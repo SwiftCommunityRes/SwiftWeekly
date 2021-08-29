@@ -87,7 +87,7 @@ Robert Widmann（[@CodaFi_](https://twitter.com/CodaFi_ "CodaFi_")）提出了�
 ![](https://files.mdnice.com/user/17787/feeae00d-c91a-42d1-891f-111552cd57a1.png)
 
 
-感谢 SwiftWeekly 与我们的合作，开启 Swift 周报中文版发布之旅。周报仓库：https://github.com/SwiftCommunityRes 文章中外引链接较多，可以点击 **阅读原文** 跳转至仓库阅读。
+感谢 SwiftWeekly 与我们的合作，开启 Swift 周报中文版发布之旅。周报仓库：https://github.com/SwiftCommunityRes
 
 后续还会翻译大量资料到我们公众号，有感兴趣的朋友，可以加入我们，扫码添加微信
 
