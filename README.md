@@ -10,7 +10,7 @@
 ![](https://files.mdnice.com/user/17787/82bc6bff-d24d-4a35-b5b0-315ae46d296d.png)
 
 
-感谢 Swift.org 负责的 SwiftWeekly 与我们的合作，开启 Swift 周报中文版发布之旅。
+感谢 [SwiftWeekly](https://github.com/SwiftWeekly/swiftweekly.github.io) 与我们的合作，开启 Swift 周报中文版发布之旅。
 
 周报仓库：https://github.com/SwiftCommunityRes
 
