@@ -14,6 +14,4 @@
 
 周报仓库：https://github.com/SwiftCommunityRes
 
-后续还会翻译大量资料到我们公众号，有感兴趣的朋友，可以加入我们，扫码添加微信
-
-![](https://files.mdnice.com/user/17787/9a7911bf-75f2-40f5-866b-3171868bb92c.jpg)
+后续还会翻译大量资料到我们公众号，有感兴趣的朋友，联系我，加入我们。
