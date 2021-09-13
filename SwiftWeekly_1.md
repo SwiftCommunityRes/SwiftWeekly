@@ -84,7 +84,7 @@ Robert Widmann（[@CodaFi_](https://twitter.com/CodaFi_ "CodaFi_")）提出了�
 
 公众号是由 Swift 爱好者共同维护，我们会分享以 Swift 实战、SwiftUI、Swift 基础为核心的技术内容，也整理收集优秀的学习资料。欢迎关注公众号：**Swift社区**，后台点击进群，联系我们获取更多内容。
 
-<img width="500" alt="Swift社区" src="https://files.mdnice.com/user/17787/feeae00d-c91a-42d1-891f-111552cd57a1.png">
+<img width="500" alt="Swift社区" src="https://user-images.githubusercontent.com/24238160/132703149-34121c6c-fd18-491c-a697-58a0fabf3060.png">
 
 
 感谢 SwiftWeekly 与我们的合作，开启 Swift 周报中文版发布之旅。周报仓库：https://github.com/SwiftCommunityRes
