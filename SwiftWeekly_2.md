@@ -1,6 +1,5 @@
 ## 前言
 
-<<<<<<< HEAD
 [California streaming](https://www.apple.com/apple-events/ "California streaming"). 我们都知道这意味着什么：马上将迎来重要的一天 —— `Apple` 宣布了 **9 月 14 日**的活动！ 他们在活动邀请中隐藏了一个彩蛋 —— [一种隐藏的 AR 体验](https://9to5mac.com/2021/09/07/apple-hypes-next-weeks-iphone-13-event-with-ar-portal-experience/ "一种隐藏的 AR 体验")，看起来很酷。 这也让全球的粉丝们纷纷猜测 `Apple` 即将发布的产品。
 
 过去两周 `Swift 社区`非常活跃。 许多提案正在 `Swift` 迭代中产生，有些已经同意或拒绝，有些仍在审查中。 这些提议有助于促进 `Swift` 保持现代语言的地位，所以让我们继续努力吧！
@@ -99,7 +98,6 @@ Austin 开始讨论 [SwiftNIO 中的 netlink 套接字支持](https://forums.swi
 * 总之，我想提出一个 `!!` 运算符，强制打开和 `nil` 并之间的交叉，如果可选是 `nil`，则抛出。
 =======
 ## 前言
->>>>>>> 0af28f124297e85443105d5db6313b4eaa2229a0
 
 [California streaming](https://www.apple.com/apple-events/ "California streaming"). 我们都知道这意味着什么：马上将迎来重要的一天 —— `Apple` 宣布了 **9 月 14 日**的活动！ 他们在活动邀请中隐藏了一个彩蛋 —— [一种隐藏的 AR 体验](https://9to5mac.com/2021/09/07/apple-hypes-next-weeks-iphone-13-event-with-ar-portal-experience/ "一种隐藏的 AR 体验")，看起来很酷。 这也让全球的粉丝们纷纷猜测 `Apple` 即将发布的产品。
 
