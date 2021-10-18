@@ -1,3 +1,5 @@
+[![RSS_icon](https://img.shields.io/badge/RSS-Atom-orange)](https://github.com/SwiftCommunityRes/SwiftWeekly/releases.atom)
+
 # [SwiftWeekly]()
 
 *一个关注 [Swift.org](https://swift.org) 动态，由社区驱动的每周时事通讯*
