@@ -4,21 +4,28 @@
 > 为了 Swift 社区周报持续稳定的发布更新，我们希望邀请 Swift 爱好者参与**周报编辑**，同时邀请赞助商对我们平台赞助支持。
 
 ## 入门任务
+**SR-15312** [Swift-DocC] [添加 “version” 命令到 docc 命令行工具中](https://bugs.swift.org/browse/SR-15312 "Add 'version' command to docc command line tool") 
 
+**SR-15312** [Swift-DocC] [当浏览器 URL 不是小写时，主教程导航下拉菜单无法将当前教程字体加粗](https://bugs.swift.org/browse/SR-15313 "Primary tutorial navigation dropdown fails to bold the current tutorial when browser URL is not lowercased") 
 
 ## 新闻和社区
+**Franklin Schrans** 宣布 [Swift-DocC](https://swift.org/blog/swift-docc/) 将要[开源](https://github.com/apple/swift-docc).
 
+**Marin Todorov** 终于[披露](https://twitter.com/icanzilb/status/1448555769050304512)了他关于 [`Swift Markdown`](https://github.com/apple/swift-markdown) 的工作.
 
-## Commits 和 pull requests
+**Federico Zanetello** 写了一篇[文章](https://www.fivestars.blog/articles/warn_unqualified_access/ "warn_unqualified_access")来说明 `@warn_unqualified_access` 的使用.
 
+**Dave DeLong** 解释了如何[简化 Swift 中的向后兼容性](https://davedelong.com/blog/2021/10/09/simplifying-backwards-compatibility-in-swift/ "Simplifying Backwards Compatibility in Swift")。
 
-## 同意的提案
-
+`Swift-DocC` 的文档现在已经发布在 [Swift.org](https://swift.org/documentation/docc/) (使用 [Swift-DocC!](https://forums.swift.org/t/documentation-for-swift-docc-is-now-on-swift-org/52914)).
 
 
 ## 正在审查的提案
+**SE-0325** [附加包插件 API](https://github.com/apple/swift-evolution/blob/main/proposals/0325-swiftpm-additional-plugin-apis.md "Additional Package Plugin APIs") 正在[审查中](https://forums.swift.org/t/se-0325-additional-package-plugin-apis/52788)。
 
+**SE-0303** 在 SwiftPM 中引入了定义构建工具插件的能力, 允许自定义工具在构建打包时被调用。为了支持该特性， **SE-0303** 引入了最小初始 API，插件能够通过该接口获取那些被唤起构建的 Target 的相关信息。
 
+该提案扩展了插件 API 以提供更多上下文，包括更丰富的包图表示。 这是为将来支持新类型的插件做准备。
 
 ## Swift 论坛
 
