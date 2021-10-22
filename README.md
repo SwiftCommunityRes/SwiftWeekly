@@ -4,6 +4,11 @@
 
 *一个关注 [Swift.org](https://swift.org) 动态，由社区驱动的每周时事通讯*
 
+* [Swift 周报 第四期](https://mp.weixin.qq.com/s/gihqifb6ZxtYvKE2vpPGhA)
+* [Swift 周报 第三期](https://mp.weixin.qq.com/s/lfACN_HumkqORNhFIKcQ8g)
+* [Swift 周报 第二期](https://mp.weixin.qq.com/s/-DfgcUTHnBVNdrkkAme90Q)
+* [Swift 周报 第一期](https://mp.weixin.qq.com/s/xYVPR2FKuHn8Vy00ZsLHcg)
+
 ## 关于我们
 
 公众号是由 Swift 爱好者共同维护，我们会分享以 Swift 实战、SwiftUI、Swift 基础为核心的技术内容，也整理收集优秀的学习资料。欢迎关注公众号：**Swift社区**，后台点击进群，联系我们获取更多内容。
