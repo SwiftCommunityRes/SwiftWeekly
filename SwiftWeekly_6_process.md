@@ -99,13 +99,13 @@ MQTT 是一种通常用于与 IoT（物联网）设备进行通信的消息传�
 
 ### VI
 
-**Cory Benfield** 向我们更新了关于 `SwiftNIO Swift` 版本支持。
+**Cory Benfield** 向我们[更新了](https://forums.swift.org/t/swiftnio-swift-version-support/53232 "SwiftNIO Swift version support")关于 `SwiftNIO Swift` 版本支持。
 
 SwiftNIO 团队已将其作为我们工作流程的主要支柱，以尝试在相当长的时间内支持 Swift 版本。大多数用户没有利用这一点，更愿意继续使用最新版本的 Swift，但我们认为重要的是你要有信心，新编写的应用程序将在未来获得一些有意义的支持。
 
 ### VII
 
-**Victoria Mitchell** 写了一片关于扩展 `Swift-DocC` 以支持 `Objective-C` 的文档。
+**Victoria Mitchell** [写了一篇](https://forums.swift.org/t/extending-swift-docc-to-support-objective-c-documentation/53243 "Extending Swift-DocC to support Objective-C documentation")关于扩展 `Swift-DocC` 以支持 `Objective-C` 的文档。
 
 `DocC` 的架构目前仅支持 `Swift` 一个语言的渲染符号文档。然而，有些跨语言项目可以从将多个“语言变体”收集到同一组文档中受益，例如可以被 `Swift` 中调用的 `Objective-C` API，反之亦然。
 
