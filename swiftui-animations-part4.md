@@ -83,6 +83,7 @@ struct ManyFaces: View {
 ```
 
 现在，让我们看下运行代码会发生什么：
+
 ![](https://swiftui-lab.com/wp-content/uploads/2021/06/emojis-changing-one.gif "Emoji")
 
 惊了？ 为什么左边的 emoji 会变，而另一个总是悲伤？ 事实证明， `SubView` 没有接收到任何变化的参数，这意味着它没有依赖关系。 `SwiftUI` 没有理由重新计算视图的主体。 2021 年 WWDC 的一个精彩演讲是 `Demystify SwiftUI`。 它解释了视图标识、生命周期和依赖关系。 所有这些主题对于理解时间线为何如此运行都非常重要。
@@ -310,10 +311,12 @@ let beatSound: NSSound? = {
 }()
 ```
 如果你需要声音文件，可以到 freesound 下载：https://freesound.org/
-示例代码中的声音为
 
-钟声: [metronome_pling](https://freesound.org/people/m1rk0/sounds/50071/) 根据许可证 CC BY 3.0 (m1rk0)
-节拍声: [metronome.wav](https://freesound.org/people/Druminfected/sounds/250552/) 根据 CC0 1.0 
+示例代码中的声音为：
+
+- 钟声: [metronome_pling](https://freesound.org/people/m1rk0/sounds/50071/) 根据许可证 CC BY 3.0 (m1rk0)
+
+- 节拍声: [metronome.wav](https://freesound.org/people/Druminfected/sounds/250552/) 根据 CC0 1.0 
 
 ## TimelineScheduler
 
@@ -372,11 +375,14 @@ struct ContentView: View {
 ## 自定义 TimelineScheduler
 
 如果现有调度程序都不符合你的需求，可以创建自己的调度程序。 思考以下动画： 
+
 ![](https://swiftui-lab.com/wp-content/uploads/2021/06/beating-heart.gif)
 
 在这个动画中，我们有一个心形表情符号，它会以不规则的间隔和不规则的幅度改变其比例。
 它以 1.0 的比例开始，0.2 秒后增长到 1.6，0.2 秒后增长到 2.0，然后缩小到 1.0 并保持 0.4 秒，然后重新开始。 换一种说法：
+
 尺度变化：1.0 → 1.6 → 2.0 → 重新开始
+
 变化之间的时间：0.2 → 0.2 → 0.4 → 重新开始
 
 我们可以创建一个 `HeartTimelineSchedule`，它完全按照心脏的需要进行更新。 但是以可重用性的名义，让我们做一些更通用的东西，将来可以重用。
