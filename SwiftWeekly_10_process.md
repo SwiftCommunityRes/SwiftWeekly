@@ -6,6 +6,10 @@
 
 ## 新闻和社区
 
+### 即将从 XML Feed 过渡到 App Store Connect API
+
+`App Store Connect REST API` 让您可以跨各种开发者工具自定义任务并实现任务自动化，使工作流程更灵活、更高效。从 **2022 年 11 月**开始，您将需要使用此 API 来代替 `XML Feed`，从而实现对 App 内购买项目、订阅、元数据和 App 定价的自动化管理。XML Feed 将继续为现有的 `Game Center` 管理功能提供支持。
+
 ### 新功能 RoomPlan
 
 使用 [RoomPlan](https://developer.apple.com/augmented-reality/roomplan/ "Introducing RoomPlan") 创建房间的 3D 户型图，包括家具的尺寸和类型等关键特征。这个是由 ARKit 提供支持的全新 Swift API 能够利用 iPhone 和 iPad 上的摄像头和激光雷达扫描仪将现实环境带入您的 App 中。
@@ -20,8 +24,11 @@
 
 ![](https://files.mdnice.com/user/17787/1a24a5c0-77b7-4d83-be72-664ff7927d11.png)
 
-//TODO
-内容待完善
+### 已推出 Xcode 14 Beta 版
+
+包含了适用于所有 Apple 平台 SDK 的 `Xcode 14 Beta` 版现已推出。利用简洁且强大的 Swift 和 SwiftUI 以及全新的跨平台 App 体验，使用编辑器的增强功能更快捷地编写代码，并着手开始进行从 `Xcode Cloud` 到 `TestFlight` 以及 `App Store` 的测试和部署。
+
+[下载 Xcode 14 Beta 版](https://developer.apple.com/xcode/ "Xcode 14 Beta")
 
 
 ## 提案
@@ -31,10 +38,23 @@
 
 ## Swift论坛
 
-[SwiftUI 中的新功能](https://developer.apple.com/forums/tags/wwdc2022-10052 "What's new in SwiftUI") 标签：`WWDC2022-10052`
+[SwiftUI 中的新功能](https://developer.apple.com/forums/tags/wwdc2022-10052 "What's new in SwiftUI") 围绕 `WWDC2022-10052` 内容进行讨论
 
-//TODO
-内容待完善
+[Swift 正则表达式](https://developer.apple.com/forums/tags/wwdc2022-110357 "Meet Swift Regex") 围绕 `WWDC2022-110357` 内容进行讨论
+
+[SwiftUI 导航](https://developer.apple.com/forums/tags/wwdc2022-10054 "The SwiftUI cookbook for navigation") 围绕 `WWDC2022-10054` 内容进行讨论
+
+[Swift 图表](https://developer.apple.com/forums/tags/wwdc2022-10137 "Swift Charts") 围绕 `WWDC2022-10137` 内容进行讨论
+
+使用 [cmake 构建 swift](https://forums.swift.org/t/using-cmake-to-build-swift-instead-of-build-script/59095 "Using cmake to build swift") 而不是 `build-script`。
+
+`build-script` 是 `build-script-impl` 的 python 包装器，本身是一个 `shell` 脚本，然后运行 CMake，执行可以构建项目的工作主体。 例如，如果您想执行 `utils/build-script -x`，将调用 `cmake -G Xcode`。
+
+**Visual Studio Code** [增加扩展包](https://forums.swift.org/t/introducing-swift-for-visual-studio-code/54246 "VSCode extension") 支持 Swift 开发
+
+[SwiftNIO _ChannelInboundHandler 与 DocC 不兼容](https://forums.swift.org/t/swiftnio-channelinboundhandler-is-docc-incompatible/58611 "SwiftNIO _ChannelInboundHandler is DocC incompatible")
+
+在阅读 swift-biome 中的 `SwiftNIO` 文档时，遇到一个问题。文档其中引用了 3 个带下划线的属性。例如：`_ChannelInboundHandler`、`_EmittingChannelHandler` 等，但是这些属性在 swift-biome 和其他基于 `SymbolGraphGen` 的工具是不可见的，包括 DocC。
 
 ## 推荐博文
 
