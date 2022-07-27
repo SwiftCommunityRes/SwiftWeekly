@@ -61,22 +61,32 @@
 
 在 `Foundation` 中引入的 `KeyPathComparator` API，比 Swift 中的 `sorted(by:)` 方法更清晰。这个 API 可以根据数组中的某个特定元素进行排序。
 
-![](https://files.mdnice.com/user/17787/ad96d0ca-3750-467e-a0ce-7370177842e7.png)
+![](https://github.com/SwiftCommunityRes/image/blob/main/FXhpnbMacAE1d6P.jpg?raw=true)
 
 
 ## 推荐博文
 
 **SwiftUI 动画系列**，文章结合动画 Gif 原图和源码为案例，深入探讨了如何创建应用 SwiftUI 动画。
 
-[高级 SwiftUI 动画 — Part 1：Paths](https://mp.weixin.qq.com/s/5KinQfNtcovf_451UGwLQQ)  **摘要：** 本文主要介绍了显式动画和隐式动画，以及针对 Animatable 协议的相关讨论。
+[高级 SwiftUI 动画 — Part 1：Paths](https://mp.weixin.qq.com/s/5KinQfNtcovf_451UGwLQQ)  
 
-[高级 SwiftUI 动画 — Part 2：GeometryEffect](https://mp.weixin.qq.com/s/rE_HILLt-uxzScS7wXh5jw) **摘要：** 主要介绍使用新工具 GeometryEffect 创建 SwiftUI 动画。GeometryEffect是一个符合Animatable 和 ViewModifier 的协议。
+**摘要：** 本文主要介绍了显式动画和隐式动画，以及针对 Animatable 协议的相关讨论。
 
-[高级 SwiftUI 动画 — Part 3：AnimatableModifier](https://mp.weixin.qq.com/s/M6MW3idXS6jZJtl4Mz5DGQ) **摘要：** 本文主要介绍使用 AnimatableModifier 完成更加复杂的动画效果。AnimatableModifier 是一个 ViewModifier，符合 Animatable 协议，如果对这个协议不了解可以阅读之前发布的两篇文章。
+[高级 SwiftUI 动画 — Part 2：GeometryEffect](https://mp.weixin.qq.com/s/rE_HILLt-uxzScS7wXh5jw) 
 
-[SwiftUI 动画进阶 — Part4：TimelineView](https://mp.weixin.qq.com/s/9OBtFNb5ddnx4_fS93Mnrg) **摘要：** 前三篇高级 SwiftUI 动画是作者在实战中总结的内容。本篇文章，我们将详细地探索 TimelineView。
+**摘要：** 主要介绍使用新工具 GeometryEffect 创建 SwiftUI 动画。GeometryEffect是一个符合Animatable 和 ViewModifier 的协议。
 
-[SwiftUI 动画进阶 — Part 5：Canvas](https://mp.weixin.qq.com/s/0kkHpzv4Y9O5d7InEAKbEw) **摘要：** 本篇文章将探索 Canvas 视图。从技术上讲，它不是一个动画视图，但当它与第四部分的 TimelineView 结合时，可以现实很多有趣的功能。
+[高级 SwiftUI 动画 — Part 3：AnimatableModifier](https://mp.weixin.qq.com/s/M6MW3idXS6jZJtl4Mz5DGQ) 
+
+**摘要：** 本文主要介绍使用 AnimatableModifier 完成更加复杂的动画效果。AnimatableModifier 是一个 ViewModifier，符合 Animatable 协议，如果对这个协议不了解可以阅读之前发布的两篇文章。
+
+[SwiftUI 动画进阶 — Part4：TimelineView](https://mp.weixin.qq.com/s/9OBtFNb5ddnx4_fS93Mnrg) 
+
+**摘要：** 前三篇高级 SwiftUI 动画是作者在实战中总结的内容。本篇文章，我们将详细地探索 TimelineView。
+
+[SwiftUI 动画进阶 — Part 5：Canvas](https://mp.weixin.qq.com/s/0kkHpzv4Y9O5d7InEAKbEw) 
+
+**摘要：** 本篇文章将探索 Canvas 视图。从技术上讲，它不是一个动画视图，但当它与第四部分的 TimelineView 结合时，可以现实很多有趣的功能。
 
 ## 关于我们
 
