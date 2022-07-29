@@ -20,7 +20,7 @@
 
 使用 [RoomPlan](https://developer.apple.com/augmented-reality/roomplan/ "Introducing RoomPlan") 创建房间的 3D 户型图，包括家具的尺寸和类型等关键特征。这个是由 ARKit 提供支持的全新 Swift API 能够利用 iPhone 和 iPad 上的摄像头和激光雷达扫描仪将现实环境带入您的 App 中。
 
-![](https://files.mdnice.com/user/17787/ffa3c808-e6d2-4676-aa7f-14432950013f.png)
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weeklynew01.png?raw=true)
 
 使用详情可以观看 WWDC22 中的 [使用 RoomPlan 创建参数 3D 房间扫描](https://developer.apple.com/videos/play/wwdc2022/10127/ "Create parametric 3D room scans with RoomPlan")
 
@@ -28,7 +28,7 @@
 
 [注册实验室和线上聊天室](https://developer.apple.com/news/?id=kvwb7ph4 "Sign up now for WWDC22 labs and lounges")，即可在一整周内与 Apple 工程师、设计师和专家在线交流。
 
-![](https://files.mdnice.com/user/17787/1a24a5c0-77b7-4d83-be72-664ff7927d11.png)
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weeklynew02.png?raw=true)
 
 ### 已推出 Xcode 14 Beta 版
 
