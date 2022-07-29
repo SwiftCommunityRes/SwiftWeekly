@@ -8,6 +8,14 @@
 
 ## 新闻和社区
 
+### 苹果先买后付服务被警告：破坏这一新兴行业的竞争
+
+据英国《金融时报》7月27日报道，美国消费者金融保护局罗希特·乔普拉向硅谷发出警告。大型科技公司进入“先买后付”贷款业务会破坏这一新兴行业的竞争，他还对客户数据的使用提出了质疑。此前6月6日苹果公司在年度开发者大会上推出“先买后付”的`“Apple Pay Later”`服务，允许用户6周内分4期付款，期间不产生利息等其他费用。（via 泰山财经）
+
+### 与 App Store 专家会面交流
+
+准备好与专家在线交流探讨，了解如何充分利用 `App Store` 的功能。探索如何吸引新顾客、测试营销策略、添加订阅等等。在整个 8 月，苹果官方将在多个时区以多种语言进行实时演讲和答疑。如果您也是苹果开发者的话，最近肯定收到了相关的邮件邀请吧，不知道您是否参加了本次会面交流呢？
+
 ### 即将从 XML Feed 过渡到 App Store Connect API
 
 `App Store Connect REST API` 让您可以跨各种开发者工具自定义任务并实现任务自动化，使工作流程更灵活、更高效。从 **2022 年 11 月**开始，您将需要使用此 API 来代替 `XML Feed`，从而实现对 App 内购买项目、订阅、元数据和 App 定价的自动化管理。XML Feed 将继续为现有的 `Game Center` 管理功能提供支持。
@@ -16,7 +24,7 @@
 
 使用 [RoomPlan](https://developer.apple.com/augmented-reality/roomplan/ "Introducing RoomPlan") 创建房间的 3D 户型图，包括家具的尺寸和类型等关键特征。这个是由 ARKit 提供支持的全新 Swift API 能够利用 iPhone 和 iPad 上的摄像头和激光雷达扫描仪将现实环境带入您的 App 中。
 
-![](https://files.mdnice.com/user/17787/ffa3c808-e6d2-4676-aa7f-14432950013f.png)
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weeklynew01.png?raw=true)
 
 使用详情可以观看 WWDC22 中的 [使用 RoomPlan 创建参数 3D 房间扫描](https://developer.apple.com/videos/play/wwdc2022/10127/ "Create parametric 3D room scans with RoomPlan")
 
@@ -24,7 +32,7 @@
 
 [注册实验室和线上聊天室](https://developer.apple.com/news/?id=kvwb7ph4 "Sign up now for WWDC22 labs and lounges")，即可在一整周内与 Apple 工程师、设计师和专家在线交流。
 
-![](https://files.mdnice.com/user/17787/1a24a5c0-77b7-4d83-be72-664ff7927d11.png)
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weeklynew02.png?raw=true)
 
 ### 已推出 Xcode 14 Beta 版
 
