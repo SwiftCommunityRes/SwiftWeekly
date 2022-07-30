@@ -41,11 +41,14 @@
 [下载 Xcode 14 Beta 版](https://developer.apple.com/xcode/ "Xcode 14 Beta")
 
 ## 提案
-### 通过的提案
-[SE-0352: 隐式开放的存在类型](https://github.com/apple/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md#introduction 'Implicitly Opened Existentials') **状态：Swift 5.7 已实现**
-Swift 中的存在类型允许存储一个特定类型为未知的值，且可能在运行时更改。被存储值的动态类型，我们称为存在类型的底层类型，仅由它遵循的协议集以及潜在的超类知道。尽管存在类型对于表达动态类型的值非常有用，但由于它们的动态性质，它们一定受到限制。最近的提议使[存在类型更加明确](https://github.com/apple/swift-evolution/blob/main/proposals/0335-existential-any.md 'existential types more explicit')，以帮助开发人员理解这种动态性质，并通过消除一些限制[使存在类型更具表现力](https://github.com/apple/swift-evolution/blob/main/proposals/0309-unlock-existential-types-for-all-protocols.md 'making existential types more expressive')。但是存在类型的一个基本类型仍然存在，一旦你有一个存在类型的值，你就很难对其使用泛型。开发者通常会通过 “protocol 'P' as a type cannot conform to itself” 这样的报错信息，遇到这样的问题。
 
-[SE-0352: 隐式开放的存在类型](https://github.com/apple/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md#introduction 'Implicitly Opened Existentials') 已于 2022 年 5 月 18 日完成，核心团队已决定接受该提案。第二次审查的重点是关注向前兼容性，当一个调用唤起一个隐式开放的存在类型，必须被抹除类型以防止存在的动态类型内存泄漏到返回值中。当存在类型的表达能力增加，我们可能会有能力使用一个更具体的类型作为这一个调用的返回类型，这可能造成源中断。为了避免这种情况，该提案要求在调用中显式地作为任何 P 类型注释，其中今天可以表达的返回类型将丢弃对被类型擦除的原始关联类型的约束，如提案中的示例所示：
+### 通过的提案
+
+[SE-0352: 隐式开放的存在类型](https://github.com/apple/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md#introduction 'Implicitly Opened Existentials') **状态：Swift 5.7 已实现**
+Swift 中的存在类型允许存储一个特定类型为未知的值，且可能在运行时更改。被存储值的动态类型，我们称为**存在类型的底层类型**，仅由它遵循的协议集以及潜在的超类知道。尽管存在类型对于表达动态类型的值非常有用，但由于它们的动态性质，它们受到一定限制。最近的提议使[存在类型更加明确](https://github.com/apple/swift-evolution/blob/main/proposals/0335-existential-any.md 'existential types more explicit')，以帮助开发人员理解这种动态性质，并通过消除一些限制[使存在类型更具表现力](https://github.com/apple/swift-evolution/blob/main/proposals/0309-unlock-existential-types-for-all-protocols.md 'making existential types more expressive')。但是存在类型中的基本类型仍然存在，一旦你有一个存在类型的值，你就很难对其使用泛型。开发者通常会遇到 `protocol 'P' as a type cannot conform to itself` 这样的报错问题。
+
+**SE-0352: 隐式开放的存在类型** 已于 2022 年 5 月 18 日完成，核心团队已决定接受该提案。第二次审查的重点是关注向前兼容性，当一个调用唤起一个隐式开放的存在类型，必须被抹除类型以防止存在的动态类型内存泄漏到返回值中。当存在类型的表达能力增加，我们可能会有能力使用一个更具体的类型作为这一个调用的返回类型，这可能造成源中断。为了避免这种情况，该提案要求在调用中显式地作为任何 P 类型注释，其中当前可以表达的返回类型将丢弃对被类型擦除的原始关联类型的约束，如提案中的示例所示：
+
 ```swift
 protocol P {
   associatedtype A
@@ -64,30 +67,31 @@ func eraseQAssoc(q: any Q) {
 ```
 
 [SE-0353: 受约束的存在类型](https://github.com/apple/swift-evolution/blob/main/proposals/0353-constrained-existential-types.md 'Constrained Existential Types') **状态：Swift 5.7 已实现**
-存在类型补完了 Swift 类型系统中的抽象能力。与泛型一样，它们使函数能够获取和返回多种可能的类型。 与泛型参数类型不同，存在类型在作为输入传递给函数时不需要预先知道。此外，当从函数返回时，可以删除具体类型（隐藏在协议接口后面）。在这个领域出现了一系列活动，[SE-0309](https://github.com/apple/swift-evolution/blob/main/proposals/0309-unlock-existential-types-for-all-protocols.md#covariant-erasure-for-associated-types 'SE-0309: unlock existential types for all protocols') 解除了对使用具有关联类型的协议作为存在类型的剩余限制，而 [SE-0346](https://github.com/apple/swift-evolution/blob/main/proposals/0346-light-weight-same-type-syntax.md 'SE-0346: light weight same type syntax') 为关联类型协议的轻量级约束语法铺平了道路。该提案直接基于这些想法，旨在在存在类型的上下文中重用轻量级关联类型约束的语法。
+存在类型弥补了 Swift 类型系统中的抽象能力。与泛型一样，它们使函数能够获取和返回多种可能的类型。与泛型参数类型不同，存在类型在作为输入传递给函数时不需要预先知道。此外，当从函数返回时，可以删除具体类型（隐藏在协议接口后面）。在这个领域出现了一系列活动，[SE-0309](https://github.com/apple/swift-evolution/blob/main/proposals/0309-unlock-existential-types-for-all-protocols.md#covariant-erasure-for-associated-types 'SE-0309: unlock existential types for all protocols') 解除了对使用具有关联类型的协议作为存在类型的剩余限制，而 [SE-0346](https://github.com/apple/swift-evolution/blob/main/proposals/0346-light-weight-same-type-syntax.md 'SE-0346: light weight same type syntax') 为关联类型协议的轻量级约束语法铺平了道路。该提案直接基于这些想法，旨在在存在类型的上下文中重用轻量级关联类型约束的语法。
 
 ```swift
 any Collection<String>
 ```
 
 [SE-0356: Swift 代码片段](https://github.com/apple/swift-evolution/blob/main/proposals/0356-swift-snippets.md 'Swift Snippets')
-该提案描述了编写称为片段的新形式示例代码的约定。 片段是简短的单文件示例，可以在 Swift 包中构建和运行，可以访问该包中的其他代码，并且可以以多种方式使用。
+该提案描述了编写成为片段的新形式示例代码的约定。片段是简短的单文件示例，可以在 Swift 包中构建和运行，可以访问该包中的其他代码，并且可以以多种方式使用。
 
 
-### 正在审查中的提案
+### 正在审查的提案
+
 [SE-0359: 构建时间常数值](https://github.com/apple/swift-evolution/blob/main/proposals/0359-build-time-constant-values.md 'Build-Time Constant Values') **状态：已接受**
 构建时间常数值是一个 Swift 语言特性，要求在编译时知道某些值。这是通过属性、`@const`、约束属性和函数参数来实现的，以使其具有编译时可知的值。这些信息为未来更丰富的编译时特性奠定了基础，例如在编译时提取和验证值。
 
 [SE-0362: 即将到来的语言改进的逐渐采用](https://github.com/apple/swift-evolution/blob/main/proposals/0362-piecemeal-future-features.md 'Piecemeal adoption of upcoming language improvements') **状态：已接受**
-Swift 6 积累了许多对语言有源码兼容性影响的改进，从而在以前的语言模式（Swift 4.x 和 Swift 5.x）中默认情况下无法启用它们。这些改进已经在背后为 Swift 6 语言模式的 Swift 编译器中实现，但他们对于开发者是无法访问的，并将持续直到 Swift 6 作为一个可获得的语言模式。这有很多原因为什么我们应该思考尽快提供这些改动。
+Swift 6 积累了许多对语言有源码兼容性影响的改进，从而在以前的语言模式（Swift 4.x 和 Swift 5.x）中默认情况下无法启用它们。这些改进已经在背后为 Swift 6 语言模式的 Swift 编译器中实现，但他们对于开发者是无法访问的，并将持续直到 Swift 6 作为一个可获得的语言模式。这有很多原因，为什么我们应该思考尽快提供这些改动。
 
 - 开发者希望很快从这些改进中受益，而不是等到 Swift 6 可用。
 - 向开发者提供这些改进比 Swift 6 提供更多体验优先级更高，如果有必要，允许我们针对 Swift 6 进一步调试它们。
 - 对于某些模块，所有在 Swift 6 中改动的总数或许会造成迁移繁重，并且在 Swift 4.x/5.x 中逐一采纳这些语言改动，可以使过渡期路径变得丝滑。
 
-一些提案已经引入了定制解决方案来提供迁移路径：[SE-0337](https://github.com/apple/swift-evolution/blob/main/proposals/0337-support-incremental-migration-to-concurrency-checking.md 'support-incremental-migration-to-concurrency-checking') 添加了 `-warn-concurrency` 以在 Swift 4.x/5.x 中启用与 `Sendable` 相关检查的警告。 [SE-0354](https://github.com/apple/swift-evolution/blob/main/proposals/0354-regex-literals.md 'regex-literals') 添加标志 `-enable-bare-slash-regex` 以启用原始 `/.../` 正则表达式语法。尽管它不是提案的一部分，但对 [SE-0335](https://github.com/apple/swift-evolution/blob/main/proposals/0335-existential-any.md 'existential-any') 的讨论包括对编译器标志的请求，以在存在类型上要求使用 `any` 。这些都具有相同的风格，即选择现有的 Swift 4.x/5.x 代码进行改进，这些改进将出现在 Swift 6 中。
+一些提案已经引入了定制解决方案来提供迁移路径：[SE-0337](https://github.com/apple/swift-evolution/blob/main/proposals/0337-support-incremental-migration-to-concurrency-checking.md 'support-incremental-migration-to-concurrency-checking') 添加了 `-warn-concurrency` 在 Swift 4.x/5.x 中启用与 `Sendable` 相关检查的警告。 [SE-0354](https://github.com/apple/swift-evolution/blob/main/proposals/0354-regex-literals.md 'regex-literals') 添加标志 `-enable-bare-slash-regex` 以启用原始 `/.../` 正则表达式语法。尽管它不是提案的一部分，但对 [SE-0335](https://github.com/apple/swift-evolution/blob/main/proposals/0335-existential-any.md 'existential-any') 的讨论包括对编译器标志的请求，以在存在类型上要求使用 `any` 。这些都具有相同的风格，即选择现有的 Swift 4.x/5.x 代码进行改进，这些改进将出现在 Swift 6 中。
 
-这个提议明确地包含了零碎的、有意采用的特性，这些特性在 Swift 6 之前出于源代码兼容性的原因而保留。它为逐步采用 Swift 6 特性建立了一条直接路径，以在 Swift 4.x/5.x 代码库中获得它们的优势，并顺利迁移到 Swift 6 语言模式。开发人员可以使用新的编译器标志 `-enable-upcoming-feature X` 为该模块启用名为 `X` 的特定功能，并且可以以这种方式指定多个功能。当开发人员移动到下一个主要语言版本时，该语言版本将隐含 `X` 并且编译器标志将被拒绝。这样，即将推出的功能标志只会累积到下一个主要的 Swift 语言版本，然后被清除，所以我们不会将语言分叉成不兼容的方言。
+这个提议明确地包含了零碎的、有意采用的特性，这些特性在 Swift 6 之前出于源代码兼容性的原因而保留。它为逐步采用 Swift 6 特性建立了一条直接路径，以在 Swift 4.x/5.x 代码库中获得它们的优势，并顺利迁移到 Swift 6 语言模式。开发人员可以使用新的编译器标志 `-enable-upcoming-feature X` 为该模块启用名为 `X` 的特定功能，并且可以以这种方式指定多个功能。当开发人员移动到下一个主要语言版本时，该语言版本将隐含 `X` 并且编译器标志将被拒绝。这样，即将推出的功能标志只会累积到下一个主要的 Swift 语言版本，然后被清除，所以我们不会将语言分拆成不兼容的方言。
 
 ## Swift论坛
 
