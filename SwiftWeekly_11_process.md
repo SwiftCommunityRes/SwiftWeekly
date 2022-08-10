@@ -66,6 +66,17 @@ func downloadRequested(_ request: DownloadRequest) async throws -> Response {
 
 8) [如何对 NavigationLink 中的 tag 和 selection 进行转换](https://developer.apple.com/forums/thread/711841 "NavigationLink")
 
+```Swift
+List(workoutTypes) { workoutType in
+    NavigationLink(
+        workoutType.name,
+        destination: SessionPagingView(),
+        tag: workoutType,
+        selection: $workoutManager.selectedWorkout
+    )
+}
+```
+
 在 iOS 16中 `init(_:destination:tag:selection:)` 方法被弃用。Apple 建议在` NavigationStack` 或者 
 `NavigationSplitView` 的列表中使用 `NavigationLink(_:value:)`。
 
