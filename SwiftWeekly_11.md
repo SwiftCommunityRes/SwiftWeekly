@@ -8,9 +8,9 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：
+> 新闻和社区：已消失 5 年 iPhone 电量百分比为何现在回归
 > 
-> 提案：
+> 提案：和脚本语言相媲美的字符串算法
 > 
 > Swift 论坛：你是否希望支持在 Windows 上构建 Swift
 >
@@ -18,13 +18,13 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 新闻和社区
 
-### 已消失5年#iPhone电量百分比为何现在回归# ？
+### 已消失 5 年 iPhone 电量百分比为何现在回归？
 
-2017年，iPhone X以后，电量百分比一直隐藏在下拉通知栏，而现在，在最新测试版的iOS 16系统中，电量百分比以数字形式被写入电池图标内。
+2017年，iPhone X 以后，电量百分比一直隐藏在下拉通知栏，而现在，在最新测试版的 iOS 16系统中，电量百分比以数字形式被写入电池图标内。
 
-如果苹果在下一代iPhone上增加一个常亮显示功能，那么这种电池百分比调整也会很有用，因为用户可以在不碰手机的情况下就可查看电池状态。还有传言称，iPhone14系列将会在Pro机型上采用挖孔屏，顶部更大的显示面积或许也是苹果复活百分比显示的原因之一。
+如果苹果在下一代 iPhone 上增加一个常亮显示功能，那么这种电池百分比调整也会很有用，因为用户可以在不碰手机的情况下就可查看电池状态。还有传言称，iPhone14 系列将会在 Pro 机型上采用挖孔屏，顶部更大的显示面积或许也是苹果复活百分比显示的原因之一。
 
-苹果发言人没有立即透露这个电池百分比调整是否会延续到iOS 16的最终版本。这次更新目前只出现在开发者版和公测版。新iOS系统将于今年秋天发布，可能是在9月份，届时苹果预计将发布iPhone 14。@凤凰网科技
+苹果发言人没有立即透露这个电池百分比调整是否会延续到 iOS 16 的最终版本。这次更新目前只出现在开发者版和公测版。新iOS系统将于今年秋天发布，可能是在 9 月份，届时苹果预计将发布iPhone 14。@凤凰网科技
 
 ### 线上讲座：App 内购买的新功能
 诚挚邀请您参加我们于 2022 年 8 月 18 日(周四)在线举办的“线上讲座：App 内购买的新功能”。 
@@ -46,13 +46,14 @@ https://essentials.applesurveys.com/WRQualtricsControlPanel_rel/File.php?F=F_a4r
 
 ### 外媒：苹果要供应商从台湾地区向中国大陆供货时严格遵守中方规定
 
-【环球时报综合报道】在美国众议院议长佩洛西窜访台湾遭谴责之际，美国科技巨头苹果公司已要求其供应商从台湾地区向中国大陆供货时严格遵守中国海关有关规定。截至记者5日发稿时，苹果方面尚未就有关报道予以置评。
+【环球时报综合报道】在美国众议院议长佩洛西窜访台湾遭谴责之际，美国科技巨头苹果公司已要求其供应商从台湾地区向中国大陆供货时严格遵守中国海关有关规定。截至记者 5 日发稿时，苹果方面尚未就有关报道予以置评。
 
-《日经亚洲》5日引述消息人士的说法报道称，苹果公司告诉其供应商，中国海关要求台湾地区生产的元件进入大陆时必须标注产地为“中国台湾”或“中国台北”。苹果公司敦促供应商严肃对待此事，避免因违规导致供货受影响。报道称，苹果公司供应商目前正在为新款iPhone和今秋其他苹果新品的元件供货做准备。消息人士称，如在进口文件、表格中或包装箱上将商品生产地标注为“台湾”，中国海关可能将商品扣留检查，违规商品将被处以4000元人民币罚款，或被拒绝通关。
+《日经亚洲》5 日引述消息人士的说法报道称，苹果公司告诉其供应商，中国海关要求台湾地区生产的元件进入大陆时必须标注产地为“中国台湾”或“中国台北”。苹果公司敦促供应商严肃对待此事，避免因违规导致供货受影响。报道称，苹果公司供应商目前正在为新款iPhone和今秋其他苹果新品的元件供货做准备。消息人士称，如在进口文件、表格中或包装箱上将商品生产地标注为“台湾”，中国海关可能将商品扣留检查，违规商品将被处以 4000 元人民币罚款，或被拒绝通关。
 
 ### Apple Entrepreneur Camp 已开放申请，欢迎女性、黑人和西班牙裔/拉丁裔创业者参加
 
 ![](https://devimages-cdn.apple.com/wwdc-services/articles/images/ED9294F6-B739-4265-B6F1-78314C028500/2048.jpeg)
+
 Apple Entrepreneur Camp 旨在为 App 驱动型组织中的少数群体创业者及开发者提供支持，助力其研发新一代的前沿 App 并开拓全球网络，鼓励这些创业者在技术领域不断探索并取得持续发展。
 
 三组面向女性、黑人以及西班牙裔及拉丁裔创业者的在线课程将在 2022 年 10 月开展，欢迎选择合适的一组提交申请。课程期间，Apple 工程师将为学员提供编程指导，Apple 高层也将作为导师分享见解、启发灵感。申请截止日期为 2022 年 8 月 24 日。
@@ -61,8 +62,95 @@ Apple Entrepreneur Camp 旨在为 App 驱动型组织中的少数群体创业者
 
 ### 通过的提案
 
+[SE-0365](https://github.com/apple/swift-evolution/blob/main/proposals/0365-implicit-self-weak-capture.md "SE-0365") **在 `self` 被解包后，允许为`weak self`捕获隐式`self`** 提案已通过。
+
+从 **SE-0269** 开始，当 `self` 在捕获列表中显式写入时，允许在闭包中使用**隐式 self**。 应该将这种方式支持扩展到 `weak self` 捕获，并且只要 `self` 已解包，就允许**隐式 self** 。
+
+```Swift
+class ViewController {
+    let button: Button
+
+    func setup() {
+        button.tapHandler = { [weak self] in
+            guard let self else { return }
+            dismiss()
+        }
+    }
+
+    func dismiss() { ... }
+}
+```
+
+[SE-0362](https://github.com/apple/swift-evolution/blob/main/proposals/0362-piecemeal-future-features.md "SE-0362") **即将到来的语言改进的逐渐采用** 提案已通过。该提案已在上期周报正在审查的提案模块做了详细介绍。
+
+[SE-0357](https://github.com/apple/swift-evolution/blob/main/proposals/0357-regex-string-processing-algorithms.md "SE-0357") **基于正则表达式的字符串算法** 提案已通过。
+
+与其他比较常用的编程语言或者脚本语言相比，Swift 标准库处理字符串算法的功能明显不足。其中一些功能可以在 `NSString` 中找到，但是这些基础的功能应该在 Swift 标准库中完善。
+
+**本提案中的建议如下：**
+
+1. 新增加到标准库的正则表达式字符串算法，功能性和实用性要和脚本语言相媲美
+2. 就子序列而言，这些算法与通用 `Collection` 相同
+3. `CustomConsumingRegexComponent` 协议允许第三方库提供 `industrial-strength` 作为正则表达式的可混合组件
 
 ### 正在审查的提案
+
+[SE-0368](https://github.com/apple/swift-evolution/blob/main/proposals/0368-staticbigint.md "SE-0368") **StaticBigInt** 正在审查
+
+Swift 源代码中的整数文字可以表示任意大的值。但是符合 `ExpressibleByIntegerLiteral` 协议的标准库之外的类型，在实际使用过程中受限于使用多大的文字值来构建。
+
+因为传递给 `init(integerLiteral:)` 的值必须是标准库支持的类型，因此很难在标准库之外编写新的整数类型。
+
+[SE-0367](https://github.com/apple/swift-evolution/blob/main/proposals/0367-conditional-attributes.md "SE-0367") **优化新属性的条件编译** 正在审查
+
+随着时间的推移，Swift 引入了一些新的属性来优化性能，提供更多的表达能力和编译检查等功能。但是在现有的源码中增加新属性意味着旧的编译器无法进行编译。
+
+可以使用条件编译来解决这个问题，但是实现代码冗长很不方便。例如，使用 #if 检查编译器版本确定是否可以使用 `@preconcurrency` 属性，代码如下：
+
+```Swift
+#if compiler(>=5.6)
+@preconcurrency protocol P: Sendable {
+  func f()
+  func g()
+}
+#else
+protocol P: Sendable {
+  func f()
+  func g()
+}
+#endif
+```
+
+通过上面的代码可以看到，这样实现会有很多重复的代码。另外 `Swift 5.6` 编译器是第一个包含 `@preconcurrency` 属性的编译器，但是有可能这个属性在 5.6 以前就被启用，或者在 `Swift 5.6` 的开发过程中启用，通过判断版本号就会有误差。建议采用下面的代码方式来规避这些问题。代码如下：
+
+```Swift
+#if hasAttribute(preconcurrency)
+@preconcurrency
+#endif
+protocol P: Sendable {
+  func f()
+  func g()
+}
+```
+
+[SE-0366](https://github.com/apple/swift-evolution/blob/main/proposals/0366-move-function.md "SE-0366") **代码上下文新增敏感关键字 move** 正在审查
+
+在代码中使用 `move` 关键字，可以结束 `let`、`var` 或者 `consuming` 函数参数的生命周期。并通过编译器实时做出判断强制执行此操作。示例代码如下：
+
+```Swift
+useX(x) // do some stuff with local variable x
+
+// Ends lifetime of x, y's lifetime begins.
+let y = move x // [1]
+
+useY(y) // do some stuff with local variable y
+useX(x) // error, x's lifetime was ended at [1]
+
+// Ends lifetime of y, destroying the current value.
+move y // [2]
+useX(x) // error, x's lifetime was ended at [1]
+useY(y) // error, y's lifetime was ended at [2]
+```
 
 ## Swift论坛
 
