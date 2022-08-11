@@ -22,6 +22,8 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 2017年，iPhone X 以后，电量百分比一直隐藏在下拉通知栏，而现在，在最新测试版的 iOS 16系统中，电量百分比以数字形式被写入电池图标内。
 
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weekly1101.png?raw=true)
+
 如果苹果在下一代 iPhone 上增加一个常亮显示功能，那么这种电池百分比调整也会很有用，因为用户可以在不碰手机的情况下就可查看电池状态。还有传言称，iPhone14 系列将会在 Pro 机型上采用挖孔屏，顶部更大的显示面积或许也是苹果复活百分比显示的原因之一。
 
 苹果发言人没有立即透露这个电池百分比调整是否会延续到 iOS 16 的最终版本。这次更新目前只出现在开发者版和公测版。新iOS系统将于今年秋天发布，可能是在 9 月份，届时苹果预计将发布iPhone 14。@凤凰网科技
@@ -52,7 +54,7 @@ https://essentials.applesurveys.com/WRQualtricsControlPanel_rel/File.php?F=F_a4r
 
 ### Apple Entrepreneur Camp 已开放申请，欢迎女性、黑人和西班牙裔/拉丁裔创业者参加
 
-![](https://devimages-cdn.apple.com/wwdc-services/articles/images/ED9294F6-B739-4265-B6F1-78314C028500/2048.jpeg)
+![](https://github.com/SwiftCommunityRes/image/blob/main/weekly/weekly1102.png?raw=true)
 
 Apple Entrepreneur Camp 旨在为 App 驱动型组织中的少数群体创业者及开发者提供支持，助力其研发新一代的前沿 App 并开拓全球网络，鼓励这些创业者在技术领域不断探索并取得持续发展。
 
