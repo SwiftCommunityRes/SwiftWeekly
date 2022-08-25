@@ -14,7 +14,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 
 > Swift 论坛：
 >
-> 推荐博文：
+> 推荐博文：iOS16 引入 SwiftUI Charts
 
 ## 新闻和社区
 
@@ -45,7 +45,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 苹果Apple One订阅包将最多六项苹果服务捆绑到一个订阅中，个人版单独订阅价格为每月14.95美元（约 101.51 元人民币），包括四项苹果服务：50GB的iCloud+、Apple Music、Apple TV+和Apple Arcade订阅。
 
-#iPhone13系列成美国最畅销手机机型# 2022年Q2美国最畅销的 10 款智能手机机型，包括苹果、三星、联想三个品牌。其中，苹果 iPhone 13、iPhone 13 Pro Max、iPhone 13 Pro 包揽前三位。三星 Galaxy S21、Galaxy S22 / Ultra 等 5 款新机进入畅销榜前十，Galaxy S22 Ultra 5G 为 2022 年 Q2 美国最畅销的安卓机型。(来源：(来源： 极目新闻))
+iPhone13系列成美国最畅销手机机型# 2022年Q2美国最畅销的 10 款智能手机机型，包括苹果、三星、联想三个品牌。其中，苹果 iPhone 13、iPhone 13 Pro Max、iPhone 13 Pro 包揽前三位。三星 Galaxy S21、Galaxy S22 / Ultra 等 5 款新机进入畅销榜前十，Galaxy S22 Ultra 5G 为 2022 年 Q2 美国最畅销的安卓机型。(来源：(来源： 极目新闻))
 
 ### 赔偿2亿元！苹果因搜包耽误员工下班，遭1万多人集体起诉
 
@@ -63,6 +63,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ### 通过的提案
 
+[SE-0367](https://github.com/apple/swift-evolution/blob/main/proposals/0367-conditional-attributes.md "SE-0367") **优化新属性的条件编译** 提案已通过。该提案已在上期周报正在审查的提案模块做了详细介绍。
 
 ### 正在审查的提案
 
@@ -71,6 +72,32 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## 推荐博文
+
+[在 iOS 16 中使用 SwiftUI Charts 创建折线图](https://swdevnotes.com/swift/2022/create-a-line-chart-with-swiftui-charts-in-ios-16/ "在 iOS 16 中使用 SwiftUI Charts 创建折线图")
+
+**摘要：** Apple 在 `WWWDC 2022` 上推出了 `SwiftUI Charts`，在 `SwiftUI` 视图中实现图表功能变得非常容易。如下图：
+
+![](https://files.mdnice.com/user/17787/26e62f71-d3d2-473a-8ceb-255476dc3d62.png)
+
+[在 iOS 16 中使用 SwiftUI Charts 自定义折线图](https://swdevnotes.com/swift/2022/customise-a-line-chart-with-swiftui-charts-in-ios-16/ "在 iOS 16 中使用 SwiftUI Charts 自定义折线图")
+
+**摘要：** iOS 16 中引入的 SwiftUI Charts，可以快速的实现各种统计图，通过图表直观的呈现数据。本文介绍了几种自定义的折线统计图。
+
+[如何在 SwiftUI 中创建条形图](https://swdevnotes.com/swift/2021/how-to-create-bar-chart-swiftui/ "如何在 SwiftUI 中创建条形图")
+
+**摘要：** 本文展示了如何创建一个垂直条形图，其中 Y 轴表示每个类型的值。如下图：
+
+![](https://files.mdnice.com/user/17787/9514fc75-413e-4f9c-9e69-5218cd035bf8.png)
+
+[如何在 SwiftUI 中创建水平条形图](https://swdevnotes.com/swift/2021/horizontal-bar-chart-in-swiftui/ "货拉拉 iOS 司机端线程治理总结")
+
+**摘要：** 根据 UI 设计以及交互需求，有时候统计图需要调整 X 和 Y 轴。本文主要介绍了如何创建水平的条形图，如下图：
+
+![](https://files.mdnice.com/user/17787/190c7254-5ee2-4f01-a298-4594d21acfb3.gif)
+
+[使用 SwiftUI 的 Eager Grids](https://github.com/SwiftCommunityRes/article-ios/blob/main/resource/%E4%BD%BF%E7%94%A8%20SwiftUI%20%E7%9A%84%20Eager%20Grids.md "使用 SwiftUI 的 Eager Grids")
+
+**摘要：** 本篇文章主要讲解如何使用 `Eager Grids` 绘制网格视图，其中讲解了十几种网格的实现方法，并详细介绍了网格的实现原理。
 
 ## 关于我们
 
