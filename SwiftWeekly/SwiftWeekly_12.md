@@ -87,21 +87,26 @@ iPhone13 系列成美国最畅销手机机型# 2022 年 Q2 美国最畅销的 10
 [SE-0365](https://github.com/apple/swift-evolution/blob/main/proposals/0365-implicit-self-weak-capture.md "SE-0365") **增加对协议 CustomDebugStringConvertible 到 AnyKeyPath 的一致性** 提案正在审查。
 
 ## Swift论坛
-围绕 [提议 Async buffered channel](https://forums.swift.org/t/pitch-async-buffered-channel/59854) 进行的讨论
-内容概括：创建一个总集channel可以在Tasks之间交流，主要用于一个task产生的value可以被另一个task使用。
 
-[使用 Swift 5.5 / Xcode 14 构建后的新崩溃问题](https://forums.swift.org/t/new-crash-after-building-with-swift-5-5-xcode-14/59798)
-内容概括：swift代码使用地址引用传入NSMutableArray类型给Objective-C，Objective-C会返回Array的地址给Swift代码，当iteration loop 返回的array时发生崩溃。可能原因：Swift ARC 内存优化释放指针引起的崩溃。
+1) 围绕 [提议 Async buffered channel](https://forums.swift.org/t/pitch-async-buffered-channel/59854 "Async buffered channel") 进行的讨论
 
-[新SwiftSyntax 解析器](https://forums.swift.org/t/a-new-swift-parser-for-swiftsyntax/59813)
-内容概括：SwiftSyntax 是一个Swift Package，它可以解析Swift代码成一个树状的语义，可以对树进行操控也可以将树状的语义变回Swift代码。目前SwiftSyntaxParser是一个基于C++库并且Swift compiler非常依赖于C++库。
-项目目标：完全取代Swift parser对C++库的依赖
+内容概括：创建一个总集 channel 可以在 Tasks 之间交流，主要用于一个 task 产生的 value 可以被另一个 task 使用。
 
-围绕 [SE-0370 pointer family initialization improvements and better buffer slice](https://forums.swift.org/t/pitch-pointer-family-initialization-improvements-better-buffer-slices/55689) 展开的讨论
+2) [使用 Swift 5.5 / Xcode 14 构建后的新崩溃问题](https://forums.swift.org/t/new-crash-after-building-with-swift-5-5-xcode-14/59798 "使用 Swift 5.5 / Xcode 14 构建后的新崩溃问题")
 
-[提议：标准库的稳定排序](https://forums.swift.org/t/pitch-document-sorting-as-stable/59880)
+内容概括：swift 代码使用地址引用传入 NSMutableArray 类型给 Objective-C，Objective-C会返回 Array 的地址给 Swift 代码，当 iteration loop 返回的 array 时发生崩溃。可能原因：Swift ARC 内存优化释放指针引起的崩溃。
+
+3) [新 SwiftSyntax 解析器](https://forums.swift.org/t/a-new-swift-parser-for-swiftsyntax/59813 "新 SwiftSyntax 解析器")
+内容概括：SwiftSyntax 是一个 Swift Package，它可以解析 Swift 代码成一个树状的语义，可以对树进行操控也可以将树状的语义变回 Swift 代码。目前 SwiftSyntaxParser 是一个基于 C++ 库并且 Swift compiler 非常依赖于 C++ 库。
+项目目标：完全取代 Swift parser 对 C++ 库的依赖
+
+4) 围绕 [SE-0370 pointer family initialization improvements and better buffer slice](https://forums.swift.org/t/pitch-pointer-family-initialization-improvements-better-buffer-slices/55689 "SE-0370") 展开的讨论
+
+5) [提议：标准库的稳定排序](https://forums.swift.org/t/pitch-document-sorting-as-stable/59880 "提议：标准库的稳定排序")
+
 稳定排序是：在比较相同元素的情况下保持输入的顺序：例子：
-```
+
+```Swift
 var roster = [
    Player(first: "Sam", last: "Coffey"),
    Player(first: "Ashley", last: "Hatch"),
@@ -119,7 +124,8 @@ roster.sort(by: { $0.first < $1.first })
 //    Player(first: "Sophia", last: "Smith"),
 // ]
 ```
-从例子中看出有两个一样的first: "Ashley", 由于输入"Hatch"在"Sanchez"之前, 稳定排序之后顺序不变。
+
+从例子中看出有两个一样的 first: "Ashley", 由于输入 "Hatch" 在 "Sanchez" 之前, 稳定排序之后顺序不变。
 
 ## 推荐博文
 
