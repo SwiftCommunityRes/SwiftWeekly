@@ -25,7 +25,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 “这就是我们所说的零日漏洞，也就是在公司发现并能够做出回应之前，已经被黑客所使用过的漏洞，” 美国麦迪安网络安全公司（Mandiant）的高级威胁情报顾问杰米·科利尔（Jamie Collier）介绍道。
 
-据介绍，受本次漏洞影响的设备涵盖了几乎所有的苹果产品。其中，手机包括 iPhone 6S 及以后的型号；平板包括第五代及以后的 iPad，所有 iPad Pro，以及 iPad Air 2；电脑则是运行 MacOS Monterey 的Mac。此外，该漏洞还能影响到部分型号的 iPod。@看看新闻
+据介绍，受本次漏洞影响的设备涵盖了几乎所有的苹果产品。其中，手机包括 iPhone 6S 及以后的型号；平板包括第五代及以后的 iPad，所有 iPad Pro，以及 iPad Air 2；电脑则是运行 MacOS Monterey 的 Mac。此外，该漏洞还能影响到部分型号的 iPod。@看看新闻
 
 ### App 和 app 内购买项目即将实行税率和价格调整
 
@@ -37,19 +37,19 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 以上调整生效后，在“我的 App”中“价格与销售范围”部分会随即更新。您可以随时在 App Store Connect 中更改您的 App 和 App 内购买项目的价格 (包括自动续期订阅)。如果您有提供订阅项目，您可以选择为现有订阅者保留当前价格。
 
-苹果发言人没有立即透露这个电池百分比调整是否会延续到 iOS 16 的最终版本。这次更新目前只出现在开发者版和公测版。新 iOS 系统将于今年秋天发布，可能是在 9 月份，届时苹果预计将发布**iPhone 14**。@凤凰网科技
+苹果发言人没有立即透露这个电池百分比调整是否会延续到 iOS 16 的最终版本。这次更新目前只出现在开发者版和公测版。新 iOS 系统将于今年秋天发布，可能是在 9 月份，届时苹果预计将发布 **iPhone 14**。@凤凰网科技
 
 ### 苹果 AppleOne 将捆绑销售电话套餐：英国运营商EE是第一家
 
-英国运营商EE近日宣布，它将成为第一家将苹果 Apple One 与电话套餐捆绑在一起的运营商。EE表示，苹果 Apple One 将从 8 月 31 日起包含在其 Full Works 计划中。该计划将包括 Apple One 的个人版订阅，每月费用为 14.95 英镑（约 122.44 元人民币）。
+英国运营商 EE 近日宣布，它将成为第一家将苹果 Apple One 与电话套餐捆绑在一起的运营商。EE表示，苹果 Apple One 将从 8 月 31 日起包含在其 Full Works 计划中。该计划将包括 Apple One 的个人版订阅，每月费用为 14.95 英镑（约 122.44 元人民币）。
 
-苹果 Apple One 订阅包将最多六项苹果服务捆绑到一个订阅中，个人版单独订阅价格为每月 14.95 美元（约 101.51 元人民币），包括四项苹果服务：50GB 的 iCloud+、Apple Music、Apple TV+ 和Apple Arcade 订阅。
+苹果 Apple One 订阅包将最多六项苹果服务捆绑到一个订阅中，个人版单独订阅价格为每月 14.95 美元（约 101.51 元人民币），包括四项苹果服务：50GB 的 iCloud+、Apple Music、Apple TV+ 和 Apple Arcade 订阅。
 
-iPhone13 系列成美国最畅销手机机型 2022 年 Q2 美国最畅销的 10 款智能手机机型，包括苹果、三星、联想三个品牌。其中，苹果 iPhone 13、iPhone 13 Pro Max、iPhone 13 Pro 包揽前三位。三星 Galaxy S21、Galaxy S22 / Ultra 等 5 款新机进入畅销榜前十，Galaxy S22 Ultra 5G 为 2022 年 Q2 美国最畅销的安卓机型。(来源：(来源： 极目新闻))
+iPhone13 系列成美国最畅销手机机型# 2022 年 Q2 美国最畅销的 10 款智能手机机型，包括苹果、三星、联想三个品牌。其中，苹果 iPhone 13、iPhone 13 Pro Max、iPhone 13 Pro 包揽前三位。三星 Galaxy S21、Galaxy S22 / Ultra 等 5 款新机进入畅销榜前十，Galaxy S22 Ultra 5G 为 2022 年 Q2 美国最畅销的安卓机型。(来源：(来源： 极目新闻))
 
 ### 赔偿 2 亿元！苹果因搜包耽误员工下班，遭 1 万多人集体起诉
 
-据路透社 8 月 15 日报道消息，当地时间 13 日，美国加州一名法官已经签署了苹果公司的 3050 万美元（约合人民币 2 亿元）的和解协议。该诉讼持续9年，诉讼称苹果公司没有为下班时检查员工行李的时间付费。
+据路透社 8 月 15 日报道消息，当地时间 13 日，美国加州一名法官已经签署了苹果公司的 3050 万美元（约合人民币 2 亿元）的和解协议。该诉讼持续 9 年，诉讼称苹果公司没有为下班时检查员工行李的时间付费。
 
 起诉源于苹果之前的一项规定，这项规定要求在下班时检查苹果员工的包和个人物品。2013 年，一群苹果公司员工因被迫接受行李检查起诉苹果公司，称公司没有为搜包的时间付费。原告称，苹果零售员工在下班后通常要等几分钟，有时甚至更长时间，才能检查完他们的行李，然后才能离开他们工作的商店。在被提起诉讼后，苹果不再对员工下班前进行搜包检查。
 
@@ -85,7 +85,6 @@ iPhone13 系列成美国最畅销手机机型 2022 年 Q2 美国最畅销的 10 
 我们打算完善该系列中每个相关成员的初始化功能：`UnsafeMutablePointer`、`UnsafeMutableRawPointer`、`UnsafeMutableBufferPointer`、`UnsafeMutableRawBufferPointer`、`Slice<UnsafeMutableBufferPointer>` 和 `Slice<UnsafeMutableRawBufferPointer>`。该功能将允许在更多种类的情况下管理初始化状态，包括更轻松地处理部分初始化的缓冲区。
 
 [SE-0365](https://github.com/apple/swift-evolution/blob/main/proposals/0365-implicit-self-weak-capture.md "SE-0365") **增加对协议 CustomDebugStringConvertible 到 AnyKeyPath 的一致性** 提案正在审查。
-
 
 ## Swift论坛
 
