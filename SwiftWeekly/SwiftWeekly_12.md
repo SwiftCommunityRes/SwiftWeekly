@@ -12,7 +12,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 
 > 提案：改进指针系列初始化和缓冲区
 > 
-> Swift 论坛：
+> Swift 论坛：使用 Swift 5.5 / Xcode 14 构建后崩溃
 >
 > 推荐博文：iOS16 引入 SwiftUI Charts
 
@@ -92,11 +92,12 @@ iPhone13 系列成美国最畅销手机机型# 2022 年 Q2 美国最畅销的 10
 
 内容概括：创建一个总集 channel 可以在 Tasks 之间交流，主要用于一个 task 产生的 value 可以被另一个 task 使用。
 
-2) [使用 Swift 5.5 / Xcode 14 构建后的新崩溃问题](https://forums.swift.org/t/new-crash-after-building-with-swift-5-5-xcode-14/59798 "使用 Swift 5.5 / Xcode 14 构建后的新崩溃问题")
+2) [新问题：使用 Swift 5.5 / Xcode 14 构建后崩溃](https://forums.swift.org/t/new-crash-after-building-with-swift-5-5-xcode-14/59798 "使用 Swift 5.5 / Xcode 14 构建后崩溃")
 
 内容概括：swift 代码使用地址引用传入 NSMutableArray 类型给 Objective-C，Objective-C会返回 Array 的地址给 Swift 代码，当 iteration loop 返回的 array 时发生崩溃。可能原因：Swift ARC 内存优化释放指针引起的崩溃。
 
-3) [新 SwiftSyntax 解析器](https://forums.swift.org/t/a-new-swift-parser-for-swiftsyntax/59813 "新 SwiftSyntax 解析器")
+3) [用于 SwiftSyntax 的新 Swift 解析器](https://forums.swift.org/t/a-new-swift-parser-for-swiftsyntax/59813 "用于 SwiftSyntax 的新 Swift 解析器")
+
 内容概括：SwiftSyntax 是一个 Swift Package，它可以解析 Swift 代码成一个树状的语义，可以对树进行操控也可以将树状的语义变回 Swift 代码。目前 SwiftSyntaxParser 是一个基于 C++ 库并且 Swift compiler 非常依赖于 C++ 库。
 项目目标：完全取代 Swift parser 对 C++ 库的依赖
 
@@ -126,6 +127,10 @@ roster.sort(by: { $0.first < $1.first })
 ```
 
 从例子中看出有两个一样的 first: "Ashley", 由于输入 "Hatch" 在 "Sanchez" 之前, 稳定排序之后顺序不变。
+
+6) [访问变量时只运行一次函数的最佳方法](https://www.reddit.com/r/swift/comments/wwgblk/best_way_to_run_a_function_only_once_while/ "访问变量时只运行一次函数的最佳方法")
+
+7) [确保 viewDidLoad 中的嵌套闭包在函数运行之前完成的最佳方法](https://www.reddit.com/r/swift/comments/wvpxmn/what_is_the_best_way_to_make_sure_a_nested/ "确保 viewDidLoad 中的嵌套闭包在函数运行之前完成的最佳方法")
 
 ## 推荐博文
 
