@@ -8,7 +8,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：苹果为老款 iPhone / iPad / iPod 发布 iOS 12.5.6 更新，修复严重漏洞
+> 新闻和社区：iPhone14 Pro 刘海变“灵动岛”
 > 
 > 提案：
 > 
@@ -17,6 +17,24 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 推荐博文：
 
 ## 新闻和社区
+
+### iPhone14 Pro 刘海变“灵动岛”
+
+iPhone14 Pro 来了，从外观看两个亮点，第一是新配色 #iPhone14Pro 灭霸紫# 好看吗？第二是刘海变成了药丸，不是感叹号，但是带来了 #iPhone14Pro 灵动岛#，和显示动画合为一体。
+
+本次发布会，iphone14pro 刘海依旧，但刘海减少 30% 变更为“药丸”，并引入灵动岛设计，通过刘海变换多种交互UI。视网膜 XDR2000 尼特峰值，实现息屏显示。使用新的 A16 4nm 芯片，搭载 4800 像素主摄像头，比 iPhone 13 Pro 大了 65%，新增配“灭霸紫”配色。
+
+9月8日凌晨，苹果秋季发布会推出 iPhone14 系列产品，其中最大亮点为 iPhone14pro 系列新增正面设计“灵动岛”。正面摄像头有一个较小的切口，在不同状态下挖孔形态不同，支持第三方应用。iPhone14 系列售价：iPhone14 5999元起，iPhone14plus 6999元起，iPhone14pro 7999元起，iPhone 14pro max 8999元起。9 月 9 日开始预售，9 月 16 日正式发售。
+
+![](https://raw.githubusercontent.com/SwiftCommunityRes/image/main/weekly/iPhone.png)
+
+### 库克：苹果将捐款支持四川地震灾区救援和重建工作
+
+9 月 7 日消息，苹果 CEO 蒂姆库克的认证微博发布消息称：“我们心系所有受地震影响的四川民众和社区。苹果将捐款支持救援和重建工作。”
+
+![](https://pics4.baidu.com/feed/5366d0160924ab186a727b567c9d0cc77a890bd9.png?token=0c7a583582e7047d15e6c743a538df15)
+
+此前，小米、宁德时代、阿里巴巴、网易、字节跳动、联想、辛选集团、比亚迪、拼多多、理想汽车等都宣布向四川地震灾区进行捐赠。
 
 ### 苹果为老款 iPhone / iPad / iPod 发布 iOS 12.5.6 更新，修复严重漏洞
 
@@ -75,16 +93,6 @@ IT之家 8 月 31 日消息，苹果在 iOS 16 中对天气应用进行了一些
 “iPad 天气”，随着 iOS 16/ iPadOS 16 更新，终于有了适用于 iPad 的天气应用，相比 iPhone 版本可以更好地适应 iPad 的大显示屏。
 
 总之，iOS 16 更新了好多新奇的功能哦，小伙伴快去试试吧。(来源： IT之家)
-
-### 现已推出 Xcode Cloud 订阅
-
-2022 年 8 月 30 日，Xcode Cloud 是一项内置于 Xcode 中的持续集成和交付服务，能有效地为高质量 App 的开发和交付提升速度。开始使用此服务，您将能在 Xcode 中配置工作流程，并在 2023 年底之前免费获取每月 25 个计算小时。现在，帐户持有人还可以在 Apple Developer App 中订阅更多的计算小时数。
-
-### WWDC22 视频现已提供简体中文字幕
-
-![](https://devimages-cdn.apple.com/wwdc-services/articles/images/ACB36B49-2AAD-4FDD-849A-3F36C5069636/2048.jpeg)
-
-2022 年 8 月 26 日，主题演讲、Platforms State of the Union 以及今年 Apple 全球开发者大会的近 200 场主题演讲皆配有日语、韩语和简体中文字幕。相关视频可在开发者网站或 iPhone、iPad、Mac 和 Apple TV 中的 Apple Developer App 上观看。
 
 ## 提案
 
