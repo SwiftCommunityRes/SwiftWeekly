@@ -103,7 +103,84 @@ IT之家 8 月 31 日消息，苹果在 iOS 16 中对天气应用进行了一些
 
 
 ## Swift论坛
+1) 讨论 [“Automatic” 类型的一致性](https://forums.swift.org/t/automatic-type-conformance/60111)
+出发点：
+```Swift
+private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
+    guard let path = path else {
+        return Just(nil)
+            .eraseToAnyPublisher()
+    }
+    if let image = imageCache.object(forKey: NSString(string: path)) {
+        return Just(image)
+            .eraseToAnyPublisher()
+    }
+    return image(for: path)
+        .handleEvents(receiveOutput: { [weak imageCache] (image) in
+            imageCache?.setObject(image, forKey: NSString(string: path))
+        })
+        .eraseToAnyPublisher()
+}
+```
+```Swift
+.eraseToAnyPublisher()
+```
+被用到了很多次
+把它提出来，写一个Just的extension
+```Swift
+extension Just: TypeConvertable {
+    var convertable: AnyPublisher<Output, Never> {
+        self.eraseToAnyPublisher()
+    }
+}
+```
+于是代码变得简洁了很多
+```Swift
+private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
+    guard let path = path else {
+        return Just(nil)
+    }
+    if let image = imageCache.object(forKey: NSString(string: path)) {
+        return Just(image)
+    }
+    return image(for: path)
+        .handleEvents(receiveOutput: { [weak imageCache] (image) in
+             imageCache?.setObject(image, forKey: NSString(string: path))
+        })
+}
+```
+把例子变得通用一些
+```Swift
+protocol TypeConvertable {
+    associatedtype ReturnType
+    var convertable: ReturnType { get }
+}
+```
+当定义一个类型转变的时候，编译器应该可以决定对应的类型和相应的转变结果。
+在这个例子中返回的类型是由给定类型决定的
 
+2) 讨论 [Xcode14 RC 不能序列化protocol类型](https://forums.swift.org/t/xcode-14-rc-cannot-specialize-protocol-type/60171)
+```
+// ❌ Cannot specialize protocol type 'Collection'
+extension Collection<MyType> { ... }
+
+// ❌ Cannot specialize protocol type 'Sequence'
+func foo(_ x: some Sequence<String>) { ... }
+```
+可能原因 macOS 12 SDK 仍然使用Swift5.6，而不是5.7.
+Swift 5.7 支持：
+* 自定义protocol可以有associated types。 参考链接：https://github.com/apple/swift-evolution/blob/main/proposals/0358-primary-associated-types-in-stdlib.md
+* 在protocol里使用associated type要注意传入的类型与返回类型
+
+3) [Swift coding style guide](https://forums.swift.org/t/swift-style-guide/60177/5)
+一个很好的swift style总集文档：https://google.github.io/swift/#line-wrapping
+
+4) 讨论 [C++ Abstract Class Inheritance and C++-Interop (to Swift Protocols)](https://forums.swift.org/t/c-abstract-class-inheritance-and-c-interop-to-swift-protocols/60170)
+
+5) 提问 [如何处理空的网络返回值](https://forums.swift.org/t/how-to-handle-empty-response-in-responseserializer/60155/1)
+可以参考Alamofire的处理方法.
+参考链接: https://github.com/Alamofire/Alamofire/blob/master/Source/ResponseSerialization.swift#L925
+当网络请求返回是空的时候可以判定为请求失败，同时查看返回代码是不是在200～299之间
 
 ## 推荐博文
 
