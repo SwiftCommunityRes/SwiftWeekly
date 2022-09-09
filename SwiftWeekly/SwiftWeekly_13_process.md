@@ -217,23 +217,23 @@ Swift 5.7 支持：
 
 [SwiftUI 锁屏小组件](https://swiftwithmajid.com/2022/08/30/lock-screen-widgets-in-swiftui/ "SwiftUI 锁屏小组件")
 
-**摘要：**随着 iOS 16 的发布，赶快来适配一下 iOS 16 最为重要的更新之一，锁屏小组件吧！
+**摘要：** 随着 iOS 16 的发布，赶快来适配一下 iOS 16 最为重要的更新之一，锁屏小组件吧！
 
 [Sourcery 的 Swift Package 命令行插件](https://www.polpiella.dev/sourcery-swift-package-command-plugin "Sourcery 的 Swift Package 命令行插件")
 
-**摘要：**作为 Swift 最流程的代码生成工具，sourcery 能够快速的生成模板代码来帮助开发者节省大量的时间。
+**摘要：** 作为 Swift 最流程的代码生成工具，sourcery 能够快速的生成模板代码来帮助开发者节省大量的时间。
 
 [项目中第三方库并不是必须的](https://mp.weixin.qq.com/s/p_MoRthVdlfhqSyxCkDkow)
 
-**摘要：**作者充分的论述了第三方库在提供便利的同时也带来了相当的风险。为是否选择集成第三方库提供了一套有意义的思路。
+**摘要：** 作者充分的论述了第三方库在提供便利的同时也带来了相当的风险。为是否选择集成第三方库提供了一套有意义的思路。
 
 [增加 App 排名的 ASO 小技巧](https://blog.nielsmouthaan.nl/aso-tips-and-tricks-to-increase-your-apps-ranking "增加 App 排名的 ASO 小技巧")
 
-**摘要：**偶尔也可以关注一下技术之外的东西，从另一个方面提升自己的竞争力。
+**摘要：** 偶尔也可以关注一下技术之外的东西，从另一个方面提升自己的竞争力。
 
 [云音乐 iOS 端网络图片下载优化实践](https://mp.weixin.qq.com/s/R1XLp9hjHDBdYcOI6w8psw "云音乐 iOS 端网络图片下载优化实践")
 
-**摘要：**本文介绍了网易云音乐在图片下载的优化下实践。从想法到技术方案，再从 `SDWebImage` 源码入手，到最后的再次封装实现，都很值得一看。
+**摘要：** 本文介绍了网易云音乐在图片下载的优化下实践。从想法到技术方案，再从 `SDWebImage` 源码入手，到最后的再次封装实现，都很值得一看。
 
 ## 关于我们
 
