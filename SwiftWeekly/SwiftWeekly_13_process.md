@@ -10,11 +10,11 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：iPhone14 Pro 刘海变“灵动岛”
 > 
-> 提案：
+> 提案：大量提案审核结果已发布
 > 
-> Swift 论坛：
+> Swift 论坛：论坛内容丰富，欢迎参与讨论
 >
-> 推荐博文：
+> 推荐博文：增加 App 排名的 ASO 小技巧
 
 ## 新闻和社区
 
@@ -32,7 +32,7 @@ iPhone14 Pro 来了，从外观看两个亮点，第一是新配色 #iPhone14Pro
 
 9 月 7 日消息，苹果 CEO 蒂姆库克的认证微博发布消息称：“我们心系所有受地震影响的四川民众和社区。苹果将捐款支持救援和重建工作。”
 
-![](https://pics4.baidu.com/feed/5366d0160924ab186a727b567c9d0cc77a890bd9.png?token=0c7a583582e7047d15e6c743a538df15)
+![](https://raw.githubusercontent.com/SwiftCommunityRes/image/main/weekly/weekly1301.png)
 
 此前，小米、宁德时代、阿里巴巴、网易、字节跳动、联想、辛选集团、比亚迪、拼多多、理想汽车等都宣布向四川地震灾区进行捐赠。
 
@@ -54,7 +54,7 @@ IT之家了解到，苹果会针对无法更新到 iOS 12 之后的旧 iPhone、
 
 描述：已通过改进边界检查解决越界写入问题。(来源： IT之家)
 
-![](https://img.ithome.com/newsuploadfiles/2022/9/f7d64544-3475-4ca1-a1a8-d0ce5422d079.png?x-bce-process=image/watermark,image_aW1nL3dhdGVybWFyay9xYy9xYzE3OC5wbmc=,g_9,x_18,y_18,a_0,t_100)
+![](https://raw.githubusercontent.com/SwiftCommunityRes/image/main/weekly/weekly1302.png)
 
 ### 苹果 iOS 16 更新，天气 App 新功能盘点
 
@@ -98,13 +98,30 @@ IT之家 8 月 31 日消息，苹果在 iOS 16 中对天气应用进行了一些
 
 ### 通过的提案
 
+[SE-0370](https://github.com/apple/swift-evolution/blob/main/proposals/0370-pointer-family-initialization-improvements.md "SE-0370") **改进指针系列初始化和缓冲区** 提案已通过。该提案已在[十二期周报](https://mp.weixin.qq.com/s/IXP8PNT4aoCnyB-V2qMY_Q)正在审查的提案模块做了详细介绍。
+
+[SE-0365](https://github.com/apple/swift-evolution/blob/main/proposals/0365-implicit-self-weak-capture.md "SE-0365") **增加对协议 CustomDebugStringConvertible 到 AnyKeyPath 的一致性** 提案已通过。该提案已在[十二期周报](https://mp.weixin.qq.com/s/IXP8PNT4aoCnyB-V2qMY_Q)正在审查的提案模块做了详细介绍。
+
+[SE-0368](https://github.com/apple/swift-evolution/blob/main/proposals/0368-staticbigint.md "SE-0368") **StaticBigInt** 提案已通过。该提案已在[十一期周报](https://mp.weixin.qq.com/s/i5a-jhRRdf36KUNRoMX_8w)正在审查的提案模块做了详细介绍。
+
+### 拒绝的提案
+
+[SE-0371](https://github.com/apple/swift-evolution/blob/main/proposals/0371-isolated-synchronous-deinit.md "SE-0371") **Isolated synchronous deinit** 被拒绝，重新修订。该提案已在[十二期周报](https://mp.weixin.qq.com/s/IXP8PNT4aoCnyB-V2qMY_Q)正在审查的提案模块做了详细介绍。
+
+[SE-0366](https://github.com/apple/swift-evolution/blob/main/proposals/0366-move-function.md "SE-0366") **代码上下文新增敏感关键字 move** 被拒绝，重新修订。该提案已在[十一期周报](https://mp.weixin.qq.com/s/i5a-jhRRdf36KUNRoMX_8w)正在审查的提案模块做了详细介绍。
 
 ### 正在审查的提案
 
+[SE-0372](https://github.com/apple/swift-evolution/blob/main/proposals/0372-document-sorting-as-stable.md "SE-0372") **更新稳定排序文档** 提案正在审查。
+
+Swift 的排序算法在 Swift 5 之前已经更改为稳定排序，但是文档一直没有更新。本提案致力于更新稳定的排序算法文档，方便开发者使用。
+
 
 ## Swift论坛
-1) 讨论 [“Automatic” 类型的一致性](https://forums.swift.org/t/automatic-type-conformance/60111)
+1) 讨论 [Automatic 类型的一致性](https://forums.swift.org/t/automatic-type-conformance/60111 "Automatic 类型的一致性")
+
 出发点：
+
 ```Swift
 private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
     guard let path = path else {
@@ -122,11 +139,15 @@ private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
         .eraseToAnyPublisher()
 }
 ```
+
 ```Swift
 .eraseToAnyPublisher()
 ```
+
 被用到了很多次
-把它提出来，写一个Just的extension
+
+把它提出来，写一个 Just 的 extension
+
 ```Swift
 extension Just: TypeConvertable {
     var convertable: AnyPublisher<Output, Never> {
@@ -134,7 +155,9 @@ extension Just: TypeConvertable {
     }
 }
 ```
+
 于是代码变得简洁了很多
+
 ```Swift
 private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
     guard let path = path else {
@@ -149,17 +172,21 @@ private func cachedImage(for path: String?) -> AnyPublisher<UIImage?, Never> {
         })
 }
 ```
+
 把例子变得通用一些
+
 ```Swift
 protocol TypeConvertable {
     associatedtype ReturnType
     var convertable: ReturnType { get }
 }
 ```
+
 当定义一个类型转变的时候，编译器应该可以决定对应的类型和相应的转变结果。
 在这个例子中返回的类型是由给定类型决定的
 
-2) 讨论 [Xcode14 RC 不能序列化protocol类型](https://forums.swift.org/t/xcode-14-rc-cannot-specialize-protocol-type/60171)
+2) 讨论 [Xcode14 RC 不能序列化 protocol 类型](https://forums.swift.org/t/xcode-14-rc-cannot-specialize-protocol-type/60171 "Xcode14 RC 不能序列化 protocol 类型")
+
 ```
 // ❌ Cannot specialize protocol type 'Collection'
 extension Collection<MyType> { ... }
@@ -167,22 +194,46 @@ extension Collection<MyType> { ... }
 // ❌ Cannot specialize protocol type 'Sequence'
 func foo(_ x: some Sequence<String>) { ... }
 ```
-可能原因 macOS 12 SDK 仍然使用Swift5.6，而不是5.7.
+
+可能原因 macOS 12 SDK 仍然使用 Swift5.6，而不是 5.7.
 Swift 5.7 支持：
-* 自定义protocol可以有associated types。 参考链接：https://github.com/apple/swift-evolution/blob/main/proposals/0358-primary-associated-types-in-stdlib.md
-* 在protocol里使用associated type要注意传入的类型与返回类型
 
-3) [Swift coding style guide](https://forums.swift.org/t/swift-style-guide/60177/5)
-一个很好的swift style总集文档：https://google.github.io/swift/#line-wrapping
+* 自定义 protocol 可以有 associated types。 参考链接：https://github.com/apple/swift-evolution/blob/main/proposals/0358-primary-associated-types-in-stdlib.md
+* 在 protocol 里使用 associated type 要注意传入的类型与返回类型
 
-4) 讨论 [C++ Abstract Class Inheritance and C++-Interop (to Swift Protocols)](https://forums.swift.org/t/c-abstract-class-inheritance-and-c-interop-to-swift-protocols/60170)
+3) [Swift coding style guide](https://forums.swift.org/t/swift-style-guide/60177/5 "Swift coding style guide")
 
-5) 提问 [如何处理空的网络返回值](https://forums.swift.org/t/how-to-handle-empty-response-in-responseserializer/60155/1)
-可以参考Alamofire的处理方法.
+一个很好的 swift style 总集文档：https://google.github.io/swift/#line-wrapping
+
+4) 讨论 [C++ Abstract Class Inheritance and C++-Interop (to Swift Protocols)](https://forums.swift.org/t/c-abstract-class-inheritance-and-c-interop-to-swift-protocols/60170 "C++ Abstract Class Inheritance and C++-Interop (to Swift Protocols)")
+
+5) 提问 [如何处理空的网络返回值](https://forums.swift.org/t/how-to-handle-empty-response-in-responseserializer/60155/1 "如何处理空的网络返回值")
+
+可以参考 Alamofire 的处理方法.
 参考链接: https://github.com/Alamofire/Alamofire/blob/master/Source/ResponseSerialization.swift#L925
-当网络请求返回是空的时候可以判定为请求失败，同时查看返回代码是不是在200～299之间
+当网络请求返回是空的时候可以判定为请求失败，同时查看返回代码是不是在 200～299 之间
 
 ## 推荐博文
+
+[SwiftUI 锁屏小组件](https://swiftwithmajid.com/2022/08/30/lock-screen-widgets-in-swiftui/ "SwiftUI 锁屏小组件")
+
+**摘要：**随着 iOS 16 的发布，赶快来适配一下 iOS 16 最为重要的更新之一，锁屏小组件吧！
+
+[Sourcery 的 Swift Package 命令行插件](https://www.polpiella.dev/sourcery-swift-package-command-plugin "Sourcery 的 Swift Package 命令行插件")
+
+**摘要：**作为 Swift 最流程的代码生成工具，sourcery 能够快速的生成模板代码来帮助开发者节省大量的时间。
+
+[项目中第三方库并不是必须的](https://mp.weixin.qq.com/s/p_MoRthVdlfhqSyxCkDkow)
+
+**摘要：**作者充分的论述了第三方库在提供便利的同时也带来了相当的风险。为是否选择集成第三方库提供了一套有意义的思路。
+
+[增加 App 排名的 ASO 小技巧](https://blog.nielsmouthaan.nl/aso-tips-and-tricks-to-increase-your-apps-ranking "增加 App 排名的 ASO 小技巧")
+
+**摘要：**偶尔也可以关注一下技术之外的东西，从另一个方面提升自己的竞争力。
+
+[云音乐 iOS 端网络图片下载优化实践](https://mp.weixin.qq.com/s/R1XLp9hjHDBdYcOI6w8psw "云音乐 iOS 端网络图片下载优化实践")
+
+**摘要：**本文介绍了网易云音乐在图片下载的优化下实践。从想法到技术方案，再从 `SDWebImage` 源码入手，到最后的再次封装实现，都很值得一看。
 
 ## 关于我们
 
