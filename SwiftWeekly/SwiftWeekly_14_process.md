@@ -22,6 +22,8 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 近日，有海外程序员小哥哥曝光了灵动岛的开发代码，并配文称原本想安装完 Xcode 14.1 Beta版（iOS开发程序）去了解下 iPhone 14 Pro的灵动岛API接口情况，但没想到，苹果并未开放API，也就是说第三方开发人员很难自行适配灵动岛这个系统级的交互功能。如果想要适配灵动岛恐怕只能向苹果官方申请开放 API 接口。这也是为什么很多 App 至今都没能适配灵动岛的情况出现。（新浪数码）
 
+![](https://raw.githubusercontent.com/SwiftCommunityRes/image/main/weekly/weekly1401.gif)
+
 ### App 和 App 内购买项目即将实行价格和税率调整
 
 最早于 2022 年 10 月 5 日起，下列地区 App Store 上的 App 及 App 内购买项目 (自动续期订阅除外) 价格将有所提高：智利、埃及、日本、马来西亚、巴基斯坦、波兰、韩国、瑞典、越南和所有使用欧元货币的地区。在越南，相关的价格提升反映了要求 Apple 代扣代缴适用税款的新规定，其中适用税款包括 5% 的增值税 (VAT) 和 5% 的企业所得税 (CIT)。
