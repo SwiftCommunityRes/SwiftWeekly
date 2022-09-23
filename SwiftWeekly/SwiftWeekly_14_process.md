@@ -51,7 +51,46 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+1) Swift 5.7 发布! 🥳 新增功能详见：[Swift Evolution](https://www.swift.org/blog/swift-5.7-released/ “Swift Evolution”) 
 
+2) [Swift Platform Work Group](https://forums.swift.org/t/initiative-swift-platform-work-group/60340 “Swift Platform Work Group”)
+Swift community 工作组将努力提高 Swift 的平台可用性
+工作组内容包括：
+* 拓展Swift可用的目标平台
+* 拓展Swift可用的主机平台
+* 提高Swift 现有平台上的Toolchain
+* 让Swift编译器可以在现有的平台上工作比如Linux 和 Windows
+* 努力打造更好的跨平台 Swift 生态系统
+工作组不涉及的内容有：
+* 涉及 Apple 已经支持的平台
+* 涉及低资源和裸机平台
+
+3)提议[使用“conformance”关键字的让协议符合要求](https://forums.swift.org/t/pre-pitch-explicit-protocol-fulfilment-with-the-conformance-keyword/60246 “使用“conformance”关键字的让协议符合要求”)
+“conformance”关键字的意思是：“此声明由程序员定义并满足协议要求”。“conformance”不是protocol必须有的关键字。 但是，当“conformance”存在时，除非声明确实符合协议要求，否则程序格式错误。
+栗子🌰：
+```Swift
+protocol Program {
+    func run()
+}
+
+struct HelloWorld: Program {
+    // OK
+    conformance func run() { ... }
+    
+    // error: function crash() does not fulfill any requirement of the protocol 'Program'.
+    conformance func crash() { ... }
+}
+```
+4) 提议[clock.sleep(for:)](https://forums.swift.org/t/pitch-clock-sleep-for/60376 "clock.sleep(for:)")
+
+4) 框架[用于web和swift server交互的框架](https://forums.swift.org/t/html-framework-for-swift/60241 "用于web和swift server交互的框架")
+* [vapor/leaf 8](https://github.com/vapor/leaf)
+* [vapor-community/HTMLKit 9](https://github.com/vapor-community/HTMLKit)
+* [Plot 13](https://github.com/JohnSundell/Plot)
+
+5) 讨论[在init方法中使用async function](https://forums.swift.org/t/call-an-async-function-in-an-initializer/60396 “在init方法中使用async function”)
+
+6）讨论[PassthroughSubject 和 CurrentValueSubject](https://forums.swift.org/t/asyncsequence-stream-version-of-passthroughsubject-or-currentvaluesubject/60395 "PassthroughSubject 和 CurrentValueSubject")
 
 ## 推荐博文
 
