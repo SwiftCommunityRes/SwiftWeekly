@@ -60,6 +60,92 @@ Apple Entrepreneur Camp 旨在为 App 驱动型组织中的少数群体创业者
 
 ## Swift论坛
 
+1) [讨论]苹果是否应该创造一个简单编程语言(https://forums.swift.org/t/should-apple-create-a-simple-programming-language/60746 "苹果是否应该创造一个简单编程语言")
+2) [Bug]@available在literal初始化中没有效果(https://github.com/apple/swift/issues/61564 "@available在literal初始化中没有效果")
+    ```Swift
+    struct Foo {
+        let bar: String
+    }
+
+    @available(*, deprecated)
+    extension Foo: ExpressibleByStringLiteral {
+        init(stringLiteral value: StringLiteralType) {
+            self.bar = value
+        }
+    }
+
+    let a: Foo = Foo(stringLiteral: "") // warning: 'init(stringLiteral:)' is deprecated
+    let b: Foo = "" // no warning
+    ```
+3) [讨论]重新考虑基于property wrappers的全局actor推断(https://forums.swift.org/t/reconsider-inference-of-global-actor-based-on-property-wrappers/60821 "重新考虑基于property wrappers的全局actor推断")
+内容概括：
+4) [提问]拆分我的信息元素(https://forums.swift.org/t/splitting-information-elements/60835 "拆分我的信息元素")
+    ```Swift
+    // Foo.swift
+    //
+    class Foo {
+        var x : Int;
+        
+        init ();
+        init (v: Int);
+        
+        func bar () -> Int;
+        func bar (u:Int, v:Int) -> Int;
+    }
+
+    extension Foo {
+        init () {
+            ...
+        }
+        
+        init (v: Int) {
+            ...
+        }
+    }
+
+    extension Foo {
+        func bar () -> Int {
+            ...
+        }
+        
+        func bar (u:Int, v:Int) -> Int {
+            ...
+        }
+    }
+    ```
+    [解决] 使用convenience初始化方法, designated初始化方法必须写在class的主体中但convenience初始化方法可以在extension中使用
+    ```Swift
+    class Foo {
+        var x: Int
+        
+        // Note that this is a designated init because it doesn't have the
+        // `convenience` keyword.
+        init() {
+            x = 0
+        }
+    }
+
+    extension Foo {
+        convenience init(v: Int) {
+            self.init()
+            x = v
+        }
+    }
+
+    extension Foo {
+        func bar() -> Int {
+            return x
+        }
+        
+        func bar(u:Int, v:Int) -> Int {
+            return x + u + v
+        }
+    }
+    ```
+5) [讨论]iPhone拍照和激光雷达数据采集(https://forums.swift.org/t/iphone-picture-taking-and-lidar-data-acquisition/60799 "iPhone拍照和激光雷达数据采集")
+6) [讨论]使用@MainActor 确保在主线程上执行(https://forums.swift.org/t/using-mainactor-to-ensure-execution-on-the-main-thread/60764 "使用@MainActor 确保在主线程上执行")
+7) [讨论]switch 语句的替代方法（https://forums.swift.org/t/an-alternative-to-the-switch-statement/60714/10 "switch 语句的替代方法"）
+8) [讨论]累积 HTTP 请求body部分：存储 `ByteBuffer` 是个好主意吗？(https://forums.swift.org/t/accumulating-http-request-body-parts-is-storing-bytebuffer-s-a-good-idea/60813 "累积 HTTP 请求nody部分：存储 `ByteBuffer` 是个好主意吗？")
 
 ## 推荐博文
 
