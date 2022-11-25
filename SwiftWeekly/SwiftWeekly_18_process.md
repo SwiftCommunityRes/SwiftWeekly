@@ -18,7 +18,50 @@
 
 
 ## Swift论坛
+1) 讨论[是否应该用Codable还是用NSCoding](https://forums.swift.org/t/should-i-stick-with-codable-or-switch-back-to-nscoding/61604 "是否应该用Codable还是用NSCoding")
 
+2) 讨论[NSKeyedArchiver, CoreData和其他的存储方案](https://forums.swift.org/t/nskeyedarchiver-coredata-and-other-storage-solutions/61603 "NSKeyedArchiver, CoreData和其他的存储方案")
+
+3) 讨论[数组的悬空指针](https://forums.swift.org/t/dangling-pointer-from-array/61609 "数组的悬空指针")
+```Swift
+do {
+    var array = [0, 1, 2, 3, 4]
+    let ptrToArray = UnsafeBufferPointer<Int>(start: &array, count: array.count)
+    
+    for number in ptrToArray {
+        print(number)
+    }
+}
+```
+解决
+```Swift
+let array = [0, 1, 2, 3, 4]
+array.withUnsafeBufferPointer { ptrToArray in
+    for number in ptrToArray {
+        print(number)
+    }
+}
+```
+
+4) 讨论[如何从 ReducerProtocol 中创建的alert回调中触发操作](https://forums.swift.org/t/how-to-trigger-action-from-alert-callback-created-in-reducerprotocol/61598 "如何从 ReducerProtocol 中创建的alert回调中触发操作")
+
+5) 讨论[键路径与闭包的代码大小差异](https://forums.swift.org/t/code-size-difference-with-keypath-vs-closure/61599 "键路径与闭包的代码大小差异")
+
+6) 讨论[将 Objective-C 代码库迁移到 Swift](https://forums.swift.org/t/migrating-an-objective-c-codebase-to-swift/61592 "将 Objective-C 代码库迁移到 Swift")
+Steve Barnegren 撰写的从 Objective-C 迁移到 Swift 30 的博客文章是一本不错的读物。
+文章链接: https://www.steveonstuff.com/2022/01/13/migrating-from-objc-to-swift.html
+
+7) 讨论[RawRepresentable<String> 和 LosslessStringConvertible的区别](https://forums.swift.org/t/difference-between-rawrepresentable-string-and-losslessstringconvertible/61600 "RawRepresentable<String>和LosslessStringConvertible的区别")
+LosslessStringConvertible 改进了 CustomStringConvertible，这会影响其他事情，例如对 String(describing:) 的调用。 
+从语义上讲，LosslessStringConvertible 意味着它可以表示为字符串（例如整数），而 RawRepresentable<String> 意味着它在底层是一个字符串（例如原始类型为 String 的枚举）。
+
+8) 讨论[无法使用protocol重新创建的类 - 扩展存储属性](https://forums.swift.org/t/i-cant-recreate-my-class-using-protocols-extension-stored-properties/61589 "无法使用protocol重新创建的类 - 扩展存储属性")
+简短的回答是“protocol不能定义存储的属性”。 协议一致性可以在定义类型的模块之外定义，这很自然地得出结论：这样的协议如何添加存储？
+您能做的最好的事情就是让协议要求您的类型具有存储空间。 您的类型定义仍然必须实际定义该存储。
+
+9) 讨论[状态初始化器中的 UUID](https://forums.swift.org/t/uuid-in-state-initializer/61593 "状态初始化器中的 UUID")
+
+10) 讨论[对于金融计算用Decimal还是Double](https://forums.swift.org/t/decimal-or-double-for-financial-calculations/61585 "对于金融计算用Decimal还是Double")
 
 ## 推荐博文
 
