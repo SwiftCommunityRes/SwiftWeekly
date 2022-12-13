@@ -3,7 +3,7 @@
 ![](https://user-images.githubusercontent.com/24238160/138631090-e34763aa-7ed8-4b9a-8e02-4fa56d55b045.png)
 
 *一个关注 [Swift.org](https://swift.org) 动态，由社区驱动的每周时事通讯*
-git 调试
+
 ## 往期回顾
 
 周报内容模块分为：**新闻**、**提案**、**Swift论坛**、**推荐博文**。初期计划每两周发布一期，每个模块还在调整磨合期。各位读者如果有好的提议，欢迎提 Issues。
