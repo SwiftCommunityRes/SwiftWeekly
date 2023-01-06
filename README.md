@@ -8,12 +8,13 @@
 
 周报内容模块分为：**新闻**、**提案**、**Swift论坛**、**推荐博文**。初期计划每两周发布一期，每个模块还在调整磨合期。各位读者如果有好的提议，欢迎提 Issues。
 
+<a href="https://mp.weixin.qq.com/s/lWS6Xfw4UyGH0YDRfmrRkw">Swift 周报 第二十期</a></br>
 <a href="https://mp.weixin.qq.com/s/lWS6Xfw4UyGH0YDRfmrRkw">Swift 周报 第十九期</a></br>
 <a href="https://mp.weixin.qq.com/s/2iML-PGaNKabxMiQtGwQdg">Swift 周报 第十八期</a></br>
-<a href="https://mp.weixin.qq.com/s/F6spkdjibMZTLmAonqdogg">Swift 周报 第十七期</a></br>
 
 <details>
 <summary>点击查看更多内容</summary>
+	<a href="https://mp.weixin.qq.com/s/F6spkdjibMZTLmAonqdogg">Swift 周报 第十七期</a></br>
 	<a href="https://mp.weixin.qq.com/s/_igJkQdGWEGSfbDmVL9bbg">Swift 周报 第十六期</a></br>
 	<a href="https://mp.weixin.qq.com/s/x-ufc5MauRGfoY571WePFA">Swift 周报 第十五期</a></br>
 	<a href="https://mp.weixin.qq.com/s/ZSOX_pW2Krwea0tgl0ufHQ">Swift 周报 第十四期</a></br>
