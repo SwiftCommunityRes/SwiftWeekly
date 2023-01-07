@@ -10,15 +10,15 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：苹果市值两年来首次跌破2万亿美元
 > 
-> 提案：
+> 提案：弃用 `@UIApplicationMain` 和 `@NSApplicationMain`
 > 
-> Swift 
+> Swift 论坛：改变一个属性包装器
 >
-> 推荐博文：
+> 推荐博文：iOS 应用卡顿监控与治理
 > 
 > **话题讨论：** 
 > 
-> 
+> 您觉得烟花应该被禁止吗？
 
 ## 新闻和社区
 
@@ -26,7 +26,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 鞭牛士 1 月 4 日消息，据报道，当地时间 1 月 3 日，苹果（AAPL）收报 125.07 美元，跌幅 3.74% ，市值 1.99 万亿美元。市值一夜蒸发 773 亿美元（约 5345 亿元人民币）。
 
-![](https://pics1.baidu.com/feed/9f510fb30f2442a728df5cb731352e40d0130255.jpeg@f_auto?token=ab29cd88610dbb90d3a05cb075caaa43)
+![](https://files.mdnice.com/user/17787/2f40682e-f405-4394-9578-ce298cae2821.png)
 
 Tech 星球 1 月 4 日消息，据凤凰网科技，在遭遇了去年的大幅下跌后，苹果公司市值本周二继续大幅缩水，自 2021 年 3 月以来首次跌破 2 万亿美元，面临被微软公司超越的风险。而就在一年前，苹果曾成为首家市值触及 3 万亿美元的公司。
 
@@ -36,27 +36,33 @@ Tech 星球 1 月 4 日消息，据凤凰网科技，在遭遇了去年的大幅
 
 在经历了周二的下跌后，苹果目前的市值为 1.99 万亿美元，稍稍领先微软，后者的市值约为 1.8 万亿美元。苹果、微软、亚马逊、谷歌母公司 Alphabet 、脸书母公司 Meta 目前在标普 500 指数中的市值占比约为 18% ， 低于 2020 年一度达到的 24% 。
 
-### TrendForce集邦咨询：疫情影响，2022年iPhone 14系列出货量滑至7,810万支
+### TrendForce 集邦咨询：疫情影响，2022 年 iPhone 14 系列出货量滑至 7,810 万支
 
 富士康（Foxconn）郑州厂自 10 月起至今持续受疫情影响，稼动率仍难突破七成，而 10 月底正值苹果（Apple）新机销售的冲刺期，其中 Pro 系列因受市场青睐而持续调升生产比重，使得作为 Apple Pro 系列主力组装厂的富士康备感压力，即便有富士康深圳厂支持生产，但仍缓不济急，故 TrendForce 集邦咨询下调 2022 年 iPhone 14 系列出货量至 7,810 万支。
 
-### 富士康独供地位不再，立讯确定将加入iPhone 15 Pro Max生产行列
+### 富士康独供地位不再，立讯确定将加入 iPhone 15 Pro Max 生产行列
 
 富士康长年稳站 Pro 系列的独家组装，但苹果基于风险控管，原本即有意找寻其他业者加入生产组装行列，并且在 iPhone 14 Pro 系列上试行，富士康由于疫情影响稼动率，这也让立讯精密（Luxshare）成为 iPhone 15 Pro Max 组装供应链行列之一，目前其 iPhone 代工厂仍坐落中国，越南厂则是以苹果周边为主，目前尚无 iPhone 产线规划。
 
 ## 提案
 
-### 通过的提案
-
-
 ### 正在审查的提案
 
+[SE-0383](https://github.com/apple/swift-evolution/blob/main/proposals/0383-deprecate-uiapplicationmain-and-nsapplicationmain.md "SE-0383") **弃用 @UIApplicationMain 和 @NSApplicationMain** 提案正在审查。
+
+`@UIApplicationMain` 和 `@NSApplicationMain` 曾经是 iOS 和 macOS 应用程序分别为应用程序声明合成平台特定入口点的标准方式。 这些函数已经被 SE-0281 引入的 `@main` 属性淘汰了。 这个提议试图在 Swift 6 之前弃用这些可选的入口点属性，从而支持 @main。
+
+[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案正在审查。
+
+该提案主要目的是通过减少对已声明的 Swift API 可见性的负面影响，来提高 Swift 中现有 Objective-C 库的可用性。希望可以用合成占位符类型来表示 Swift 中已声明的 Objective-C 接口和协议。
 
 ## Swift论坛
 1) 讨论 [SE-0384：导入前向声明的 Objective-C 接口和协议](https://forums.swift.org/t/se-0384-importing-forward-declared-objective-c-interfaces-and-protocols/62392 "SE-0384：导入前向声明的 Objective-C 接口和协议")
 
 2) 讨论 [Swift 6 语言模式的设计优先级](https://forums.swift.org/t/design-priorities-for-the-swift-6-language-mode/62408 "Swift 6 语言模式的设计优先级")
+
 Swift 6 重点领域
+
 Swift 语言工作组确定了三个重点领域，Swift 的系统改进将取决于源代码不兼容的更改。 涉及 Swift 6 源代码不兼容更改的提案应解决以下多个领域之一：
 
 默认情况下的数据竞争安全性：默认情况下的数据竞争安全性是对只能在新语言版本中上演的模型的重大转变，但它有很大的回报，因为它使并发程序更容易正确编写。 Swift 6 将需要加强围绕 Sendable 和 actor-isolation 检查的语义，但可能还需要额外的更改或功能来使在该安全模型中工作更容易。
@@ -70,13 +76,17 @@ Swift 语言工作组确定了三个重点领域，Swift 的系统改进将取�
 4) 讨论 [如何使用函数的返回值而不是使用@Binding 在视图之间传递数据？](https://forums.swift.org/t/how-can-i-use-return-values-from-functions-instead-of-using-binding-to-pass-data-between-views/62413 "如何使用函数的返回值而不是使用@Binding 在视图之间传递数据？")
 
 5) 提议 [在闭包中隐式使用guard self](https://forums.swift.org/t/implicit-guarding-self-in-closures/62386 "在闭包中隐式使用guard self")
+
 受 SE-0365 的启发：
+
 ```Swift
 { [guarded self] in
     dismiss()
 }
 ```
-在这里guard self 以确保 self（否则返回），这通常在这种情况下使用：
+
+在这里 guard self 以确保 self（否则返回），这通常在这种情况下使用：
+
 ```Swift
 { [weak self] in
     guard let self else { return }
@@ -85,7 +95,9 @@ Swift 语言工作组确定了三个重点领域，Swift 的系统改进将取�
 ```
 
 6) 讨论 [改变一个属性包装器](https://forums.swift.org/t/mutating-a-property-wrapper/62403 "改变一个属性包装器")
-Property wrapper一个栗子：
+
+Property wrapper 一个栗子：
+
 ```Swift
 @propertyWrapper
 public struct PropertyWrapper {
@@ -118,7 +130,9 @@ private final class Box {
     }
 }
 ```
+
 如何使用：
+
 ```Swift
 struct Struct {
     @PropertyWrapper
@@ -139,9 +153,10 @@ print(s.propertyWrapper.needsCopyOnWrite()) // false
 7) 讨论 [保持任务实例超出其主体执行的警告？](https://forums.swift.org/t/caveats-of-keeping-task-instance-beyond-its-bodys-execution/62400 "保持任务实例超出其主体执行的警告？")
 
 8) 讨论 [SE-0379: Opt-in Reflection Metadata](https://forums.swift.org/t/returned-for-revision-se-0379-opt-in-reflection-metadata/62390 "SE-0379: Opt-in Reflection Metadata")
+
 更改反射生成的默认行为:
 
-该提案规定，在 Swift 6 语言模式下，反射的默认行为应该成为选择加入。 社区对提案的这一方面反应不一，许多开发人员担心这会对现有代码中普遍使用打印、镜像和其他基于反射的 API 产生影响。 关于支持“按使用量付费”模型和提供丰富的运行时设施之间的紧张关系，有很好的哲学讨论。 该提案建议通过使依赖反射的 API 在其参数中添加 Reflectable 约束来解决这种紧张关系。 然而，对于许多 API 来说，这是一个问题，特别是标准库设施，如打印和相关的字符串化功能，旨在尽最大努力处理任何值。 要求通过潜在的许多 API 层线程化通用约束只是为了添加一些日志记录或 printf 调试将是一个严重的强加。 但是，消除对这些约束的需求会使编译器没有面包屑来帮助开发人员制作所有需要的类型 Reflectable 或 Custom*StringConvertible； 开发人员必须通过大量专门测试来发现和修复运行时影响。
+该提案规定，在 Swift 6 语言模式下，反射的默认行为应该成为选择加入。 社区对提案的这一方面反应不一，许多开发人员担心这会对现有代码中普遍使用打印、镜像和其他基于反射的 API 产生影响。 关于支持“按使用量付费”模型和提供丰富的运行时设施之间的紧张关系，有很好的哲学讨论。 该提案建议通过使依赖反射的 API 在其参数中添加 Reflectable 约束来解决这种紧张关系。 然而，对于许多 API 来说，这是一个问题，特别是标准库设施，如打印和相关的字符串化功能，旨在尽最大努力处理任何值。 要求通过潜在的许多 API 层线程化通用约束只是为了添加一些日志记录或 printf 调试将是一个严重的强加。 但是，消除对这些约束的需求会使编译器没有面包屑来帮助开发人员制作所有需要的类型 Reflectable 或 Custom * StringConvertible；开发人员必须通过大量专门测试来发现和修复运行时影响。
 
 Language Workgroup 还注意到 Swift 项目先前尝试追溯更改运行时行为，特别是 SE-0083，它通过从运行时中删除 Foundation 类型桥接来简化动态转换行为。 当时的核心团队最终拒绝了该提议，因为考虑到该提议的动态性质，他们无法想出一种方法来评估对 Swift 生态系统的影响，并有足够的把握认为该变化不会造成过度破坏。 语言工作组对更改默认反射行为也有类似的担忧； 即使默认更改受语言版本限制，我们希望开发人员采用 Swift 6 以获得静态并发安全和其他更改的好处，并期望他们也审计项目的动态行为以防止意外的反射依赖项将是一个障碍 更新他们的语言版本模式。 如果没有评估更改默认设置对现实世界影响的计划，我们就不会接受这种更改。
 
@@ -158,6 +173,24 @@ Reflectable 的本质和动态投射支持:
 需要进一步考虑的实现的一个方面是它与调试器的交互。 LLDB 的 Swift 支持目前严重依赖全反射元数据来提供完整的功能，语言工作组希望看到一个计划来确保调试支持可用
 
 ## 推荐博文
+
+[出行iOS用户端卡顿治理实践](https://juejin.cn/post/7176823567059779639 "出行iOS用户端卡顿治理实践")
+
+**摘要：** 这篇文章主要讲解该如何去做好卡顿治理。我们使用APP有时会遇到点击响应迟钝、页面跳转缓慢、滑动列表不流畅、卡死无响应，这些就是卡顿问题，它会影响用户体验，严重时会导致用户的流失，因此卡顿治理是非常重要的。
+
+[58同城iOS包大小治理工具解密](https://juejin.cn/post/7176441132447399993 "58同城iOS包大小治理工具解密")
+
+**摘要：** 本文通过58同城包大小治理的实践经验，来讲解如何解决混编环境下OC/Swift无用类、无用资源、重复资源等检测问题，同时结合业内常见的段迁移、链接时优化(LTO)等多种技术手段，来辅助App进行瘦身。
+
+[iOS卡顿监控探索与实践](https://juejin.cn/post/7181352292673650746 "iOS卡顿监控探索与实践")
+
+**摘要：** 这篇文章主要讲解如何监控卡顿，帮助开发者进一步解决卡顿问题。与用户交互的事件都是在主线程里处理的，但如果主线程无法响应用户的交互就会造成卡顿，卡顿时间比较长是非常影响App的功能和用户体验的，所以这也是一个非常值得重视的问题。
+
+## 话题讨论
+
+**您觉得烟花应该被禁止吗？**
+
+欢迎在文末留言参与讨论。
 
 ## 关于我们
 
