@@ -10,7 +10,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：因iPhone销量下降 苹果利润2016年以来首次低于预期
 > 
-> 提案：
+> 提案：新年开始多个提案状态发生变化
 > 
 > Swift 论坛：
 >
@@ -22,9 +22,9 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 新闻和社区
 
-### 因iPhone销量下降 苹果利润2016年以来首次低于预期
+### 因 iPhone 销量下降，苹果利润 2016 年以来首次低于预期
 
-2 月 3 日凌晨，多家美股科技巨头公布财报。苹果 2023 财年 Q1 净利润录得 299 亿美元，低于市场预期，原因是 iPhone 的供应出现问题，导致销售疲软。苹果当季销售额下降 5% ，至 1172 亿美元，全球各地的销售额均出现下滑。除服务和 ipad 以外，所有产品类别的销售额都有所下降。这是自 2016 年以来苹果首次未能达到华尔街的利润预期。不过，苹果CEO库克在最新业绩会上表示，中国市场的需求已经有非常好的复苏，去年 12月 和 11 月相比市场确实发生了很大变化。库克还表示，苹果将很快在印度开设第一批零售店。
+2 月 3 日凌晨，多家美股科技巨头公布财报。苹果 2023 财年 Q1 净利润录得 299 亿美元，低于市场预期，原因是 iPhone 的供应出现问题，导致销售疲软。苹果当季销售额下降 5% ，至 1172 亿美元，全球各地的销售额均出现下滑。除服务和 ipad 以外，所有产品类别的销售额都有所下降。这是自 2016 年以来苹果首次未能达到华尔街的利润预期。不过，苹果CEO库克在最新业绩会上表示，中国市场的需求已经有非常好的复苏，去年 12 月和 11 月相比市场确实发生了很大变化。库克还表示，苹果将很快在印度开设第一批零售店。
 
 ### App 和 App 内购买项目即将实行税率和价格调整
 
@@ -58,14 +58,46 @@ Apple 在计算抽成之前会根据您提供的税务类别信息估算并移�
 
 ## 提案
 
-### 通过的提案
+### 通过审查的提案
 
+[SE-0383](https://github.com/apple/swift-evolution/blob/main/proposals/0383-deprecate-uiapplicationmain-and-nsapplicationmain.md "SE-0383") **弃用 @UIApplicationMain 和 @NSApplicationMain** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0381](https://github.com/apple/swift-evolution/blob/main/proposals/0381-task-group-discard-results.md "SE-0381") **DiscardingTaskGroups** 提案通过审查。该提案已在 **二十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0380](https://github.com/apple/swift-evolution/blob/main/proposals/0380-if-switch-expressions.md "SE-0380") **if 和 switch 表达式** 提案通过审查。该提案已在 **十九期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0378](https://github.com/apple/swift-evolution/blob/main/proposals/0378-package-registry-auth.md "SE-0378") **Package 注册表认证** 提案通过审查。该提案已在 **十八期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0377](https://github.com/apple/swift-evolution/blob/main/proposals/0377-parameter-ownership-modifiers.md "SE-0377") **提出了新的 `borrow` 和 `take` 参数修饰符** 提案通过审查。该提案已在 **十六期周报** 正在审查的提案模块做了详细介绍。
+
+### 驳回的提案
+
+[SE-0382](https://github.com/apple/swift-evolution/blob/main/proposals/0382-expression-macros.md "SE-0382") **Expression Macros** 提案被驳回。该提案已在 **二十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0379](https://github.com/apple/swift-evolution/blob/main/proposals/0379-opt-in-reflection-metadata.md "SE-0379") **Swift 选择加入 Reflection 元数据** 提案被驳回。该提案已在 **十九期周报** 正在审查的提案模块做了详细介绍。
 
 ### 正在审查的提案
 
+[SE-0387](https://github.com/apple/swift-evolution/blob/main/proposals/0387-cross-compilation-destinations.md "SE-0387") **交叉编译项目** 提案正在审查。
+
+`Cross-compilation` 是一个常见的开发用例。该提案的作者知道已建立的“构建/主机/目标平台”命名惯例，但认为“目标”在构建系统命名中已经具有不同的含义。此外，“平台”本身的定义相当松散。为了避免可能的混淆，我们在这个建议中使用“构建时三元组”和“运行时三元组”术语。
+
+[SE-0386](https://github.com/apple/swift-evolution/blob/main/proposals/0386-package-access-modifier.md "SE-0386") **新的访问修饰符:package** 提案正在审查。
+
+该提案引入了 `package` 作为一个新的访问修饰符。目前，要访问另一个模块中的符号，该符号需要声明为 `public`。但是，`public` 符号允许从任何模块访问它，无论是在包内还是从包外，有时候这样做不能满足需求。需要一个新的访问修饰符来更好地控制此类符号的可见范围。
+
+[SE-0386](https://github.com/apple/swift-evolution/blob/main/proposals/0386-package-access-modifier.md "SE-0386") **自定义反射元数据** 提案正在审查。
+
+该提案引入了使用自定义属性将库定义的反射元数据附加到声明中的功能，然后库可以查询这些元数据，以便于将客户端代码选择到库功能中。
 
 ## Swift论坛
+
 1) 讨论[如何设置需要异步初始化的静态变量](https://forums.swift.org/t/how-to-set-static-variable-that-requires-async-initialization/62661 "如何设置需要异步初始化的静态变量")
+
 ```Swift
 @globalActor public actor ImageDatabase{
     
@@ -81,7 +113,9 @@ Apple 在计算抽成之前会根据您提供的税务类别信息估算并移�
 
 @ImageDatabase class ImageTransportLayer { } // CRUD
 ```
-解决方法：可以稍后在应用程序启动序列中手动初始化 ImageTransportLayer
+
+**解决方法：** 可以稍后在应用程序启动序列中手动初始化 `ImageTransportLayer`
+
 ```Swift
 @globalActor public actor ImageDatabase {
     private init() {}
@@ -102,70 +136,77 @@ Task {
 }
 ```
 
-2) 讨论[macOS Catalina 上的 Swift 5.7 和适用于 macOS 的工具链](https://forums.swift.org/t/swift-5-7-on-macos-catalina-and-a-toolchain-for-macos/62656 "macOS Catalina 上的 Swift 5.7 和适用于 macOS 的工具链")
+2) 讨论[ macOS Catalina 上的 Swift 5.7 和适用于 macOS 的工具链](https://forums.swift.org/t/swift-5-7-on-macos-catalina-and-a-toolchain-for-macos/62656 "macOS Catalina 上的 Swift 5.7 和适用于 macOS 的工具链")
 
-3) 发布[VSCode Swift v1.0.0](https://forums.swift.org/t/vscode-swift-v1-0-0/62668 "VSCode Swift v1.0.0")
+3) 发布[ VSCode Swift v1.0.0](https://forums.swift.org/t/vscode-swift-v1-0-0/62668 "VSCode Swift v1.0.0")
+
 Swift Visual Studio Code 扩展的 1.0 版已经发布。 它不再处于预览状态。
 此版本对 v0.10.0 进行了一些小的添加，并修复了一些错误。 更新日志链接：https://marketplace.visualstudio.com/items/sswg.swift-lang/changelog
 
-4) 讨论[AsyncSequences 和cooperative任务取消](https://forums.swift.org/t/asyncsequences-and-cooperative-task-cancellation/62657 "AsyncSequences 和cooperative任务取消")
+4) 讨论[ AsyncSequences 和 cooperative 任务取消](https://forums.swift.org/t/asyncsequences-and-cooperative-task-cancellation/62657 "AsyncSequences 和 cooperative 任务取消")
 
 5) 讨论[函数签名的属性包装器](https://forums.swift.org/t/property-wrapper-on-a-functions-signature/62660 "函数签名的属性包装器")
 
 6) 提问[将函数集成到结构中](https://forums.swift.org/t/integrating-a-function-into-a-struct/62634 "将函数集成到结构中")
+
 目标是有一个接受字符串的字段，它下面的文本将打印一条消息，其中包含输入的单词和它包含的字母数。
- ```Swift
- import SwiftUI
+
+```Swift
+import SwiftUI
 
 struct Test1: View {
-    
-    @State private var newWord = ""
-    
-    var body: some View {
-        VStack {
-            TextField("Enter a word", text: $newWord)
-                .frame(height: 50)
-                .cornerRadius(10)
-                .background(.gray.opacity(0.1))
-                .padding(.horizontal, 20)
-            
-            //Text(countLetters(myWord: newWord))
-            Text(myMessage)
-        }
-    }
+
+  @State private var newWord = ""
+
+  var body: some View {
+      VStack {
+          TextField("Enter a word", text: $newWord)
+              .frame(height: 50)
+              .cornerRadius(10)
+              .background(.gray.opacity(0.1))
+              .padding(.horizontal, 20)
+
+          //Text(countLetters(myWord: newWord))
+          Text(myMessage)
+      }
+  }
 }
 
 func countLetters(myWord: String) -> (String, Int) {
-    var myCounter = 0
-    var characters = ""
-    for letter in myWord {
-        characters += "\(letter)"
-        myCounter += 1
-    }
-    return (characters, myCounter)
+  var myCounter = 0
+  var characters = ""
+  for letter in myWord {
+      characters += "\(letter)"
+      myCounter += 1
+  }
+  return (characters, myCounter)
 }
 var myWordCount = countLetters(myWord: "Gregory")
 var myMessage = "There are \(myWordCount) letters in the"
- ```
- 解决：字符串有一个 .count 属性，可以直接使用：
- ```Swift
- struct ContentView: View {
-    
-    @State var text = ""
-    
-    var body: some View {
-        VStack {
-            TextField("Enter a word", text: $text)
-            Text("There are \(text.count) letters in your word")
-        }
-    }
-}
- ```
+```
 
-7) 发布[AsyncObjects 2.0](https://forums.swift.org/t/released-asyncobjects-2-0/62664 "AsyncObjects 2.0")
+**解决：** 字符串有一个 `.count` 属性，可以直接使用：
+
+```Swift
+struct ContentView: View {
+
+  @State var text = ""
+
+  var body: some View {
+      VStack {
+          TextField("Enter a word", text: $text)
+          Text("There are \(text.count) letters in your word")
+      }
+  }
+}
+```
+
+7) 发布[ AsyncObjects 2.0](https://forums.swift.org/t/released-asyncobjects-2-0/62664 "AsyncObjects 2.0")
 
 8) 提议[添加 KeyPaths Boolean 自定义运算符](https://forums.swift.org/t/pitch-add-keypaths-boolean-custom-operators/62626 "添加 KeyPaths Boolean自定义运算符")
-内容大概：
+
+**内容大概：**
+
 在[SE-0249](https://github.com/apple/swift-evolution/blob/main/proposals/0249-key-path-literal-function-expressions.md) 引入了在允许 (Root) -> Value 函数的任何地方使用关键路径表达式 \Root.value 的能力。
 
 现在在各个项目中得到了广泛的使用。
@@ -175,15 +216,19 @@ var myMessage = "There are \(myWordCount) letters in the"
 
 假设我们想过滤字典并获取所有为真的值。
 我们现在可以通过以下方式使用关键路径轻松完成此操作：
- ```Swift
+
+```Swift
 let dict = ["a": true, "b": true, "c": false]
 let filtered = dict.filter(\.value) // returns ["a": true, "b": true]
 ```
 但是如果我们想过滤字典中的错误值怎么办？那么现在我们不能使用关键路径，我们需要依赖闭包：
+
 ```Swift
 let filtered = dict.filter { !$0.value } // returns ["c": false]
 ```
+
 这里的建议是添加以下运算符：
+
 ```Swift
 prefix func !<V>(keyPath: KeyPath<V, Bool>) -> (V) -> Bool {
     { !$0[keyPath: keyPath]}
@@ -197,7 +242,9 @@ func !=<T, V: Equatable>(lhs: KeyPath<T, V>, rhs: V) -> (T) -> Bool {
     return { $0[keyPath: lhs] != rhs }
 }
 ```
+
 这将使我们能够按如下方式使用关键路径：
+
 ```Swift
 let dict = ["a": true, "b": true, "c": false]
 
