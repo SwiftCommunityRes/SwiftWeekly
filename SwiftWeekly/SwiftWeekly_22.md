@@ -12,13 +12,8 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 
 > 提案：新年开始多个提案状态发生变化
 > 
-> Swift 论坛：
+> Swift 论坛：讨论如何设置需要异步初始化的静态变量
 >
-> 推荐博文：
-> 
-> **话题讨论：** 
-> 
-> 
 
 ## 新闻和社区
 
@@ -60,11 +55,9 @@ Apple 在计算抽成之前会根据您提供的税务类别信息估算并移�
 
 ### 通过审查的提案
 
+[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
+
 [SE-0383](https://github.com/apple/swift-evolution/blob/main/proposals/0383-deprecate-uiapplicationmain-and-nsapplicationmain.md "SE-0383") **弃用 @UIApplicationMain 和 @NSApplicationMain** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
-
-[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
-
-[SE-0384](https://github.com/apple/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md "SE-0384") **导入已声明的 Objective-C 接口和协议** 提案通过审查。该提案已在 **二十一期周报** 正在审查的提案模块做了详细介绍。
 
 [SE-0381](https://github.com/apple/swift-evolution/blob/main/proposals/0381-task-group-discard-results.md "SE-0381") **DiscardingTaskGroups** 提案通过审查。该提案已在 **二十期周报** 正在审查的提案模块做了详细介绍。
 
@@ -90,7 +83,7 @@ Apple 在计算抽成之前会根据您提供的税务类别信息估算并移�
 
 该提案引入了 `package` 作为一个新的访问修饰符。目前，要访问另一个模块中的符号，该符号需要声明为 `public`。但是，`public` 符号允许从任何模块访问它，无论是在包内还是从包外，有时候这样做不能满足需求。需要一个新的访问修饰符来更好地控制此类符号的可见范围。
 
-[SE-0386](https://github.com/apple/swift-evolution/blob/main/proposals/0386-package-access-modifier.md "SE-0386") **自定义反射元数据** 提案正在审查。
+[SE-0385](https://github.com/apple/swift-evolution/blob/main/proposals/0385-custom-reflection-metadata.md "SE-0385") **自定义反射元数据** 提案正在审查。
 
 该提案引入了使用自定义属性将库定义的反射元数据附加到声明中的功能，然后库可以查询这些元数据，以便于将客户端代码选择到库功能中。
 
@@ -252,8 +245,6 @@ let filtered = dict.filter(!\.value)
 
 let filtered2 = dict.filter(\.value == false)
 ```
-
-## 推荐博文
 
 ## 关于我们
 
