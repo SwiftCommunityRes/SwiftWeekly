@@ -10,13 +10,13 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：苹果iPhone 15 Pro硬件细节曝光，广大网友期待USB-C接口迎来普及
 > 
-> Swift 论坛：
+> Swift 论坛：讨论嵌套泛型的问题
 >
-> 推荐博文：iOS 应用卡顿监控与治理
+> 推荐博文：iOS App 项目优化
 > 
 > **话题讨论：** 
 > 
-> 您觉得烟花应该被禁止吗？
+> 生活中遇到的问题你会使用 chatGTP 寻找答案吗？
 
 ## 新闻和社区
 
