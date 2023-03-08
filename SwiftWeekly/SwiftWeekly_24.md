@@ -12,13 +12,13 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 
 > 提案：围绕 `Macros` 提出多个提案
 > 
-> Swift 论坛：
+> Swift 论坛：新发布 VSCode devContainers 的新功能
 >
 > 推荐博文：使用 `async/await` 完成后台任务管理
 > 
 > **话题讨论：** 
 > 
-> 
+> 程序员养生喝什么？
 
 ## 新闻和社区
 
@@ -150,7 +150,7 @@ MemoryLayout.size(ofValue: theInstance) 但它只返回错误的大小（可能�
 提问者：“为什么框架不能自动为我调用它？”
 因此，出现了属性包装器。
 
-5) 提问[SwiftUI 如何只启动一次 onApper？](https://forums.swift.org/t/weburl-keyvaluepairs-api/63164 "SwiftUI 如何只启动一次 onApper？")
+5) 提问[SwiftUI 如何只启动一次 onApper？](https://forums.swift.org/t/how-to-launch-effect-onapper-only-once/63455 "SwiftUI 如何只启动一次 onApper？")
 
 6) 提问[选择取消 macOS 上的自动 Foundation 链接？](https://forums.swift.org/t/opting-out-of-automatic-foundation-linking-on-macos/63430 "选择取消 macOS 上的自动 Foundation 链接？")
 
@@ -173,7 +173,7 @@ Swift Package Manager 2、Swift 网站、文档或 Swift 的其他部分。
 
 ## 推荐博文
 
-[使用 async let 在 Swift 中并行运行后台任务](https://juejin.cn/post/7197970175478464571 "Use async let to run background tasks in parallel in Swift")
+[使用 async let 在 Swift 中并行运行后台任务](https://swdevnotes.com/swift/2023/use-async-let-to-run-background-tasks-in-parallel-in-swift/ "Use async let to run background tasks in parallel in Swift")
 
 **摘要：** 本文介绍了如何在后台执行长期运行的任务并保持 UI 响应。`async/await` 提供了执行异步任务的干净机制。允许并行执行多个后台任务。
 
@@ -187,7 +187,7 @@ Swift Package Manager 2、Swift 网站、文档或 Swift 的其他部分。
 
 ## 话题讨论
 
-**TODO**
+**程序员养生喝什么？**
 
 123
 
