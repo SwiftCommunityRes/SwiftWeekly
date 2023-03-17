@@ -248,13 +248,17 @@ if let fileHandler = FileHandler(filePath: "path/to/your/file.txt") {
 
 ## 推荐博文
 
-[Swift中如何使用XCTest框架进行性能测试](https://swiftwithmajid.com/2023/03/15/performance-testing-in-swift-using-xctest-framework/ "Swift中如何使用XCTest框架进行性能测试")
+[Swift 中如何使用 XCTest 框架进行性能测试](https://swiftwithmajid.com/2023/03/15/performance-testing-in-swift-using-xctest-framework "Swift 中如何使用 XCTest 框架进行性能测试")
 
-**摘要：** 本文介绍了如何在Swift中使用XCTest框架进行性能测试，并通过measure函数来测量应用程序中特定代码路径的性能。。
+**摘要：** 本文介绍了如何在 Swift 中使用 XCTest 框架进行性能测试，并通过 measure 函数来测量应用程序中特定代码路径的性能。
 
-[两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1](https://www.swift.org/blog/swift-certificates-and-asn1/ "两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1")
+[两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1](https://www.swift.org/blog/swift-certificates-and-asn1 "两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1")
 
-**摘要：** 这篇文章介绍了两个新的开源 Swift 库：Swift Certificates和Swift ASN.1。这两个库共同提供了更快、更安全的 X.509证书实现，X.509证书是支持TLS安全的关键技术之一。文章解释了X.509证书和ASN.1格式的概念，和为什么需要构建一个ASN.1库以支持完整的X.509库，并介绍了Swift ASN.1和Swift Certificates的功能和目标。Swift Certificates目前可以解析大多数符合RFC 5280 标准和Web PKI 中使用的X.509 证书，支持插件式 X.509验证策略和OCSP分辨率。短期目标是使用 Swift Certificates 替换swift-nio-ssl 中的BoringSSL实现，以提供更高性能和更好的内存安全性。。
+**摘要：** 这篇文章介绍了两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1。这两个库共同提供了更快、更安全的 X.509 证书实现，X.509证书是支持TLS安全的关键技术之一。文章解释了X.509 证书和 ASN.1 格式的概念，和为什么需要构建一个ASN.1库以支持完整的X.509库，并介绍了 Swift ASN.1 和 Swift Certificates 的功能和目标。 Swift Certificates 目前可以解析大多数符合 RFC 5280 标准和 Web PKI 中使用的 X.509 证书，支持插件式 X.509 验证策略和 OCSP 分辨率。短期目标是使用 Swift Certificates 替换 swift-nio-ssl 中的 BoringSSL 实现，以提供更高性能和更好的内存安全性。
+
+[云音乐 Swift 混编 Module 化实践](https://juejin.cn/post/7207269389474037817 "云音乐 Swift 混编 Module 化实践")
+
+**摘要：**  文章介绍了网易云音乐 iOS App 在支持 Swift 混编过程中，Module 化阶段的分析与实践以及在实践过程中可能会遇到各种未知问题。
 
 ## 关于我们
 
