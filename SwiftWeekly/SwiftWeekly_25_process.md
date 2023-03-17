@@ -81,6 +81,14 @@ App Store 的全球均衡价格工具为你提供了一种简单便捷的方式�
 
 ## 推荐博文
 
+[Swift中如何使用XCTest框架进行性能测试](https://swiftwithmajid.com/2023/03/15/performance-testing-in-swift-using-xctest-framework/ "Swift中如何使用XCTest框架进行性能测试")
+
+**摘要：** 本文介绍了如何在Swift中使用XCTest框架进行性能测试，并通过measure函数来测量应用程序中特定代码路径的性能。。
+
+[两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1](https://www.swift.org/blog/swift-certificates-and-asn1/ "两个新的开源 Swift 库：Swift Certificates 和 Swift ASN.1")
+
+**摘要：** 这篇文章介绍了两个新的开源 Swift 库：Swift Certificates和Swift ASN.1。这两个库共同提供了更快、更安全的 X.509证书实现，X.509证书是支持TLS安全的关键技术之一。文章解释了X.509证书和ASN.1格式的概念，和为什么需要构建一个ASN.1库以支持完整的X.509库，并介绍了Swift ASN.1和Swift Certificates的功能和目标。Swift Certificates目前可以解析大多数符合RFC 5280 标准和Web PKI 中使用的X.509 证书，支持插件式 X.509验证策略和OCSP分辨率。短期目标是使用 Swift Certificates 替换swift-nio-ssl 中的BoringSSL实现，以提供更高性能和更好的内存安全性。。
+
 ## 关于我们
 
 **Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
