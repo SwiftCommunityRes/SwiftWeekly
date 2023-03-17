@@ -77,7 +77,174 @@ App Store 的全球均衡价格工具为你提供了一种简单便捷的方式�
 
 
 ## Swift论坛
+1) 提议[Observation（修订）](https://forums.swift.org/t/pitch-observation-revised/63757 "Observation（修订）")
+**介绍**
+制作响应式应用程序通常需要能够在基础数据发生变化时更新演示文稿。 观察者模式允许一个主题维护一个观察者列表，并通知他们特定的或一般的状态变化。 这具有不直接将对象耦合在一起并允许在潜在的多个观察者之间隐式分布更新的优点。 可观察对象不需要关于其观察者的特定信息。
 
+这种设计模式是许多语言都走过的一条很好的道路，Swift 有机会提供一个健壮的、类型安全的和高性能的实现。 该提议定义了什么是可观察引用、观察者需要遵守什么以及类型与其观察者之间的联系。
+
+**动机**
+Swift 中已经有一些观察机制。 其中包括键值观察 (KVO) 和 ObservableObject，但它们中的每一个都有局限性。 KVO 只能与 NSObject 后代一起使用，而 ObservableObject 需要使用 Combine，它仅限于 Darwin 平台并且不使用当前的 Swift 并发功能。 通过从这些现有系统中吸取经验，我们可以构建一个更普遍有用的功能，适用于所有 Swift 引用类型，而不仅仅是那些继承自 NSObject 的引用类型，并使其跨平台工作，并具有 async/await 等语言功能的优势。
+
+现有系统获得了许多正确的行为和特征。 但是，有许多领域可以在安全性、性能和表现力之间提供更好的平衡。 例如，将相关的更改分组到一个独立的事务中是一项常见的任务，但是这在使用 Combine 时很复杂并且在使用 KVO 时不受支持。 在实践中，观察者想要访问交易，并能够指定如何解释交易。
+
+注释阐明了可观察的内容，但也可能很麻烦。 例如，Combine 不仅要求类型符合 ObservableObject，还要求被观察的每个属性都标记为 @Published。 此外，无法直接观察计算出的属性。 实际上，在可观察的类型中具有非观察字段并不常见。
+
+在整个文档中，对 KVO 和 Combine 的引用将说明哪些功能是有益的并且可以合并到新方法中，以及可以以更稳健的方式解决哪些缺点。
+
+**现有技术**
+**KVO**
+Objective-C 中的键值观察很好地服务于该模型，但仅限于从 NSObject 继承的类层次结构。 API 仅提供事件拦截，这意味着更改通知位于 willSet 和 didSet 事件之间。 KVO 在事件粒度方面具有很大的灵活性，但缺乏可组合性。 KVO 观察者还必须继承自 NSObject，并依赖 Objective-C 运行时来跟踪发生的变化。 尽管 KVO 的接口已经更新为使用更现代的 Swift 强类型键路径，但在底层它的事件仍然是字符串类型的。
+
+**Combine**
+Combine 的 ObservableObject 在 willSet/didSet 事件的前缘产生变化，所有的值都在值被设置之前传递。 虽然这很好地服务于 SwiftUI，但它对非 SwiftUI 的使用有限制，并且对于第一次遇到该限制的开发人员来说可能会感到惊讶。 ObservableObject 还要求将所有观察到的属性标记为@Published 以与更改事件进行交互。 在大多数情况下，这一要求适用于每一个单独的属性，对开发者来说变得多余； 编写符合 ObservableObject 类型的人必须重复（几乎没有真正获得清晰度）注释每个属性。 最后，这会导致对参与项目或不参与项目的意义疲劳。
+
+我们提出了一个名为 Observation 的新标准库模块，其中包括实现这种模式的协议、类型和宏。
+基本上，一个类型可以简单地通过使用 @Observable 宏注解将自己声明为可观察的：
+```Swift
+@Observable public final class MyObject {
+    public var someProperty: String = ""
+    public var someOtherProperty = 0
+    fileprivate var somePrivateProperty = 1
+}
+```
+@Observable 宏声明并实现与 Observable 协议的一致性，该协议包括一组处理观察的扩展方法。 在最简单的情况下，客户端可以使用 changes(for:) 方法来观察给定实例的特定属性的变化。
+```Swift
+func processChanges(_ object: MyObject) async {
+    for await value in object.values(for: \.someProperty) {
+        print(value)
+    }
+}
+```
+这允许 Observable 类型的用户将特定值的更改或整个实例作为更改事件的异步序列进行观察。 changes(for:) 方法提供类型安全，因为它只提供对一个特定属性的更改。
+```Swift
+object.someProperty = "hello" 
+// prints "hello" in the awaiting loop
+object.someOtherProperty += 1
+// nothing is printed
+```
+可观察对象还可以提供分组到事务中的更改，这些事务合并了在暂停点之间进行的任何更改。 默认情况下，交易会单独交付给您提供的参与者或主要参与者。
+```Swift
+func processTransactions(_ object: MyObject) async {
+    for await change in objects.changes(for: [\.someProperty, \.someOtherProperty]) {
+        print(myObject.someProperty, myObject.someOtherProperty)
+    }
+}
+```
+与 ObservableObject 和 @Published 不同，@Observable 类型的属性不需要单独标记为可观察。 相反，所有存储的属性都是隐式可观察的。
+对于只读计算属性，作者可以添加 static dependencies(of:) 方法来声明额外的关键路径作为他们观察的一部分。 这类似于 KVO 用来提供对键路径有影响的附加键路径的机制。
+```Swift
+extension MyObject {
+    var someComputedProperty: Int { 
+        somePrivateProperty + someOtherProperty
+    }
+
+    nonisolated static func dependencies(
+        of keyPath: PartialKeyPath<Self>
+    ) -> TrackedProperties<Self> {
+        switch keyPath {
+        case \.someComputedProperty:
+            return [\.somePrivateProperty, \.someOtherProperty]
+        default:
+            return [keyPath]
+        }
+    }
+}
+```
+由于所有对观察变化的访问都是通过关键路径进行的，因此 public 和 private 等可见性关键字决定了可以观察到什么，不能观察到什么。 与 KVO 不同，这意味着只能观察到在特定范围内可访问的成员。 这一事实反映在设计中，其中事务表示为 TrackedProperties 实例，它允许查询更改的键路径，但不能查询它们的迭代。
+
+2) 提议[在 Swift 6 中省略`some`](https://forums.swift.org/t/pitch-elide-some-in-swift-6/63737 "在 Swift 6 中省略`some`")
+**介绍**
+目前，在类型位置中编写普通协议名称的默认值是 any，但其中许多隐含的 any 用法可以替换为 some，从而为它们提供更多类型信息，同时仍能正确运行。 该提议翻转了默认值，以便在编写普通协议时，类型将默认为 some 而不是 any。 使默认值 some 保证固定的底层类型，它保留与底层类型的静态类型关系，使您可以完全访问使用 Self 和关联类型的协议要求和扩展方法。
+**动机**
+一段时间以来，Swift 一直致力于改进泛型的UI，在 Swift 5.1 中引入了 some 关键字来表示不透明类型——特定具体类型的抽象类型占位符——它在 Swift 5.7 类型中扩展到参数，这样：
+```Swift
+func foo<T>(_ bar: T) where T: Equatable { }
+
+// is equivalent to 
+
+func foo(_ bar: some T) { }
+```
+Swift 5.6 引入了 explicit any，这在 Swift 6 语言模式中是必需的，以确保选择类型擦除而不是使用类型参数是明确和深思熟虑的。 引入使用显式 any 的要求并鼓励默认编写一些，这为将一些作为普通协议名称的默认值提供了机会。
+
+通用代码已经在比您想象的更多的地方得到了简化。 以协议扩展为例。 要编写适用于任何符合协议的具体类型的通用代码，您只需编写扩展关键字和普通协议名称。 在此示例中，我们使用 Collection 协议：
+```Swift
+// What you write to extend all concrete types conforming to 'Collection':
+extension Collection { ... }
+```
+在通用代码中，通用签名表示通用参数和对这些参数的任何要求。 在协议扩展的情况下，有一个名为 Self 的隐式类型参数和单一一致性要求 Self: Collection 由编译器添加，而不需要您编写。 这允许您从符合要求的 Self 类型上的 Collection 协议访问所有协议要求、关联类型和其他扩展方法。
+
+当存在不需要使用 where 子句内化泛型签名的垫脚石时，程序员学习泛型编程会容易得多。 程序员可以使用更直接、更直观的语法来表达同一事物。 Swift 6 可以将同样的原则应用于其他上下文中的普通协议名称。 这种做法对于学习 Swift 的初学者来说可能是无价的，它消除了在向代码中添加协议时比较某些和任何之间的权衡的心理负担。 初学者不需要在使用 some 还是 any 之间做出决定，推迟完全理解语义差异的需要，直到绝对有必要在两者之间进行选择。 即使您不是初学者，一些默认设置仍然可以通过使代码更简洁来提高代码的可读性。
+
+3) 讨论[并发性能真的很差以及如何优化代码](https://forums.swift.org/t/really-bad-performance-with-concurrecny-and-how-to-optimize-the-code/63732/1 "并发性能真的很差以及如何优化代码")
+**内容大概：**
+我们正在对各种编程语言的并发性进行比较，并使用 Swift 实现一维热方程求解器。 与 Python、Rust 和 C++ 相比，swift 的性能看起来不是很好。
+首先，代码最多只能扩展到三个内核，见下文
+
+核心，总时间
+10,2111.423936009407
+8,2189.256893992424
+5,1967.6182420253754
+4,1929.6173659563065
+2,3097.796007990837
+1,4388.57520699501
+
+然而，每秒的浮点运算相当低，例如在三个内核上我们每秒可以进行 500 次浮点运算。 与其他语言相比，这并不多。
+
+所以，既然我们想发布结果，我想寻求一些帮助，因为我认为我们在 Swift 中的实现并不好。
+
+**Vote最多的回答：**
+
+这种问题对于简单的并发或多线程来说通常是一个非常糟糕的情况：
+
+您的工作集太大。 在 2 * 10000000 * MemoryLayout(Double).size，你有一个 160MB 的工作集，它不适合缓存，所以你实际上受到内存速度的限制，而不是计算速度，这 与额外资源的扩展几乎不一样。
+如果你用较小的工作集解决了这个问题，你就会被数据局部性所困扰。 您确实希望将每个 worker 固定到数据的固定部分，因此它会在下一个时间步位于与 worker 关联的缓存中。
+
+4) 讨论[@State 没有正确初始化](https://forums.swift.org/t/state-not-initializing-correctly/63726 "@State 没有正确初始化")
+5) 讨论[Swift 中的轻量级 MVVMLight 架构模式](https://forums.swift.org/t/a-light-weight-mvvmlight-architecture-pattern-in-swift/63722 "Swift 中的轻量级 MVVMLight 架构模式")
+6) 讨论[协议类型里的Generic“where”失效](https://forums.swift.org/t/generic-where-fails-for-protocol-types/63729/1 "协议类型里的Generic“where”失效")
+7) 讨论[如何使用 `defer` 模拟 RAII](https://forums.swift.org/t/how-to-kind-of-emulate-raii-using-defer/63719 "如何使用 `defer` 模拟 RAII")
+**内容大概**
+Swift 的 defer 语句具有很好的模拟 C++ 的资源获取即初始化行为的能力，由于 ARC，我们无法做到这一点。 如果您正在使用 UnsafeMutablePointer 通过确保在退出范围时正确清理资源来执行某些操作，这可能会很方便：
+```Swift
+import Foundation
+
+class FileHandler {
+    private var file: UnsafeMutablePointer<FILE>?
+
+    init?(filePath: String) {
+        file = fopen(filePath, "r")
+        guard file != nil else {
+            print("Error: Unable to open the file.")
+            return nil
+        }
+    }
+
+    deinit {
+        if file != nil {
+            fclose(file)
+        }
+    }
+
+    func readAndProcessFile() {
+        defer {
+            if file != nil {
+                fclose(file)
+                file = nil
+            }
+        }
+
+        // Read and process the file
+    }
+}
+
+if let fileHandler = FileHandler(filePath: "path/to/your/file.txt") {
+    fileHandler.readAndProcessFile()
+}
+```
+在这个例子中，我们有一个管理文件的 FileHandler 类。 当调用 readAndProcessFile 方法时，我们使用 defer 块来确保在方法退出时关闭文件，无论它是正常退出还是由于错误退出。 这类似于 C++ 中的 RAII 概念，其中在对象超出范围时执行资源清理。
+
+当然，这不是 RAII 的 1:1，但它显示了一种可以使用 defer 来实现类似效果的方法。
 
 ## 推荐博文
 
