@@ -10,11 +10,11 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：印度将首次成为苹果公司自有销售地区
 > 
-> 提案：
+> 提案：提案 SE-0382、SE-0388、SE-0389 通过审查
 > 
-> Swift 论坛：
+> Swift 论坛：提议 Observation 修订
 >
-> 推荐博文：
+> 推荐博文：两个新的开源 Swift 库：`Swift Certificates` 和 `Swift ASN.1`
 > 
 > **话题讨论：** 
 > 
@@ -71,25 +71,21 @@ App Store 的全球均衡价格工具为你提供了一种简单便捷的方式�
 
 ## 提案
 
+### 通过审查的提案
+
+[SE-0382](https://github.com/apple/swift-evolution/blob/main/proposals/0382-expression-macros.md "SE-0382") **Expression Macros** 提案通过审查。该提案已在 **二十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0388](https://github.com/apple/swift-evolution/blob/main/proposals/0388-async-stream-factory.md "SE-0388") **增加 Async[Throwing]Stream.makeStream 方法** 提案通过审查。该提案已在 **二十四期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0389](https://github.com/apple/swift-evolution/blob/main/proposals/0389-attached-macros.md "SE-0389") **Attached Macros** 提案通过审查。该提案已在 **二十四期周报** 正在审查的提案模块做了详细介绍。
+
 ### 正在审查的提案
 
-[SE-0382](https://github.com/apple/swift-evolution/blob/main/proposals/0382-expression-macros.md "SE-0382") **Expression Macros** 提案重新恢复审查。该提案已在 **二十期周报** 正在审查的提案模块做了详细介绍。
+[SE-0392](https://github.com/apple/swift-evolution/blob/main/proposals/0392-custom-actor-executors.md "SE-0392") **自定义 Actor 执行器** 提案正在审查。
 
-[SE-0388](https://github.com/apple/swift-evolution/blob/main/proposals/0388-async-stream-factory.md "SE-0388") **增加 Async[Throwing]Stream.makeStream 方法** 提案正在审查。
+该提案介绍了一种用于自定义 actor 执行程序的基本机制。通过提供执行者的实例，参与者可以影响他们将在什么地方执行正在运行的一些任务。
 
-改天建议引入辅助方法来创建 `AsyncStream` 和 `AsyncThrowingStream` 实例，使开发者使用起来更加方便。
-
-[SE-0389](https://github.com/apple/swift-evolution/blob/main/proposals/0389-attached-macros.md "SE-0389") **Attached Macros** 提案正在审查。
-
-`Attached Macros` 是 Swift 中 `Macros` 愿景的一部分，该提案以 SE-0382 `Expression Macros` 的思想和动机为基础，涵盖了大量新的用例，将参考该提案以了解 `Macros` 如何集成到语言中的基本模型。
-
-[SE-0390](https://github.com/apple/swift-evolution/blob/main/proposals/0390-noncopyable-structs-and-enums.md "SE-0390") **引入 @noncopyable ** 提案正在审查。
-
-该提案引入了 `@noncopyable` 类型（也称为 `move-only` 类型）的概念。 `@noncopyable` 类型的实例始终具有唯一所有权，这与可以自由复制的普通 Swift 类型不同。
-
-[SE-0391](https://github.com/apple/swift-evolution/blob/main/proposals/0391-package-registry-publish.md "SE-0391") **Package Registry 公开发布** 提案正在审查。
-
-`Package Registry` 公开发布后，可以对外公开可用。 从 Swift 5.7 开始，SwiftPM 支持使用任何实现与 SE-0292 一起提出的服务规范的注册表的依赖项解析和包下载。
+> **注意：** 该提案仅定义了一组 API 来自定义 actor 执行器，其他类型的执行器控制超出了该特定提案的范围。
 
 ## Swift论坛
 
@@ -315,7 +311,9 @@ if let fileHandler = FileHandler(filePath: "path/to/your/file.txt") {
 
 **文心一言挑战ChatGPT，谁更胜一筹？**
 
-123
+1. 文心一言
+2. ChatGPT
+3. 不分伯仲
 
 欢迎在文末留言参与讨论。
 
