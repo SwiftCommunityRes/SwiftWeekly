@@ -10,11 +10,11 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：WWDC23 将于北京时间 6 月 6 日举行
 > 
-> 提案：
+> 提案：提出添加 Value 和 Type 参数包
 > 
-> Swift 论坛：
+> Swift 论坛：讨论 KeyPath 会产生内存泄漏吗？
 >
-> 推荐博文：
+> 推荐博文：使用 Hummingbird framework 对数据进行编码和解码
 > 
 > **话题讨论：** 
 > 
@@ -46,15 +46,29 @@ watchOS 9 为 watchOS App 提供了强大的新通信功能。你可以在更多
 
 ## 提案
 
+### 驳回的提案
+
+[SE-0385](https://github.com/apple/swift-evolution/blob/main/proposals/0385-custom-reflection-metadata.md "SE-0385") **自定义反射元数据** 提案被驳回。该提案已在 **二十二期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0393](https://github.com/apple/swift-evolution/blob/main/proposals/0393-parameter-packs.md "SE-0393") **Value 和 Type 参数包** 提案正在审查。
+
+该提案添加了类型参数包和值参数包，方便对 Value 和 Type进行抽象实现。这是 Swift 向可变泛型迈出的关键一步。
+
 
 ## Swift论坛
 
-1) 提议[使`Never`符合`Codable`](https://forums.swift.org/t/pitch-conform-never-to-codable/64056 "使`Never`符合`Codable`")
+1) 提议[使 Never 符合 Codable](https://forums.swift.org/t/pitch-conform-never-to-codable/64056 "使 Never 符合 Codable")
+
 **介绍**
+
 扩展 Never 使其符合 Encodable 和 Decodable 协议，统称为 Codable。
 
 **动机**
+
 Swift 可以为任何具有 Codable 成员的类型综合 Codable 一致性。 泛型类型通常通过约束它们的泛型参数来参与这种综合一致性，例如 Either 类型：
+
 ```Swift
 enum Either<A, B> {
     case left(A)
@@ -63,23 +77,30 @@ enum Either<A, B> {
 
 extension Either: Codable where A: Codable, B: Codable {}
 ```
+
 这样，两个泛型参数都是 Codable 的 Either 实例本身就是 Codable，例如 Either<Int, Double>。 但是，由于 Never 不可编码，因此使用 Never 作为参数之一会阻止条件一致性，即使编码或解码像 Either<Int, Never> 这样的类型是完全没问题的。
 
 **建议的解决方案**
+
 标准库应该向 Never 类型添加 Encodable 和 Decodable 一致性。
 
 **详细设计**
+
 Encodable 一致性很简单——因为不可能有 Never 实例，encode(to:) 方法可以简单地为空。
 Decodable 协议需要 init(from:) 初始化器，它显然不能创建 Never 实例。 如果尝试解码，该实现会抛出 DecodingError。
 
 2) 提议[导入带有 ARC 指针成员的 C 结构体](https://forums.swift.org/t/pitch-import-c-structs-with-arc-pointer-members/64059#introduction-1 "导入带有 ARC 指针成员的 C 结构体")
+
 **介绍：**
-目前，Swift 可以导入 C 结构，其成员是 Swift 可导入的值类型，例如 int、BOOL 和 __unsafe_unretained ARC 指针，它们都是简单的构造和可析构的。 基于 Akira 在 LLVM 中启用强引用和弱引用的工作，我们应该能够导入这些类型和声明。
+
+目前，Swift 可以导入 C 结构，其成员是 Swift 可导入的值类型，例如 int、BOOL 和 `__unsafe_unretained ARC` 指针，它们都是简单的构造和可析构的。 基于 Akira 在 LLVM 中启用强引用和弱引用的工作，我们应该能够导入这些类型和声明。
 
 **动机：**
+
 自 2018 年以来，这些指针类型已可用于 Objective-C/Objective-C++（以及之前的 Objective-C++），而 Swift 迄今为止尚未扩展以导入它们。 这是 Swift <> C++ 互操作的必要部分，我们应该能够移植值类型的引用类型成员的默认和成员构造和销毁，包括 Objective-C 语言模式中结构中的 ARC 指针。 Puyan 已经在此处合并了一些使用 C++ interop 构建这些类型的代码。
 
 **建议的解决方案：**
+
 ```Objective-C
 #import <Foundation/Foundation.h>
 
@@ -90,7 +111,9 @@ typedef struct WithArcPointers {
     NSInteger count;
 } WithArcPointers;
 ```
+
 应该导入到 Swift 作为
+
 ```Swift
 struct WithArcPointers {
   init(usUR: String!, sStr: String, wStr: String?, count: Int)
@@ -100,28 +123,35 @@ struct WithArcPointers {
   var count: Int
 }
 ```
-应保留各种 arc 存储类型，并在可能的情况下尊重预期的类型桥接和可空性注释。 弱成员在 Swift 端必须是 Optional，并且 __unsafe_unretained 必须是非桥接类型的 Unmanaged。 这些结构应该是成员可构造的，如果它们不包含非空成员，那么也可以通过可用的 init() 轻松构造。
+
+应保留各种 arc 存储类型，并在可能的情况下尊重预期的类型桥接和可空性注释。 弱成员在 Swift 端必须是 Optional，并且 `__unsafe_unretained` 必须是非桥接类型的 Unmanaged。 这些结构应该是成员可构造的，如果它们不包含非空成员，那么也可以通过可用的 init() 轻松构造。
 
 结构中的非空弱引用虽然在 Clang 中是合法的，但不会被导入并且编译器将发出适当的诊断，因为 Swift 要求弱引用是可选的。 C 声明可能也应该有一个诊断，与适当错误的 ObjC 类一致，但这超出了本提案的范围。
 
 3) 提议[可变序列](https://forums.swift.org/t/pitch-variadic-sequences/64072 "可变序列")
+
 Swift 可以通过在方法定义中允许重复的参数序列来使可变参数表达式更强大。
 
 这是在 Swift 5.7 语法中有效的可变参数函数定义和调用：
+
 ```Swift
 func myFunction(_ value: (name: String, age: Int)..., and otherName: String) {}
 
 myFunction((name: "Ada", age: 26), (name: "Bob", age: 21), and: "Carl")
 ```
+
 但是，我相信相同的定义/调用应该具有如下所示的能力：
+
 ```Swift
 func myFunction(name: String..., age: ...Int, and anotherParameter: String) {}
 
 myFunction(name: "Ada", age: 26, name: "Bob", age: 21, and: "Carl")
 ```
+
 这可能是一种称为可变序列的新语言功能，其中可以在方法定义中包含任意数量的序列参数。 请注意新的 ...Int 语法：这表示可变序列的结尾。 此功能为开发人员在编写方法调用时提供了更友好的体验。
 
 至于在函数实现中获取可变参数序列，可以使用美元符号语法。 或者，每个可变序列元素都可以通过参数名称作为元组数组获得。 最后，可以通过使用 for in 循环 [1] 来迭代可变序列。
+
 ```Swift
 func myFunction(a: String..., b: ...Int) {
   let allSequences: [(a: String, b: Int)] = $0
@@ -134,13 +164,17 @@ func myFunction(a: String..., b: ...Int) {
   }
 }
 ```
+
 提议的细节：
 
 每个可变参数序列都以打开和关闭参数开始和结束。 开放参数使用 Type... 语法。 关闭参数使用新的 ...Type 语法。
+
 ```Swift
 func myFunction(_ open: String..., _ close: ...String) {}
 ```
+
 可变序列可以包含中间参数。 中间参数的类型使用普通语法：
+
 ```Swift
 // Variadic sequence with 3 elements
 func myFunction(_ open: String..., _ middle: String, _ close: ...String) {}
@@ -148,42 +182,55 @@ func myFunction(_ open: String..., _ middle: String, _ close: ...String) {}
 // Variadic sequence with 4 elements
 func myFunction(_ a: String..., _ b: String, _ c: String, _ d: ...String) {}
 ```
+
 可变参数序列可以使用任何需要的类型。
+
 ```Swift
 func myFunction<T>(_ a: String..., _ b: Double, _ c: ...T, _ d: Int) {}
 
 myFunction("Swift", 5.7, objectA, "Objective-C", 2.0, objectB, 1234)
 ```
+
 对具有可变序列参数的函数的调用可以根据需要包含尽可能多的重复：
+
 ```Swift
 myFunction("A", 1, "B", 2, "C", 3, "D", 4) {}
 ```
+
 Varadic 序列元素可以命名为 [2]：
+
 ```Swift
 func myFunction<A, B>(property path: KeyPath<A, B>..., _ middle: Comparison, value: ...B) {}
 
 myFunction(property: \.name, .equals, value: "Ada", property: \.age, .greaterThan, value: 21)
 ```
+
 方法定义中可能存在多个不同长度的可变序列。 在这种情况下，每个相应的序列都是使用 $0、$1、$2 等获得的：
+
 ```Swift
 func myFunction(_ a: String..., _ b: ...Int, _ c: Double..., _d: Date, _ e: ...Int) {
   let abValues: [(String, Int)] = $0
   let cdeValues: [(Double, Date, Int)] = $1
 }
 ```
+
 可变参数序列可以与常规参数和现有的可变参数一起使用：
+
 ```Swift
 func myFunction(_ a: String..., _ b: ...Int, _c: Double, _ d: Int...)
 myFunction("Ada", 26, "Bob", 21, 5.7, 1, 2, 3, 4)
 ```
 
 4) 讨论[有没有办法从字符串中验证 URL](https://forums.swift.org/t/pitch-observation-revised/63757 "有没有办法从字符串中验证 URL")
-可以用第三方库：GitHub：[vapor/validation](https://github.com/vapor/validation/blob/master/Sources/Validation/Validators/URLValidator.swift)
 
-5) 讨论[“KeyPath”会产生内存泄漏吗？](https://forums.swift.org/t/does-keypath-produce-memory-leaks/64050 "“KeyPath”会产生内存泄漏吗？")
+可以用第三方库：GitHub：[vapor/validation](https://github.com/vapor/validation/blob/master/Sources/Validation/Validators/URLValidator.swift "vapor/validation")
+
+5) 讨论[ KeyPath 会产生内存泄漏吗？](https://forums.swift.org/t/does-keypath-produce-memory-leaks/64050 "KeyPath 会产生内存泄漏吗？")
+
 回答：是的，KeyPath 实例在第一次使用时被缓存并保留在内存中直到程序结束。
 
 6) 讨论[当序列元素为 Dictionary.Key 时，For-in 与 forEach()](https://forums.swift.org/t/for-in-vs-foreach-when-sequence-element-is-dictionary-key/64053 "当序列元素为 Dictionary.Key 时，For-in 与 forEach()")
+
 ```Swift
 extension Dictionary {
     func f1(keys: any Sequence<Key>) {
@@ -198,24 +245,29 @@ extension Dictionary {
     }
 }
 ```
+
 在 for-in 中，key 的类型被推断为 Any，而在 forEach() 中，其类型为 Key。 这是设计使然还是错误？
-回答：
+
+**回答：**
+
 首先，要知道这一点，但 f1 和 f2 实际上应该采用一些 Sequence<Key> 类型的参数，而不是任何类型的参数，这将使错误消失。
 这是一个已知的限制，将来可能会被取消。 让我试着分解一下。
 
 从 f2: forEach 开始可以保留具体的 Key 类型，这要归功于 SE-0353：受限存在类型中的 Covariant Erasure with Constrained Existentials 1。 所以这是相对简单的。
+  
 对于 f1，编译器基本上将 for 循环重写为 while 循环，如下所示：
+
 ```Swift
 var iterator = keys.makeIterator()
 while let key = iterator.next() {
     …
 }
 ```
+  
 如果我们手动编写这个 while 循环，我们会在第一行的 makeIterator() 调用中遇到错误：
 
 错误：推断结果类型“any IteratorProtocol”需要显式
-由于通用要求的丢失而导致的强制
-编译器强制我们将 keys.makeIterator() 编写为任何 IteratorProtocol，以确认迭代器变量失去了其 Element == Key 的知识，这就是为什么 for 循环中的元素类型为 Any 的原因。
+由于通用要求的丢失而导致的强制编译器强制我们将 keys.makeIterator() 编写为任何 IteratorProtocol，以确认迭代器变量失去了其 Element == Key 的知识，这就是为什么 for 循环中的元素类型为 Any 的原因。
 
 在 SE-0352: Implicitly Opened Existentials 中类型擦除结果值时“丢失”约束中描述了几乎这种情况：
 
@@ -229,21 +281,22 @@ while let key = iterator.next() {
 
 ##  推荐博文
 
-[在 Swift 中解决 "The operation couldn’t be completed" 错误](https://www.avanderlee.com/swift/operation-couldnt-completed-error-code/ "在 Swift 中解决 "The operation couldn’t be completed" 错误")
+[在 Swift 中解决 The operation couldn’t be completed 错误](https://www.avanderlee.com/swift/operation-couldnt-completed-error-code/ "在 Swift 中解决 The operation couldn’t be completed 错误")
 
 **摘要：** 本篇博客讨论如何解决 Swift 中出现 "The operation couldn’t be completed" 的错误，当收到 "The operation couldn’t be completed" 错误消息时该如何处理。作者解释说，这些错误通常会附带错误代码，但没有描述，因此很难确定如何解决问题。该文章建议在GitHub上搜索错误域以查找错误代码的描述，然后在Google上搜索相关信息并找到带有描述的苹果文档。作者还介绍了 What The Error Code ，这是一个提供即时错误代码描述的简单工具的使用。最后，作者解释说他们已经将 What The Error Code 添加到 RocketSim 上，以简化其使用。
 
 [Swift 之 struct 二进制大小分析](https://juejin.cn/post/7216130963277332535 "Swift 之 struct 二进制大小分析")
 
-**摘要：** 文章讨论了struct 对比 class 的一些优劣势，重点分析了 struct 和 class 对包体积带来的影响及规避措施，并分别比较了使用 let 和 var 修饰下二者二进制大小的区别，为我们在日常开发中 struct 和 class 选择上提供了包大小维度的衡量。
+**摘要：** 文章讨论了 struct 对比 class 的一些优劣势，重点分析了 struct 和 class 对包体积带来的影响及规避措施，并分别比较了使用 let 和 var 修饰下二者二进制大小的区别，为我们在日常开发中 struct 和 class 选择上提供了包大小维度的衡量。
 
-[使用 Hummingbird framework 对数据进行编码和解码。](https://theswiftdev.com/encoding-and-decoding-data-using-the-hummingbird-framework/ "使用 Hummingbird framework 对数据进行编码和解码")
+[使用 Hummingbird framework 对数据进行编码和解码](https://theswiftdev.com/encoding-and-decoding-data-using-the-hummingbird-framework/ "使用 Hummingbird framework 对数据进行编码和解码")
 
-**摘要：**  这篇博文介绍了 HummingbirdFoundation 框架对数据进行编解码，它支持 HTML、JSON 和 plain text 等多种数据类型。该框架还允许将传入的 HTTP 请求体对象轻松转换为 Swift 数据结构并返回它们。作者展示了框架通过 Codable 协议和使用 HBResponseCodable 协议、 HBResponseEncodable 协议、 HBRequestDecoder 和 HBResponseEncoder 实现的 JSON 对象内置编码和解码支持。此外，文章还解释了使用  HummingbirdFoundation 支持的两种编码类型—— application/x-www-form-urlencoded 和 multipart/form-data—— 对HTML表单进行编码和解码。
+**摘要：**  这篇博文介绍了 `HummingbirdFoundation` 框架对数据进行编解码，它支持 HTML、JSON 和 plain text 等多种数据类型。该框架还允许将传入的 HTTP 请求体对象轻松转换为 Swift 数据结构并返回它们。作者展示了框架通过 Codable 协议和使用 `HBResponseCodable` 协议、 `HBResponseEncodable` 协议、 `HBRequestDecoder` 和 `HBResponseEncoder` 实现的 JSON 对象内置编码和解码支持。此外，文章还解释了使用  `HummingbirdFoundation` 支持的两种编码类型—— `application/x-www-form-urlencoded` 和 `multipart/form-data——` 对 HTML 表单进行编码和解码。
 
 [在 Swift 中如何取消后台任务](https://swdevnotes.com/swift/2023/how-to-cancel-a-background-task-in-swift// "在 Swift 中如何取消后台任务")
 
-**摘要：**  本文演示了在 Swift 5.5中使用 async/await 异步编程时取消后台任务的不同方法。文章强调了取消不必要的任务的重要性，以防止不需要的后台任务干扰应用程序的性能。文章提供了各种取消任务的方法，包括使用取消标志、使用 Task.checkCancellation() 检查任务取消情况以及使用 Task.isCancelled 来将取消传播到子任务。文章为每种方法提供了示例代码，并解释了每种方法的优点和缺点。
+**摘要：**  本文演示了在 Swift 5.5 中使用 async/await 异步编程时取消后台任务的不同方法。文章强调了取消不必要的任务的重要性，以防止不需要的后台任务干扰应用程序的性能。文章提供了各种取消任务的方法，包括使用取消标志、使用 `Task.checkCancellation()` 检查任务取消情况以及使用 `Task.isCancelled` 来将取消传播到子任务。文章为每种方法提供了示例代码，并解释了每种方法的优点和缺点。
+
 
 ## 话题讨论
 
@@ -252,6 +305,11 @@ while let key = iterator.next() {
 1. 必须算啊，勇于突破陈旧观念，值得尊敬。
 2. 不能算的，选择了普通非技术岗位，意味着自己的大学生涯毫无价值体现。
 3. 无所谓进步与否，只不过是当今经济环境下的无奈选择罢了。
+
+![本图来源于网络](https://files.mdnice.com/user/17787/6cdea255-542f-4168-93f8-31cf18c17ce5.png)
+
+欢迎在文末留言参与讨论。
+
 ## 关于我们
 
 **Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
