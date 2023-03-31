@@ -227,6 +227,24 @@ while let key = iterator.next() {
 
 7) 讨论[Void 作为关联类型？](https://forums.swift.org/t/void-as-an-associated-type/64043 "Void 作为关联类型？")
 
+##  推荐博文
+
+[在 Swift 中解决 "The operation couldn’t be completed" 错误](https://www.avanderlee.com/swift/operation-couldnt-completed-error-code/ "在 Swift 中解决 "The operation couldn’t be completed" 错误")
+
+**摘要：** 本篇博客讨论如何解决 Swift 中出现 "The operation couldn’t be completed" 的错误，当收到 "The operation couldn’t be completed" 错误消息时该如何处理。作者解释说，这些错误通常会附带错误代码，但没有描述，因此很难确定如何解决问题。该文章建议在GitHub上搜索错误域以查找错误代码的描述，然后在Google上搜索相关信息并找到带有描述的苹果文档。作者还介绍了 What The Error Code ，这是一个提供即时错误代码描述的简单工具的使用。最后，作者解释说他们已经将 What The Error Code 添加到 RocketSim 上，以简化其使用。
+
+[Swift 之 struct 二进制大小分析](https://juejin.cn/post/7216130963277332535 "Swift 之 struct 二进制大小分析")
+
+**摘要：** 文章讨论了struct 对比 class 的一些优劣势，重点分析了 struct 和 class 对包体积带来的影响及规避措施，并分别比较了使用 let 和 var 修饰下二者二进制大小的区别，为我们在日常开发中 struct 和 class 选择上提供了包大小维度的衡量。
+
+[使用 Hummingbird framework 对数据进行编码和解码。](https://theswiftdev.com/encoding-and-decoding-data-using-the-hummingbird-framework/ "使用 Hummingbird framework 对数据进行编码和解码")
+
+**摘要：**  这篇博文介绍了 HummingbirdFoundation 框架对数据进行编解码，它支持 HTML、JSON 和 plain text 等多种数据类型。该框架还允许将传入的 HTTP 请求体对象轻松转换为 Swift 数据结构并返回它们。作者展示了框架通过 Codable 协议和使用 HBResponseCodable 协议、 HBResponseEncodable 协议、 HBRequestDecoder 和 HBResponseEncoder 实现的 JSON 对象内置编码和解码支持。此外，文章还解释了使用  HummingbirdFoundation 支持的两种编码类型—— application/x-www-form-urlencoded 和 multipart/form-data—— 对HTML表单进行编码和解码。
+
+[在 Swift 中如何取消后台任务](https://swdevnotes.com/swift/2023/how-to-cancel-a-background-task-in-swift// "在 Swift 中如何取消后台任务")
+
+**摘要：**  本文演示了在 Swift 5.5中使用 async/await 异步编程时取消后台任务的不同方法。文章强调了取消不必要的任务的重要性，以防止不需要的后台任务干扰应用程序的性能。文章提供了各种取消任务的方法，包括使用取消标志、使用 Task.checkCancellation() 检查任务取消情况以及使用 Task.isCancelled 来将取消传播到子任务。文章为每种方法提供了示例代码，并解释了每种方法的优点和缺点。
+
 ## 话题讨论
 
 **当代大学生脱掉孔乙己长衫，选择普通的非技术岗位就业，这算是一种思想的进步吗？**
