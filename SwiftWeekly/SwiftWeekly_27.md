@@ -10,15 +10,15 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：因增速放缓 苹果公司将开启大规模收购
 > 
-> 提案：
+> 提案：Package Manager 支持自定义宏
 > 
-> Swift 论坛：
+> Swift 论坛：讨论为什么 didSet 观察者在使用中会触发 Set 类型的属性
 >
-> 推荐博文：
+> 推荐博文：在 SwiftUI 中掌握 Canvas 的使用
 > 
 > **话题讨论：** 
 > 
-> 
+> 你存钱了吗？你存钱的目的是什么呢？
 
 ## 新闻和社区
 
@@ -52,14 +52,32 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 通过的提案
+
+[SE-0393](https://github.com/apple/swift-evolution/blob/main/proposals/0393-parameter-packs.md "SE-0393") **Value 和 Type 参数包** 提案通过审查。该提案已在 **二十六期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0394](https://github.com/apple/swift-evolution/blob/main/proposals/0394-swiftpm-expression-macros.md "SE-0394") **Package Manager 支持自定义宏** 提案正在审查。
+
+宏提供了一种扩展 Swift 的方法，通过对输入源代码执行任意语法转换来生成新代码。该提案涵盖了如何将自定义宏作为 Swift 软件包的一部分进行定义、构建和分发。
+
+[SE-0395](https://github.com/apple/swift-evolution/blob/main/proposals/0395-observability.md "SE-0395") **Observation** 提案正在审查。
+
+该提案定义了什么是可观察的引用，观察者需要遵守什么，以及类型与其观察者之间的联系。这种设计模式是许多语言都支持的，Swift 引入之后，无疑将更加强大、安全和高性能。
 
 ## Swift论坛
+
 1) 提议[可变泛型类型抽象包](https://forums.swift.org/t/pitch-variadic-generic-types-abstracting-over-packs/64377 "可变泛型类型抽象包")
+
 **介绍**
+
 之前的 SE-0393 引入了类型参数包和几个相关概念，允许泛型函数声明抽象出可变数量的类型。 该提案将这些想法概括为泛型类型声明。
 
 **动机**
+
 当试图在集合上概括通用算法时，自然会出现对可变数量的类型进行抽象的通用类型声明。 例如，惰性 ZipSequence 可能在两个序列上是通用的。 可以声明一个 ZipSequence 类型，它将固定序列列表的元素表示为元组序列：
+
 ```Swift
 struct ZipSequence<each S: Sequence>: Sequence {
   typealias Element = (repeat each S.Element)
@@ -81,16 +99,22 @@ struct ZipSequence<each S: Sequence>: Sequence {
   }
 }
 ```
+
 **建议的解决方案**
+
 在泛型类型的泛型参数列表中，each 关键字声明了一个泛型参数包，就像它在泛型函数的泛型参数列表中所做的那样。 存储属性的类型可以包含包扩展类型，如上面的 let seq 和 var iter。
 
 2) 讨论[点前缀被认为是丑陋的](https://forums.swift.org/t/dot-prefixing-considered-ugly/64376 "点前缀被认为是丑陋的")
+
 虽然我们已经习惯了，但在静态成员和枚举常量前加上点会引入视觉噪音，看起来太聪明了，总是让我的其他语言背景的同事感到惊讶：
+
 ```Swift
 func foo(_ v: Color) {...}
 object.foo(.red) // 🤔
 ```
+
 在声明中缺少点前缀之间也存在这种令人不安的不对称性：
+
 ```Swift
 enum Color {
     case red
@@ -98,7 +122,9 @@ enum Color {
     static var blue = ...
 }
 ```
+
 并在其他地方使用这些前缀：
+
 ```Swift
 switch color {
     case .red: break
@@ -107,8 +133,11 @@ switch color {
 foo(.red)
 foo(.blue)
 ```
+
 有趣的是，我已经可以在某些上下文中使用“object.foo(red)”（例如，在 Color 的静态方法中），但不能在其他上下文中使用。
+
 我很欣赏这将是一个突破性的变化，我们不可能在现阶段迅速适应这一变化。 暂时忘记这一点，你认为 Swift 通过以下更改会变得更好还是更糟？
+
 ```Swift
 func foo(_ v: Color) {...}
 ...
@@ -134,7 +163,9 @@ bar(init())  // ✅
 ```
 
 3) 讨论[非 Sendable 类型可以在 Tasks 中捕获吗？](https://forums.swift.org/t/can-non-sendable-types-be-captured-in-tasks/64372 "非 Sendable 类型可以在 Tasks 中捕获吗？")
+
 现在，我猜想下面的代码应该会出现任何错误。
+
 ```Swift
 class SomeClass {
     var count: Int
@@ -155,17 +186,19 @@ Task {
     someClass.count += 1
 }
 ```
-但是，在 Swift（5.8 版）中，此代码片段可以编译。 在Swift6中，这段代码有没有出现错误？
+但是，在 Swift（5.8 版）中，此代码片段可以编译。 在 Swift6 中，这段代码有没有出现错误？
 
-回答：
+**回答：**
 
 在 Swift v.Future 中，全局 someClass 必须与全局 actor 隔离，因此行 someClass.count += 1 将需要：
+
 整个 Task 闭包被隔离到同一个global actor，或者您为该操作切换到适当的global actor
-（例如：await MainActor.run { someClass.count += 1 }）
-很难准确地说出在 Swift 6 中什么会/不会是错误。您可以使用一些编译器标志来尝试一些事情，但它们是不一致的。
+（例如：await MainActor.run { someClass.count += 1 }）很难准确地说出在 Swift 6 中什么会/不会是错误。您可以使用一些编译器标志来尝试一些事情，但它们是不一致的。
 
 4) 讨论[为什么 didSet 观察者在使用集合中已有的值调用插入后会触发 Set 类型的属性？](https://forums.swift.org/t/why-does-didset-observer-fire-for-property-of-type-set-after-calling-insert-with-value-already-in-the-set/64350 "为什么 didSet 观察者在使用集合中已有的值调用插入后会触发 Set 类型的属性？")
+
 Xcode Playground 中的以下代码片段：
+
 ```Swift
 import UIKit
 
@@ -182,7 +215,9 @@ collection.insert("Test3")
 
 print("Done")
 ```
+
 为什么是输出：
+
 ```Swift
 didSet
 didSet
@@ -191,20 +226,25 @@ didSet
 Done
 ```
 而不是:
+
 ```Swift
 didSet
 didSet
 didSet
 Done
 ```
+
 为什么当集合未更改时它会触发，因为该值已经在集合中？
 
-回答：
+**回答：**
+
 每个mutating函数都会像这样。
 没有特殊的机制可以让属性知道 Set 没有在内部被修改。
 
 5) 讨论[可变参数泛型的同时简单但可能致命复杂的使用](https://forums.swift.org/t/a-simultaneously-simple-yet-probably-fatally-complex-use-of-variadic-generics/64347 "可变参数泛型的同时简单但可能致命复杂的使用")
+
 我很好奇即将到来的可变参数泛型特性是否能让我们实现像 transform(_:_:) 这样的函数，你可以在下面看到它的使用：
+
 ```Swift
 extension String {
     var hasPrimeNumberOfCharacters: Bool {
@@ -216,11 +256,13 @@ extension String {
     }
 }
 ```
+
 该函数采用一个强制性的第一个参数，即要转换的值，然后是一个可变的转换闭包列表，每个闭包都对它之前的闭包的输出类型进行操作，第一个对初始值进行操作。 在上面的例子中，参数是：String, (String)->Int, (Int)->Bool。
 
 我已经阅读了大量的可变参数泛型文档，如果我现在必须给出我最好的猜测，我会说我的 transform(_:_:) 函数在可变参数泛型的第一次迭代中是不可能的。
 
 下面是一个非常粗略的草图，它是我能想象到的最接近如何编写这样一个函数签名的草图。 我发现有必要发明许多新的语法，这支持了我的猜测，即这是不可能的，至少在最初是不可能的。
+
 ```Swift
 func transform
     <InitialValue,
@@ -234,18 +276,24 @@ where first T == InitialValue {
 ```
 
 6) 讨论[为 Debian/Ubuntu 构建发行版？](https://forums.swift.org/t/building-distros-for-debian-ubuntu/64367 "为 Debian/Ubuntu 构建发行版？")
+
 现在我希望在 Jetson Nano（它有一个 ARM Cortex-A57 CPU）上用 Swift 做一个机器人项目，它只能使用 Ubuntu 18.04。 18.04 没有预构建的 5.8 .deb 包，这有点痛苦，因为这意味着我必须从源代码构建，并且一些构建依赖项（例如 cmake）必须从源代码构建才能获得最新的 足够的版本。 我以前构建过工具链，现在我正在 Jetson Nano 上构建它，但它花费了很长时间，尽管构建在连接的 SSD 上（操作系统运行在 SD 卡上）。
+
 我想知道在我的 M1 Max MacBook Pro 上的 Ubuntu 18.04 Docker 容器（或者可能是 Parallels VM）中构建工具链是否有意义，然后构建将正确安装在任何 18.04 ARM 机器上的工具链的 .deb。
+
 你认为那会建造得更快吗？
+
 是否存在对构建 .deb 包的支持？ 20.04 和 22.04 包是如何构建的？
 
-回答：
+**回答：**
+
 另一种选择是构建 MacOS -> 18.04 交叉编译工具链。 不久前，我将 x-compiler 配置移到了 focus，但要翻转回 bionic 配置应该很容易。
 
 7) 发布[Swift 5.8 发布！](https://forums.swift.org/t/swift-5-8-released/64346 "Swift 5.8 发布！")
-链接：https://www.swift.org/blog/swift-5.8-released/
-您可能已经看到，Swift 5.8 现已正式发布！ :tada: 此版本包括对语言和标准库的主要补充，包括支持逐步采用即将推出的功能的 hasFeature、改进的开发人员体验、改进 Swift 生态系统中的工具，包括 Swift-DocC、Swift Package Manager 和 SwiftSyntax，经过改进 Windows 支持等。
 
+**链接：** https://www.swift.org/blog/swift-5.8-released/
+
+您可能已经看到，Swift 5.8 现已正式发布！ :tada: 此版本包括对语言和标准库的主要补充，包括支持逐步采用即将推出的功能的 hasFeature、改进的开发人员体验、改进 Swift 生态系统中的工具，包括 Swift-DocC、Swift Package Manager 和 SwiftSyntax，经过改进 Windows 支持等。
 
 ## 推荐博文
 
@@ -261,10 +309,9 @@ where first T == InitialValue {
 
 **摘要：**  文章介绍了 Swift 5.7 引入的主关联类型和不透明返回类型相结合的使用方式。通过声明主关联类型，我们可以在使用 some 关键字时避免类型擦除，并使代码更加类型安全。该功能不仅适用于 Combine 框架，还可以在处理自己的泛型协议时使用。
 
-
 ## 话题讨论
 
-**4月11日，央行公布了2023年一季度的金融数据，居民超额存款三年10.8万亿：北京人均存款已接近27万，上海人均超21万。你存钱了吗？你存钱的目的是什么呢？**
+4月11日，央行公布了2023年一季度的金融数据，居民超额存款三年10.8万亿：北京人均存款已接近27万，上海人均超21万。**你存钱了吗？你存钱的目的是什么呢？**
 
 1. 有安全感：为了应对失业、突发疾病等，避免因意外事件而出现经济困难。
 2. 实现个人目标：买房、买车、旅行等，通过积累资金来实现自己的愿望。
