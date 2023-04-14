@@ -246,6 +246,35 @@ where first T == InitialValue {
 链接：https://www.swift.org/blog/swift-5.8-released/
 您可能已经看到，Swift 5.8 现已正式发布！ :tada: 此版本包括对语言和标准库的主要补充，包括支持逐步采用即将推出的功能的 hasFeature、改进的开发人员体验、改进 Swift 生态系统中的工具，包括 Swift-DocC、Swift Package Manager 和 SwiftSyntax，经过改进 Windows 支持等。
 
+
+## 推荐博文
+
+[在 SwiftUI 中掌握 Canvas 的使用](https://swiftwithmajid.com/2023/04/11/mastering-canvas-in-swiftui/ "在 SwiftUI 中掌握 Canvas 的使用")
+
+**摘要：** 文章介绍了如何使用 Canvas 视图在 SwiftUI 中绘制 2D 图形，而无需使用 Shape API 。在 Canvas 视图中，我们可以使用 GraphicsContext 实例进行绘图，调整透明度、缩放和混合模式等参数，并添加不同的滤镜。 Canvas 还提供了 stroke、 fill 和 clip 函数，允许我们绘制任何我们需要的路径，同时也提供了draw函数，允许我们绘制文本和图像。我们可以使用 Canvas 类型绘制任何 SwiftUI 视图，但需要在创建 Canvas 时使用 symbols 闭包中注册它们。虽然 Canvas 视图不支持动画，但可以通过将其嵌入到带有动画调度程序的 TimelineView 中来实现动画效果。 Canvas 视图没有辅助功能树，但可以附加一组辅助视图修饰符，以使每个人都可以访问其内容。
+
+[监听 SwiftUI ScrollView 的内容偏移量](https://www.swiftbysundell.com/articles/observing-swiftui-scrollview-content-offset/#resolving-frames-using-geometryreader "监听 SwiftUI ScrollView 的内容偏移量")
+
+**摘要：** 文章介绍了如何监听 SwiftUI ScrollView 的内容偏移量。在构建可滚动的 UI 时，通常需要观察当前滚动位置以便进行操作，但目前（在撰写本文时）SwiftUI 的 ScrollView 没有内置的方式来执行此类滚动观察。作者提供了一种利用 GeometryReader 解析器并使用 PreferenceKey 类型来实现的方法，使我们能够观察当前的内容偏移。最终作者实现了一个名为 OffsetObservingScrollView 的自定义滚动视图，可以实现监听当前内容偏移量的功能。
+
+[Swift 中如何将不透明返回类型与主要关联类型相结合](https://www.swiftbysundell.com/articles/opaque-return-types-primary-associated-types/ "Swift 中如何将不透明返回类型与主要关联类型相结合")
+
+**摘要：**  文章介绍了 Swift 5.7 引入的主关联类型和不透明返回类型相结合的使用方式。通过声明主关联类型，我们可以在使用 some 关键字时避免类型擦除，并使代码更加类型安全。该功能不仅适用于 Combine 框架，还可以在处理自己的泛型协议时使用。
+
+
+## 话题讨论
+
+**4月11日，央行公布了2023年一季度的金融数据，居民超额存款三年10.8万亿：北京人均存款已接近27万，上海人均超21万。你存钱了吗？你存钱的目的是什么呢？**
+
+1. 有安全感：为了应对失业、突发疾病等，避免因意外事件而出现经济困难。
+2. 实现个人目标：买房、买车、旅行等，通过积累资金来实现自己的愿望。
+3. 投资理财：通过投资股票、基金、房地产等资产来增加财富，实现长期的财务目标。
+4. 应对退休生活：通过积累养老金和退休金来保障自己的生活质量和经济安全。
+
+
+欢迎在文末留言参与讨论。
+
+
 ## 关于我们
 
 **Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
