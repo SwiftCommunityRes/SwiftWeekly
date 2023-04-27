@@ -22,6 +22,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+
 1) 讨论[避免未使用的异步结果的可发送警告](https://forums.swift.org/t/avoiding-sendable-warning-for-unused-async-result/64633 "避免未使用的异步结果的可发送警告")
 *** 内容大概 ***
 有一个独立于专用actor的功能：
