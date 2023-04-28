@@ -148,6 +148,21 @@ Swift 5.8 引入了使用新编译器选项启用即将推出的功能的能力�
 * 过滤以查看所有带有 UFF 的提案
 * 新的 UFF 过滤器按钮与现有的搜索字段和状态过滤器结合使用。
 
+## 推荐博文
+
+[SwiftUI 中的 Deeplink URL 处理](https://www.avanderlee.com/swiftui/deeplink-url-handling/ "SwiftUI 中的 Deeplink URL 处理")
+
+**摘要：** 本文讨论深度链接（ deeplinks ）以及如何在 SwiftUI 中配置应用程序来处理它们。深度链接允许用户通过打开特定位置，在启动后深入进入您的应用程序，例如基于所点击的链接打开某个菜谱或电影等。本文提供了在 Xcode 中配置URL类型和使用视图修饰符或 AppDelegate/SceneDelegate 方法处理传入 URL 的步骤。此外，它建议使用深度链接进行其他场景，例如使用特定账户登录或在预发布和生产环境之间切换。该文章还强调了考虑安全性时定义支持 Deeplink URL 的重要性。
+
+[抖音 Swift 编译优化 - 基于自定义 Toolchain 编译提速 60%](https://juejin.cn/post/7221444501956886588 "抖音 Swift 编译优化 - 基于自定义 Toolchain 编译提速 60%")
+
+**摘要：** 本篇博客主要介绍了抖音团队基于自定义 Toolchain 提出的 Swift 编译优化方案，重点讨论在全部模块化后解决依赖瓶颈所采用的方法以及优化效果。通过裁剪 Clang Header 指定内容来降低 OC 头文件预编译耗时，并采用细粒度控制方案，实现编译提速 60%。文章还分享了方案拆解、快速验证、开发调试、验证上线等具体流程，对于有需要进行Swift编译优化的读者可以参考此文中给出的思路和方法。
+
+[Swift 最佳实践之 Property Wrapper](https://juejin.cn/post/7222189908429275173 "Swift 最佳实践之 Property Wrapper")
+
+**摘要：**  本文介绍了 Swift 5.1 中引入的 Property Wrapper，它是对属性的一层封装，隐藏与属性相关的逻辑细节从而提高代码复用性。文章详细讲解了 Property Wrapper 的定义、使用、初始化以及 Projected Value 等概念，并通过示例展示了在 SwiftUI、线程安全保护、Codable 和 User Defaults 存储等方面应用 Property Wrapper 的方法和好处。最后还指出了使用 Property Wrapper 标记属性时需要注意的限制。
+
+
 ## 关于我们
 
 **Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
