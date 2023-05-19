@@ -229,6 +229,21 @@ await main()
 今天，Swift 核心团队宣布对 Swift 的结构、工作和周围的人进行前瞻性的改变。 这些更改包括新的组、名称、组织以及作为每个组的一流概念的包含。
 链接：https://www.swift.org/blog/evolving-swift-project-workgroups/
 
+##  推荐博文
+[万字长文详解如何使用 Swift 提高代码质量 | 京东云技术团队](https://juejin.cn/post/7231359714055077946/ "万字长文详解如何使用 Swift 提高代码质量 | 京东云技术团队")
+
+**摘要：** 文章介绍了如何使用 Swift 提高代码质量。 Swift 的三个重要特性：富有表现力、安全性和快速。通过使用这些特性，可以提高代码质量并减少 Crash 的发生率。同时，本文还分享了一些实践技巧来提高使用 Swift 编写代码的效率和可读性，如利用编译检查、减少使用 Any/AnyObject 、不推荐大量使用 Dictionary 数据结构等。最后，从性能优化的角度，谈到了使用源代码打包，减少方法动态派发，使用 Slice 共享内存优化性能等来提高代码质量。
+
+[swiftUI 中视图叠加的强大能力](https://swiftwithmajid.com/2023/05/03/the-power-of-overlays-in-swiftui/ "swiftUI 中视图叠加的强大能力")
+
+**摘要：** 本博客文章讨论了 SwiftUI 中两个有趣的叠加使用案例。第一个案例涉及使用叠加来保持视图的结构标识，这对于防止性能问题和状态丢失至关重要。第二个用例是通过叠加视图修饰符构建自定义导航转换，使开发人员能够创建流畅的动画而不依赖 NavigationView 或 NavigationStack。提供示例以说明这些概念，并提供其他资源供进一步学习。总体而言，本文展示了 SwiftUI 中叠加功能的强大之处以及它们如何增强应用程序开发中用户体验。
+
+[SwiftUI 中的文件导入和导出](https://swiftwithmajid.com/2023/05/10/file-importing-and-exporting-in-swiftui/ "SwiftUI 中的文件导入和导出")
+
+**摘要：** 本篇博客讨论了如何使用 fileImporter 和 fileExporter 视图修饰符在 SwiftU I视图中导入和导出文件。文章包括两种操作的代码示例，以及一个额外部分介绍如何使用 fileMover 视图修改器进行文件移动。此外，还介绍了 TextDocument 类型，它符合 FileDocument 协议并允许从文件读取纯文本字符串，并将字符串数据导出到文件。总体而言，这篇文章强调了使用这些简单的视图修饰符可以轻松实现 SwiftUI 应用程序中的文件管理体验。
+
+
+
 ## 关于我们
 
 **Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
