@@ -1,6 +1,6 @@
 ## 前言
 
-**本期是 Swift 编辑组自主整理周报的第十三期**，每个模块已初步成型。各位读者如果有好的提议，欢迎在文末留言。
+**本期是 Swift 编辑组自主整理周报的第二十一期**，每个模块已初步成型。各位读者如果有好的提议，欢迎在文末留言。
 
 Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly "SwiftWeekly")，欢迎提交 issue，投稿或推荐内容。目前计划每两周周一发布，欢迎志同道合的朋友一起加入周报整理。
 
@@ -14,6 +14,11 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 > 
 > Swift 论坛：
 >
+> **话题讨论：** 
+> 
+> 有博主在视频社交平台说，2023年已然迎来了经济危机，只是有些人不愿意相信而已，那么你认为国内2023年是否真的进入了经济危机？
+
+>**上期话题结果**
 
 ## 新闻和社区
 
@@ -22,6 +27,8 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+
+## 话题讨论
 
 
 ## 关于我们
