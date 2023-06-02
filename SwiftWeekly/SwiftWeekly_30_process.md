@@ -23,6 +23,21 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## Swift论坛
 
+##  推荐博文
+
+[iOS crash 报告分析系列 - 看懂 crash 报告的内容](https://juejin.cn/post/7238802590661476412/ "iOS crash 报告分析系列 - 看懂 crash 报告的内容")
+
+**摘要：** 本篇文章主要介绍了iOS崩溃报告的解读方法，从报告的Header、Exception information、Diagnostic messages、Backtraces、Thread state和Binary images六个部分详细讲解了各字段含义，并提供示例代码帮助读者更好地理解。同时也引导读者去深入学习符号化的相关知识来获得更多信息。通过阅读本文，开发者可轻松看懂代码中产生的崩溃报告，并进行问题定位和处理。
+
+[SwiftUI 中 LinearGradient的用法](https://swdevnotes.com/swift/2023/lineargradient-in-swiftui/ "SwiftUI 中 LinearGradient的用法")
+
+**摘要：** 这篇博文探讨了在 SwiftUI 中使用 LinearGradient 为对象创建渐变颜色效果。它展示了如何定义颜色数组、使用标准和自定义起点和终点，以及设置坐标以改进铅笔对象上的颜色笔尖。本文还包括用于创建具有各种起点终点组合的不同线性渐变的示例代码。文章以示例结束，展示了如何使用这些技术来自定义一支蓝色铅笔或整套铅笔的外观。
+
+[Swift 中的动态成员查找](https://swiftwithmajid.com/2023/05/23/dynamic-member-lookup-in-swift/ "Swift 中的动态成员查找")
+
+**摘要：** 本文介绍了 Swift 语言中的动态成员查找（Dynamic Member Lookup）特性。通过在类型上使用 @dynamicMemberLookup 属性，我们可以重载该类型的 subscript 方法来更方便地访问其数据。但是，这也意味着缺乏编译时安全性。为了解决这个问题，本文提到了使用 KeyPath 作为参数的 subscript 方法来实现编译时安全检查。最后，作者建议我们可以谨慎地使用 @dynamicMemberLookup 特性来改进 API 设计。
+
+
 
 ## 关于我们
 
