@@ -250,6 +250,20 @@ Swift 中的宏扩展基于语法的内存表示，这意味着您无法在不�
 
 您可能会考虑尝试使用此方法扩展所有宏：[SyntaxProtocol.expand(macros:in:)](https://github.com/apple/swift-syntax/blob/b556ac7c099539ed058f6fcfd978d66cb133176e/Sources/SwiftSyntaxMacros/MacroSystem.swift#L576)
 
+## 推荐博文
+
+[ AngularGradient 在swiftUI中的使用](https://swdevnotes.com/swift/2023/angulargradient-in-swiftui/ "   AngularGradient 在swiftUI中的使用")
+
+**摘要：** 本篇文章讲解了如何在 swiftUI 中使用  AngularGradient，用于从一种颜色过渡到另一种颜色，可选地通过围绕指定中心点的放射状图案中的一系列颜色。本文探讨了设置不同中心点以及指定渐变的起始角度和结束角度范围的效果。 AngularGradient 可用于在 SwiftUI 视图中创建引人注目的视觉效果，尤其是在圆形或弧形中使用时。
+
+[字节跳动 DanceCC 工具链系列之Swift 调试性能的优化方案](https://juejin.cn/post/7095940115532349454/ "字节跳动 DanceCC 工具链系列之Swift 调试性能的优化方案")
+
+**摘要：**  本篇文章讲解了大型 Swift 项目如何通过开关，以及自定义 LLDB ，优化 Swift 开发同学的调试速度，提高整体的研发效能。其中讲解了 LLDB 的部分工作流程，以及针对性优化的技术细节，以及实际效果。
+
+[ Swift 的可选值优化](https://juejin.cn/post/7244809939839434808/ " Swift 的可选值优化")
+
+**摘要：** 在 Swift 中，nil 的语义与 Objective-C 中的 nil 不同，它代表没有值的概念。为了表示没有值，Swift 引入了 nil 关键字，但在内存中的表示方式与 Objective-C 不同。文章通过代码展示了 nil 在内存中的真正表示，发现可选的 Int? 类型比普通的 Int 类型多占一个字节，用来表示是否有值。然而，Swift 编译器已经进行了优化，例如 Bool? 类型只占用一个字节，用2来表示 nil 。 String 类型也可以在内存中用0表示没有值。对于 Class 类型和 Enum 类型，空指针或越界值可以表示没有值，也没有内存浪费。总之， Swift 编译器会尽可能地优化可选值的内存占用，但仍建议在某些情况下尽量少使用可选值，特别是在结构体中连续多个可选的 Int 的情况下，可以使用非可选值并用0初始化它们。
+
 ## 话题讨论
 
 
