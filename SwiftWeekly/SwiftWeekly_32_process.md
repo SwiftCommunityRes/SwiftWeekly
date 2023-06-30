@@ -67,6 +67,189 @@ Apple Vision Pro 提供了一幅无边的画布，你现在就可以开始为这
 
 ## Swift论坛
 
+1) 提议[使用部分不可复制类型的字段](https://forums.swift.org/t/request-for-feedback-partial-consumption-of-fields-of-noncopyable-types/65884 "使用部分不可复制类型的字段")
+**介绍**
+当前给定一个类似于 var 的构造（例如：var、inout），Swift 不允许部使用耗该类型的存储字段：
+```Swift
+struct E : ~Copyable {}
+
+struct S : ~Copyable {
+    var first: E
+    var second: Klass
+}
+
+var s = S()
+let _ = s.e // Error! Cannot partially consume s
+```
+**不可复制类型的部分使用**
+我们在设计空间中考虑以下几个不同的轴：
+
+1. 关于带有 deinit 的类型
+2. 启用 Library Evolution 时
+3. 当 Library Evolution 被禁用时
+4. 无论哪种情况，我们是否应该只允许方法中的部分消耗。
+具有 Deinits 的类型的部分消耗
+我们禁止使用 deinits 部分消耗不可复制类型，因为当字段
+被部分消耗，我们允许该类型被销毁
+部分。 例如：
+```Swift
+struct E : ~Copyable
+struct S : ~Copyable {
+   var first: E
+   var second: E
+   deinit {}
+}
+
+var s = S()
+let _ = s.first // s.first is destroyed here
+doSomething()
+// s.second is destroyed here
+```
+由于这里的 s 已被部分消耗，因此我们永远不会将其全部销毁，这意味着我们永远不会调用它自己的 deinit，这意味着我们不能允许它发生。 请注意，即使我们不允许这样做，我们仍然允许使用方法的作者使用丢弃运算符来关闭值的 deinit，然后部分解构该值。
+
+2) 提问[一组弱引用可以符合Collection吗？](https://forums.swift.org/t/can-a-group-of-weak-references-conform-to-collection/65899 "一组弱引用可以符合Collection吗？")
+问题陈述：
+我有一个收集弱引用的类型，您可以对其进行迭代并追加。 我希望它符合 RangeReplaceableCollection，但我认为我不能做任何比 Sequence 更具体的事情。
+该类型本身是一个经典的指针长度容量三元组，其中指针指向弱引用缓冲区。 一旦长度==容量，在尝试重新分配之前，它会扫描缓冲区以查找可以丢弃的nils。 仅当无法删除足够的 nil 来为新元素腾出空间时，它才会执行重新分配。
+使其符合 Collection 的问题是下标(_:)。 如果索引类型只是缓冲区中的索引，则其他线程可能会导致弱引用从您的下面删除，因此索引可能会变得无效，而不会对集合进行明显的更改。
+我可以想到两种方法来解决这个问题，但都不能令人满意。
+第一个是使索引类型也持有对该对象的强引用。 我想这可行，但我担心当用户没有意识到他们通过索引持有强大的参考时，它可能会产生枪炮。
+第二个是使元素类型为T？ 而不是 T。这是一种误导，因为迭代器会跳过 nils，但它会使下标可实现。
+我认为第三个选项是在不实际遵守协议的情况下实现许多（但不是全部）收集操作。 我担心这是我必须做的，除非我能证明其他两种行为之一是合理的。 有没有一种方法可以在不改变类型语义的情况下实现协议？
+
+回答：
+不是集合似乎是您所提供的数据结构的固有属性，而不是实现限制。 如果序列中的第 n 个项目可以从 x 更改为 y，因为 x（或序列中较早的某个其他对象）已被收集，则序列没有稳定的索引。
+
+3) 提问[swift Macro 中没有这样的模块“UIKit”](https://forums.swift.org/t/no-such-module-uikit-in-swift-macro/65885 "swift Macro 中没有这样的模块“UIKit”")
+在 swift Macro 中导入 UIKit 时，报错 No such module 'UIKit' 。
+宏包有以下平台
+平台：[.macOS(.v10_15)、.iOS(.v13)、.tvOS(.v13)、.watchOS(.v6)、.macCatalyst(.v13)]
+回答：
+在构建过程中，宏在编码的计算机（可能是 Mac/Windows/Linux）上运行。 它不在 iOS 上运行，因此无法访问 UIKit。
+为什么在宏中需要 UIKit（而不是在声明宏的包中）？
+可以尝试创建一个可以导入 UIKit 的“Mac Catalyst”宏，但即使有可能，它也可能没有用
+
+4) 提议[低级联动控制属性：@used 和@section](https://forums.swift.org/t/pitch-low-level-linkage-control-attributes-used-and-section/65877 "低级联动控制属性：@used 和@section")
+**动机**
+动机有两个目标：
+
+提供低级构建块来构建更多高级 API，例如 “链接器集”（见下文）或自定义每种类型元数据，如 SE-0385 中所述（swift-evolution/proposals/0385-custom-reflection-metadata.md，位于 main·apple/swift-evolution·GitHub 2）。 尽管这个推介/提案实际上并没有尝试添加或设计高级 API，只是提供了一条单独解锁它们设计的路径。
+
+为系统编程用例提供低级机制（这些用例是针对具体系统的定制案例），并构建一个通常可重用的高级 API 是没有意义的（项目作者可以自由地构建这样一个高级 API，例如 他们项目的内部机制）。
+
+“链接器集”机制是 Swift 已经在使用的一种方法：几乎任何类型的编译器发出的元数据都被放入二进制文件中专门命名的部分中，并给出固定布局的记录。 然后，当我们想要查找某些信息时（例如，在二进制文件中查找协议一致性），我们要求加载器（Darwin 上的 dyld）为我们提供每个加载的该部分的起始/结束地址。 图像，然后您可以迭代这些部分中的所有记录。 还可以从进程外部提取一些元数据，或者从二进制文件本身中挖掘它。 我们使用现有的反射库来完成此操作，例如 swift-inspect 和 swift-reflection-dump。
+
+这个建议建议我们在 Swift 语言中添加功能来表达该机制的第一部分：将固定布局记录放入专门命名的部分。
+
+**提议**
+其中一些已经在功能标志下实现为 main 中的下划线属性（@_section、@_used），通过 https://github.com/apple/swift/pull/65901 实现。 总之：
+
+@used 属性，通过 llvm.used 将全局变量或顶级函数标记为“不要死区”，大致相当于 C/C++ 中的 __attribute__((used)) 。
+@section("...") 属性，将全局变量或顶级函数放入具有该名称的节中，大致相当于 C/C++ 中的 __attribute__((section("..."))) 。
+这些注释只能应用于保证最终“静态初始化”（而不是通过 init_once 运行时调用延迟初始化）的全局变量，因为否则注释没有任何意义。 这就提出了一个有趣的问题：当用于初始化全局时，哪些表达式可以保证“静态初始化”？ 建议从一组非常基本的表达式开始，并在将来对其进行改进。 截至今天，强制优化管道已经使整数文字、它们的元组和简单算术表达式进行“静态初始化”，如果存在任何具有 @section 属性的全局变量，我们可以在 SIL 管道末尾明确拒绝编译 这不是静态初始化的。 然后，作为后续改进，我们应该考虑允许 POD 结构类型也在强制优化管道中处理，并允许与 @section 一起使用。
+
+虽然超出了本次推介的范围，但以下是“链接器集”API 的运行时端的草图：
+```Swift
+ // in Module1
+@used @section("__DATA,mysection") private let my_entry: Int = ...
+
+// in Module2
+@used @section("__DATA,mysection") private let my_entry: Int = ...
+
+for entry in SwiftRuntime.section("__DATA,mysection", as: Int.self) { // this uses the loader's APIs to locate and iterate over the section
+  ...
+}
+```
+最终，将其包装到基于宏的解决方案中可能是有意义的，这样我们就根本不会公开低级属性：
+```Swift
+@LinkerSet(name: "myLinkerSet") private let myEntry: Int = 42
+
+for entry in SwiftRuntime.linkerSet("myLinkerSet", as: Int.self) {
+  ...
+}
+```
+或者，在我们想要将元数据附加到类型的情况下（由 SE-0385 推动）：
+```Swift
+@Registered(name: "My Favorite Type") // this creates a hidden global in a named section
+class MyType { }
+
+for regType in allRegisteredTypes { // queries over the entries in the section
+  ...
+}
+```
+
+5) 提问[在构建期间启用预处理器标志](https://forums.swift.org/t/enable-preprocessor-flags-during-build/65892 "在构建期间启用预处理器标志")
+我有一个 C++ 头文件，仅在设置了预处理器标志时才公开一个类：
+```Cpp
+#ifdef UNIX_ENABLED
+
+class Some_Class {
+...
+}
+#endif // UNIX_ENABLED
+```
+当我调用 swift 编译器时：
+swiftc MyApp.swift -cxx-互操作性模式=默认-Xcc -std=c++17 -I cxx -c -parse-as-library
+并尝试在 MyApp.swift 中使用 Some_Class ，但显然找不到该类。 我尝试使用 -D UNIX_ENABLED 但这没有帮助
+我有什么想法可以进行此编译吗？
+
+回答：
+您可以尝试将 -Xcc -D -Xcc UNIX_ENABLED 传递给 swiftc 以确保它将 -D 转发给 clang
+
+6) 讨论[Non-Reentrant Actors](https://forums.swift.org/t/non-reentrant-actors/65888 "Non-Reentrant Actors")
+每当我编写涉及 Actor 的代码时，我发现自己想要对 Actor 进行有意义的工作，但最终会在此过程中引入难以捕获的错误。 以这个简单的例子为例：
+```Swift
+actor HeavyLifting {
+    var cachedResult: String?
+    func doHeavyLifting() async throws -> String {
+        if let cachedResult { return cachedResult }
+        let result = try await // load some resource and process it.
+        cachedResult = result
+        return result
+    }
+}
+```
+天真的开发人员（我）可能会认为这是确保只执行一次“繁重工作”并缓存结果的完全足够的方法。 然而，更精明的审阅者（也是我）可能会注意到，虽然这不会导致灾难性的失败，但它实际上也不会保护繁重的工作不被多次完成，因为对此方法的多个并发请求虽然不是“ 一旦达到每个负载的暂停点，每个负载就会开始繁重的工作负载。
+
+更具冒险精神的开发人员（又是我）的工具带中确实有一个工具可以解决这个问题 - 非结构化任务：
+```Swift
+actor HeavyLifting {
+    var heavyLiftingTask: Task<String, Error>?
+    var heavyLiftingResult: String {
+        get async throws {
+            if let heavyLiftingTask { return try await heavyLiftingTask.value }
+            let task = Task { try await // load some resource and process it. }
+            heavyLiftingTask = task
+            return try await task.value
+        }
+    }
+}
+```
+现在，我们得到了我们正在寻找的行为，并且认识到，如果我们在做一些繁重的工作时做了愚蠢的事情，我们确实可能会陷入僵局。 然而，在此过程中，我们现在引入了不完整样板的微妙平衡，更不用说缺乏对取消传播的适当支持，所有这些都是以防止死锁的名义，而实际上并没有阻止富有冒险精神的开发人员编写可能会导致死锁的代码。 可能会陷入僵局，但可能不会。
+
+我的代码中到处都是这样的样板文件，我最终肯定会弄错，当一天结束时，我最终希望的，并假设我在错误的等待最终潜入之前所做的事情，是为了 演员的方法在进行过程中不可调用，而演员的其余部分则继续其业务。
+
+希望我们已经与 Actor 一起生活了一段时间，是时候重新审视不可重入性了，因为它是我们可以使用的最有用的工具。 就我而言，我可以看到单独的方法或函数是我们可能希望以某种能力强制执行串行访问的东西，但我也可以看到将其应用于对整个参与者的所有访问的好处。 哎呀，也许宏可以解决第一个用例？
+回答：
+
+我认为所陈述的未来方向（有任务链重入的奖励积分，但没有任务链重入绝对非常有用）将如那里所描述的那样非常棒。 我不希望它应用于整个Actor。
+
+它肯定会有助于避免现在很容易变得脆弱的模式来解决缺乏此功能的问题。
+
+恕我直言，这与可选的参与者“发送”对 Void 返回函数的支持一起将释放参与者的很大一部分潜力。
+
+7) 讨论[宏扩展后访问源代码](https://forums.swift.org/t/accessing-source-code-after-macro-expansion/65881 "宏扩展后访问源代码")
+当构建一个使用 SwiftSyntax 遍历 Swift 源代码的工具时，是否有一种直接的方法来遍历宏扩展后的源代码？ 这是否需要通过尝试扩展每个源文件来手动完成？
+
+在我正在构建的工具中，我复制源文件并对其进行操作，但这是直接来自文件系统和预扩展的。 具体来说，该工具会遍历有效的 .swift 文件并捕获符合给定协议的所有类型。 就我而言，我使用宏来添加对该协议的一致性，但我的构建插件无法仅通过阅读非扩展源代码来了解最终的一致性。 我使用 Target.directory 来确定给定目标的源文件所在的位置，但是是否有更好的方法来访问扩展源所在的构建目录？
+
+回答：
+
+如果您对宏扩展的工作原理感到好奇，可以在[这个文档](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros/#Macro-Expansion)中阅读它.
+Swift 中的宏扩展基于语法的内存表示，这意味着您无法在不手动执行扩展的情况下直接从源文件中检索扩展的代码。
+
+您可能会考虑尝试使用此方法扩展所有宏：[SyntaxProtocol.expand(macros:in:)](https://github.com/apple/swift-syntax/blob/b556ac7c099539ed058f6fcfd978d66cb133176e/Sources/SwiftSyntaxMacros/MacroSystem.swift#L576)
+
 ## 话题讨论
 
 
