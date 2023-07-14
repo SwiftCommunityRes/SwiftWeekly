@@ -181,6 +181,22 @@ struct ContentView: View {
 回答：
 从历史上看，结果构建器对其内部运行的语法有一些限制。 其中许多限制在 [SE-0373](https://github.com/apple/swift-evolution/blob/main/proposals/0373-vars-without-limits-in-result-builders.md)：解除结果构建器中变量的所有限制中被删除，但如果仍然存在一些限制，我不会感到惊讶。
 
+## 推荐博文
+
+[轻量化的 iOS 动画框架实现](https://juejin.cn/post/7252586606091419708/ " 轻量化的 iOS 动画框架实现")
+
+**摘要：** 在这篇博客中，介绍了日常开发中对视图进行动画处理的常见问题，并提供了一种解决方案。文章首先展示了普通的动画代码，并指出了其回调函数回溯的问题。接着介绍了一些流行的动画库，如 Spring ， Hero 和 TweenKit ，但它们都存在一些限制。为了解决这些问题，引入了一种简洁、易于使用和维护的动画执行方式。该方案基于 Animator 和 Animation 的封装实现，其中 Animator 定义了动画执行器的基本协议，并封装了几种不同类型的动画执行器。 Animation 定义了动画执行的参数，并为不同的 Animato r制定了不同的协议。此外，文章还介绍了类型擦除的概念，以解决参数类型不一致的问题。具体实现方面，通过扩展UIView添加了串行和并行动画的方法。最后，总结了该方案的优点和可能的改进点。 
+
+[使用 Swift Package 插件将自定义字体加载到您的应用程序中](https://www.polpiella.dev/load-custom-fonts-with-no-code-using-swift-package-plugins/ "使用 Swift Package 插件将自定义字体加载到您的应用程序中")
+
+**摘要：**  本文介绍了如何使用 Swift Package 插件将自定义字体加载到应用程序中。通过创建一个 Swift Package 来包含共享的字体文件和字体加载代码，可以加快新应用的发布速度，减少代码重复，并提供一个统一更新字体文件的地方。结合 Swift Package 的可重用性和 Swift Package 插件的强大功能，甚至可以在构建时从字体文件自动生成所有必要的代码。本文使用 SwiftGen 来演示如何实现这一点。首先创建一个名为 "Fonts" 的 Swift Package ，并在其中添加自定义字体资源。然后添加 SwiftGen 插件来生成加载字体所需的代码。最后，可以使用生成的代码来在 SwiftUI 和 UIKit 中使用自定义字体。
+
+[掌握 Swift Foundation Formatter API 。自定义格式样式](https://swiftwithmajid.com/2023/07/04/mastering-swift-foundation-formatter-api-custom-format-styles/ "掌握 Swift Foundation Formatter API 。自定义格式样式")
+
+**摘要：** 本篇博客介绍了如何使用 Swift Foundation Formatter API 中的自定义格式样式。作者分享了自己在每个项目中都使用该 API 并构建自定义格式化逻辑的经验。博客中详细讲解了 FormatStyle 协议以及如何创建符合该协议的自定义格式样式。通过示例，展示了如何创建短数字格式样式和粗体数字格式样式，并说明了如何在自定义类型中重用这些格式样式。最后，作者还提供了一种封装格式化逻辑的方法。
+
+
+
 ## 话题讨论
 
 
