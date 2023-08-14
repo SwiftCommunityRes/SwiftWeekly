@@ -1,4 +1,4 @@
-[![RSS_icon](https://img.shields.io/badge/RSS-Atom-orange)](https://github.com/SwiftCommunityRes/SwiftWeekly/commits/master.atom)
+[![RSS_icon](https://img.shields.io/badge/RSS-Atom-orange)](https://github.com/SwiftCommunityRes/SwiftWeekly/commits/main.atom)
 
 ![](https://user-images.githubusercontent.com/24238160/138631090-e34763aa-7ed8-4b9a-8e02-4fa56d55b045.png)
 
