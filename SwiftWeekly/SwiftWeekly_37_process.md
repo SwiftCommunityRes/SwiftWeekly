@@ -95,6 +95,22 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## Swift论坛
 
+## 推荐博文
+
+[ SwiftDataKit：让你在 SwiftData 中使用 Core Data 的高级功能](https://juejin.cn/post/7275590714712883256?searchId=20230908113707B1CB34D5F133E8B64AD9 " SwiftDataKit：让你在 SwiftData 中使用 Core Data 的高级功能")
+
+**摘要：**  SwiftDataKit 旨在帮助开发者在 SwiftData 中使用 Core Data的高级功能。由于 SwiftData 是 Core Data 的继任者，它在多个方面都对
+Core Data 进行了改进和扩展。然而，当前版本的 SwiftData 还不能完全实现 Core Data 的所有高级功能，这对一些开发者而言可能是一个困扰。
+为了解决这个问题，作者创建了 SwiftDataKit 库，通过提取 SwiftData 中底层的 Core Data 对象，使开发者能够在 SwiftData 中使用 Core Data 的高级功能 
+
+[ Swift 中的线程安全性和使用锁的方法](https://swiftwithmajid.com/2023/09/05/thread-safety-in-swift-with-locks/ " Swift 中的线程安全性和使用锁的方法")
+
+**摘要：**  这篇文章讨论了 Swift 中的线程安全性和使用锁的方法。首先介绍了线程安全性的重要性，并提到了在代码库中发现的相关问题。接着通过一个简单的示例代码演示了状态管理的概念，并说明了这种代码可能导致数据竞争和竞争条件的情况。为了解决这个问题，作者介绍了使用锁机制来控制对共享变量的并发访问。为了实现线程安全，博客展示了如何在 Swift 中使用 OSAllocatedUnfairLock 和 NSRecursiveLock 两种类型的锁。最后，博客总结了保证类的线程安全性的重要性，并鼓励在开发过程中早期就投入时间来构建类型安全的代码。
+
+[ Swift 语言底层原理剖析-Array 系列-高阶函数](https://juejin.cn/post/7275225666029797433?searchId=20230908125940173984B583F745BF08A0 " Swift 语言底层原理剖析-Array 系列-高阶函数")
+
+**摘要：** 文章介绍了Swift的数组中的 filter, forEach, map ,compactMap,f latMap , reduce 等函数内部源码，剖析实现逻辑。Array系列的高阶函数其实是 Collection 的高阶函数，同样适合与 Dictionary ， Set 等其他集合类型。整体的设计也比较巧妙，用到了很多 Swift 特有的 Protocol 特性，对我们日后设计 Swift代 码也会有一些启发。
+
 ## 话题讨论
 
 
