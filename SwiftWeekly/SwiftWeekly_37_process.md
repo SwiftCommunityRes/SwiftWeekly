@@ -94,6 +94,278 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+1) 提议[用户定义的元组一致性](https://forums.swift.org/t/pitch-user-defined-tuple-conformances/67154 "用户定义的元组一致性")
+**介绍**
+元组无法符合当今的协议，这以明显的限制形式表现出来，例如无法使用可哈希值的元组作为字典键。
+
+**动机**
+SE-0283 的动机先前解决了元组符合某些标准库协议的愿望，该动机提出了对 Equatable、Comparable 和 Hashable 元组的内置语言支持。 独立地，Swift 并发工作添加了一个语言扩展，其中可发送值的元组本身就是可发送的。 我们建议将所有这些特殊情况行为与用户定义的元组一致性统一起来，现在可以使用参数包（SE-0393）来表达。 SE-0283 和 SE-0393 都将元组一致性列为未来方向。
+
+建议的解决方案
+我们建议引入参数化扩展语法，如泛型宣言中所述。 在一种特定情况下，允许使用此语法以最通用的形式声明元组一致性：
+```Swift
+extension <each T> (repeat each T): P where repeat each T: P { ... }
+```
+我们还将允许描述元组的通用类型别名通过条件一致性进行扩展； 我们建议将以下元组类型别名添加到标准库中以方便实现：
+```Swift
+protocol Shape {
+  func draw()
+}
+
+typealias Tuple<each Element> = (repeat each Element)
+
+extension Tuple: Shape where repeat each Element: Shape {
+  func draw() {
+    repeat (each self).draw()
+  }
+}
+```
+回想一下，协议中的要求是由具体符合类型的见证人实现的。 在上面，我们声明了一个元组扩展，因此draw()的见证者在元组上实现了协议要求draw()。 实际的实现对每个元素调用draw()，它本身符合Shape。 请注意在draw() 主体的重复模式中每个self 的使用。
+
+**详细设计**
+任何未标记元组都可以通过“最通用”未标记元组类型的类型替换来获得。 如果每个 T 都是某种类型参数包，则这个最通用的类型是（重复每个 T）； 即，由每个 T 的元素的包扩展形成的元组类型。
+
+如今，扩展的扩展类型必须是名义类型，无论是结构、枚举、类还是协议。 我们建议允许扩展最通用的元组类型； 这称为元组扩展。 由于扩展可以声明协议一致性，因此元组扩展可以实现最通用元组类型的协议要求。 这称为元组一致性。
+
+这意味着元组扩展中 self 的类型是（重复每个 T），其中每个 T 是声明一致性的扩展的通用参数。 由于 SE-0399，对包扩展表达式中每个 self 的引用将扩展到元组的元素上。
+
+与结构、枚举和类的扩展一样，元组扩展中的 Self 指的是 self 的类型，即（重复每个 T）。
+
+一旦声明了对某个协议 P 的元组一致性，只要元组的元素满足元组一致性的条件要求，任意元组类型都将满足 P 的一致性要求。 我们将在下面看到，条件要求必须恰好由重复每个 T:P 的一个要求组成。当对元组类型的值调用协议要求时，由元组类型的元素形成一个包； 这成为调用协议见证中每个 T 的通用参数。
+
+**孤儿规则**
+在大多数情况下，元组一致性的行为就好像它们是标准库类型上的用户定义的追溯一致性。 特别是，两个模块定义两个不同的元组符合同一协议是无效的。 因此，我们禁止元组符合定义模块之外的协议。
+
+**单元素元组展开**
+根据参数包提案中规定的规则，单元素元组类型在替换后展开。 这意味着元组一致性必须与此展开保持一致。
+
+这对元组一致性可以采取的形式施加了一些限制。 我们可以通过交换图的形式理解以下所有限制。 最上面一行显示了最通用的元组类型、相应的元组一致性以及某些关联类型 A 的见证。现在，我们对每个对象应用替换，将每个 T 的类型参数包替换为包含单个具体类型的包， 说 X。我们要求图中所有在同一对象处开始和结束的路径都产生相同的结果：
+```Swift
+(repeat each T) ---> [(repeat each T): P] ---> (repeat each T).A
+      |                        |                        |
+      |                        |                        |
+      v                        v                        v
+      X -------------------> [X: P] -----------------> X.A
+```
+具体而言，这些限制如下：
+
+* 元组扩展必须声明符合一个协议。
+
+* 此一致性的条件要求必须精确重复每个 T: P，其中每个 T 是扩展的类型参数包，P 是一致性协议。
+
+* 也就是说，一个元组扩展扩展 Tuple: P ，其中重复每个 T: Q 是没有意义的，因为在单元素情况下，它会衰减到 X: P 其中 X: Q; 当 P 和 Q 可能是不相关的协议时，一般情况下该陈述是错误的。
+
+* P 的关联类型要求 A 必须由其底层类型恰好为 (repeat (each T).A) 的类型别名见证； 也就是说，从每个元素投影 A 的元组类型。
+
+也就是说，如果X.A是Int，Y.A是String，那么我们别无选择，只能要求(X, Y).A等于(Int, String)。
+请注意，由于所有这些规则，空tuple() 将符合每个具有元组一致性的协议。
+
+**动态行为**
+上述规则使我们能够保证元组一致性见证永远不会被单元素包调用，在这种情况下调用将直接转发到元素一致性。 因此，元组一致性中 Self 的运行时类型必须始终是真正的元组类型，而不是未包装的元素。
+
+如果某个函数本身使用参数包从包中形成元组值，则对该值调用协议要求将调用元组一致性见证或单个元素的见证，具体取决于包的大小。
+
+**标记元组和方差**
+元组标签不是参数包可以抽象的东西。 然而，表达式类型系统定义了标记元组和相应的未标记元组之间的子类型关系。
+
+与类类比，如果在非最终类 C 上声明了一致性，并且存在 D 继承自 C 的子类关系，则该一致性也被 D 继承。
+
+为了在类继承的情况下用 D 替换 C 是有效的，我们要求 Self 仅用于协变或逆变位置，而不是不变的。 因此，我们必须对元组施加与当前对非最终类相同的限制。
+
+这允许以下操作：
+
+* 符合Equatable等协议，Self出现在参数位置。
+* 符合假设的 Clonable 协议，具有返回 Self 的 func clone() -> Self 要求。
+另一方面，这是禁止的：
+
+* 符合要求Self位置不变的协议，例如func f() -> G<Self>。
+
+在这种情况下，采用标记元组并将 G<> 应用于相应的未标记元组类型并不完全合理。
+
+**使用范围**
+由于上面概述的微妙的静态和动态行为，我们期望元组一致性仍然是一项高级功能。 对于许多目的，最好通过 SE-0398 声明一个特殊用途的可变参数泛型结构，并使其符合协议，因为这提供了完全的灵活性，而不会在一致性方面出现任何复杂情况：
+```Swift
+struct EggFactory<each Bird> {}
+
+extension EggFactory: OmletMaker where repeat each Bird: Chicken {}
+```
+此模式还允许可变参数类型定义自定义构造函数和访问器以强制不变量等。
+
+元组应该只符合具有明显“代数”实现的协议，该实现以归纳方式推广到元素类型的所有组合，例如上面讨论的三个标准库协议。
+
+例如，使元组符合 IteratorProtocol 可能不是一个好主意，因为至少有两个明显的实现； 要么是压缩，要么是串联（在这种情况下，我们还需要要求所有序列具有相同的元素类型，这是元组一致性甚至无法表达的）。
+
+2) 讨论[dispatchPrecondition 是实现 @unchecked Sendable 类型的合理方法吗？](https://forums.swift.org/t/is-dispatchprecondition-a-reasonable-way-to-implement-an-unchecked-sendable-type/67159 "dispatchPrecondition 是实现 @unchecked Sendable 类型的合理方法吗？")
+我正在尝试提高我对何时使用 @unchecked Sendable 有意义的理解。
+
+举个例子，使用dispatchPrecondition保证值只能在主线程上读取或修改：
+```Swift
+/// A wrapper that guaruntees that its value is only read or modified on the main thread.
+/// For simplicity assume `T` is a value type.
+final class MainThreadWrapper<T> {
+
+  init(_ value: T) {
+    dispatchPrecondition(condition: .onQueue(.main))
+    _value = value
+  }
+
+  var value: T {
+    get {
+      dispatchPrecondition(condition: .onQueue(.main))
+      return _value
+    }
+    set {
+      dispatchPrecondition(condition: .onQueue(.main))
+      _value = newValue
+    }
+  }
+
+  private var _value: T
+
+}
+```
+为了便于讨论，我们假设包装的值是值类型（而不是引用类型），因此我们不需要考虑不经过值设置器的修改。
+
+使用 @unchecked Sendable 一致性将该类型设置为可发送是否合理？
+```Swift
+// Is this reasonable, given the expectations of Sendable?
+extension MainThreadWrapper: @unchecked Sendable { }
+```
+使用这种类型时不可能出现数据竞争。 如果在错误的线程上使用了不正确的类型（例如，在主要参与者之外的任务中），dispatchPrecondition 将失败并阻止不允许的使用：
+```Swift
+struct NotSendable {
+  var value: String
+}
+
+let wrapper = MainThreadWrapper(NotSendable(value: "foo"))
+
+Task {
+  // Allowed by the compiler since wrapper is Sendable, 
+  // but a triggers a runtime error:
+  print(wrapper.value)
+
+  await MainActor.run {
+    // Safe, prints "NotSendable(value: "foo")"
+    print(wrapper.value)
+  }
+}
+```
+鉴于这种类型可以安全地跨并发域传递，而不会出现数据竞争，我倾向于认为这是 @unchecked Sendable 的合理用例。
+
+人们怎么看？ 我特别有兴趣听到任何潜在的反驳意见。
+
+**回答**
+这里的包装器确实保证了底层数据的“安全”，但如果该类型在主队列之外使用过，它会崩溃。 这仅适用于声明为 @MainActor 的类型...但是一旦您以这种方式对其进行注释，那么您就已经获得了跨并发域的保证，即您将成为主要演员。
+
+关于“安全”对您意味着什么，@unchecked Sendable 是一个承诺，您的类型可以在任何并发域中使用，并且仍然保护其自己的状态。 我认为这样标记你的包装纸是不正确的。 它仍然只能安全地从主队列使用。 （如果不是这种情况，它就会快速而有效地崩溃。）
+
+3) 讨论[Swift 不会使用 ReferenceWritableKeyPath 编译dictionary，除非它是一个类属性](hhttps://forums.swift.org/t/swift-wont-compile-dictionary-with-referencewritablekeypath-unless-its-a-class-property/67148 "Swift 不会使用 ReferenceWritableKeyPath 编译dictionary，除非它是一个类属性")
+这段代码编译可以通过：
+```Swift
+@objcMembers final class DriversLicense1: NSObject {
+    private let map: [String: ReferenceWritableKeyPath<DriversLicense1, String>] = [
+        "DAA": \DriversLicense1.nameFull,
+    ]
+    private(set) var nameFull: String = ""
+
+    override init() {
+        super.init()
+
+        for (key, keyPath) in map {
+            self[keyPath: keyPath] = key
+        }
+    }
+}
+```
+但是，这段代码编译不能通过 - 错误是：
+```Swift
+cannot convert value of type 'KeyPath<DriversLicense2, String>' to expected dictionary value type 'ReferenceWritableKeyPath<DriversLicense2, String>'
+```
+```Swift
+fileprivate let map: [String: ReferenceWritableKeyPath<DriversLicense2, String>] = [
+    "DAA": \DriversLicense2.nameFull,
+]
+@objcMembers final class DriversLicense2: NSObject {
+    private(set) var nameFull: String = ""
+
+    override init() {
+        super.init()
+
+        for (key, keyPath) in map {
+            self[keyPath: keyPath] = key
+        }
+    }
+}
+```
+为什么？
+
+**回答**
+这绝对感觉像是一个诊断可能更有帮助的地方 - 如果您尝试直接在同一位置使用设置器，您会得到更好的消息：
+
+无法分配给属性：“nameFull”设置器无法访问
+
+似乎我们可以查看尝试 KeyPath -> (Reference)WritableKeyPath 转换的情况，并提供特殊的诊断，如果我们可以在 setter 在当前范围内可见的情况下形成适当的可写密钥路径。
+
+4) 讨论[无法从 Objective C 类调用 swift 扩展方法](https://forums.swift.org/t/unable-to-call-swift-extension-method-from-objective-c-class/67174 "无法从 Objective C 类调用 swift 扩展方法")
+我为 ViewController 类创建了 swift 扩展，并在其中定义了一种方法。 当我尝试从同一个 Obj-c ViewController 调用相同的方法时，它给出了以下错误：
+
+“ViewController”没有可见的 @interface 声明选择器“testMe”
+
+我的代码如下：
+
+Objective-C类
+```Swift
+#import <UIKit/UIKit.h>
+
+@interface ViewController : UIViewController
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+
+[super viewDidLoad];
+
+[self testMe]; // No visible @interface for 'ViewController' declares the selector 'testMe'
+
+}
+@end
+```
+Swift extension:
+// ViewController+extnesion.swift
+```Swift
+import UIKit
+
+@objc public extension ViewController {
+    
+    func testMe() {
+        print("Vish")
+    }
+}
+```
+
+**回答**
+您的 .m 文件需要导入 Swift 编译器发出的兼容性标头。
+
+5) 讨论[使用类型包的通用结构无法在属性中使用相同类型包存储闭包](https://forums.swift.org/t/generic-struct-using-type-pack-cant-store-closure-using-same-type-pack-in-property/67145 "使用类型包的通用结构无法在属性中使用相同类型包存储闭包")
+```Swift
+struct Foo<each T> {
+    let foo: (repeat each T) -> Void
+
+    init(
+        fn: @escaping (repeat each T) -> Void
+    ) {
+        self.foo = fn
+    }
+}
+```
+编译器使用 Xcode 15.0 beta 8 (15A5229m) 和 swift-DEVELOPMENT-SNAPSHOT-2023-09-04-a 工具链响应以下消息
+```Swift
+error: type of expression is ambiguous without a type annotation
+        self.foo = fn
+        ~~~~~~~~~^~~~
+```
 
 ## 推荐博文
 
