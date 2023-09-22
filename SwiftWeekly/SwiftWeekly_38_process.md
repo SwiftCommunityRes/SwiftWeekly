@@ -66,6 +66,221 @@ App Store：借助 StoreKit 中的全新 SwiftUI 视图，你现在可以更轻�
 
 
 ## Swift论坛
+1) 讨论[结构和类型（以前是匿名联合类型）](https://forums.swift.org/t/structural-sum-types-used-to-be-anonymous-union-types/67432 "结构和类型（以前是匿名联合类型）")
+从状态检查中衍生出一个关于匿名联合类型主题的新讨论[线程：类型抛出](https://forums.swift.org/t/status-check-typed-throws/66637)。
+
+关于这个主题的衍生讨论是围绕这个[评论](https://forums.swift.org/t/status-check-typed-throws/66637/100)开始的。
+
+类型化抛出就像类一样，是静态类型信息的重要载体。 您所说的相当于说“不应允许类实例在弹性库中具有特定的类类型，而应始终为 AnyObject”。 这显然是非常错误的。 不小心将自己锁定在特定错误类型中，然后在主要版本发布后后悔的可能性不是语言问题，而是工程无能问题。 作者应该采取预防措施，在设计错误类型时考虑到未来的扩展（例如，具有可选元数据的结构而不是裸枚举）。
+
+当我们谈论这个话题时：
+
+匿名联合类型 (A | B) 也是如此，它们只不过是某些通用枚举周围的语法糖（例如 Either<A, B>）。 这不是什么新鲜事，Swift 已经完全能够表达这种类型，因此我不断听到的“由于编译器复杂性而经常被拒绝的提案”显然也是非常错误的。
+
+**结论：**
+
+类型系统必须具有工程师认为合适的表达能力，以使他们的代码具有表达能力。 仅仅因为有人想不出保留静态类型信息的理由（通过使用特定的错误类型或使用匿名联合类型），并不意味着没有理由。
+
+2) Swift使用[推出 Swift SDK 生成器](https://forums.swift.org/t/announcing-swift-sdk-generator/67409 "推出 Swift SDK 生成器")
+我们很高兴地宣布推出新的[开源实用程序](https://github.com/apple/swift-sdk-generator)，它可以简化 Swift 包的交叉编译！
+
+使用 Xcode 时，许多 Swift 开发人员每天都会使用从 macOS 到其他 Darwin 平台的交叉编译。 与此同时，使用命令行开发工具对 Linux 和 Swift 支持的其他平台进行交叉编译并不那么容易设置。 通过 SE-0387 35，我们希望缩小这一差距，并使交叉编译成为 SwiftPM 命令行界面中的一流功能。
+
+虽然 [SE-0387](https://github.com/apple/swift-evolution/blob/main/proposals/0387-cross-compilation-destinations.md) 指定了 Swift SDK 捆绑包的格式和文件系统布局，但它没有规定如何生成这些捆绑包。 我们提供了此类生成器的参考实现，它支持 macOS 作为主机平台和一些主要的 Linux 发行版作为目标平台。
+
+区分 Swift SDK 作者和 Swift SDK 用户非常重要。 新的 Swift SDK Generator 应主要由 Swift SDK 作者使用，他们可以根据自己的需求对其进行自定义并发布自己的 Swift SDK 捆绑包。 反过来，Swift SDK 用户可以依赖 Swift 5.9 中引入的 swift Experimental-sdk 命令来安装 Swift SDK 作者之前生成的捆绑包。
+
+我们正在努力增加对 Swift 项目正式支持的所有 Linux 发行版的支持。 一如既往，欢迎所有贡献！
+
+3) 讨论[Swift 测试的新方法](https://forums.swift.org/t/a-new-approach-to-testing-in-swift/67425 "Swift 测试的新方法")
+大家好，
+
+我很高兴地宣布一个新的开源项目，旨在探索 Swift 测试体验的改进。 我和我的同事 @briancroom、@grynspan、@chefski、@Dennis 和我最近几个月一直在致力于此工作，并取得了一些早期进展，我们很高兴与大家分享。
+
+受到 Swift 宏的启发，我们构建了一个测试库 API，它可以：
+
+使用名为 @Test 的附加宏提供有关各个测试的详细信息。 这使得许多新功能成为可能，例如表达需求、传递参数或添加自定义标签，所有这些都直接在代码中而不是单独的配置文件中实现。
+使用拼写为 #expect(...) 的表达式宏，通过详细且可操作的故障信息验证测试中的预期条件。 它通过自动捕获传入表达式的值及其源代码来通知失败消息，并且比专门的断言函数更容易学习，因为它接受内置运算符表达式，如 #expect(a == b)。
+通过向函数添加参数并在 @Test 属性中指定其参数，可以使用不同的输入轻松重复测试多次。
+这是一个示例：它显示了一个测试函数，使用 @Test 表示，其中包含两个特征：自定义显示名称和决定测试是否应运行的条件。 该测试创建一辆食品卡车，在其中存放食物，然后使用 #expect 检查食物数量是否等于我们期望的值：
+```Swift
+@Test("The Food Truck has enough burritos",
+      .enabled(if: FoodTruck.isAvailable))
+func foodAvailable() async throws {
+    let foodTruck = FoodTruck()
+    try await foodTruck.stock(.burrito, quanity: 15)
+    #expect(foodTruck.quantity(of: .burrito) == 20)
+}
+```
+如果上述测试失败，#expect 将捕获数量(of: .burrito) 等子表达式的值以及源代码文本。 这允许在输出中包含丰富的诊断信息：
+```Swift
+✘ Test "The Food Truck has enough burritos" recorded an issue at FoodTruckTests.swift:8:6:
+Expectation failed: (foodTruck.quantity(of: .burrito) → 15) == 20
+```
+使用这种方法，使用不同的输入多次重复测试（称为参数化测试 15）也很简单。 @Test 属性可以包含参数，并且该函数将被重复调用并传递每个参数：
+```Swift
+@Test(arguments: [Food.burrito, .taco, .iceCream])
+func foodAvailable(food: Food) {
+    let foodTruck = FoodTruck()
+    #expect(foodTruck.quantity(of: food) == 0)
+}
+```
+[Swift 测试的新 API 方向](https://github.com/apple/swift-testing/blob/main/Documentation/Vision.md)深入探讨了我们的愿景，描述了项目的目标，并展示了我们提出的方法的更多示例。
+
+这些想法已在名为 [swift-testing](https://github.com/apple/swift-testing) 的新包中原型化，该包目前被认为是实验性的，尚未推荐用于一般生产用途。 如果您感兴趣，我们鼓励您克隆它，探索它的实现，并尝试使用它为您的项目编写测试。 有关说明，请参阅入门。
+4) 讨论[VSCode 5.9：停止服务器失败](https://forums.swift.org/t/vscode-with-5-9-stopping-server-failed/67397 "VSCode 5.9：停止服务器失败")
+自从升级到 5.9 以来，VSCode 上的 sourcekit-lsp 变得更加不稳定，我不断收到“客户端 SourceKit 语言服务器：与服务器的连接出错。 关闭服务器。” 问题，它打印的唯一日志输出是：
+```
+[Error - 4:44:34 PM] Stopping server failed
+  Message: Cannot call write after a stream was destroyed
+  Code: -32099
+```
+我相信，这是应该解决该问题的 PR：[Don’t crash when unregistering for change notifications of a file that isn’t watched by ahoppen · Pull Request #828 · apple/sourcekit-lsp · GitHub](https://github.com/apple/sourcekit-lsp/pull/828)
+
+5) 讨论[对于传递到异步作用域函数的闭包来说，Sendable 是否是必需的？](https://forums.swift.org/t/is-sendable-necessary-for-closures-passed-into-asynchronous-scope-functions/67403 "对于传递到异步作用域函数的闭包来说，Sendable 是否是必需的？")
+我一直在思考以下函数代码。
+```Swift
+public extension Database {
+    func transaction<T>(_ closure: @Sendable @escaping (Database) async throws -> T) async throws -> T {
+        try await self.transaction { db -> EventLoopFuture<T> in
+            let promise = self.eventLoop.makePromise(of: T.self)
+            promise.completeWithTask{ try await closure(db) }
+            return promise.futureResult
+        }.get()
+    }
+}
+```
+这是来自 Vapor 框架的实际代码。
+以下是供参考的网址：https://github.com/vapor/ Fluent-kit/blob/main/Sources/FluentKit/Concurrency/Database%2BConcurrency.swift 1
+
+在这个事务函数中，参数闭包具有@Sendable和@escaping属性。
+我想知道是否可以将两者删除。
+
+特别是，@Sendable 属性意味着传递给闭包的类型必须是 Sendable，
+这施加了相当严格的限制。
+因此，如果我们可以省略它，那就方便多了。
+
+我认为它可以被删除的原因是，
+虽然这个闭包确实被传递到事件循环线程，
+当它离开交易功能时，
+它正在等待 EventLoopFuture.get(),
+确保闭包的函数调用完成。
+
+换句话说，两个不同线程不可能同时调用闭包。
+
+确实，理论上由于 eventLoop 类型被抽象为任何 EventLoop，
+实现一种将传递给completeWithTask的闭包存储到全局变量或类似的东西中的方法是可能的，
+但这对于 EventLoop 和 EventLoopFuture 来说显然是不自然的行为，我认为没有什么可担心的。
+
+此外，我认为出于同样的原因可以消除@escaping。 闭包实际上并没有逃脱。
+
+上面的想法可能是对的吗？
+我很想听听有更多见解的人的想法来权衡。
+
+作为参考，具体实现如下：
+```Swift
+public extension Database {
+    func transaction<T>(_ closure: (any Database) async throws -> T) async throws -> T {
+        try await withoutActuallyEscaping(closure) { (closure) in
+            let closureBox = UncheckedSendableBox(closure)
+            return try await self.transaction { db -> EventLoopFuture<T> in
+                let dbBox = UncheckedSendableBox(db)
+                let promise = self.eventLoop.makePromise(of: T.self)
+                promise.completeWithTask {
+                    let db = dbBox.value
+                    let closure = closureBox.value
+                    return try await closure(db)
+                }
+                return promise.futureResult
+            }.get()
+        }
+    }
+}
+```
+我相信这个想法可以推广。
+我将这些接受值并允许使用闭包进行灵活处理的函数称为作用域函数。
+这样的作用域函数确实可以是异步的，但是，即使它们是异步的，
+在我看来，只要作用域函数中的闭包执行是串行完成的，
+它们不一定必须是@Sendable 或@escaping。
+
+您对此有何看法？
+
+**回答**
+这个问题很好理解，但解决方案不是放弃当前语言中的 Sendable 要求，而是让编译器可以推断出根本不需要它。 请参阅 [Pitch 跨隔离域安全发送非“可发送”值](https://forums.swift.org/t/pitch-safely-sending-non-sendable-values-across-isolation-domains/66566)，了解编译器如何增强此功能的示例。
+
+我同意你的观点，只要我们排除异步代码中不安全的行为，这种使用模式可能是安全的，但此时我仍然不愿意删除注释。
+
+6) 讨论[编写 TCP 客户端应用程序的推荐方法是什么？](https://forums.swift.org/t/whats-the-recommended-way-to-write-a-tcp-client-application/67433 "编写 TCP 客户端应用程序的推荐方法是什么？")
+我需要为 TCP/IP 上的自定义专有协议编写一个客户端。 我希望它能够在 macOS、iOS 和 Linux 上使用。 推荐的方法是什么？
+
+我有一组现有的 Objective-C 代码来执行此操作，并且我只使用原始 BSD 套接字。 它们很简单，并且由于不需要是高性能服务器，所以我非常乐意阻塞：我只需将代码粘贴在 NSOperation 中，在串行 NSOperationQueue 上运行它，并使用回调来传递结果。 在 Swift 中使用 BSD 套接字感觉就像我在与该语言作斗争：很多都陷入了 UnsafePointer 领域。
+
+我查看了 Mojave 和 Swift-NIO 中引入的网络框架，但在这两种情况下，我真的不确定如何构建客户端。 我需要做很多来回操作：向事物发送命令，读回响应，发送下一个命令，读取响应等。通过单个通道读取处理程序（在 Swift-NIO 的情况下）感觉所有内容， 再次，就像我做错事一样。
+
+有谁知道 Swift-NIO 类似的来回通信示例吗？ 或者我看错了方向？
+
+**回答**
+自从我上次查看我的代码以来已经过去很长时间了，我确信自那时起 API 已经发生了很大的变化，但对我帮助最大的是查看 Java 的 Netty 文档。 Swift-NIO 现在似乎有相当好的文档，所以我会先阅读一下。
+
+同样，它已经很老了，而且事情可能已经发生了变化，但这里有一个简单的示例，说明 Swift-NIO 客户端和处理程序类如何[协同工作](https://github.com/jonathanwong/TCPClient/tree/master/Sources/TCPClient)。 这个默认实现会让您遇到您提到的确切问题，但是如果您在 TCP 客户端类之外声明通道、处理程序、事件循环等，您可以处理处理程序类中发生的更改，例如断开连接或接收消息， 在客户端类的其他方法中。 我不确定这是否是“正确”的处理方式，但它足以让它在我正在构建的应用程序中顺利运行。
+
+您可能会考虑由 IBM 开发并在 macOS、iOS 和 Linux 上运行的 BlueSocket。
+
+我向这个库添加了对 Windows 的支持，并以 GreenSocket 的名称提供。
+
+BlueSocket 此处（macOS、iOS、Linux）：
+https://github.com/Kitura/BlueSocket
+https://github.com/litewrap/GreenSocket
+
+
+7) 讨论[协议扩展可以定义类 API 覆盖吗？](https://forums.swift.org/t/can-protocol-extension-define-class-api-overrides/67404/3 "协议扩展可以定义类 API 覆盖吗？")
+我有几个符合协议的 UIViewController 子类（它们不共享相同的父类）。 我想添加几个 UIViewController API 重写的默认实现，以避免在每个子类中重写它们。 无论如何要让这项工作成功吗？
+```Swift
+protocol StylingController {
+        
+}
+
+extension StylingController where Self: UIViewController {
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        becomeFirstResponder()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        resignFirstResponder()
+    }
+    
+}
+```
+**回答**
+在这种情况下，只需创建两个父类而不是一个：一个基于 UIViewController，另一个基于 UITableViewController。 如果有很多重叠的功能，并且您希望它尽可能DRY，您可以进一步将通用功能提取到协议扩展中：
+```Swift
+class BaseViewController: UIViewController, CommonVCFunctionality {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        commonVCFunctionality()
+    }
+}
+
+class BaseTableViewController: UITableViewController, CommonVCFunctionality {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        commonVCFunctionality()
+    }
+}
+
+protocol CommonVCFunctionality: AnyObject {
+    func commonVCFunctionality()
+}
+
+extension CommonVCFunctionality {
+    func commonVCFunctionality() { ... }
+}
+```
 
 ## 话题讨论
 
