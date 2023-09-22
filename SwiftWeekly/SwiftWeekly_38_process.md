@@ -282,6 +282,21 @@ extension CommonVCFunctionality {
 }
 ```
 
+## 推荐博文
+
+[ Swift 中使用 actors 实现线程安全](https://swiftwithmajid.com/2023/09/19/thread-safety-in-swift-with-actors/ " Swift 中使用 actors 实现线程安全")
+
+**摘要：**  本文介绍了在 Swift 中使用 actors 实现线程安全的方法。首先，文章回顾了 Store 类型的定义，它允许我们可预测地实现状态管理，但这个类型不是线程安全的。为了解决这个问题，文章使用了一个 NSRecursiveLock 类型的实例来确保线程安全。然而，作者指出使用锁存在一些缺点，并引入了 actors 这个新的 Swift 语言特性。介绍了如何使用 actors 以及与使用锁相比的优点，并讨论了 actor 的重入问题。最后总结了actors在 Swift 中的重要性和优势。
+
+[深入理解 Observation - 原理，back porting 和性能](https://onevcat.com/2023/08/observation-framework/ "深入理解 Observation - 原理，back porting 和性能")
+
+**摘要：**  喵神这篇文章讨论了 SwiftUI 中的状态管理，特别是引用类型的状态管理，以及 Apple 在 iOS 14 中推出的新 Observation 框架。Observation 框架可以在 View 中实现属性粒度的订阅，避免不必要的刷新。它实质上通过添加 @ObservationTracked 宏将存储属性转换为计算属性，并添加与 ObservationRegistrar 相关的内容来实现。通过阅读本文，您将更了解 SwiftUI 中的新 Observation 框架及其优势。
+
+
+[货拉拉 iOS 用户端10万分位 Crash 率攻坚之战](https://juejin.cn/post/7281159113882320915?searchId=20230922142040421750A2476F6B944434 "货拉拉 iOS 用户端10万分位 Crash 率攻坚之战")
+
+**摘要：** 该文主要介绍了货拉拉 iOS 用户端在 Crash 治理方面的经验和技术方案。文章探讨了 iOS 平台下 Crash 监控方案的优缺点，并分享了自建 Crash 监控平台的思路和经验。随后，总结了 Crash 治理的思路和经验，包括分级治理、版本追踪、定期分析和团队合作。最后，文章分享了常见的 Crash 类型及其解决方案，并总结了长期 Crash 治理的经验和收益。
+
 ## 话题讨论
 
 
