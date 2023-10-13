@@ -56,6 +56,247 @@ Apple Vision Pro 开发者实验室 - 上海，2023 年 10 月 31 日 上午 9:3
 
 
 ## Swift论坛
+1) 讨论[Emitting模块花费的时间是 XCode 15.1 beta 的 25 倍](https://forums.swift.org/t/emitting-module-takes-25x-the-time-in-xcode-15-1-beta/67671 "Emitting模块花费的时间是 XCode 15.1 beta 的 25 倍")
+XCode 15.0 ( Swift 5.9.0.128.108 ) 和 XCode 15.1 Beta ( Swift 5.9.2.1.6 ) 之间的构建“发出模块”阶段似乎存在一些退化
+
+我的 XCWorkspace 中有几个不同的框架和应用程序。 在 15.1 beta 中，大多数编译速度都差不多，或者稍快一些。 然而，我们拥有的一个框架的时间似乎是以前的 10 倍以上。 当在 Xcode 时间线中查看时，几乎所有时间都花在“Emitting Module”阶段。 在干净的构建中，时间从约 56 秒缩短到约 1440 秒。 另外，有些文件的编译速度似乎确实慢了一些，但这是一个很大的瓶颈，除了当时的“发射模块”之外，时间线中没有其他真正发生的事情。 如果我当时观看 Activity Monitor，我的 CPU 的 swift-frontend 进程在此期间将保持在 100%。 但除此之外似乎没有什么可疑的。 比较输出，框架的大小几乎相同，我没有看到任何其他真正值得注意的东西。
+
+关于什么会导致这种巨大差异有什么想法吗？
+**回答**
+我刚刚发现并修复了 39 个案例，当模块中包含大量 Swift 文件时，我们会看到这种情况发生。 （大量宏展开也可能发生）。 对于我们看到回归的项目，“发射模块”阶段从 300 秒下降到 32 秒。
+
+它很可能与您所看到的相同。 如果您能够捕获一个旋转转储，我们可以使用旋转转储来验证这一点，或者如果您想尝试的话，我们可以启动工具链构建。
+
+[编辑：对于那些好奇的人来说，编译器有一个线性时间算法，可以从源位置的内部表示映射到该位置所在的源文件。 该算法“永远”是线性时间的，但最近的错误修复将其置于热路径中。 解决方法是将其转换为具有单元素最近使用的缓存的对数算法。]
+
+2) 讨论[状态检查：Int128 和 UInt128](https://forums.swift.org/t/status-check-int128-uint128/67694 "状态检查：Int128 和 UInt128")
+Swift 标准库实际上包含 Int128 和 UInt128，它们只是没有作为公共 API 公开。 它们是作为 SE-0329 的先决条件添加的：时钟、即时和持续时间。 他们在公共 API 中的明显缺席甚至在该提案的[第三次]审查期间被提出，但因超出范围而被推迟。 多年来，一直有人对它们提出要求，甚至可以追溯到这些论坛存在之前。
+
+swift-numerics（本质上）拥有自己的 128 位整数重新实现，现在基金会也正在考虑添加自己的。
+
+更不用说各种第 3 方包，以及其他 Swift 库和程序中这些类型的大量私有重新实现。
+
+复制粘贴扩散这样一个基本的数字类型似乎有点愚蠢，当它已经在标准库中时，只需要发布它即可。 不过，我怀疑这已经是实现这一目标的目标，所以我希望问题只是：预计到达时间？ :微微微笑的脸:
+**回答**
+需要明确的是：Foundation库不考虑添加自己的。 他们建议使用 Numerics 现有的 DoubleWidth 测试支持来进行测试。 我们很快就会为 stdlib 推荐 Int128，但即使它可用，由于可用性限制（至少在中期），Foundation 和 Numerics 仍应使用双宽度类型进行测试。 所以无论如何，这都是正确的前进道路。
+
+3) 讨论[我是否必须手动检查宏参数是否为文字？](https://forums.swift.org/t/do-i-have-to-manually-check-macro-parameters-to-be-literals/67687 "我是否必须手动检查宏参数是否为文字？")
+在做了一些实验来了解如何开发一个真正的宏之后，我遇到了一个问题：我试图开发一个 @AddCompletionHandler 宏（如 WWDC 演讲中提到的那样），并且我尝试将完成参数名称传递为 宏的参数：
+```Swift
+@attached(peer, names: overloaded)
+public macro AddCompletionHandler(completionName: String = "onCompletion") = #externalMacro(...)
+```
+我应该得到一个字符串，我将使用它来构建要添加到函数签名的新参数：
+```Swift
+let completionParameter: FunctionParameterSyntax = "\(raw: completionParameterName): @escaping (\(returnType)) -> Void"
+```
+并在新生成的函数块内调用完成：
+```Swift
+let newCode: CodeBlockItemListSyntax = """
+    Task.detached {
+        await \(raw: completionParameterName)(\(functionDeclaration.wrappedInvocation))
+    }
+    """
+```
+这样做的问题是宏声明接受任何返回字符串的表达式，因此您可以像这样调用它：
+```Swift
+@AddCompletionHandler(completionName: "on" + "Completion")
+```
+我发现自己手动检查 AttributeSyntax 树是否包含一个名为completionName 的参数，该表达式的类型为 StringLiteralExprSyntax，只有一个段，最后提取该值作为该唯一段的 .content.text。 如果这些步骤中的任何一个失败，我都会发出一条诊断消息，要求该值是一个文字。
+
+这是应该如何工作的吗？ 对于看似常见的用例来说，这似乎是一个极其繁琐的过程。 我在这里错过了什么吗？
+
+**回答**
+这是实现它的一种迂回方式，但您可以执行以下操作：
+
+定义符合 ExpressibleByStringLiteral 的自定义类型，并使用该类型作为宏的参数而不是 String。 用户仍然可以将字符串文字直接传递给宏调用，但他们无法执行任何接近但不是文字的操作，例如“hello”+“world”。
+
+但是，这仍然会让有人这样做，这是你不希望的，因为你无法评估 x：
+```Swift
+let x: YourCustomType = "onCompletion"
+@AddCompletionHandler(completionName: x)
+```
+因此，下一个技巧是，当您在自定义类型中实现 init(stringLiteral:) 时，只需将其设置为 fatalError() 即可。 这将阻止任何人尝试创建它的实例并将其存储在某个地方。 但该类型在宏使用中仍然有效，因为在宏调用中使用宏时，该类型实际上并不调用 init(stringLiteral:) 。 它所要做的就是类型检查它是否有效，确实如此。 （如果有人确实尝试在某处创建显式实例，则直到运行时才会捕获该错误。）
+
+使这变得更容易的是某种参数必须为常量的功能，这些功能之前已经在这些论坛上讨论过。
+
+仅当用户尝试直接实例化新类型时才会发生运行时错误，否则除了在宏签名中命名之外，该新类型对他们是隐藏的。 将其命名为 CompletionHandlerNameLiteral 之类的名称，这样就不会混淆其用途。
+
+没有编译时失败被转移到运行时，因为它严格阻止了编译器以前允许的使用：现在编译器不再允许像“hello”+“world”这样的表达式并要求宏检查它，而是 编译器会停止它，宏不再需要检查它。
+
+这不是一个完美的解决方案，但我可以理解，用户并不都希望为“这是一个文字吗”之类的事情编写相同的检查，因此最好让编译器在可能的情况下为您完成工作。 在缺乏 const-value 强制功能的情况下，SwiftSyntax 将成为此类辅助 API 的良好家园，至少可以减轻负担。
+
+4) 讨论[从头开始的基本 HTTP 客户端](https://forums.swift.org/t/swift-runtime-unable-to-suspend-thread-when-compiling-in-qemu/67676 "从头开始的基本 HTTP 客户端")
+我想使用 Swift 从头开始创建基本的 HTTP 客户端，以达到学习目的，以了解互联网上 http 的发送者和接收者是如何工作的。 这只是出于原始学习目的，所以我只想使用套接字。 现在我正在本地主机中尝试，我在SO 1中发布了相同的内容。我尝试了下面的代码:
+```Swift
+import Foundation
+import Darwin
+
+final class Client {
+    
+    let host: String
+    let port: UInt16
+    
+    init(host: String, port: UInt16) {
+        
+        self.host = host
+        self.port = port
+    }
+    
+    func get(_ completionHandler: @escaping() -> Void) {
+        
+        // Create a socket
+        let sock = socket(AF_INET, SOCK_STREAM, 0)
+ 
+        var serveraddr = sockaddr_in()
+        serveraddr.sin_family = sa_family_t(AF_INET)
+        serveraddr.sin_port = self.port
+        serveraddr.sin_addr.s_addr = inet_addr(self.host)
+
+        // Connect to the server
+          
+        print("Connecting....")
+        
+        withUnsafePointer(to: &serveraddr) { sockaddrInPtr in
+          
+            let sockaddrPtr = UnsafeRawPointer(sockaddrInPtr).assumingMemoryBound(to: sockaddr.self)
+            let connection = connect(sock, sockaddrPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
+             
+            if connection == 0 {
+                
+                // Form an HTTP GET request
+                let request = "GET / HTTP/1.1\r\nHost: \(self.host)\r\n\r\n"
+                let bytes = [UInt8](request.data(using: .utf8)!)
+
+                // Send the request over the socket
+                send(sock, bytes, request.count, 0)
+
+                /*
+                // Receive and print the response
+                var response = [UInt8](repeating: 0, count: 1024)
+                let bytesRead = recv(sock, &response, response.count, 0)
+                if bytesRead > 0 {
+                    if let httpResponse = String(bytes: response, encoding: .utf8) {
+                        print(httpResponse)
+                    }
+                }
+
+                // Close the socket
+                close(sock)
+                 */
+                
+            } else {
+                
+                print("not connected \(connection)")
+            }
+        }
+    }
+}
+```
+使用：
+```Swift
+let client: Client = .init(host: "127.0.0.1", port: 8080)
+client.get {
+                
+     print("GET request successfully executed!")
+}
+```
+我使用 python3 -m http.server 8080 作为包含一些文件的文件夹上的测试服务器。 它适用于浏览器和邮递员 GET 请求。
+
+但问题是 cleint 退出，打印未连接 -1
+
+我该如何解决此问题并成功请求？
+**回答**
+从 Swift 正确使用 BSD 套接字是一个严峻的挑战。 我自己在这个问题上反复讨论了很多次，最终选择了从 [Swift 调用 BSD 套接字中所示的方法](https://developer.apple.com/forums/thread/734124)。 正如那篇顶级文章中所解释的，这并不适用于生产代码，而是适用于我们在这里讨论的测试项目。
+
+至于您是否应该使用 BSD 套接字，这是我在 TN3151 [选择正确的网络 API](https://developer.apple.com/documentation/technotes/tn3151-choosing-the-right-networking-api) 中介绍的内容。
+
+哦，实现一个正确的 HTTP 客户端非常困难，即使您将自己限制为 HTTP/1.1 而没有 HTTPS。 因此，虽然为这样的测试项目编写自己的 HTTP 代码很好，但如果您打算部署它，我建议您使用现有的 HTTP 库。
+需要明确的是，ATS 仅适用于 URLSession 及以上版本。 低级 API，如网络框架和 BSD 套接字，只是忽略 ATS。
+应用程序沙箱适用于所有网络连接，因此这是正确的举措（-：
+
+5) 讨论[不同平台不同的宏实现](https://forums.swift.org/t/different-macro-implementation-for-different-platforms/67693 "不同平台不同的宏实现")
+我正在尝试创建一个宏，允许我在资源包中按名称引用颜色。
+例如，能够执行以下操作：
+```Swift
+let myColor = #color("MyColor")
+```
+在 macOS 上，我希望将其为：
+```Swift
+"NSColor(named: \(argument)) ?? NSColor.clear"
+```
+在 iOS 上，我希望它是：
+```Swift
+"UIColor(named: \(argument))"
+```
+我写了以下宏：
+```Swift
+public struct ColorMacro: ExpressionMacro {
+    public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax {
+        guard let argument = node.argumentList.first?.expression else {
+            throw MacroError.invalidArguments
+        }
+
+#if canImport(AppKit)
+        return "NSColor(named: \(argument)) ?? NSColor.clear"
+#elseif canImport(UIKit)
+        return "UIColor(named: \(argument))"
+#else
+        #error("Unsupported platform")
+#endif
+    }
+}
+```
+和
+```Swift
+#if canImport(AppKit)
+import AppKit
+
+@freestanding(expression)
+public macro color(_ named: String) -> NSColor = #externalMacro(module: "SwatchbookMacrosMacros", type: "ColorMacro")
+#elseif canImport(UIKit)
+import UIKit
+
+@freestanding(expression)
+public macro color(_ named: String) -> UIColor = #externalMacro(module: "SwatchbookMacrosMacros", type: "ColorMacro")
+#endif
+```
+在为 macOS 构建时效果很好，但在为 iOS 构建的目标中使用时，它似乎仍在尝试使用 AppKit 分支并引用 NSColor。
+
+难道我做错了什么？ 是否使用正在构建的平台来确定可用性，而不是目标平台？
+**回答**
+这里的问题是 #if 块是 IfConfigDeclSyntax，而不是表达式。 不过，您可以将整个事情包装在立即执行的闭包中，使其成为一个表达式：
+```Swift
+return """
+  {
+    #if canImport(AppKit)
+      NSColor(named: \(argument)) ?? NSColor.clear
+    #elseif canImport(UIKit)
+      UIColor(named: \(argument))
+    #else
+      #error("Unsupported platform")
+    #endif
+  }()
+  """
+```
+但如果您打算执行所有这些操作，那么在宏的库目标中创建一个辅助函数并调用它可能会更干净、更简单：
+```Swift
+func __colorHelper(_ name: String) {
+  #if canImport(AppKit)
+    NSColor(named: name) ?? NSColor.clear
+  #elseif canImport(UIKit)
+    UIColor(named: name)
+  #else
+    #error("Unsupported platform")
+  #endif
+}
+```
+并让您的宏实现调用该函数：
+```Swift
+return """
+  YourModuleName.__colorHelper(\(argument))
+  """
+```
 
 ## 推荐博文
 
