@@ -275,7 +275,30 @@ printTimeElapsedWhenRunningCode(title: "Array") {
 **回答**
 V2 确实还有一项工作要做：从 String 到 enum case。 但这可以优化（在 init(rawValue:) 实现中），因为编译器知道可能的有效字符串的完整集合，因此它最终比哈希查找更快。 （事实上，由于所有字符串都很短，它甚至可以作为整数开关来完成，在检查长度后将字符串内容视为多字节整数。）
 
+## 推荐博文
+
+[掌握 swift 中  Preview macro 的用法](https://swiftwithmajid.com/2023/10/17/mastering-preview-macro-in-swift// "掌握 swift 中  Preview macro 的用法")
+
+**摘要：**  本篇博客介绍了 Swift 中的新功能——预览宏（Preview macro），以及它对开发体验的改进。预览宏可以轻松地将 SwiftUI 视图、UIViewController 或 UIView 实例嵌入到预览中。文章还讨论了如何创建展示不同视图状态的多个预览，并通过传递标题参数来区分它们。此外，它还介绍了预览宏的 traits 参数，可以在预览中显示横向视图或指定尺寸。文章最后提到了如何将预览宏与 widget 结合使用来展示交互式的 widget 时间线。作者建议开发者可以利用预览宏来改善开发体验，并指出可以创建专门用于设计系统包的预览文件或示例用法的文件。
+
+[Xcode 中使用 SPM 和 Build Configuration 的一些坑](https://onevcat.com/2022/10/spm-in-xcode/ "Xcode 中使用 SPM 和 Build Configuration 的一些坑")
+
+**摘要：**  本文介绍了 Swift 中的值和类型参数包，并结合示例进行了详细解释。类型参数包和值参数包允许你编写一个接受任意数量具有不同类型参数的通用函数。在 Swift 5.9 中，由于 SE-393、SE-398 和SE-399 的提案，这一新特性得以实现。采用参数包的最显著影响之一是在 SwiftUI 中的10个视图限制已经不存在，这是由于在这些提案之后可实现了可变参数泛型。本文还解释了参数包的解决方案，它们帮助我们编写可重用的代码，避免编写大量的函数重载。从 Swift 5.9 开始，我们可以使用参数包重写类似的函数。
+
+[ Swift 中 User Defaults 的读取和写入](https://www.avanderlee.com/swift/user-defaults-preferences/ " Swift 中 User Defaults 的读取和写入")
+
+**摘要：** 这篇文章讨论了在 Swift 中使用 User Defaults进行读取和写入的方法。User Defaults 是 Swift 应用程序中用于存储在应用程序启动期间保持不变的偏好设置的首选解决方案。它是一个基于属性列表（plist）文件的键值存储。文章介绍了一些与 User Defaults 工作时的最佳实践，并提供了一些特定的解决方案和建议。其中包括使用应用程序组与其他应用程序和扩展共享 User Defaults，以及类型支持和数据转换的注意事项。此外，文章还介绍了监听 User Defaults 更改的方法，并探讨了一些替代方案，如 Keychain 和 CloudKit。在文章的结尾，作者总结了使用 User Defaults 存储偏好设置的好处，并提醒读者在需要跨设备访问数据或存储敏感数据时考虑其他解决方案。。
+
 ## 话题讨论
+
+**10月27日，起家于东南亚的极兔速递正式登陆港交所。此次IPO，发行价12港元/股,市值约1000亿港元，成为港交所2023年迄今开盘市值最高的IPO。在诸多物流行业，你最看好哪一家？**
+
+1. 菜鸟
+2. 顺丰
+3. 京东物流
+4. 极兔
+
+欢迎在文末留言参与讨论。
 
 
 ## 关于我们
