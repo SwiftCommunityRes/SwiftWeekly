@@ -10,24 +10,27 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：53.5亿美元！传苹果今明两年或将采购2.3万台AI服务器！
 > 
-> 提案：
+> 提案：隔离的默认值表达式
 > 
-> Swift 论坛：
+> Swift 论坛：讨论为什么 CaseIterable 比 Set 更快
 >
-> 推荐博文：
+> 推荐博文：掌握 swift 中  Preview macro 的用法
 >
 > **话题讨论：** 
 > 
-> 
+> 在诸多物流行业，你最看好哪一家？
 
 **上期话题结果**
 
+![](https://files.mdnice.com/user/17787/b4e1d72d-e137-40ba-8792-7ee684a256a7.jpg)
+
+投票结果显示大多数人更倾向于保持薪资不变或者期望薪资增加，而只有少数人愿意接受较小幅度的薪资降低。小编认为公司在决定远程办公政策时需要综合考虑员工的期望和需求。
 
 ## 新闻和社区
 
-### 53.5亿美元！传苹果今明两年或将采购2.3万台AI服务器！
+### 53.5亿美元！传苹果今明两年或将采购 2.3 万台 AI 服务器！
 
-![](https://pics0.baidu.com/feed/fc1f4134970a304e4c6dc3ca29a0588ac9175c2c.jpeg@f_auto?token=d0c47e6be9eb61055f78f5b77ce6a506)
+![](https://files.mdnice.com/user/17787/74aa9817-a2f6-4eb7-a2d3-5e7080d3596c.png)
 
 10 月 25 日消息，根据最新的研究显示，苹果公司计划在 2023 年采购约 2000 - 3000 台 AI 服务器，2024 年或将增长至 1.8 万 - 2 万台，采购的主要目标是满足苹果对AI算力的需求，尤其是在训练和推理生成式 AI 方面。
 
@@ -39,7 +42,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ### TestFlight 让管理测试员变得更加简单
 
-![](https://developer.apple.com/assets/elements/icons/testflight/testflight-128x128_2x.png)
+![](https://files.mdnice.com/user/17787/a743075b-d7aa-48f5-a206-ac5461e7ad81.png)
 
 2023 年 10 月 24 日
 
@@ -47,7 +50,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ### 推送通知控制面板现已推出新交付指标
 
-![](https://developer.apple.com/assets/elements/icons/notifications/notifications-128x128_2x.png)
+![](https://files.mdnice.com/user/17787/345f138a-5923-41ec-9c9b-613a06ffb979.png)
 
 2023 年 10 月 19 日
 
@@ -57,7 +60,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ### Apple Vision Pro 开发者实验室现已扩展到纽约市和悉尼
 
-![](https://developer.apple.com/assets/elements/icons/apple-vision-pro-labs/apple-vision-pro-labs-256x256_2x.png)
+![](https://files.mdnice.com/user/17787/469efa54-6995-47ae-8117-c793957ef8e7.png)
 
 2023 年 10 月 17 日
 
@@ -65,11 +68,25 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 正在审查的提案
+
+[SE-0410](https://github.com/apple/swift-evolution/blob/main/proposals/0410-atomics.md "SE-0410") **Low-Level Atomic Operations ** 提案正在审查。
+
+该提案为标准库添加了一组有限的低级原子操作，包括 C++ 风格的内存排序的原生拼写。我们的目标是使编写系统级代码的勇敢的图书馆作者和开发人员能够直接在 Swift 中构建同步结构。
+
+[SE-0411](https://github.com/apple/swift-evolution/blob/main/proposals/0411-isolated-default-values.md "SE-0411") **隔离的默认值表达式** 提案正在审查。
+
+默认值表达式允许用于默认参数和默认存储属性值。当前默认值表达式的 actor 隔离规则存在一些问题：**存储属性的规则容许数据竞争，默认参数值的规则过于限制，而在不同的默认值表达式使用位置之间的规则相互矛盾，导致 actor 隔离模型更难理解**。
+
+该提案统一了默认值表达式的 actor 隔离规则，消除了数据竞争，通过安全地允许默认值的隔离来提高表现力。
 
 ## Swift论坛
 
 1) 讨论[查找符号是如何导入的？](https://forums.swift.org/t/find-how-a-symbol-was-imported/68052 "查找符号是如何导入的？")
-我有一个使用特定 API 的源文件，但没有导入定义它的包。据我所知，在该文件的导入中，即使是传递性的，也不会导入该包。 然而，该文件在构建时“正确”编译（尽管 Xcode 15 的实时编译同意我的观点，即 API 不应该可见并生成实时错误）。
+
+我有一个使用特定 API 的源文件，但没有导入定义它的包。据我所知，在该文件的导入中，即使是传递性的，也不会导入该包。 
+
+然而，该文件在构建时“正确”编译（尽管 Xcode 15 的实时编译同意我的观点，即 API 不应该可见并生成实时错误）。
 
 我正在使用 Xcode，该文件是一个测试，如果其中任何一个对答案有任何影响。
 
@@ -77,8 +94,9 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 **回答**
 
-从技术上讲，只有当您想要使用类型的名称时，才需要将其导入到该文件中。 您可以使用该类型的实例，无需：
-```Swift
+从技术上讲，只有当你想要使用类型的名称时，才需要将其导入到该文件中。 你可以使用该类型的实例，无需：
+
+```swift
 // main.swift
 let calendar = myCalendar()
 let currentYear = calendar.component(.year, from: now())
@@ -101,11 +119,15 @@ func now() -> Date {
 }
 ```
 
-2) 讨论[@backDeployed 作为override运行，而不是仅用于不受支持的平台版本](https://forums.swift.org/t/backdeployed-is-operating-as-an-override-instead-of-only-for-use-in-unsupported-platforms-versions/68071 "@backDeployed 作为override运行，而不是仅用于不受支持的平台版本")
-自 Xcode 15 和 iOS 17 发布以来，我们最近一直面临很多令人头痛的问题，因为我们 @backDeployed 的 API 的意外行为。 长话短说，我发现我们 @backDeployed 的任何 API 不仅在平台部署版本“之前”的操作系统上被调用，而且也在平台部署版本“之后”的操作系统上被调用。
+2) 讨论 [@backDeployed 作为 override 运行，而不是仅用于不受支持的平台版本](https://forums.swift.org/t/backdeployed-is-operating-as-an-override-instead-of-only-for-use-in-unsupported-platforms-versions/68071 "@backDeployed 作为 override 运行，而不是仅用于不受支持的平台版本")
 
-这可以通过单元测试或playground来重现：
-```Swift
+自 Xcode 15 和 iOS 17 发布以来，我们最近一直面临很多令人头痛的问题，因为我们 `@backDeployed` 的 API 的意外行为。 
+
+长话短说，我发现我们 @backDeployed 的任何 API 不仅在平台部署版本“之前”的操作系统上被调用，而且也在平台部署版本“之后”的操作系统上被调用。
+
+这可以通过单元测试或 playground 来重现：
+
+```swift
 import UIKit
 
 public extension Locale.LanguageCode {
@@ -133,50 +155,68 @@ func test() {
 
 test()
 ```
-实际上，我们使用 @backDeployed 来override任何我们喜欢的 API，而不仅仅是向后部署。
+
+实际上，我们使用 @backDeployed 来 override 任何我们喜欢的 API，而不仅仅是向后部署。
 
 这是否可以在 Swift 的错误修复修订版中解决（最好在退出 beta 之前部署到 Xcode 15.1）？
 
 **回答**
-我认为您误解了 @backDeployed 属性的作用以及它的用途。 @backDeployed 设计用于实现操作系统附带的框架。 该属性的设计目的不是为您提供一种为 SDK 中的任意函数提供您自己的 polyfill 的方法，因此，如果我正确解释了您想要完成的任务，我认为它不会达到您想要的效果 。
 
-在您的示例中，您已为 Locale.LanguageCode 声明了自己的计算属性 debugDescription。 您的声明不会“覆盖”基金会中的声明； 它只是作为可以调用的不同函数同时存在于您的模块中。 是否在任何给定的调用站点调用您的实现取决于编译器将 debugDescription 静态解析为哪个声明。 如果编译器解析对您的声明的调用，而不是来自 SDK 的调用，那么您的实现上的 @backDeployed 属性将导致编译器发出对中间 thunk 的调用，该中间 thunk 调用您的原始函数或函数的副本 ，它不会完成任何有用的事情，因为它是同一模块中的函数，并且原始副本和后备副本将始终具有相同的实现。
+我认为你误解了 @backDeployed 属性的作用以及它的用途。@backDeployed 设计用于实现操作系统附带的框架。
+
+该属性的设计目的不是为你提供一种为 SDK 中的任意函数提供你自己的 polyfill 的方法，因此，如果我正确解释了你想要完成的任务，我认为它不会达到你想要的效果 。
+
+在你的示例中，你已为 `Locale.LanguageCode` 声明了自己的计算属性 `debugDescription`。 你的声明不会“覆盖”基金会中的声明；它只是作为可以调用的不同函数同时存在于你的模块中。是否在任何给定的调用站点调用你的实现取决于编译器将 debugDescription 静态解析为哪个声明。
+
+如果编译器解析对你的声明的调用，而不是来自 SDK 的调用，那么你的实现上的 @backDeployed 属性将导致编译器发出对中间 thunk 的调用，该中间 thunk 调用你的原始函数或函数的副本，它不会完成任何有用的事情，因为它是同一模块中的函数，并且原始副本和后备副本将始终具有相同的实现。
 
 3) 讨论[新的 SwiftNIO 异步 API](https://forums.swift.org/t/new-swiftnio-async-apis/68056 "新的 SwiftNIO 异步 API")
+
 我很高兴与大家分享，我们刚刚发布了一些软件包的新版本，其中包括全新的异步 API。
 
 * swift-nio : [2.60.0](https://github.com/apple/swift-nio/releases/tag/2.60.0)
 * swift-nio-transport-services : [1.20.0](https://github.com/apple/swift-nio-transport-services/releases/tag/1.20.0)
 * swift-nio-http2 : [1.29.0](https://github.com/apple/swift-nio-http2/releases/tag/1.29.0)
+
 一段时间以来，我们一直致力于新 API 的开发，让它们在 AsyncChannel SPI 后面进行烘焙。 在最新版本中，我们将 SPI 升级为稳定的 API。
 
-新异步 API 的目标是让开发人员能够轻松、安全地在 NIO Channels 和 Swift Concurrency 之间建立桥梁。 新 API 的一个重要部分是它们携带有关 ChannelPipeline 的类型信息，同时保持灵活性，这是通过利用泛型的强大功能实现的。 您可以在我们全新的 [NIO 和 Swift Concurrency 文章](https://swiftpackageindex.com/apple/swift-nio/2.60.0/documentation/niocore/swift-concurrency)中找到有关新 API 的更多文档。如果您有兴趣阅读更多有关新 API 背后的想法并查看跨包的 API 添加的概述，请随时查看 我们的[开发者文档](https://github.com/apple/swift-nio/blob/main/docs/public-async-nio-apis.md).
+新异步 API 的目标是让开发人员能够轻松、安全地在 NIO Channels 和 Swift Concurrency 之间建立桥梁。 新 API 的一个重要部分是它们携带有关 ChannelPipeline 的类型信息，同时保持灵活性，这是通过利用泛型的强大功能实现的。 
 
-我想指出的一件重要的事情是，新的 API 在业务逻辑和网络之间提供了明确的关注点分离。 网络协议存在于通道管道中，业务逻辑应直接在通道管道之外的 Swift Concurrency 中实现。 许多现有应用程序都驻留在通道管道内，我们强烈建议将业务逻辑移出。
+你可以在我们全新的 [NIO 和 Swift Concurrency 文章](https://swiftpackageindex.com/apple/swift-nio/2.60.0/documentation/niocore/swift-concurrency "NIO 和 Swift Concurrency 文章")中找到有关新 API 的更多文档。如果你有兴趣阅读更多有关新 API 背后的想法并查看跨包的 API 添加的概述，请随时查看 我们的[开发者文档](https://github.com/apple/swift-nio/blob/main/docs/public-async-nio-apis.md).
 
-我们迫不及待地想看看社区使用新 API 构建了什么，并期待您的反馈！
+我想指出的一件重要的事情是，新的 API 在业务逻辑和网络之间提供了明确的关注点分离。
 
-4) 讨论[使用 ArgumentParser 创建命令行工具的正确方法是什么？ `swift package` 或 Xcode 创建 Mac 命令行工具项目？](https://forums.swift.org/t/what-s-the-right-way-to-create-a-command-line-tool-using-argumentparser-swift-package-or-xcode-create-mac-command-line-tool-project/68050 "使用 ArgumentParser 创建命令行工具的正确方法是什么？ `swift package` 或 Xcode 创建 Mac 命令行工具项目？")
+网络协议存在于通道管道中，业务逻辑应直接在通道管道之外的 Swift Concurrency 中实现。 许多现有应用程序都驻留在通道管道内，我们强烈建议将业务逻辑移出。
+
+我们迫不及待地想看看社区使用新 API 构建了什么，并期待你的反馈！
+
+4) 讨论[使用 ArgumentParser 创建命令行工具的正确方法是什么？ swift package 或 Xcode 创建 Mac 命令行工具项目？](https://forums.swift.org/t/what-s-the-right-way-to-create-a-command-line-tool-using-argumentparser-swift-package-or-xcode-create-mac-command-line-tool-project/68050 "使用 ArgumentParser 创建命令行工具的正确方法是什么？ swift package 或 Xcode 创建 Mac 命令行工具项目？")
+
 我相信创建 ArgumentParser 命令行工具的正确方法是：
-```Swift
+
+```swift
 swift package init --type tool --name MyTool
 ```
+
 然后在 Xcode 中打开 Package.swift。 但是我无法添加这个包：https://github.com/dominicegginton/spinner
 
-添加依赖项后，“My Mac”target消失了。
+添加依赖项后，“My Mac” target 消失了。
 
 当我从 Xcode 内部创建 macOS 命令行工具项目时，我可以找到 spinner 包并使用它。 如果我添加 ArgumentParser，运行崩溃。
 
 我应该怎么办？
 
 **回答**
-您可以尝试分叉 Spinner，更新其软件包清单以使用 Rainbow 4+ ，取决于您的fork，而不是原始fork，然后看看有什么问题......
 
-如果没有任何问题，您可以将该更改作为 PR 提交到 Spinner 项目。
+你可以尝试分叉 Spinner，更新其软件包清单以使用 Rainbow 4+ ，取决于你的 fork，而不是原始 fork，然后看看有什么问题......
 
-5) 讨论[performSelector(“retainCount”)](https://forums.swift.org/t/performselector-retaincount/68055 "performSelector(“retainCount”)")
-另一个线程提示我一个调用禁止的保留计数的问题——可能对调试目的有用。 我知道一些获取对象的保留计数的技术（例如，通过驻留在非 ARC obj-c 文件中的 C 帮助程序进行调用，因此能够调用保留计数，即引用线程中显示的技术）或阅读 通过“withUnsafeBytes”直接从 Swift 中保留 Swift 对象的原始位。 那么这个基于performSelector 的其他方法呢？
-```Swift
+如果没有任何问题，你可以将该更改作为 PR 提交到 Spinner 项目。
+
+5) 讨论[performSelector("retainCount")](https://forums.swift.org/t/performselector-retaincount/68055 "performSelector("retainCount")")
+
+另一个线程提示我一个调用禁止的保留计数的问题——可能对调试目的有用。 我知道一些获取对象的保留计数的技术（例如，通过驻留在非 ARC obj-c 文件中的 C 帮助程序进行调用，因此能够调用保留计数，即引用线程中显示的技术）或阅读 通过 “withUnsafeBytes” 直接从 Swift 中保留 Swift 对象的原始位。 那么这个基于 performSelector 的其他方法呢？
+
+```swift
 let obj = NSObject()
 let x = obj.perform("retainCount")!
 // p x
@@ -190,17 +230,20 @@ let z = x.takeUnretainedValue() // crash
 print(z)
 print(obj)
 ```
-可以对其进行调整以使其工作吗？ 它似乎工作正常，返回正确的 UnmanagedObject，我可以通过“print”命令在调试器中看到它，但如何从应用程序中获取它？ 我是否需要使用一些 unsafeBitCast 来读取该值？
+
+可以对其进行调整以使其工作吗？ 它似乎工作正常，返回正确的 UnmanagedObject，我可以通过 “print” 命令在调试器中看到它，但如何从应用程序中获取它？ 我是否需要使用一些 unsafeBitCast 来读取该值？
 
 **回答**
-PerformSelector: 返回一个对象； 它名义上仅用于返回对象的方法，而不是基元。
 
-在 Objective-C 中，您可能可以通过将结果转换为原始类型来滥用它，但如果它不是指针大小或平台的调用约定使用不同的寄存器来返回指针与整数，您将得到垃圾（或更糟）。
+`PerformSelector:` 返回一个对象； 它名义上仅用于返回对象的方法，而不是基元。
+
+在 Objective-C 中，你可能可以通过将结果转换为原始类型来滥用它，但如果它不是指针大小或平台的调用约定使用不同的寄存器来返回指针与整数，你将得到垃圾（或更糟）。
 
 我不确定你是否可以在 Swift 中执行此转换，因为 Unmanaged 假设它确实包含有效的对象引用，并且会尝试适当地保留和释放它。
 
 6) 讨论[为什么 CaseIterable 比 Set 更快](https://forums.swift.org/t/find-how-a-symbol-was-imported/68052 "为什么 CaseIterable 比 Set 更快")
-```Swift
+
+```swift
 // V1
 enum VaccineCodeSet: String {
     case covidModerna = "207"
@@ -270,10 +313,14 @@ printTimeElapsedWhenRunningCode(title: "Array") {
 }
 // Time elapsed to check:: 0.005916875 s.
 ```
-为什么V1比V2慢？
+
+为什么 V1 比 V2 慢？
 
 **回答**
-V2 确实还有一项工作要做：从 String 到 enum case。 但这可以优化（在 init(rawValue:) 实现中），因为编译器知道可能的有效字符串的完整集合，因此它最终比哈希查找更快。 （事实上，由于所有字符串都很短，它甚至可以作为整数开关来完成，在检查长度后将字符串内容视为多字节整数。）
+
+V2 确实还有一项工作要做：从 String 到 enum case。 但这可以优化（在 `init(rawValue:)` 实现中），因为编译器知道可能的有效字符串的完整集合，因此它最终比哈希查找更快。
+
+事实上，由于所有字符串都很短，它甚至可以作为整数开关来完成，在检查长度后将字符串内容视为多字节整数。
 
 ## 推荐博文
 
@@ -285,7 +332,7 @@ V2 确实还有一项工作要做：从 String 到 enum case。 但这可以优�
 
 **摘要：**  本文介绍了 Swift 中的值和类型参数包，并结合示例进行了详细解释。类型参数包和值参数包允许你编写一个接受任意数量具有不同类型参数的通用函数。在 Swift 5.9 中，由于 SE-393、SE-398 和SE-399 的提案，这一新特性得以实现。采用参数包的最显著影响之一是在 SwiftUI 中的10个视图限制已经不存在，这是由于在这些提案之后可实现了可变参数泛型。本文还解释了参数包的解决方案，它们帮助我们编写可重用的代码，避免编写大量的函数重载。从 Swift 5.9 开始，我们可以使用参数包重写类似的函数。
 
-[ Swift 中 User Defaults 的读取和写入](https://www.avanderlee.com/swift/user-defaults-preferences/ " Swift 中 User Defaults 的读取和写入")
+[Swift 中 User Defaults 的读取和写入](https://www.avanderlee.com/swift/user-defaults-preferences/ "Swift 中 User Defaults 的读取和写入")
 
 **摘要：** 这篇文章讨论了在 Swift 中使用 User Defaults进行读取和写入的方法。User Defaults 是 Swift 应用程序中用于存储在应用程序启动期间保持不变的偏好设置的首选解决方案。它是一个基于属性列表（plist）文件的键值存储。文章介绍了一些与 User Defaults 工作时的最佳实践，并提供了一些特定的解决方案和建议。其中包括使用应用程序组与其他应用程序和扩展共享 User Defaults，以及类型支持和数据转换的注意事项。此外，文章还介绍了监听 User Defaults 更改的方法，并探讨了一些替代方案，如 Keychain 和 CloudKit。在文章的结尾，作者总结了使用 User Defaults 存储偏好设置的好处，并提醒读者在需要跨设备访问数据或存储敏感数据时考虑其他解决方案。。
 
