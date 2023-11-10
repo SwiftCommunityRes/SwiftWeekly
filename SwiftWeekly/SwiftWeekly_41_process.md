@@ -61,6 +61,23 @@ Apple Vision Pro 活动：了解如何为 visionOS 设计和构建全新的 App 
 
 ## 话题讨论
 
+## 推荐博文
+
+[ Swift 中的崩溃回溯](https://www.swift.org/blog/swift-5.9-backtraces/ " Swift 中的崩溃回溯")
+
+**摘要：**  这篇博客讨论了 Swift 5.9 版本中所包含的一些新的调试代码功能，一个能在实时检查崩溃的外部互动性极强的崩溃处理器，一个可以触发调试器进行即时调试的功能，以及一个可以提升理解在一个使用结构化并发的程序中的控制流程的并发意识后退功能。
+在 Swift 5.9 版本之前，一旦你的程序运行失败，你只能看到来自父进程（通常是 shell ）的消息告诉你子进程崩溃了。而现在，你得到的信息将会更具有详细性。
+作者还提出了一个名为"交互式后退"的概念。在许多情况下，你可能会发现你在终端开发的程序崩溃了，但你无法复现问题。没有适当的崩溃日志，这可能会让你非常沮丧，你知道你的程序有一个 bug ，但你不知道问题出在哪里，也不知道如何复现它。这个特性的主要思想就是在程序崩溃后将其挂起，从而给你机会附加一个调试器，或对崩溃过程进行更深入的查看。
+最后，后退功能支持结构化并发，并且能够正确地逆向穿过异步框架。无论你在哪个平台上，这个新功能都无需特殊要求，只需要回退追踪器能够查找到符号以确定给定框架是否是异步的。
+
+[掌握 SwiftUI 中的 ContentUnavailableView ](https://swiftwithmajid.com/2023/10/31/mastering-contentunavailableview-in-swiftui/ "掌握 SwiftUI 中的 ContentUnavailableView ")
+
+**摘要：**  这篇博客介绍了如何在 SwiftUI中 掌握使用 ContentUnavailableView 类型。 ContentUnavailableView 类型允许我们在应用中表现空状态、错误状态或其他任何内容不可用的状态。文章通过实例演示了ContentUnavailableView 的基本用法以及如何在其中定义描述文本和操作按钮。还介绍了 SwiftUI 为我们提供的一种预制的 ContentUnavailableView 实例，可在搜索屏幕中使用。总的来说，我们学会了如何利用 ContentUnavailableView 以用户友好的方式显示空状态。
+
+[ SwiftUI 中的 visual effects ](https://swiftwithmajid.com/2023/11/07/visual-effects-in-swiftui/ " SwiftUI 中的 visual effects ")
+
+**摘要：** 这篇博客介绍了 SwiftUI 在 WWDC2023 中引入的一种叫做 visualEffect 的新视图修饰符。 visualEffect 允许我们通过访问特定视图的布局信息来附加一组可动画的视觉效果。
+通过上述示例，我们可以看到定义了一个文本视图并附加了 visualEffect 视图修饰符。attach visualEffect 视图修饰符时，你需要指定闭包以应用所需的所有效果。闭包提供了两个参数：第一个参数是附加到视图的效果集合的初始状态，是 EmptyVisualEffect 类型的实例；第二个参数是 GeometryProxy 类型的实例，包含可能需要的视图所有布局信息，比如框架、安全区等。现在，所有这些视觉效果都遵循 VisualEffect 协议，可以在 visualEffect 闭包中使用它们。
 
 ## 关于我们
 
