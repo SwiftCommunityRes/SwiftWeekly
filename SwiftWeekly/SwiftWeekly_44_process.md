@@ -28,6 +28,8 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## Swift论坛
 
+## 推荐博文
+
 ## 话题讨论
 
 
