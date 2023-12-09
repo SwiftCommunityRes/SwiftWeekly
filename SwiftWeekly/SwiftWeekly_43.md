@@ -8,23 +8,23 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：iPhone破发促销、印度市场寻增量，苹果再攀3万亿美元高点
+> 新闻和社区：iPhone 破发促销、印度市场寻增量，苹果再攀 3 万亿美元高点
 > 
-> 提案：
+> 提案：函数体 Macros 提案正在审查中
 > 
-> Swift 论坛：
+> Swift 论坛：Swift 中引入函数体宏
 >
-> 推荐博文：
+> 推荐博文：在 SwiftUI 中实战使用 MapKit API
 >
 > **话题讨论：** 
 > 
-> 那个活在记忆中的帅气少年，已慢慢变成了大叔模样。岁月无情，那么各位程序猿和攻城狮们，你们心中最担心的容貌变化是哪一个呢？
+> 你是更能接受同性上司还是更能接受异性上司？
 
 **上期话题结果**
 
-![](https://files.mdnice.com/user/17787/14af3e92-0eee-4ed1-8bd1-06d37adf3ca9.jpg)
+![](https://files.mdnice.com/user/17787/5fd68ce5-d014-45ed-b021-6285dc8d8abe.jpg)
 
-这个结果反映了员工在工作和生活平衡方面的个体差异。一些人更注重通勤时间的利用效率，而另一些人则更注重在自己的房子中获得更大的舒适感和生活空间。这对公司提供灵活的工作安排和住房福利可能有一定的启示。
+投票结果反映，大多数开发者还是比较担心自己的头发，另外就是身体变胖。久坐缺乏运动会导致一系列的身体健康问题。建议大家抽时间多运动，避免久坐。
 
 ## 新闻和社区
 
@@ -38,17 +38,20 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 从 2024 年春季开始，若要将新 App 或 App 更新上传到 App Store Connect，你需要在 App 的隐私清单中注明批准的原因，以准确反映你的 App 如何使用相应 API。
 
-### iPhone破发促销、印度市场寻增量，苹果再攀3万亿美元高点
+### iPhone 破发促销、印度市场寻增量，苹果再攀 3 万亿美元高点
 
 ![](https://pics5.baidu.com/feed/8cb1cb1349540923a29e57537f7ee504b2de49df.jpeg@f_auto?token=8e4dedccfd364ba7338ad8a0f473afb1)
 
 作为全球科技公司的标杆，苹果公司的市值在今年 8 月初创下了新高，突破了 3 万亿美元的大关。不过，由于手机、PC 等市场的波动，加上外部多种因素的影响，近几月的时间，苹果公司的股价起起伏伏，市场也都在等待苹果何时能够再次站上 3 万亿美元的高点。
+
 四个月的等待后，这一节点被定格在了美国当地时间 12 月 5 日。截至美股当日收盘，苹果公司股价报收于 193.42 美元，上涨 2.11% ，总市值达 3.01 万亿美元。
 
 ![](https://pics1.baidu.com/feed/b7fd5266d0160924145e91b4312101f7e7cd34dd.jpeg@f_auto?token=509090cf3dfb0bf361fc007a1a56c038)
 
 临近 2023 年年底，苹果公司股价 3 万亿美元的再次冲关，也算是给过去起伏的一年收了个尾。回望过去的一年，作为贡献出近一半收入的产品，iPhone 也未能幸免于整个大环境的下滑。为了提振销量，渠道商不得不降价促销，而新品开售破发加速、华为 5G 的回归更是给了苹果重重一击。
+
 不过，依然需要指出的是，在绝大部分手机品牌亏本做买卖的同时，苹果公司则是赚走了全球超 8 成的利润。另外，印度市场的崛起，也让苹果公司找到了新增量。
+
 Counterpoint 高级分析师 Ivan Lam 对钛媒体 App 表示，“印度俨然已经成为了人口第一大国，而且出生率还不错，年轻群体庞大且消费活跃。对于苹果来说，是未来十年的一个重要潜力市场。”
 
 ### 假日将至，请为你的 App 做好准备
@@ -59,12 +62,35 @@ App Store 最繁忙的季节即将到来！确保及时更新你的 App 和游�
 
 ## 提案
 
+### 通过的提案
+
+[SE-0411](https://github.com/apple/swift-evolution/blob/main/proposals/0411-isolated-default-values.md "SE-0411") **隔离的默认值表达式** 提案通过审查。该提案已在 **四十期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0414](https://github.com/apple/swift-evolution/blob/main/proposals/0414-region-based-isolation.md "SE-0414") **基于区域的隔离** 提案正在审查。
+
+Swift Concurrency 将值分配给由 actor 和任务边界确定的隔离域。在不同隔离域中运行的代码可以并发执行，并且通过 Sendable 检查，防止非 Sendable 值跨越隔离边界传递，从而彻底消除对共享可变状态的并发访问。在实践中，这是一个重要的语义限制，因为它禁止了无数据竞争的自然编程模式。
+
+在本文档中，我们提出通过引入一种新的控制流敏感的诊断来放宽这些规则，该诊断确定非 Sendable 值是否可以安全地在隔离边界上传递。通过引入隔离区域的概念，编译器可以保守地推断两个值是否可能相互影响。通过使用隔离区域，语言可以证明在将非 Sendable 值传递过隔离边界后，该值（以及可能引用它的任何其他值）在调用者中不会被使用，从而防止竞争的发生。
+
+[SE-0415](https://github.com/apple/swift-evolution/blob/main/proposals/0415-function-body-macros.md "SE-0415") **函数体 Macros** 提案正在审查。
+
+宏通过附加代码来增强 Swift 程序，其中包括新的声明、表达式和语句。目前，宏系统不支持可能希望增强代码的关键方式之一，即合成或更新函数的主体。可以创建具有自己函数主体的新函数，但不能为用户声明的函数提供、增强或替换函数主体。
+
+该提案引入了函数体宏，确切地说：允许根据声明全面合成函数主体，以及通过更多功能增强现有函数主体。这为宏提供了许多新的用例，包括：
+
+- 根据函数声明和一些元数据（例如自动合成传递提供的参数的远程过程调用）全面合成函数主体。
+- 通过执行日志/跟踪、检查前置条件或建立不变量来增强函数主体。
+- 根据提供的实现替换函数主体。例如，将主体移入在其他地方执行的闭包中，或将主体视为宏“降低”为可执行代码的特定领域语言。
 
 ## Swift论坛
 
 1) 提议[SE-0415：函数体宏](https://forums.swift.org/t/se-0415-function-body-macros/68847 "SE-0415：函数体宏")
+
 **内容概括**
-SE-0415 提议在 [Swift 中引入函数体宏](https://github.com/apple/swift-evolution/blob/main/proposals/0415-function-body-macros.md)。 该提案的审核期截至 2023 年 12 月 20 日。该提案建议启用一项可通过带有 -enable-experimental-feature BodyMacros 标志的主干开发快照访问的功能。
+
+SE-0415 提议在 [Swift 中引入函数体宏](https://github.com/apple/swift-evolution/blob/main/proposals/0415-function-body-macros.md "Swift 中引入函数体宏")。 该提案的审核期截至 2023 年 12 月 20 日。该提案建议启用一项可通过带有 -enable-experimental-feature BodyMacros 标志的主干开发快照访问的功能。
 
 审核过程鼓励反馈以改进提案。 它要求审阅者评估所解决问题的重要性、提案是否符合 Swift 的方向，并将其与其他语言或库中的类似功能（如果适用）进行比较。 Tony Allevato 作为审核经理负责监督此审核流程。
 
@@ -73,7 +99,9 @@ SE-0415 提议在 [Swift 中引入函数体宏](https://github.com/apple/swift-e
 所提出的语法示例演示了一个概念，其中 defer 块可能会捕获从函数体抛出的错误并执行报告错误和重新抛出错误等操作。
 
 2) 讨论[枚举案例类型签名/插值](https://forums.swift.org/t/enum-case-typed-signature-interpolation/68833 "枚举案例类型签名/插值")
+
 **内容概括**
+
 讨论围绕获取具有关联值的枚举情况的字符串表示，特别是寻求一种为每种情况生成类型化签名或插值的方法。 一个示例枚举了具有关联值及其预期输出签名的各种情况。
 
 当前的方法涉及使用反射，但由于反射元数据对应用程序二进制大小的影响，因此存在可能删除反射元数据的担忧。 另一种考虑的方法是使用宏，但这些可能不适用于较旧的操作系统版本，从而带来兼容性挑战。
@@ -84,8 +112,10 @@ SE-0415 提议在 [Swift 中引入函数体宏](https://github.com/apple/swift-e
 
 一个探索的想法涉及利用 String(describing:) 生成枚举案例的字符串表示形式，但如果客户端为枚举实现 CustomStringConvertible，则这种方法可能会失败。 人们有兴趣了解如何调用枚举描述的默认 Swift 标准库实现，以解决 CustomStringConvertible 的客户端实现所产生的问题。
 
-3) 讨论[`~Copyable` 类型中不可用的 `deinit`](https://forums.swift.org/t/unavailable-deinit-in-copyable-types/68627 "`~Copyable` 类型中不可用的 `deinit`")
+3) 讨论[~Copyable 类型中不可用的 deinit](https://forums.swift.org/t/unavailable-deinit-in-copyable-types/68627 "~Copyable 类型中不可用的 deinit")
+
 **内容概括**
+
 讨论围绕着 ~Copyable 类型中不存在不可用的 deinit 以及它对程序员构建代码以与本地数据流分析保持一致的依赖展开。
 
 不可破坏类型的概念旨在增强本地数据流分析并提供编译时保证。 它类似于函数的想法，从技术上讲，函数承诺返回一些东西，但实际上却没有，而编译器静态地证明了理论上的不可能。
@@ -97,7 +127,9 @@ SE-0415 提议在 [Swift 中引入函数体宏](https://github.com/apple/swift-e
 对话承认实现此功能的潜在复杂性以及收益是否值得付出努力的不确定性。 它引用了 Scott Meyers 关于使接口易于正确使用且难以错误使用的名言，强调了编程接口简单性和清晰性的重要性。
 
 4) 展示[Advent of Code 2023](https://forums.swift.org/t/advent-of-code-2023/68749 "Advent of Code 2023")
+
 **内容概括**
+
 Swift 社区受邀参加“Advent of Code”，这是一项从 12 月 1 日到 12 月 25 日举办的年度编码挑战赛。 这项挑战由 Eric Wastl 组织，涉及日常编码练习，开始时很简单，逐渐变得更具挑战性。
 
 参与者可以使用任何编程语言，但有一个 Swift 团队模板可供那些喜欢 Swift 的人使用。 该模板提供了解决挑战的起点。
@@ -107,6 +139,7 @@ Swift 社区受邀参加“Advent of Code”，这是一项从 12 月 1 日到 1
 1. 克隆 Swift 团队的入门模板（可选）。
 2. 在 Advent of Code 网站上创建一个帐户（参与排行榜所需）。
 3. 使用ID 3315857-f51d8ce5加入Swift社区排行榜。
+
 我们鼓励参与者每天使用 Swift 尝试挑战。 排行榜跟踪完成时间，但分数只是为了好玩，可以忽略。
 
 排行榜允许那些想要分享解决方案的人链接到 GitHub 帐户，为参与者提供了互相学习方法的机会。
@@ -114,7 +147,9 @@ Swift 社区受邀参加“Advent of Code”，这是一项从 12 月 1 日到 1
 这是一个社区活动，并不正式隶属于 Swift 项目，旨在整个 12 月享受乐趣、提高 Swift 技能并享受一些编码挑战。 参与者被警告，随着挑战变得更加严峻，挫败感可能会出现！
 
 5) 讨论[Swift OpenAPI Generator 1.0.0-alpha.1（候选发布版）已发布（Multipart、base64、过滤、递归类型等）](https://forums.swift.org/t/swift-openapi-generator-1-0-0-alpha-1-release-candidate-released-multipart-base64-filtering-recursive-types-and-more/68703 "Swift OpenAPI Generator 1.0.0-alpha.1（候选发布版）已发布（Multipart、base64、过滤、递归类型等）")
+
 **内容概括**
+
 Swift OpenAPI Generator 团队已发布版本 1.0.0-alpha.1，该版本作为即将发布的 1.0 版本的候选版本，预计将在大约两周内发布。 1.0 的主要重点是增强文档和示例，没有计划更改代码。
 
 自 2023 年 5 月以 0.1.0 版本首次开源以来，Swift OpenAPI Generator 已经取得了实质性进展。 合并了 200 多个拉取请求，产生了 24 项更新并引入了重要的新功能。
@@ -136,7 +171,9 @@ Swift OpenAPI Generator 团队已发布版本 1.0.0-alpha.1，该版本作为即
 该团队对贡献者表示感谢，并邀请通过 Swift OpenAPI Generator GitHub 存储库进一步参与。
 
 6) 讨论[可编码不正确的 Json 字符串，包含 URL 和十进制存在值](https://forums.swift.org/t/encodable-incorrect-json-string-with-url-and-decimal-existentials/68713/1 "可编码不正确的 Json 字符串，包含 URL 和十进制存在值")
+
 **内容概括**
+
 该对话探讨了 Swift Codable 协议在处理存在类型时的细微差别，特别是涉及 URL、Decimal 和 AnyEncodable 的可编码行为。
 
 讨论解决了使用存在类型时期望与实际行为之间的差异。 值得注意的是，当抽象具有预期行为（例如，meow()）的 Cat 等类型的实例时，预期 Cat 的所有实例都将统一表现出该行为。 当使用encode()时，内部表示（例如Decimal类型）会出现在最终的JSON字符串中，这会让人感到惊讶，从而导致方法分派和类型编码的混乱。
@@ -148,7 +185,9 @@ Swift OpenAPI Generator 团队已发布版本 1.0.0-alpha.1，该版本作为即
 最后，讨论暗示了从枚举案例数组中收集枚举时的挑战和注意事项，强调了编码和解码策略的复杂性以及在设计导出或序列化工具时深思熟虑的重要性。
 
 7) 讨论[是否可以自动验证值更改并抛出错误？](https://forums.swift.org/t/is-it-possible-to-automatically-validate-a-value-change-and-throw-error/68647 "是否可以自动验证值更改并抛出错误？")
+
 **内容概括**
+
 本讨论围绕自动验证值更改的概念展开，旨在消除 CRUD 方法中出现的显式验证调用。 对话的重点是在 Swift 构造中实现自动验证的挑战。
 
 该示例使用 Name 结构来探索拦截值访问以进行实时验证的潜在方法。 然而，诸如计算属性或属性观察器之类的现有机制缺乏对在验证过程中抛出错误的直接支持。 这一限制对在 Swift 结构中无缝实现自动验证造成了重大障碍。
@@ -168,15 +207,27 @@ Swift OpenAPI Generator 团队已发布版本 1.0.0-alpha.1，该版本作为即
 
 [从预编译的角度理解 Swift 与 Objective-C 及混编机制](https://tech.meituan.com/2021/02/25/swift-objective-c.html "从预编译的角度理解 Swift 与 Objective-C 及混编机制")
 
-**摘要：**  这篇博客讨论了 Objective-C 的预编译工作机制和与 Xcode 相关的技术细节。Clang Module 提升了编译的健壮性和扩展性，而使用 hmap 技术可以提高编译效率。Xcode Phases 构建系统中的不同类型代表不同的文件。使用 cocoapods-hmap-built 插件可以节省大型项目的编译时间。Clang Module 和 Swift Module 有相似的概念，而 Swift 与 Objective-C 混编有几种方法可选。利用 VFS 机制可以提升编译效率。
+**摘要：**  这篇博客讨论了 Objective-C 的预编译工作机制和与 Xcode 相关的技术细节。Clang Module 提升了编译的健壮性和扩展性，而使用 hmap 技术可以提高编译效率。
 
-[掌握 SwiftUI 中的 MapKit 基本用法](https://swiftwithmajid.com/2023/11/28/mastering-mapkit-in-swiftui-basics/ "掌握 SwiftUI 中的 MapKit 基本用法")
+Xcode Phases 构建系统中的不同类型代表不同的文件。使用 cocoapods-hmap-built 插件可以节省大型项目的编译时间。Clang Module 和 Swift Module 有相似的概念，而 Swift 与 Objective-C 混编有几种方法可选。利用 VFS 机制可以提升编译效率。
 
-**摘要：**  这篇 Swift 博客介绍了在 SwiftUI 中使用 MapKit 的基础知识。最新版本的 SwiftUI 引入了新的 MapKit 集成 API ，提供了更全面的功能。文章示例了如何使用 Marker 和 Annotation 类型在地图上放置标记和自定义视图。还介绍了控制地图初始位置和交互类型的方法。该博客将在接下来的几周继续深入讨论相机操作、地图样式和用户位置跟踪等主题。
+[在 SwiftUI 中实战使用 MapKit API](https://juejin.cn/post/7307146455537614875 "在 SwiftUI 中实战使用 MapKit API")
+
+**摘要：**  这篇 Swift 博客介绍了在 SwiftUI 中使用 MapKit 的基础知识。最新版本的 SwiftUI 引入了新的 MapKit 集成 API ，提供了更全面的功能。
+
+文章示例了如何使用 Marker 和 Annotation 类型在地图上放置标记和自定义视图。还介绍了控制地图初始位置和交互类型的方法。
+
+该博客将在接下来的几周继续深入讨论相机操作、地图样式和用户位置跟踪等主题。
 
 [计算机编程语言原理与源码实例讲解：Swift 函数和闭包](https://juejin.cn/post/7309549170375786506?searchId=2023120719043685E070931C364C2168D4/ "计算机编程语言原理与源码实例讲解：Swift 函数和闭包")
 
-**摘要：**  这篇 Swift 博客介绍了计算机编程语言原理与源码实例中的 Swift 函数和闭包。文章首先介绍了 Swift 作为一种强类型、编译型、面向对象的编程语言的背景。然后，详细讲解了函数和闭包的核心概念和联系，包括函数的定义、调用和返回值，以及闭包的定义、调用和返回值。接下来，文章深入探讨了函数和闭包的算法原理，包括函数的接收输入参数、执行操作和返回输出结果的过程，以及闭包的类似过程。最后，文章通过具体的代码实例展示了函数和闭包的使用方法，并讨论了它们未来的发展趋势和可能面临的挑战。附录部分回答了一些常见问题，帮助读者更好地理解 Swift 函数和闭包的概念和用法。
+**摘要：**  这篇 Swift 博客介绍了计算机编程语言原理与源码实例中的 Swift 函数和闭包。文章首先介绍了 Swift 作为一种强类型、编译型、面向对象的编程语言的背景。
+
+然后，详细讲解了函数和闭包的核心概念和联系，包括函数的定义、调用和返回值，以及闭包的定义、调用和返回值。
+
+接下来，文章深入探讨了函数和闭包的算法原理，包括函数的接收输入参数、执行操作和返回输出结果的过程，以及闭包的类似过程。
+
+最后，文章通过具体的代码实例展示了函数和闭包的使用方法，并讨论了它们未来的发展趋势和可能面临的挑战。附录部分回答了一些常见问题，帮助读者更好地理解 Swift 函数和闭包的概念和用法。
 
 
 ## 话题讨论
