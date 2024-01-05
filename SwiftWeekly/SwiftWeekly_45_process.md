@@ -188,6 +188,19 @@ MongoKitten 模块本身导入上述所有内容，并提供更高级别的 API 
 
 ## 推荐博文
 
+[swift 中的冻结枚举和非冻结枚举](https://juejin.cn/post/7317288133455937599 "swift 中的冻结枚举和非冻结枚举")
+
+**摘要：**  本博客探讨了在 Swift 中的冻结枚举和非冻结枚举的概念。回顾了在传统的 Objective-C 和 C 中，枚举类型是一个整数列表，并介绍了非冻结枚举和冻结枚举的概念，类比了 OC 中的 NS_ENUM 和NS_CLOSED_ENUM 。在 Swift中，用户定义的枚举基本上都是冻结枚举。对于非冻结枚举，讨论了在使用 switch 语句时需要增加 @unknown default 来处理未来可能的case新增情况。相对于default， @unknown default 在未列举 case 时会产生警告，而 default 不会。博客最后总结了处理非冻结枚举时的最佳实践，强调了使用 @unknown default 或 @unknown case  来做兜底处理的必要性，以避免在枚举有新增case时导致异常情况的发生。
+
+[手把手教你用 Swift 实现命令行工具](https://juejin.cn/post/7310448854628859919 "手把手教你用 Swift 实现命令行工具")
+
+**摘要：**  这篇博客讲解了用 Swift 实现命令行工具，选择 Swift 的原因包括对 Swift 开发者友好以及 Swift 作为完全开源的语言具有更强的语言抽象能力、类型系统安全性和性能。通过一个计算器示例，教读者创建项目、引入依赖（ ArgumentParser 库），以及实现加法和汇率转换功能。详细介绍了 ArgumentParser 的优点和核心逻辑，同时展示了命令行调试和发布安装的方法，最后鼓励使用Swift进行小工具开发。
+
+[使用 SwiftUI 创建康威生命游戏](https://swdevnotes.com/swift/2023/conways-game-of-life-with-swiftui "使用 SwiftUI 创建康威生命游戏")
+
+**摘要：**  这篇博客中作者使用 SwiftUI 创建康威生命游戏（Conway's Game of Life）。Conway's Game of Life 是一款自动游戏，由一个 2D 网格组成，其中的细胞可以是活的或死的。每个细胞在下一代的状态基于其周围细胞在当前一代中的状态，遵循一些简单的规则。文章首先，使用 SwiftUI 的 Grid 容器视图展示游戏状态并在游戏变化时进行动画处理；其次，实现根据游戏的四个规则从一代到下一代改变细胞状态的逻辑。展示了使用 Canvas 视图的不同方法，包括从 2D 数组和从模型获取数据的两种方式。
+文章还介绍了使用 SwiftUI 创建康威生命游戏的不同视图，包括使用 Grid 和 Canvas 的不同布局方式。LifeModel 用于包含和控制生命游戏的核心逻辑，而 LifeViewModel 则用于在模型和视图之间进行桥接，实现数据的传递和控制。CanvasFromModelView 演示了如何使用 Canvas 视图显示来自 LifeModel 的数据。
+
 ## 话题讨论
 
 
