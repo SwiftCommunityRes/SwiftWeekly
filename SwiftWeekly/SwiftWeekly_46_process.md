@@ -141,6 +141,19 @@ func invokeHandler<A>(_ completion: consuming CompletionHandler<A>) {
 
 ## 推荐博文
 
+[ swift 的内购测试](https://swiftwithmajid.com/2024/01/09/storekit-testing-in-swift/ " swift 的内购测试")
+
+**摘要：**  这篇博客介绍了在 Swift 中使用 StoreKitTest 框架进行应用内购买测试的方法。作者首先概述了最近 StoreKit 框架的重大变化，强调了新版本充分采用了 Swift 语言的异步和等待特性。随后，博客详细介绍了 StoreKitTest 框架，该框架允许我们编写测试用例以验证应用在应用内购买、退款、ask-to-buy 和订阅过期等方面的处理能力。通过示例代码，演示了如何使用 SKTestSession 类型执行购买、管理交易、模拟退款以及测试应用对交易更新的反应。博客还提到了创建 StoreKit 配置文件的必要性。
+
+[ Swift Evolution：阅读提案并从中学习](https://www.avanderlee.com/swift/swift-evolution-proposals/ " Swift Evolution：阅读提案并从中学习")
+
+**摘要：**  这篇博客介绍了 Swift 编程语言的演进过程，重点关注了通过阅读和学习 Swift Evolution 提案来了解语言变化的方式。作者指出 Swift 的不断演进源于 Swift Evolution 仓库内的公开提案，这些提案是了解最新发展的良好途径。博客解释了 Swift Evolution 的定义和作用，强调了语言开源的特点，任何人都可以通过提出好的想法来影响未来功能和方向。提案经过讨论和批准后成为发布目标，可以在官方 Swift 网站上进行跟踪。作者还简要概述了从提出一个提案到将其纳入 Swift 发布的过程，强调了提案经历多个状态。读者被鼓励查阅 Swift Evolution 过程文档获取最新状态概述。
+
+[ ElasticSearch与Swift集成](https://juejin.cn/post/7326265442837528586/ " ElasticSearch与Swift集成")
+
+**摘要：**  本篇博客详细介绍了 Elasticsearch 与 Swift 的集成，旨在帮助开发者将强大的搜索引擎功能整合到 Swift 应用程序中，提升用户体验。文章首先介绍了 Elasticsearch 和 Swift 的背景，分别强调了 Elasticsearch 作为基于 Lucene 的搜索引擎的特性，以及 Swift 作为苹果主要开发语言的优势。
+核心概念与联系部分深入解释了集成前需要了解的核心概念，包括 Elasticsearch 的索引、查询、分词、词典等原理，以及 Swift 的类型安全、自动引用计数、高性能等特点。接着，文章详细探讨了集成的操作步骤，包括安装 Elasticsearch 、创建索引、使用 Swift 访问 Elasticsearch 、执行搜索查询等步骤。
+
 ## 话题讨论
 
 
