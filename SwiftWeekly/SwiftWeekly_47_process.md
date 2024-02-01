@@ -30,8 +30,28 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 推荐博文
 
+[Swift OpenAPI Generator 1.0 版本发布](https://www.swift.org/blog/swift-openapi-generator-1.0/ "Swift OpenAPI Generator 1.0 版本发布")
+
+**摘要：**  Swift OpenAPI Generator 是一个用于生成类型安全、符合惯例的 Swift 代码的工具，根据 OpenAPI 文档自动生成 API 调用和服务器实现所需的代码。支持 OpenAPI 规范版本 3.0 和 3.1 ，提供更灵活的抽象方式，使开发人员能够以 API 优先的方式进行服务器开发。生成的客户端代码为每个操作提供了一个方法，可与任何提供 Swift OpenAPI Generator 集成包的 HTTP 库一起使用。生成的服务器代码通过 "APIProtocol" 协议定义了每个操作的方法要求，适用于任何提供Swift OpenAPI Generator集成包的Web框架。
+
+[SwiftUI 中的 visionOS ornament](https://swiftwithmajid.com/2024/01/30/visionos-ornaments-in-swiftui/ "SwiftUI 中的 visionOS ornament")
+
+**摘要：**  这篇博客介绍了在 Swift 中使用 SwiftU I构建 visionOS 应用程序的方法，重点介绍了新的 SwiftUI API 中的 ornament 概念。ornament 是一种用于在不干扰窗口内容的情况下呈现与窗口相关的控件和信息的用户界面组件。文章首先展示了如何使用 TabView 创建一个基本的 ornamen t，然后介绍了如何使用 SwiftUI 的 Toolbar API 在 ornament 中添加操作控件。此外，文章还详细讲解了如何创建自定义 ornaments ，包括控制其位置、外观和感觉。最后，总结了如何使用 SwiftUI 框架来改善 visionOS 上应用程序的用户体验。以帮助开发人员更好地适应 visionOS 平台。
+
+[Swift 有些场景其实不必加 final](https://juejin.cn/post/7313242001113677862/ "Swift 有些场景其实不必加 final")
+
+**摘要：**  这篇文章深入探讨了在 Swift 中使用 final 关键字的场景和最佳实践。作者首先介绍了 final 关键字的作用，包括防止类被继承和优化执行性能。文章指出了一些场景下是不必手动添加 final 的，比如私有类/属性和具有默认访问权限（internal）的类。特别是在使用 Whole Module Optimization（WMO）编译模式时，编译器能够自动推断是否需要添加 final。然而，对于公共类，作者强调了需要主动考虑是否添加 final ，特别是当提供库给上层调用时，以确保性能和防止意外继承。文章在最后提到在维护项目时，主动添加 final 可以作为一种强文档的方式，提醒未来的使用者。
+
 ## 话题讨论
 
+近日，有网友在社交平台爆料称自己因为隐瞒裁员经历说成是主动离职而被取消了 offer 。在职场中，有些人可能选择将自己被裁员的情况描述为主动离职。把“被裁”说成“主动离职”算撒谎吗? 
+
+1. 算，不诚实
+2. 算适度美化而已
+3. 不都这么说吗?
+4. 不算，很正常
+
+欢迎在文末留言参与讨论。
 
 ## 关于我们
 
