@@ -125,6 +125,19 @@ So...之前还有不少小伙伴说买个欧版回来试试，现在应该是行
 
 ## 推荐博文
 
+[在 Playdate 上使用 Swift 构建小型游戏](https://www.swift.org/blog/byte-sized-swift-tiny-games-playdate/ "在 Playdate 上使用 Swift 构建小型游戏")
+
+**摘要：**  这篇 swift 官方博客详细介绍了如何在 Playdate 上使用 Swift 构建小型游戏的过程。作者首先介绍了为什么选择 Swift 以及 Playdate 的背景，然后讨论了 Swift 在嵌入式系统中的应用和发展。作者分享了他在使用 Swift和 Playdate SDK 构建 Conway's Game of Life 和 Swift Break 两款游戏的经验，包括在模拟器和真机的调试和优化过程。文章还深入探讨了如何改进 Playdate C API 的 Swift 封装以提高代码的可读性和易用性。作者最后总结了整个开发过程中遇到的挑战和解决方案，并鼓励读者尝试在非传统环境中使用  Swift 开发。
+
+[Swift 中的全局 actors](https://swiftwithmajid.com/2024/03/12/global-actors-in-swift/ "Swift 中的全局 actors")
+
+**摘要：**  在这篇文章中，作者探讨了如何在 Swift 中使用全局 actors 。全局 actors 允许我们保护多种类型，确保它们具有互斥访问。通过示例代码和解释，解释了如何定义和使用全局 actors ，特别是 @MainActor 和自定义的 StorageActor 。这些全局 actors 有助于确保在特定情况下的线程安全性，如主线程渲染。通过在类型、函数或属性上标记 @MainActor 或自定义的全局 actor ，我们可以确保特定工作在相应的 actor 上独占运行。全局 actors 在特定情况下非常有用，如主线程渲染。
+
+[ Swift 类型中的 Equality, Identity 和 Hashing](https://juejin.cn/post/7340278606391869459/ " Swift 类型中的 Equality, Identity 和 Hashing")
+
+**摘要：**  本文深入探讨了 Swift 类型中的 Equality、Identity 和 Hashing 的概念。
+文章首先介绍了 Equality 的概念，以值类型和引用类型为例，介绍了如何实现 Equatable 协议以便比较对象是否相等。对于引用类型，还介绍了 Identity 的概念，使用 "===" 运算符来检查对象是否指向相同的引用。接着讨论了 Hashable 的重要性，特别是在需要在 Dictionary 或 Set 中进行快速查找时。文章解释了 Hashable 的原理，如何为自定义类型实现 Hashable 协议，并提到了哈希碰撞可能会影响性能的问题。文章最后强调了正确实现 Hashing 的重要性，展示了如何在 Swift 中实现 Hashable 协议来生成有效的哈希值，并提到了好的哈希值的必要性以防止潜在的安全漏洞。
+
 ## 话题讨论
 
 
