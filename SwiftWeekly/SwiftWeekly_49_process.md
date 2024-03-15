@@ -123,6 +123,80 @@ So...之前还有不少小伙伴说买个欧版回来试试，现在应该是行
 
 ## Swift论坛
 
+1) 讨论[Wasm/WASI 的 Stdlib 和运行时测试现在可在 Swift CI 上使用](https://forums.swift.org/t/stdlib-and-runtime-tests-for-wasm-wasi-now-available-on-swift-ci/70385/1 "Wasm/WASI 的 Stdlib 和运行时测试现在可在 Swift CI 上使用")
+**内容概括**
+Swift 针对 WebAssembly (Wasm) 和 WebAssembly 系统接口 (WASI) 的标准库和运行时测试现已在 Swift Continuous Integration (CI) 上提供，这标志着 Swift 工具链中 WebAssembly 支持开发的一个重要里程碑。 以前，对于 Wasm 和 WASI 平台来说，维护主 Swift 存储库的分支是必要的，但 SwiftWasm 团队（特别是 @kateinoigakukun 领导的团队）最近的努力已经消除了这种需求。
+
+上游 Swift 工具链的开发快照已经启用了几个月的 Wasm 编译，WasmKit 中的性能优化允许在 CI 上运行 Swift 标准库和为 WASI 编译的运行时测试。
+
+由 @mishal_shah 实现的 apple/swift 存储库主分支上的新 CI 作业允许监控 WASI 支持的稳定性。 我们鼓励贡献者在合并之前在其拉取请求 (PR) 上运行此 CI 作业。
+
+尽管在 Swift 中增强 WebAssembly 体验仍有工作要做，但定期 CI 测试对于进步至关重要。 社区热切等待 WebAssembly 社区对 Swift 做出更多贡献。
+
+为了将 Swift 编译为 WebAssembly，开发人员可以使用上游 Swift 编译器，该编译器在预览模式下支持 Wasm。 Wasm 的交叉编译遵循与其他平台相同的过程，使用适当的编译器开关或选项。
+
+Swift 的标准库函数可以在 wasm32-unknown-wasi 三元组的编译过程中使用，但不能用于 wasm32-unknown-none-wasm 三元组，其中类似的限制适用于其他嵌入式 Swift 平台。
+
+对于文件 I/O 等系统相关功能，开发人员可以利用 Swift System 或 Swift Foundation 库。 任何其他 WASI 兼容的运行时都应该能够使用 .wasm 文件运行，只要二进制文件没有除了 wasi_snapshot_preview1 标准导入之外的其他导入。
+
+2) 提议[SE-0425：128 位整数类型](https://forums.swift.org/t/se-0425-128-bit-integer-types/70456 "SE-0425：128 位整数类型")
+**内容概括**
+SE-0425 提议向 Swift 添加 128 位整数类型。 这些类型可在 swift-numerics 包的一个名为 int128 的分支中进行实验。 该提案的反馈截止日期为 2024 年 3 月 19 日，审核经理为 Doug Gregor。 该提案包括以 JSON 和 plist 格式对这些大整数类型进行编码和解码的考虑因素，提出了处理 Int128 和 UInt128 类型的编码和解码容器的协议要求。 建议默认实现将这些类型编码为 64 位整数对，从而允许特定编码人员根据需要灵活地以不同方式处理表示形式。 寻求 Swift 社区的反馈来完善该提案并确定其与 Swift 的目标和方向的一致性。
+
+3) 讨论[SwiftNIO 需要 noassert 模式，这个模式存在吗？](https://forums.swift.org/t/swiftnio-needs-a-noassert-mode-does-this-exist/70454 "SwiftNIO 需要 noassert 模式，这个模式存在吗？")
+**内容概括**
+围绕 SwiftNIO 中“noassert”模式必要性的讨论深入探讨了库中前提条件的使用，强调了它们的多方面目的。 首先，先决条件用于防止调用未定义的行为，例如越界内存访问，如果不加以控制，可能会导致灾难性后果。 其次，它们充当一种防御机制，防止用户通过滥用 API 无意中导致复杂且难以诊断的问题，例如承诺泄漏。 这种主动方法旨在将无声故障转变为更明显的故障，确保及时识别和解决开发人员的错误。
+
+然而，对话承认处理意外前提条件失败的挑战，特别是在某些条件被认为不可能的情况下。 虽然遇到先决条件通常意味着程序中存在真正的错误，但人们认识到开发人员容易犯错，曾经被认为不可能的事情实际上可能会发生。 因此，最佳实践转向采用更灵活的方法，其中对所谓不可能路径的断言与优雅的错误处理机制相结合。
+
+此外，讨论还扩展到解决有关处理库中前提条件失败的更广泛的问题，特别是在服务器端 Swift 应用程序的上下文中。 与其他编程语言中的错误处理实践进行了比较，突出了 Swift 独特的限制和挑战。 尽管存在困难，还是提出了增强错误处理能力的建议，例如区分不同类型的前提条件失败并允许更受控的恢复机制。
+
+总的来说，这次对话强调了 SwiftNIO 平衡安全性和灵活性的重要性，并认可了框架内为改进错误处理机制所做的持续努力。
+
+4) 讨论[@MainActor 方法中的 Task {...} 是否保证在下一个运行循环周期中运行？](https://forums.swift.org/t/is-task-in-a-mainactor-method-guaranteed-to-run-in-the-next-run-loop-cycle/70436 "@MainActor 方法中的 Task {...} 是否保证在下一个运行循环周期中运行？")
+**内容概括**
+讨论围绕着理解“@MainActor”方法中任务的行为展开，特别是关于它们的执行时间以及是否保证它们在下一个运行循环周期中运行。 在解决最初的问题时，强调应该避免对当前运行循环的假设，即使是在主线程上。
+
+参与者强调了考虑运行循环模式的重要性，但澄清说，如果开发人员知道自己所在的线程，那么他们通常不需要担心自己处于哪个运行循环中。 线程的运行循环是按需创建的，当任何线程调用某些 Core Foundation 函数时，就会创建主线程的运行循环。
+
+尽管对运行循环的访问受到限制，但值得注意的是，后台线程可以在特定情况下运行运行循环，例如在使用某些 Core Foundation 函数时。
+
+经过讨论，最初的问题被细化为仅关注 Swift 的行为，而没有明确提及运行循环。 参与者尝试确定 Swift 是否保证涉及“@MainActor”方法中任务的代码的特定输出行为。
+
+总之，虽然运行循环被认为是一个重要的基础概念，但我们还是努力以与平台无关的方式解决这个问题，重点关注 Swift 在任务执行计时方面的行为。
+
+5) 讨论[Swift Macros：构建时间开销问题](https://forums.swift.org/t/swift-macros-build-time-overhead-concerns/70443 "Swift Macros：构建时间开销问题")
+**内容概括**
+讨论解决了与使用 Swift 宏相关的构建时间开销的问题，该功能是为了提高代码质量并减少样板文件而引入的。 通过一系列实验，团队观察到在各种项目设置中使用宏时构建时间显着增加。
+
+分析了三种不同的宏类型：StringifyMacro、MemberwiseInitMacro 和 ObservationMacro，每种宏类型都展示了不同的使用场景和性能影响。 对使用宏的项目和使用非宏等效项的项目进行了比较，揭示了构建时间的显着差异。
+
+调查结果表明，使用宏时构建时间开销会大幅增加，观察结果表明宏可执行文件会增加额外的构建步骤和系统负载。 该团队向社区寻求有关潜在解决方法、优化或正在进行的 Swift 开发的见解，以解决这些问题。
+
+此外，轶事经验强调了宏进程使系统超载的情况，可能导致构建冻结或速度减慢。 鼓励进一步测试以探索跨文件的宏进程的可扩展性、潜在的死锁、优化机会以及分析以识别瓶颈。
+
+总之，虽然 Swift 宏有望改善开发实践，但观察到的构建时间开销构成了重大挑战，促使社区合作制定缓解策略和优化。
+
+6) 讨论[将 String 与零拷贝 C API 一起使用](https://forums.swift.org/t/using-string-with-zero-copy-c-apis/70476 "将 String 与零拷贝 C API 一起使用")
+**内容概括**
+讨论围绕如何利用 Swift 的 String 类型和零拷贝 C API 展开，特别关注 Swift 的内存管理限制阻碍与此类 API 进行有效交互的场景。 Tree-sitter 的 API 提供了一个具体示例，展示了需要提供连续字符串数据而无需复制的 TSInput 闭包。
+
+挑战在于安全地转义从 Swift 对象派生的指针，确保它们在整个 API 调用过程中的有效性，而无需诉诸手动内存管理。 现有的解决方案（例如 SwiftTreeSitter）采用缓冲区分配和清理策略来解决此问题。
+
+参与者提出了对 Swift 闭包类型的潜在增强，以促进安全的指针转义，理想情况下允许表达对象生命周期和转义指针之间的依赖关系。 然而，人们承认，在没有手动生命周期管理的情况下实现这一目标仍然是一个挑战。
+
+人们提出了各种想法，包括扩展 Swift 闭包来封装函数指针和上下文指针，或者利用借用或仅移动类型来表达对象和转义指针之间的依赖关系。 最终目标是直接从 Swift 与零拷贝 C API 进行高效、安全的交互，最大限度地减少不必要的内存复制和管理开销。
+
+7) 提议[SE-0426：可按位复制](https://forums.swift.org/t/se-0426-bitwisecopyable/70479 "SE-0426：可按位复制")
+**内容概括**
+关于 SE-0426（BitwiseCopyable）的讨论围绕着改进所提议协议的定义和实现细节。 参与者对 BitwiseCopyable 的概念表示同意，其中包含 BitwiseMovable、NoOpDeinit 和可能 Copyable 的类型。 但是，对于 BitwiseCopyable 是否应包含可复制但不包含 BitwiseMovable 且具有 NoOpDeinit 的类型，存在不同意见。
+
+反馈建议重新考虑 BitwiseCopyable 作为标记协议的特征，强调需要澄清语言属性，并避免与 SE-0302（可发送）中定义的标记协议概念混淆。 标记协议被概述为具有特定的属性，包括在各种情况下对其使用没有要求和限制。
+
+人们担心运行时表示是否有必要实现 BitwiseCopyable 一致性，特别是在后端部署场景中。 在避免不必要的开销的同时，人们认识到需要一些运行时支持来查询 BitwiseCopyable 约束。
+
+总的来说，讨论强调了完善 BitwiseCopyable 的定义和实现的重要性，以平衡 Swift 版本之间的效率、清晰度和兼容性。
+
 ## 推荐博文
 
 [在 Playdate 上使用 Swift 构建小型游戏](https://www.swift.org/blog/byte-sized-swift-tiny-games-playdate/ "在 Playdate 上使用 Swift 构建小型游戏")
