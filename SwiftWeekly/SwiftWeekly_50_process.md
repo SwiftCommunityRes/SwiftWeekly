@@ -90,6 +90,22 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 推荐博文
 
+[使用 Swift 编写 GNOME 应用程序](https://www.swift.org/blog/adwaita-swift/ "使用 Swift 编写 GNOME 应用程序")
+
+**摘要：**  这篇博客介绍了使用 Swift 编写 GNOME 应用程序的方法，并重点介绍了 Adwaita for Swift 这一工具。 Swift 由于其清晰的语法、静态类型和特殊功能而非常适合创建用户界面。 Adwaita for Swift 利用 Swift 的特性为开发 GNOME 平台应用程序提供直观的界面。
+
+文章展示了使用 Adwaita for Swift 的代码示例，并探讨了其优点，如声明性、易用性和可读性。此外，还介绍了 Adwaita for Swift 在跨平台应用开发和应用发布方面的优势，以及如何参与该项目。
+
+[ Swift  AttributedString 常见使用方法](https://juejin.cn/post/7347947619744743451/ " Swift AttributedString 常见使用方法")
+
+**摘要：**  这篇博客介绍了在 swift 开发中常见的 AttributedString 的使用方法。通过示例代码展示了如何设置文本的字体大小、颜色、背景颜色，以及如何添加下划线等样式。此外，还介绍了如何拼接不同样式的文本，并提供了一个整合常用文本属性的类，使得使用 AttributedString 更加便捷。通过这些方法，可以轻松实现丰富的文本样式效果。
+
+[在 SwiftUI 中如何构建异步 Button ](https://swiftwithmajid.com/2024/03/26/building-async-button-in-swiftui/ "在 SwiftUI 中如何构建异步 Button ")
+
+**摘要：**  文章介绍了如何在 SwiftUI 中使用 Swift Concurrency 的异步功能来创建异步按钮。作者展示了如何通过简单的示例来创建一个按钮，该按钮在每次按下时都会启动一个异步任务。讲解了如何对按钮进行改进，以在任务执行期间禁用按钮，以及如何将按钮的逻辑提取到一个专用的视图中。
+
+文章的最后讲解了如何在简单的示例中使用触发值模式来取消任务。本文深入探讨了 SwiftUI 中异步任务的处理方式，为开发人员提供了有关使用 Swift Concurrency 构建交互式用户界面的宝贵指导。
+
 ## 话题讨论
 
 
