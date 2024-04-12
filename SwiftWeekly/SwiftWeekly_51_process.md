@@ -94,7 +94,121 @@ IT之家此前报道苹果公司已经在研发折叠屏产品，只是现有的
 
 
 ## Swift论坛
+1) 提议[SE-0433: 同步互斥锁](https://forums.swift.org/t/se-0433-synchronous-mutual-exclusion-lock/71174 "SE-0433: 同步互斥锁")
+**内容概括**
+SE-0433:同步互斥锁
 
+SE-0433是一项提案,旨在引入Swift编程语言的同步互斥锁(SMEL)。SMEL是一种同步原理,只允许一个线程在一次之内访问共享资源。该提案旨在提供更一致和可预测的锁定行为,使Swift编码变得更容易并安全。
+
+演变
+
+Swift演变过程是指改变Swift编程语言的过程。提案被提交给Swift演变邮件列表,社区讨论并给予反馈。提案根据反馈进行修改后,由Swift核心团队做出最终决定。
+
+提案审查
+
+提案审查是演变过程中非常重要的一部分。审查负责人负责监督审查过程,审查可以在本论坛帖子上发布或者直接发送给审查负责人。撰写审查时,应该提供有用的反馈,评估与Swift相匹配的提案,并与其他语言相似功能进行比较。
+
+审查过程是一个机会,让Swift社区改进提案并决定Swift语言的方向。审查过程是演变过程中非常重要的一部分,并且鼓励参与。
+
+该提案在社区中获得积极反馈,许多人认为这是Swift语言急需的补充。一些审查人士表示,提议的SMEL并不完全取代专门锁定解决方案,但是它补充了Swift标准库的空白。另一些人表示,提议的SMEL易于移植,并且应该很容易将其融入现有的Swift代码中。
+
+整体而言,审查SE-0433的反馈都很积极,并且该提案很可能在Swift演变过程中继续前进。
+
+2) 讨论[检查漏洞:关于`rethrows`的类型检查](https://forums.swift.org/t/type-checking-hole-regarding-rethrows/71162 "检查漏洞:关于`rethrows`的类型检查")
+**内容概括**
+讨论在Swift论坛上发生了,涉及到了`rethrows`的类型检查漏洞。该代码编译通过,但在运行时使用时会产生一条崩溃。编译器抱怨称没有什么东西可以"尝试",但是局部函数在考虑rethrows传播时并没有正确地进行类型检查。
+
+参与讨论的Lincoln Wu (CrystDragon)表示已知有关rethrows检查的问题,但由于标准函数,比如DispatchQueue.sync,遵循rethrows精神,以及一个更安全的实现不允许的方式使用它们,因此无法修复。然而,斯拉瓦·佩斯特夫(Slava_Pestov)希望这些模式足够奇怪而罕见,以便在所有新代码中完全可以使用类型的抛出来代替rethrows,并且有一天可以逐步弃用rethrows。
+
+蒂诺(Tino)建议一种简单的修复方法,但斯拉瓦_Pestov解释说,这样做需要引入一个rethrows(不安全)逃逸口,或者需要迁移现有的使用方式到类型的抛出来,而且在那个阶段并不值得麻烦。斯拉瓦_Pestov还表示,Swift已经达到了兼容性问题导致修复错误的状态,而且关注的是成本和受益比。
+
+3) 讨论[使用 NSLock 时,读取值时是否需要调用 lock()?](https://forums.swift.org/t/while-using-nslock-do-i-need-to-call-lock-when-reading-a-value/71170 "使用 NSLock 时,读取值时是否需要调用 lock()?")
+**内容概括**
+在使用NSLock时,读取值时是否需要调用lock()方法?
+
+在Swift语言中,NSLock类提供了一种方法来同步共享资源的访问。lock()方法用于锁定资源,而unlock()方法用于释放锁定。
+
+当使用NSLock时,需要记住锁定应该持续仅需要必要的时间,并尽快释放它以允许其他线程访问资源。
+
+在某些情况下,可能需要在读取资源值之前调用lock()方法,以防止其他线程同时修改值。然而,在其他情况下,读取值时可能无需调用lock(),只要当前没有其他线程正在修改值即可。
+
+譬如,如果在多线程环境下更新计数器,则可能无需调用lock()方法读取计数器值。然而,如果计数器被非多线程安全方式修改,则可能需要调用lock()方法以防止其他线程同时修改值。
+
+一般而言,使用NSLock时,需要仔细考虑资源的使用情况以及其行为,并采取适当的锁定策略以确保资源以多线程安全方式访问。
+
+4) 讨论[寻找 AttributeSyntax 装饰的类型](https://forums.swift.org/t/finding-type-decorated-by-attributesyntax/71206 "寻找 AttributeSyntax 装饰的类型")
+**内容概括**
+讨论集中讨论了找到一个对象装饰了`AttributeSyntax`协议的类型。讨论涉及使用Swift语言以及一个名为`swift-syntax`的工具。
+
+用户Matt Cox正在使用一个名为`SyntaxVisitor`的工具,以搜寻具有`name`属性设置为"Foo"的`AttributeSyntax`节点。这种做法很好,但是下一步就是要收集具有"Foo"属性的对象了。在这种情况下,用户想要获得一个具有"Bar"属性的`StructDeclSyntax`节点,以便能够检查其子节点。
+
+用户正在苦苦思考如何获得这个对象。他问道,如果能够得到一个`AttributeSyntax`节点,那么该节点所附着的对象(类、枚举、结构体等)是如何获得的呢?
+
+约翰.麦考回复了这个问题,表示如果阅读树形结构正确,那么`AttributeSyntax`节点的父节点应该是一个名为`AttributeListSyntax`的节点,而父节点应该是属性列表所在节点。
+
+Matt Cox感谢约翰.麦考的帮助,而Wes建议使用https://swift-ast-explorer.com这个工具来帮助回答相关问题。Matt Cox认为该工具很有帮助,并感谢Wes提供这个工具。
+
+5) 讨论[可否丢弃Unmanaged.retain()返回值?](https://forums.swift.org/t/is-it-safe-to-discard-returned-value-of-unmanaged-retain/71176 "可否丢弃Unmanaged.retain()返回值?")
+**内容概括**
+在《Is it safe to discard the returned value of Unmanaged.retain()?》中讨论了Unmanaged结构中的retain函数的行为。retain函数返回一个新的Unmanaged实例,但是该实例并没有被标记为@discardableResult属性,且文档没有解释为什么这样做。实现并不会修改该结构,它只是返回了一个与原来的Unmanaged引用相同的"指针"。
+
+帖子的作者Nathan S.问是否可以将返回的Unmanaged直接丢弃或者必须对其做某些事情,而不是直接丢弃。
+
+Kyle Sluder回应说可能是因为retain函数模仿了Obj-C的retain函数,而且在Swift中retain函数没有被标记为@discardableResult属性,所以它可以在未来被标记为这个属性并且不会破坏旧代码。
+
+Nathan S.回应说他会使用返回的Unmanaged来关闭警告直到@discardableResult被添加。
+
+Kyle Sluder回应说可以覆盖-retain函数以便它返回与自身不同的东西,但是必须确保Swift能将返回值传递给兼容性问题的库。
+
+综上所述,讨论还指出了Unmanaged.retain()函数的行为,并且讨论了将其标记为@discardableResult的优缺点。
+
+6) 讨论[没有MainActor警告的扩展](https://forums.swift.org/t/no-mainactor-warning-in-extension/71180 "没有MainActor警告的扩展")
+**内容概括**
+约西普·卡瓦尔(Josip Cavar)注意到,当一个扩展调用并发函数时,并没有出现“MainActor警告”,与预期相反。
+
+卡瓦尔提供了一个示例,在Swift 5.10中展示了这种行为。该示例演示了当移除“start”函数从扩展中并调用它从主线程时,就会出现“MainActor警告”,与预期相符。然而,当把“start”函数留在扩展中时,没有警告被产生。
+
+```Swift
+@MainActor
+public final class Test {
+    func process() {
+    }
+}
+
+public extension Test {
+    func start() {
+        let browser = NWBrowser(
+            for: .bonjour(type: MIDINetworkBonjourServiceType, domain: nil),
+            using: NWParameters()
+        )
+        browser.browseResultsChangedHandler = { [weak self] newResult, changes in
+            Task { [weak self] in
+                self?.process() // no warning, compiles ok
+            }
+        }
+    }
+}
+```
+
+Quinn “The Eskimo!”(埃斯库莫)对卡瓦尔的帖子发表了回应,表示这种行为是预期的,并且将“严格并发检查”设置为“完成”将在扩展中生成“MainActor警告”。埃斯库莫还提供了一个示例演示了这一点。
+
+卡瓦尔承认埃斯库莫的解释并感谢他的回应。
+
+总之, 讨论揭示了Swift并发系统中扩展调用并发函数而不会默认生成“MainActor警告”的小特性。但是,将“严格并发检查”设置为“完成”将正确生成警告。
+
+7) 讨论[Swift String 对字符的理解是否稳定?](https://forums.swift.org/t/will-swift-strings-understanding-of-characters-remain-stable/71164 "Swift String 对字符的理解是否稳定?")
+**内容概括**
+论文摘要:论文标题为“Swift String对于字符的理解是否稳定?”的Swift论坛帖子讨论了Swift String对于字符的理解是否会随着时间的推移而变化。该帖子考虑了由于演变的Unicode规则和标准库中的修复而可能发生的变化对Swift String的行为的影响。
+
+讨论围绕着一个字符串中包含的字符的稳定性和解释,尤其是当字符串包含unicode字符时。如果Swift String只包含标准库版本的Unicode中定义的字符,则其对字符的理解是稳定的。然而,如果字符串包含未被定义的字符,则在处理该字符串时,由于更新版本的Unicode规则,其解释可能会发生变化。
+
+帖子还指出,苹果平台上的Swift标准库是系统库,因此可以跨设备支持不同版本的Unicode。通过使用.age属性,可以强制设置最大版本,从而排除不能被可靠地解释的字符。
+
+帖子承认标准库代码中可能会出现错误并被修复,标准库维护人员将决定是否修复错误,这可能会改变现有字符串的行为。另一种选择是继续使用错误的实现以保持稳定性,但这种做法被反对。
+
+帖子还讨论了发现错误后的潜在解决方案,并讨论了如何改变字符串的行为。结论是,即使有些属性行为发生变化,仍然推荐采取改变字符串行为的解决方案。
+
+讨论强调了维持稳定的Swift String实现,同时应对潜在的Unicode规则变化和标准库错误修复。
 
 ## 推荐博文
 
