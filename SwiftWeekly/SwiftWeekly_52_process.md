@@ -206,6 +206,20 @@ Swift 论坛上的讨论围绕 SE-0433 展开，SE-0433 提议在 Swift 中引�
 
 ## 推荐博文
 
+[SwiftUI 中的内容边距](https://swiftwithmajid.com/2024/04/23/content-margins-in-swiftui/ "SwiftUI 中的内容边距")
+
+**摘要：**  这篇博客介绍了 SwiftUI 中的新功能——内容边距（contentMargins）概念。文章首先解释了在 iPad 上处理大量文本时的布局问题，并指出在 SwiftUI 中无法直接使用 UIKit 中的 readableContentGuide。作者展示了如何通过增加安全区域来调整布局，但这种方法也会移动滚动条指示器，影响用户体验。最后，作者介绍了 contentMargins 视图修饰符的用法，可以将可滚动内容移动到安全区域外，同时保持滚动条在原位。这项功能填补了 SwiftUI 中安全区域管理的一项重要缺失，使得应用程序在不同屏幕尺寸下能够更加灵活和适应性强。
+
+[Swift 类型推断](https://www.swiftbysundell.com/basics/type-inference/ "Swift 类型推断")
+
+**摘要：**  这篇文章探讨了 Swift 中类型推断的重要性以及如何在编写代码时利用类型推断来简化语法。作者首先介绍了 Swift 是一种静态类型语言的特性，但又指出 Swift 支持类型推断，可以自动推断出变量、常量和属性的类型，从而使代码编写更加轻量化。
+
+文章通过示例说明了在 Swift 中如何使用类型推断，包括变量声明、枚举、静态属性和方法等情况。此外，作者还提及了一些情况下需要手动指定类型的情况，例如处理数值类型和调用具有泛型返回类型的函数时。最后，作者总结了 Swift 的类型推断机制的计算成本以及如何在需要时手动指定类型。整体而言，本文强调了 Swift 中类型推断的重要性和灵活性，以及在代码编写过程中如何有效地利用它来提高开发效率。
+
+[使用 count 还是 isEmpty 检查集合是否为空](https://www.swiftbysundell.com/articles/count-vs-isEmpty/ "使用 count 还是 isEmpty 检查集合是否为空")
+
+**摘要：**  这篇 Swift 博客讨论了在 Swift 中检查集合是否为空的两种主要方法：使用 count 属性和使用专用的 isEmpty 属性。首先文章介绍了这两种方法在行为上的差异，并探讨了标准库中 isEmpty 的实现方式。作者指出，尽管对于某些具体的集合类型，如 Set，使用 count 和 isEmpty 可能会得到相同的结果，但在其他情况下，特别是对于 String 这样的集合，直接使用 count 可能会导致性能损失。最后，作者建议在判断集合是否为空时始终使用 isEmpty，因为它更易读、更直观，并且性能始终较高。
+
 
 ## 话题讨论
 
