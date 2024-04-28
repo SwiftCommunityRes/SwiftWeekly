@@ -14,6 +14,9 @@
 
 <details>
 <summary>点击查看更多内容</summary>
+	<a href="https://mp.weixin.qq.com/s/9os2vbc5Js5kOi5UK2BNxQ">Swift 周报 第四十一期</a></br>
+	<a href="https://mp.weixin.qq.com/s/IE_F3lL6yeJtElmyTiCDpw">Swift 周报 第四十期</a></br>
+	<a href="https://mp.weixin.qq.com/s/cluSif2VxmPY3vn9kZNQuw">Swift 周报 第三十九期</a></br>
 	<a href="https://mp.weixin.qq.com/s/D9mhuPKigeL5iRAHkrsYAQ">Swift 周报 第三十八期</a></br>
 	<a href="https://mp.weixin.qq.com/s/g90Eh_lprw7b54fsPqGqdA">Swift 周报 第三十七期</a></br>
 	<a href="https://mp.weixin.qq.com/s/Fk05KTMITq3uWrsTsDQdIA">Swift 周报 第三十六期</a></br>
