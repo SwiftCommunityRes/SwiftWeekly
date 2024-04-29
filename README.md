@@ -8,12 +8,21 @@
 
 周报内容模块分为：**新闻**、**提案**、**Swift论坛**、**推荐博文**。初期计划每两周发布一期，每个模块还在调整磨合期。各位读者如果有好的提议，欢迎提 Issues。
 
-<a href="https://mp.weixin.qq.com/s/9os2vbc5Js5kOi5UK2BNxQ">Swift 周报 第四十一期</a></br>
-<a href="https://mp.weixin.qq.com/s/IE_F3lL6yeJtElmyTiCDpw">Swift 周报 第四十期</a></br>
-<a href="https://mp.weixin.qq.com/s/cluSif2VxmPY3vn9kZNQuw">Swift 周报 第三十九期</a></br>
+<a href="https://mp.weixin.qq.com/s/_XPPqQYwf2aoha9sChWp6Q">Swift 周报 第五十二期</a></br>
+<a href="https://mp.weixin.qq.com/s/QKopiEK3kI3JXFlG92aE5A">Swift 周报 第五十一期</a></br>
+<a href="https://mp.weixin.qq.com/s/Gv41loqyKdRJWZxnRDU2wA">Swift 周报 第五十期</a></br>
 
 <details>
 <summary>点击查看更多内容</summary>
+	<a href="https://mp.weixin.qq.com/s/Gv41loqyKdRJWZxnRDU2wA">Swift 周报 第五十期</a></br>
+	<a href="https://mp.weixin.qq.com/s/zxp0RlC6wMjc3JsGlMZ-Iw">Swift 周报 第四十九期</a></br>
+	<a href="https://mp.weixin.qq.com/s/xZSRKjJiJdAbdCRLCAj0Mg">Swift 周报 第四十八期</a></br>
+	<a href="https://mp.weixin.qq.com/s/3yVgEEkmIp4yEW_dwGkj_w">Swift 周报 第四十七期</a></br>
+	<a href="https://mp.weixin.qq.com/s/xR9dPPxS2CB2Kmsore8Csw">Swift 周报 第四十六期</a></br>
+	<a href="https://mp.weixin.qq.com/s/AJ2Cbr3C_5w84iIFV6L0dA">Swift 周报 第四十五期</a></br>
+	<a href="https://mp.weixin.qq.com/s/ebqb9XA2AR4BBh1XPgY2Xw">Swift 周报 第四十四期</a></br>
+	<a href="https://mp.weixin.qq.com/s/vgKyLvc8VbSnZJH-MBElCw">Swift 周报 第四十三期</a></br>
+	<a href="https://mp.weixin.qq.com/s/zJ-_-ygCk2uahtaC8oeszg">Swift 周报 第四十二期</a></br>
 	<a href="https://mp.weixin.qq.com/s/9os2vbc5Js5kOi5UK2BNxQ">Swift 周报 第四十一期</a></br>
 	<a href="https://mp.weixin.qq.com/s/IE_F3lL6yeJtElmyTiCDpw">Swift 周报 第四十期</a></br>
 	<a href="https://mp.weixin.qq.com/s/cluSif2VxmPY3vn9kZNQuw">Swift 周报 第三十九期</a></br>
