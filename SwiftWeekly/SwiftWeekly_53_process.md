@@ -242,6 +242,18 @@ Steve Canon(scanon)提到,填充是独立于操作的,并且操作使用每个�
 
 ## 推荐博文
 
+[使用 TipKit 框架发现应用功能的基础知识](https://swiftwithmajid.com/2024/05/07/discovering-app-features-with-tipkit-basics/ "使用 TipKit 框架发现应用功能的基础知识")
+
+**摘要：**  这篇博客介绍了 TipKit 框架的基础知识，该框架可以帮助开发者在应用中突出显示功能特点。文章首先介绍了 TipKit 框架的基本结构，包括如何定义提示并将其显示在应用界面中。然后，文章演示了如何在 SwiftUI 中使用 TipKit 框架，并介绍了如何进行自定义，包括添加消息、图像和操作。此外，还讨论了如何配置提示的显示频率和存储位置，以及在 UIKit 中如何使用 TipKit 框架。最后，文章提到了一些在测试和调试中可能有用的 TipKit 框架提供的调试功能。
+
+[SwiftData枚举字段Predicate失效](https://juejin.cn/post/7366075411166445618/ "SwiftData枚举字段Predicate失效")
+
+**摘要：**  在使用 SwiftData 进行枚举属性过滤数据时，遇到了无法直接在谓词中使用枚举进行比较的问题。尝试使用枚举的 rawValue 属性进行比较时，也出现了错误。通过分析 SwiftData 和 SwiftUI 的闭源代码，发现了问题的根本原因，并提出了一个临时解决方案：在模型中添加一个非持久化的属性来存储枚举值，以解决枚举比较和 rawValue 比较无法使用的问题。作者总结指出，SwiftUI 和 SwiftData 在功能完备性上存在一些小瑕疵，未来将继续尝试改进。
+
+
+[Swift 二进制组件getTypeContextDescriptor crash 分析](https://juejin.cn/post/7355763456082083880/ "Swift 二进制组件getTypeContextDescriptor crash 分析")
+
+**摘要：**  本文分析了在使用内网的某二进制组件 BinaryPodA 时触发的 Swift 崩溃问题，发现是由于编译器/链接器在优化中将两个不同类型的实现合并导致的。通过逆向分析和调试，发现了问题的根源，并提出了长期和短期的解决方案。长期方案是确认修复是否已合入上游并被 Xcode Toolchain 使用，并进一步修复可能的其他 bug。短期方案是使用类似 magic() 函数的方式规避问题。
 
 ## 话题讨论
 
