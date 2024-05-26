@@ -113,6 +113,18 @@ Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广
 
 ## 推荐博文
 
+[Swift 中的捕获列表：弱引用、强引用和无主引用之间的区别](https://www.hackingwithswift.com/articles/179/capture-lists-in-swift-whats-the-difference-between-weak-strong-and-unowned-references/ "Swift 中的捕获列表：弱引用、强引用和无主引用之间的区别")
+
+**摘要：** 这篇博客深入探讨了闭包捕获列表（Capture lists）在 Swift 中的应用，特别是在解决强引用循环（retain cycles）和内存管理方面的作用。文章先介绍了闭包捕获列表的基本概念和使用方法，然后详细讨论了其中的三种引用类型：强引用（strong）、弱引用（weak）、无主引用（unowned），以及它们在不同场景下的应用和注意事项。此外，作者还探讨了在闭包捕获过程中可能遇到的常见问题，并提供了相应的解决方案和建议。这篇博客通过丰富的例子和详细的解释，帮助读者深入理解闭包捕获列表的原理和实践应用，以及如何避免常见的内存管理问题。
+
+[RxSwift 6 更新了什么](https://dev.to/freak4pc/what-s-new-in-rxswift-6-2nog/ "RxSwift 6 更新了什么")
+
+**摘要：** 文章详细介绍了 RxSwift 6 带来了一系列增强和新功能，旨在简化和改进 Swift 中的响应式编程。从 Binder 迁移到 RxSwift，到使用动态成员查找自动合成 Binder，开发人员可以期待更流畅、更高效的编码体验。重要新增功能包括用于更好地管理内存的 withUnretained 操作符，引入了不可失败流 Infallible，以及像 decode 和 distinctUntilChange(at:) 这样的新操作符。Variadic drive() 和 emit() 操作符提供了更大的绑定灵活性，而 Single 的改进使其与 Swift 的 Result 类型更加一致。ReplayRelay、DisposeBag 函数构建器以及更好的 XCFramework 支持进一步增强了 RxSwift 的可用性和性能。这些更新，加上大量操作符重命名和错误修复，使 RxSwift 6 成为 Swift 中响应式编程的重要进步。
+
+
+[Swift中的任务组](https://swiftsenpai.com/swift/understanding-task-groups/ "Swift中的任务组")
+
+**摘要：**  文章介绍了Swift中的任务组，它是一组并发运行的子任务的集合，只有当所有子任务都完成执行时才返回。文章涵盖了如何创建任务组、向其中添加子任务以及收集所有子任务的结果。任务组的关键行为，包括子任务独立并且并发运行，任务组只有在所有子任务完成执行时才返回。作者演示了如何使用withTaskGroup创建任务组，并在任务组的主体内使用addTask方法添加子任务。文章在左后解释了如何使用循环收集所有子任务的结果，并提供了一个示例代码片段来说明整个过程。示例代码的输出确认了所有子任务都是并发运行的，并且任务组只有在所有子任务完成后才返回。
 
 ## 话题讨论
 
