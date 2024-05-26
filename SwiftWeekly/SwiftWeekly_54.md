@@ -8,25 +8,27 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：苹果iPhone SE 4售价曝光
+> 新闻和社区：苹果 iPhone SE 4 售价曝光
 > 
-> 提案：
+> 提案：不可复制的标准库原语提案正在审查
 > 
-> Swift 论坛：
+> Swift 论坛：讨论嵌套类型无法识别递归方法中的协议一致性
 >
-> 推荐博文：
+> 推荐博文：RxSwift 6 更新了什么
 >
 > **话题讨论：** 
 > 
-> 
+> 《2024歌手》节目近期强势来袭，如火如荼、异常火爆，多国歌王齐聚一堂，精彩不断。都说音乐是不分国界与种族的，但歌曲却有着不同的种类，那么你心目中的天籁是怎样的类型呢？
 >
 >**上期话题结果**
 
+![](https://files.mdnice.com/user/17787/51bb9f4b-4d4e-433c-bbad-7bebbb9b08a9.jpg)
 
+通过投票结果可以发现，更多的人购买 iPad 是为了体验与收集不同的新功能。新鲜劲过去之后也只能沦为看电视剧的工具。建议大家理性消费。
 
 ## 新闻和社区  
 
-### 苹果上架iPhone 14/Pro官翻机：起售价不到5000元
+### 苹果上架 iPhone 14/Pro 官翻机：起售价不到 5000 元
 
 2024 年 5 月 26 日
 
@@ -48,7 +50,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 同时苹果还承诺，所有翻新 iPhone 均可享受一年保修服务以及免费的送货和退货服务。（来源：快科技）
 
-### 苹果iPhone SE 4售价曝光
+### 苹果 iPhone SE 4 售价曝光
 
 2024 年 5 月 23 日
 
@@ -62,7 +64,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ![](https://d.ifengimg.com/w600_h926_ablur_q90_webp/x0.ifengimg.com/res/2024/58F45C098A24F41C2A04850ABEC7D1947DC189EB_size214_w600_h926.jpg)
 
-### 苹果针对欧盟20亿美元罚单提起上诉 双方另一场“缠斗”已跨越近八年
+### 苹果针对欧盟 20 亿美元罚单提起上诉 双方另一场“缠斗”已跨越近八年
 
 2024 年 5 月 23 
 
@@ -94,10 +96,51 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 通过的提案
+
+[SE-0436](https://github.com/apple/swift-evolution/blob/main/proposals/0436-objc-implementation.md "SE-0436") **Objective-C 在 Swift 中的实现** 提案通过审查。该提案已在 **第五十三期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0435](https://github.com/apple/swift-evolution/blob/main/proposals/0435-swiftpm-per-target-swift-language-version-setting.md "SE-0435") **每个目标的 Swift 语言版本** 提案通过审查。该提案已在 **第五十三期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0430](https://github.com/apple/swift-evolution/blob/main/proposals/0430-transferring-parameters-and-results.md "SE-0430") **transferring 参数和结果值的隔离区域** 该提案已在 **五十期周报** 正在审查的提案模块做了详细介绍。在第**五十二期周报**时被拒绝。本期重新恢复审查。本期该提案通过审查。
+
+### 正在审查的提案
+
+[SE-0436](https://github.com/apple/swift-evolution/blob/main/proposals/0436-objc-implementation.md "SE-0436") **不可复制的标准库原语** 提案正在审查。
+
+**相关提案：**
+
+* SE-0377 借用和消耗参数所有权修饰符
+* SE-0390 不可复制的结构体和枚举
+* SE-0426 BitwiseCopyable
+* SE-0427 不可复制的泛型
+* SE-0429 不可复制值的部分消耗
+* SE-0432 对不可复制类型的借用和消耗模式匹配
+
+在此提案中，我们扩展了标准库中的以下泛型类型，使其支持不可复制的类型参数：
+
+* `enum Optional<Wrapped: ~Copyable>`
+* `enum Result<Success: ~Copyable, Failure: Error>`
+* `struct MemoryLayout<T: ~Copyable>`
+* `struct UnsafePointer<Pointee: ~Copyable>`
+* `struct UnsafeMutablePointer<Pointee: ~Copyable>`
+* `struct UnsafeBufferPointer<Element: ~Copyable>`
+* `struct UnsafeMutableBufferPointer<Element: ~Copyable>`
+* `class ManagedBuffer<Header, Element: ~Copyable>`
+* `struct ManagedBufferPointer<Header, Element: ~Copyable>`
+
+`Optional` 和 `Result` 变得有条件地可复制，其可复制性继承自其类型参数。上述所有其他类型仍然是无条件可复制的，与其类型参数的可复制性无关。
+
+我们还更新了一个标准协议，以允许不可复制的符合类型：
+
+* `protocol ExpressibleByNilLiteral: ~Copyable`
 
 ## Swift论坛
+
 1) 讨论[泛型实现不适用于具体类型](https://forums.swift.org/t/generic-implementation-doesnt-work-with-concrete-types/72022 "泛型实现不适用于具体类型")
+
 **内容概括**
+
 用户正尝试在 Swift 中创建一个通用实现来处理更新存储的操作，但他们在具体类型方面遇到了困难。他们提供了一个使用泛型的示例，该示例具有适用于特定类型（“State”、“Add”和“Remove”）的“Updater”结构。“Updater”可以使用“Add”或“Remove”修饰符来修改“State”对象，并且此特定实现有效。
 
 但是，在尝试创建一个更通用的函数来处理更新时，他们遇到了一个问题：该函数无法确定要使用哪种特定的“apply”方法，从而导致“Add”和“Remove”的实现之间产生混淆。
@@ -105,7 +148,9 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 然后，用户尝试了一种替代方法，即直接将“apply”方法添加到“State”结构中，这种方法有效并且允许更方便的代码。尽管如此，在保持相同功能和便利性的同时使方法通用化还是存在问题。用户正在寻求一种解决方案，以通用方式实现这些操作，而不会失去易用性或功能性。
 
 2) 提议[SE-0437：将标准库原语推广至不可复制类型](https://forums.swift.org/t/se-0437-generalizing-standard-library-primitives-for-non-copyable-types/72020 "SE-0437：将标准库原语推广至不可复制类型")
+
 **内容概括**
+
 Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广到不可复制类型。审查期持续到 2024 年 6 月 4 日。
 
 该提案对 Optional、Result 和其他不安全和托管缓冲区类型进行了更改，旨在提供更清晰的信息和必要的调整，尤其是关于消费更改。该提案与早期的 Swift Evolution 提案一致，并且看起来很合理，尽管由于消费等新概念可能会出现潜在的编译器错误。
@@ -117,7 +162,9 @@ Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广
 总体而言，该提案似乎是朝着解决 Swift 标准库中的写时复制行为和性能控制的更广泛问题迈出的一步。
 
 3) 提议[RFC：允许工具版本 >= 6.0 中的包级依赖循环](https://forums.swift.org/t/rfc-allowing-package-level-dependency-cycles-in-tools-version-6-0/72021 "RFC：允许工具版本 >= 6.0 中的包级依赖循环")
+
 **内容概括**
+
 该提案寻求对 Swift 工具 6.0 版及更高版本依赖关系解析的更改的反馈。当前禁止包级依赖循环的规则将被取消，允许包相互依赖，只要它们的目标（模块）不形成循环。例如，包 A 可以依赖于包 B，反之亦然，只要它们的产品/目标不相互依赖。
 
 此更改针对小众用例，例如测试框架，在这种情况下，库使用与框架本身用于测试的相同框架是合理的。
@@ -127,10 +174,13 @@ Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广
 对于那些对详细更改感兴趣的人，该提案包含指向 GitHub 上特定拉取请求的链接。作者认为这种变化是可管理的，不会造成交易破坏，但开发人员必须意识到在这些情况下发生源代码破坏性变化的可能性。
 
 4) 讨论[嵌套类型无法识别递归方法中的协议一致性](https://forums.swift.org/t/nested-types-dont-recognize-protocol-conformance-in-recursive-methods/72023 "嵌套类型无法识别递归方法中的协议一致性")
+
 **内容概括**
+
 用户在 Swift 中遇到了嵌套类型和递归方法中的协议一致性问题。他们的场景涉及 `Element` 和 `Container` 协议，其中 `Container` 符合 `Element` 并且可以包含其他元素，包括嵌套容器。
 
-问题描述
+**问题描述**
+
 用户定义协议和类型：
 
 - **协议**：`Element` 和 `Container`（其中包括符合 `Element` 的关联类型 `Child`）。
@@ -138,35 +188,44 @@ Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广
 
 然后，他们扩展 `Container` 以包含 `action()` 方法，该方法的行为取决于 `Child` 是否也是 `Container`。
 
-预期行为
+**预期行为**
+
 对于嵌套容器，`action()` 方法应根据 `Child` 的类型识别并递归调用适当的 `action()` 方法。
 
-观察到的行为
+**观察到的行为**
+
 该方法正确识别并打印第一级嵌套的消息，但无法识别更深的层次。具体来说，对于三重嵌套容器，它无法正确将第二级容器识别为容器。
 
-解决方法
+**解决方法**
+
 手动解决方法涉及添加具有更具体的 `where` 子句的其他方法重载，但这不可扩展或不优雅。
 
-用户的期望结果
+**用户的期望结果**
+
 他们希望 `action()` 方法能够递归地了解类型一致性，而无需手动指定每个嵌套级别。
 
-附加目标
+**附加目标**
+
 用户还希望实现一个 `flatten()` 方法，该方法返回所有元素的平面数组，正确识别嵌套容器和非容器。
 
-问题和挑战
-1. **为什么会发生这种情况：**Swift 的类型系统和协议一致性检查不像这种场景所需的那样动态或递归。如果没有明确的类型约束，Swift 不会自动推断嵌套一致性。
+**问题和挑战**
 
-2. **所需方法：**一种处理任意嵌套级别的递归方法，正确识别和处理嵌套容器。
+1. **为什么会发生这种情况：** Swift 的类型系统和协议一致性检查不像这种场景所需的那样动态或递归。如果没有明确的类型约束，Swift 不会自动推断嵌套一致性。
 
-解决方案
+2. **所需方法：** 一种处理任意嵌套级别的递归方法，正确识别和处理嵌套容器。
+
+**解决方案**
+
 用户寻求一种更动态的解决方案来管理递归方法中的类型感知，从而实现对嵌套容器的高效且可扩展的处理。他们需要一种方法将嵌套容器展平为单个元素数组，同时让编译器理解类型关系。
 
-结论
+**结论**
+
 用户在涉及嵌套类型的递归方法中遇到了 Swift 协议一致性检查的限制。他们希望找到一种解决方案，允许动态和递归类型处理，使 `action()` 和 `flatten()` 等方法能够与嵌套容器无缝协作。
 
-
 5) 讨论[多个变量声明中的优先级](https://forums.swift.org/t/precedence-in-multiple-variable-declaration/72034 "多个变量声明中的优先级")
+
 **内容概括**
+
 用户正在寻求澄清 Swift 中关于多个变量声明优先级的特定行为。他们提供了代码示例，其中变量赋值的顺序似乎会导致意外的默认值。
 
 在第一个示例中，他们观察到，当以“let y = f(x), x = 100”的顺序声明变量“y”和“x”时，“y”默认为零而不是 100，尽管“x”在语句的后面被赋值。
@@ -181,19 +240,32 @@ Swift 社区目前正在审查 SE-0437，该提案提议将标准库原语推广
 
 [Swift 中的捕获列表：弱引用、强引用和无主引用之间的区别](https://www.hackingwithswift.com/articles/179/capture-lists-in-swift-whats-the-difference-between-weak-strong-and-unowned-references/ "Swift 中的捕获列表：弱引用、强引用和无主引用之间的区别")
 
-**摘要：** 这篇博客深入探讨了闭包捕获列表（Capture lists）在 Swift 中的应用，特别是在解决强引用循环（retain cycles）和内存管理方面的作用。文章先介绍了闭包捕获列表的基本概念和使用方法，然后详细讨论了其中的三种引用类型：强引用（strong）、弱引用（weak）、无主引用（unowned），以及它们在不同场景下的应用和注意事项。此外，作者还探讨了在闭包捕获过程中可能遇到的常见问题，并提供了相应的解决方案和建议。这篇博客通过丰富的例子和详细的解释，帮助读者深入理解闭包捕获列表的原理和实践应用，以及如何避免常见的内存管理问题。
+**摘要：** 这篇博客深入探讨了闭包捕获列表（Capture lists）在 Swift 中的应用，特别是在解决强引用循环（retain cycles）和内存管理方面的作用。文章先介绍了闭包捕获列表的基本概念和使用方法，然后详细讨论了其中的三种引用类型：强引用（strong）、弱引用（weak）、无主引用（unowned），以及它们在不同场景下的应用和注意事项。
+
+此外，作者还探讨了在闭包捕获过程中可能遇到的常见问题，并提供了相应的解决方案和建议。这篇博客通过丰富的例子和详细的解释，帮助读者深入理解闭包捕获列表的原理和实践应用，以及如何避免常见的内存管理问题。
 
 [RxSwift 6 更新了什么](https://dev.to/freak4pc/what-s-new-in-rxswift-6-2nog/ "RxSwift 6 更新了什么")
 
-**摘要：** 文章详细介绍了 RxSwift 6 带来了一系列增强和新功能，旨在简化和改进 Swift 中的响应式编程。从 Binder 迁移到 RxSwift，到使用动态成员查找自动合成 Binder，开发人员可以期待更流畅、更高效的编码体验。重要新增功能包括用于更好地管理内存的 withUnretained 操作符，引入了不可失败流 Infallible，以及像 decode 和 distinctUntilChange(at:) 这样的新操作符。Variadic drive() 和 emit() 操作符提供了更大的绑定灵活性，而 Single 的改进使其与 Swift 的 Result 类型更加一致。ReplayRelay、DisposeBag 函数构建器以及更好的 XCFramework 支持进一步增强了 RxSwift 的可用性和性能。这些更新，加上大量操作符重命名和错误修复，使 RxSwift 6 成为 Swift 中响应式编程的重要进步。
+**摘要：** 文章详细介绍了 RxSwift 6 带来了一系列增强和新功能，旨在简化和改进 Swift 中的响应式编程。从 Binder 迁移到 RxSwift，到使用动态成员查找自动合成 Binder，开发人员可以期待更流畅、更高效的编码体验。
 
+重要新增功能包括用于更好地管理内存的 withUnretained 操作符，引入了不可失败流 Infallible，以及像 decode 和 `distinctUntilChange(at:)` 这样的新操作符。`Variadic drive()` 和 `emit()` 操作符提供了更大的绑定灵活性，而 Single 的改进使其与 Swift 的 Result 类型更加一致。`ReplayRelay`、`DisposeBag` 函数构建器以及更好的 `XCFramework` 支持进一步增强了 `RxSwift` 的可用性和性能。这些更新，加上大量操作符重命名和错误修复，使 RxSwift 6 成为 Swift 中响应式编程的重要进步。
 
-[Swift中的任务组](https://swiftsenpai.com/swift/understanding-task-groups/ "Swift中的任务组")
+[Swift 中的任务组](https://swiftsenpai.com/swift/understanding-task-groups/ "Swift 中的任务组")
 
-**摘要：**  文章介绍了Swift中的任务组，它是一组并发运行的子任务的集合，只有当所有子任务都完成执行时才返回。文章涵盖了如何创建任务组、向其中添加子任务以及收集所有子任务的结果。任务组的关键行为，包括子任务独立并且并发运行，任务组只有在所有子任务完成执行时才返回。作者演示了如何使用withTaskGroup创建任务组，并在任务组的主体内使用addTask方法添加子任务。文章在左后解释了如何使用循环收集所有子任务的结果，并提供了一个示例代码片段来说明整个过程。示例代码的输出确认了所有子任务都是并发运行的，并且任务组只有在所有子任务完成后才返回。
+**摘要：**  文章介绍了 Swift 中的任务组，它是一组并发运行的子任务的集合，只有当所有子任务都完成执行时才返回。文章涵盖了如何创建任务组、向其中添加子任务以及收集所有子任务的结果。任务组的关键行为，包括子任务独立并且并发运行，任务组只有在所有子任务完成执行时才返回。
+
+作者演示了如何使用 `withTaskGroup` 创建任务组，并在任务组的主体内使用 `addTask` 方法添加子任务。文章在左后解释了如何使用循环收集所有子任务的结果，并提供了一个示例代码片段来说明整个过程。示例代码的输出确认了所有子任务都是并发运行的，并且任务组只有在所有子任务完成后才返回。
 
 ## 话题讨论
 
+**《2024歌手》节目近期强势来袭，如火如荼、异常火爆，多国歌王齐聚一堂，精彩不断。都说音乐是不分国界与种族的，但歌曲却有着不同的种类，那么你心目中的天籁是怎样的类型呢？**
+
+1. 华语金曲YYDS。
+2. 英文歌曲更显优雅。
+3. 粤语经典经久不衰。
+4. 民谣淳朴宛转悠扬。
+
+欢迎在文末留言参与讨论。
 
 ## 关于我们
 
