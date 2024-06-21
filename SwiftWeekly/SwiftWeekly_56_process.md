@@ -30,7 +30,106 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+1) 宣布[Swift 项目的新 GitHub 组织](https://forums.swift.org/t/new-github-organization-for-the-swift-project/72336 "Swift 项目的新 GitHub 组织")
+**内容概括**
+Swift编程语言正在迁移到一个专门的GitHub组织（GitHub.com/swiftlang）。这一迁移反映了Swift社区的成长和成熟，并强调了Swift在Apple生态系统之外的多样性。新的GitHub组织将为协作和创新创造更有利的环境，使Swift能够扩展到更多平台和用例。
+迁移将分阶段进行，初始范围包括Swift项目的基础元素，如编译器、核心工具、标准库、核心API、示例、Swift.org网站以及官方客户端和驱动程序等。
+迁移过程将解决几个关键的治理方面，包括新项目整合方法、扩大贡献者基础、明确提交者角色，以及扩展持续集成支持。
+这是一个社区范围的努力，由核心团队、贡献者体验工作组、Swift服务器工作组和网站工作组等多个群体共同推动。迁移将逐步进行，保持完全透明。
+作为第一步，swift-evolution仓库将于今天迁移，其他仓库将在接下来的几周内陆续转移。核心团队对过去十年来为Swift梦想做出贡献的每个人表示深深的感谢，并期待Swift的下一个篇章。
 
+2) 讨论[[已接受] Swift 测试的新方向](https://forums.swift.org/t/accepted-a-new-direction-for-testing-in-swift/72309 "[已接受] Swift 测试的新方向")
+**内容概括**
+将成立 Swift 测试工作组，隶属于生态系统指导小组。
+该愿景是 swift-testing 项目的延续，旨在改进 Swift 的测试 API 和工具。
+语言指导小组和平台指导小组已审核并接受了这一愿景。
+该文档强调了测试的目标和基本设计方法，具体设计将由社区讨论和审核。
+
+然而，有评论指出：
+
+1. 这些变化主要是表面的，focusí于改善易用性和表达能力。
+2. 缺乏解决开发者在测试中遇到的最大问题的雄心，例如没有涉及模拟（mocking）。
+3. 模拟是开发者最struggle的部分，与 Swift 的严格类型系统相矛盾。
+4. 需要更多、更大的创意来真正实现 Swift 测试的"新方向"。
+
+总的来说，这个愿景虽然有所进步，但可能不足以称为测试的"新方向"，还需要更多实质性的改进。
+
+3) 讨论[Swiftly 即将推出的增强功能](https://forums.swift.org/t/upcoming-enhancements-to-swiftly/72361 "Swiftly 即将推出的增强功能")
+**内容概括**
+Swiftly 即将推出的增强功能
+
+Swiftly 是一个命令行工具，帮助用户开始使用 Swift 工具链并在多个版本之间轻松切换。以下是计划中的主要改进:
+
+1. macOS 支持：扩展到 macOS 平台。
+2. 命令代理：允许为不同项目指定特定工具链版本。
+3. 迁移到纯 Swift：将安装脚本逻辑移至 Swiftly 本身。
+4. 移除 GitHub API 依赖：改用 swift.org 获取元数据和更新。
+5. 新功能：
+   - 查询可用工具链
+   - 设置项目默认版本
+   - 改进安装体验
+
+这些改进旨在使 Swiftly 成为 Swift 的默认安装体验，提高易用性和灵活性。
+对于 CI 系统，将考虑提供迁移指南。系统级包管理器仍是最无缝的安装方式，但 Swiftly 提供了更灵活的用户级管理。
+为改善用户体验，计划调整系统依赖项安装流程，提高透明度并保持用户级工具的心智模型。对于 CI 环境，可能会添加检测 root 用户并自动安装依赖的功能。
+总体目标是让 Swift 开发更accessible，并为新手提供更好的体验。
+
+4) 讨论[在某些情况下，“包”访问级别可以是隐式的吗？](https://forums.swift.org/t/can-the-package-access-level-be-implicit-in-certain-contexts/72326 "在某些情况下，“包”访问级别可以是隐式的吗？")
+**内容概括**
+讨论涉及Swift编程语言中`package`访问级别的隐式使用。主要问题是：为什么包类型的成员声明不能默认为package访问级别？
+
+提议的优点：
+1. 减少代码中显式`package`关键字的使用，可能减少约85%。
+2. 如果类型已标记为package，其成员通常也需要相同级别的可见性。
+
+反对意见：
+1. 可能会降低代码的可读性，使读者更难理解代码。
+2. 可能会影响本地推理能力。
+
+讨论还涉及了代码读者如何查找成员引用的问题。对于public、private和fileprivate成员，查找方法明确。而对于internal、package或无显式修饰符的成员，都需要使用全局搜索。
+提议者认为，在大多数成员都是package可见性的情况下，显式的package修饰符可能成为视觉干扰。但如果大多数成员是internal的，则当前做法更好。
+最后，讨论指出，即使采用提议的更改，读者也可以通过一次"跳转到定义"操作来确定类型的访问级别。
+总的来说，这个讨论权衡了代码简洁性和可读性之间的关系，以及对代码作者和读者的影响。
+
+5) 讨论[在 switch case 中绑定枚举](https://forums.swift.org/t/binding-enums-in-a-switch-case/72324 "在 switch case 中绑定枚举")
+**内容概括**
+这个问题讨论了在Swift中如何在switch语句中绑定枚举值。作者提出了两种方法：
+
+1. 使用if let进行可选绑定，然后在switch语句中匹配枚举值。这种方法是有效的。
+2. 作者希望在switch语句中直接处理可选的枚举值，并在每个case中绑定非空值。这种语法在Swift中是无效的，但作者想知道是否有类似的方法可以实现。
+
+作者强调他们主要出于学术原因对这个问题感兴趣，并且关注的是如何在case语句内引用枚举实例，而不是具体的处理逻辑。
+这个问题探讨了Swift语言中枚举处理和模式匹配的高级用法，反映了对语言特性和语法糖的深入思考。
+
+6) 讨论[分布式、分布式集群模块的初学者建议](https://forums.swift.org/t/beginner-advice-for-distributed-distributedcluster-modules/72391 "分布式、分布式集群模块的初学者建议")
+**内容概括**
+主要讨论了分布式系统中的Distributed和DistributedCluster模块的使用建议,特别是针对初学者。作者正在尝试解决Fly.io的Gossip Glomers挑战中的"高效广播"问题,希望使用这些模块来实现节点间的通信和消息传播。
+
+主要内容包括:
+
+1. 作者介绍了他在Elixir/Erlang生态系统中的分布式系统背景。
+2. 解释了"高效广播"挑战的要求:25个程序实例需要形成集群并进行消息广播。
+3. 询问是否有现成的模块可以实现集群、节点发现和通信功能。
+4. 讨论了Swift的ClusterSystem与Erlang节点系统的异同:
+   - 两者都是基于TCP端口的对等节点系统
+   - Erlang有额外的守护进程简化了本地节点发现
+   - Swift目前需要手动编写节点加入代码,但后续可能会改进
+5. 提供了在Swift中启动多个集群节点的代码示例。
+6. 建议改进文档,以便更好地解释节点加入过程和集群形成。
+7. 提出了添加类似Erlang的辅助守护进程的想法,以简化Swift中的集群配置过程。
+
+文章强调了改进文档和用户体验的重要性,以使Swift的分布式系统开发对初学者更加友好。
+
+6) 讨论[为什么assumeIsolated()现在需要T:Sendable？](https://forums.swift.org/t/why-does-assumeisolated-now-require-t-sendable/72344 "为什么assumeIsolated()现在需要T:Sendable？")
+**内容概括**
+这段讨论涉及Swift语言中的区域隔离（Region-Based Isolation, RBI）和并发安全性。主要观点包括：
+
+1. Swift使用"并发域"而非线程作为并发安全的基础，这可能是一个优势。
+2. RBI允许在独立区域间传输非Sendable值，这引入了新的能力和复杂性。
+3. 有人表示，RBI的引入使Swift并发的安全性变得更加难以理解。
+4. 每个新版本的Swift编译器都可能将之前认为安全的操作标记为不安全，这增加了开发者的困惑。
+
+这段讨论反映了Swift并发模型正在不断演进，同时也带来了一些挑战和争议。
 
 ## 推荐博文
 
