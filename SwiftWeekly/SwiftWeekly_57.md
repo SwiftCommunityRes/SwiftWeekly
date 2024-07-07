@@ -8,31 +8,28 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：iPhone 16或将配备可拆卸电池
+> 新闻和社区：iPhone 16 或将配备可拆卸电池
 > 
-> Swift 论坛：
+> 提案：`DebugDescription` 宏提案正在审查
 >
-> 推荐博文：
+> Swift 论坛：讨论 `unless` 关键字的优点
+>
+> 推荐博文：使用 Swift 6 语言模式构建 Swift 包
 >
 > **话题讨论：** 
 > 
-> 
->
->**上期话题结果**
-
-
+> 了解当代年轻人的网络时代“新名词”
 
 ## 新闻和社区  
 
-
-### 消息称苹果又一高管跳槽汽车厂商 这次是加入Rivian
+### 消息称苹果又一高管跳槽汽车厂商 这次是加入 Rivian
 
 2024 年 7 月 4 日
 
 据外媒报道，在苹果近几年跳槽的高管中，有多人是加入了汽车厂商，除了他们汽车项目团队的高管，还有工程副总裁 Mike Abbot，他在去年 4 月份加入了通用汽车，2022 年他们的全球电池开发主管 Soonho Ahn 是跳槽大众。
 
-![](https://upload.techweb.com.cn/s/1080/imgs/2024/0704/1720081763197.jpg)
- 
+![](https://files.mdnice.com/user/47553/916bd9c3-9587-4336-8c33-a9990a463993.png)
+
 而从外媒最新的报道来看，苹果又有一名高管在近期跳槽到了汽车厂商。
 
 近期跳槽汽车厂商的苹果高管，是硬件工程总监杰夫・阿尔维斯（Jeff Alves），他在 2013 年加入苹果，已工作超过 10 年。作为电池工程团队的一员，他在苹果期间参与了多个项目的工作，包括初代 Apple Watch 充电系统的开发，随后也曾参与汽车项目，他的名字也出现在了相关的苹果专利中。
@@ -47,13 +44,13 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 2024 年 6 月 28 日
 
-![](https://pics0.baidu.com/feed/b58f8c5494eef01f10b259225752d92bbe317de9.jpeg?token=4e0a182fac0b09fe5ebbf659dc1e9df5)
+![](https://files.mdnice.com/user/47553/90b8ada6-e09a-4b38-97e1-bbe83e76d9a6.png)
 
 欧洲法规无疑对苹果的产品线产生了影响，它要求苹果公司在 iPhone 上采用 USB-C 接口，然后采用 RCS 接口，以便 Messages 能够更轻松地与全球 Android 用户通信。据 The Information 报道，苹果可能正在研发可拆卸的 iPhone 电池，以符合全球要求。我们可能会在今年秋季的 iPhone 16 上看到它。
 
 去年，欧洲议会通过了一项规定，在欧盟境内销售和分销的智能手机电池必须遵守特定的设计和回收规则。对于智能手机来说，最重要的一点是可以轻松更换电池。该法律适用于不同产品类别的电池，包括电动踏板车和汽车。
 
-![](https://pics3.baidu.com/feed/f31fbe096b63f624693cd670a850d7f61a4ca306.jpeg@f_auto?token=53e4b6a02a889b338cd1d5de5c9cd5c3)
+![](https://files.mdnice.com/user/47553/47e7bf03-a54e-4d25-9578-4c661919cac4.png)
 
 到 2027 年，所有智能手机和可折叠手机都必须符合该标准，但苹果可能会更早。据参与 iPhone 制造的五位人士透露，iPhone 16 机型之一可能会推出一种新的易于更换的电池技术。
 
@@ -63,9 +60,9 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 据 The Information 报道，你仍然需要自己“撬开” iPhone，这仍然不是一个简单的过程，因为所有部件都是通过螺丝连接起来的。当苹果展示这项技术时，它会附带一个警告，即在自行尝试维修之前，它坚持要求你寻求专业帮助。
 
-![](https://pics7.baidu.com/feed/ca1349540923dd543bb85b4be11d8fd09d8248e8.jpeg@f_auto?token=156b2cc69356c1028810376392ffb7e4)
+![](https://files.mdnice.com/user/47553/305ccc2a-ebbb-414e-a7ee-f1ea0b105b2c.png)
 
-如果苹果遵循一系列特定标准，它就可以获得欧盟新电池法的豁免，这些标准包括充电500次后至少保留 83% 的电池容量，充电 1,000 次后至少保留 80% 的电池容量。电池容量确保设备可重复使用，而强制要求减少废弃部件，这样人们就不会在手机无法充电时直接更换手机。(来源：Hi科技前线)
+如果苹果遵循一系列特定标准，它就可以获得欧盟新电池法的豁免，这些标准包括充电500次后至少保留 83% 的电池容量，充电 1，000 次后至少保留 80% 的电池容量。电池容量确保设备可重复使用，而强制要求减少废弃部件，这样人们就不会在手机无法充电时直接更换手机。(来源：Hi科技前线)
 
 ### 苹果头显国行版开售：预约火爆但销量难评
 
@@ -73,7 +70,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 备受期待的苹果头显 Vision Pro 国行版于 6 月 28 日正式发售，售价 29999 元起。苹果中国官网此次专门上线了 Vision Pro 发售倒计时，以秒为单位计算，而且已经开启了 Vision Pro 预约体验。未开售前，北京地区的预约体验已经排到了 7 月 3 日。国行版 Vision Pro 势必掀起讨论热潮，但从销售上说，高昂的售价难免令消费者三思而行，另外，是否有足够匹配国行版 Vision Pro 的生态内容是市场担忧之处。
 
-![](https://pic.rmb.bdstatic.com/bjh/news/d57e76c836f20615947ed546231c415c.jpeg)
+![](https://files.mdnice.com/user/47553/07f67362-8b66-4255-8e21-cea2e557d19b.png)
 
 北京商报记者登录苹果官网看到，想要预约体验 Vision Pro 的消费者需要有一个苹果账号，登录后选择想去的线下门店及时间，相关事宜要通过邮件通知、确认，预约后，消费者可以享受 30 分钟的 Vision Pro Demo 体验，若用户佩戴眼镜，苹果还提醒用户携带眼镜到店，以便选择 Vision Pro 上相应的镜片。
 
@@ -105,11 +102,29 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 通过的提案
+
+[SE-0432](https://github.com/apple/swift-evolution/blob/main/proposals/0432-noncopyable-switch.md "SE-0432") **不可复制类型的借阅和消费模式匹配** 提案通过审查。该提案已在 **第五十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0434](https://github.com/apple/swift-evolution/blob/main/proposals/0434-global-actor-isolated-types-usability.md "SE-0434") **global-actor-isolated 类型的可用性** 提案通过审查。该提案已在 **第五十一期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0439](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0439-trailing-comma-lists.md "SE-0439") **允许在逗号分隔的列表中使用尾随逗号** 提案正在审查。
+
+该提案旨在允许在逗号分隔的列表中使用尾随逗号，这些逗号目前仅限于数组和字典文字，只要有终止符可以实现明确的解析。在 Swift论坛 章节第一小节也有详细介绍。
+
+[SE-0440](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0440-debug-description-macro.md "SE-0440") **DebugDescription 宏** 提案正在审查。
+
+该提案引入了一个新的调试宏 `@DebugDescription` 到标准库中，该宏允许数据类型指定一个自定义摘要，由调试器呈现。此宏改善了调试体验，并简化了调试器类型摘要的维护和交付。它可以代替 `CustomDebugStringConvertible` 的遵从，或者在自定义用例中与之一起使用。
 
 ## Swift论坛
+
 1) 提议[SE-0439：允许在逗号分隔的列表中使用尾随逗号](https://forums.swift.org/t/se-0439-allow-trailing-comma-in-comma-separated-lists/72876 "SE-0439：允许在逗号分隔的列表中使用尾随逗号")
+
 **内容大概**
-这项提案旨在允许在逗号分隔的列表中使用尾随逗号,只要有明确的终止符可以进行无歧义解析。主要动机包括:
+
+这项提案旨在允许在逗号分隔的列表中使用尾随逗号，只要有明确的终止符可以进行无歧义解析。主要动机包括:
 
 1. 提高开发质量:使添加、删除、重新排序或注释最后一个元素变得容易。
 
@@ -123,24 +138,26 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 详细设计:
 
 - 只有在有明确终止符的情况下才支持尾随逗号。
-- 单元素列表允许尾随逗号,但零元素列表不允许。
+- 单元素列表允许尾随逗号，但零元素列表不允许。
 
-该提案不会影响现有有效代码的源代码兼容性,但会改变某些无效代码的解析方式。
+该提案不会影响现有有效代码的源代码兼容性，但会改变某些无效代码的解析方式。
 
-总的来说,这项提案通过允许更灵活的语法来提高代码的可读性和可维护性。
+总的来说，这项提案通过允许更灵活的语法来提高代码的可读性和可维护性。
 
 2) 提议[集合文字](https://forums.swift.org/t/proposal-set-literals/72929 "集合文字")
-**内容大概**
-该提案旨在将集合(Set)提升为Swift中的一等公民。主要观点包括:
 
-1. 集合类型的重要性被低估,应该得到更多关注。
-2. 开发者经常使用数组而非更适合的集合,可能是因为数组声明和使用更简单。
+**内容大概**
+
+该提案旨在将集合(Set)提升为 Swift 中的一等公民。主要观点包括:
+
+1. 集合类型的重要性被低估，应该得到更多关注。
+2. 开发者经常使用数组而非更适合的集合，可能是因为数组声明和使用更简单。
 
 提案的主要内容:
 
-1. 集合类型语法: 使用 `:[Type]` 表示集合类型,例如 `:[Int]` 表示整数集合。
+1. 集合类型语法: 使用 `:[Type]` 表示集合类型，例如 `:[Int]` 表示整数集合。
 
-2. 集合字面量语法: 使用 `:[element1, element2, ...]` 创建集合。
+2. 集合字面量语法: 使用 `:[element1， element2， ...]` 创建集合。
 
 3. 可选的集合操作符:
    - `*` 表示交集
@@ -150,28 +167,32 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 讨论要点:
 
-1. 对于小型数据集,数组和集合的性能差异可能不显著。
-2. 集合的使用应基于对数据结构的理解,而不是盲目选择。
+1. 对于小型数据集，数组和集合的性能差异可能不显著。
+2. 集合的使用应基于对数据结构的理解，而不是盲目选择。
 3. 简单类型(如Int、String、枚举等)更适合用作集合元素。
-4. 在并发编程中,可发送性(Sendable)是一个考虑因素,但不应成为唯一决定因素。
+4. 在并发编程中，可发送性(Sendable)是一个考虑因素，但不应成为唯一决定因素。
 
-总的来说,这个提案旨在通过引入更简洁的语法来促进集合的使用,但也引发了关于何时使用集合以及性能考虑的讨论。
+总的来说，这个提案旨在通过引入更简洁的语法来促进集合的使用，但也引发了关于何时使用集合以及性能考虑的讨论。
 
-3) 讨论[“unless”关键字的优点](https://forums.swift.org/t/merits-of-the-unless-keyword/72909 "“unless”关键字的优点")
+3) 讨论[unless 关键字的优点](https://forums.swift.org/t/merits-of-the-unless-keyword/72909 "unless 关键字的优点")
+
 **内容大概**
-讨论关于引入"unless"关键字的讨论, 作者提出重新考虑引入"unless"关键字的想法,作为"if"的补充对立词。主要观点如下:
 
-1. "unless"的可读性较好,但在"unless...else"结构中可能不太直观。
-2. 仅仅为了交换if...else块的顺序并不是一个足够有说服力的理由。
-3. 作者常常希望有一个类似"guard"但不要求退出的结构。
-4. 引入新关键字会增加Swift的复杂性,需要权衡利弊。
-5. 作为替代方案,作者建议考虑引入类似Python的"not"关键字。
-6. 总体而言,作者认为"unless"的好处相对较小,但仍值得讨论。
+讨论关于引入 "unless" 关键字的讨论， 作者提出重新考虑引入 "unless" 关键字的想法，作为 "if" 的补充对立词。主要观点如下:
 
-作者还提到,尽管使用Swift多年,有时仍会习惯性地写出"if not ..."这样的语法,并对Swift不支持这种优雅的表达方式感到遗憾。
+1. "unless" 的可读性较好，但在 "unless...else" 结构中可能不太直观。
+2. 仅仅为了交换 if...else 块的顺序并不是一个足够有说服力的理由。
+3. 作者常常希望有一个类似 "guard" 但不要求退出的结构。
+4. 引入新关键字会增加 Swift 的复杂性，需要权衡利弊。
+5. 作为替代方案，作者建议考虑引入类似 Python 的 "not" 关键字。
+6. 总体而言，作者认为 "unless" 的好处相对较小，但仍值得讨论。
+
+作者还提到，尽管使用 Swift 多年，有时仍会习惯性地写出 "if not ..." 这样的语法，并对 Swift 不支持这种优雅的表达方式感到遗憾。
 
 4) 讨论[为什么 Swift 采用逗号？](https://forums.swift.org/t/why-did-swift-adopt-the-use-of-commas/72906 "为什么 Swift 采用逗号？")
+
 **内容大概**
+
 我之所以问这个问题，是因为我关注目前正在审核的允许尾随逗号的提案 7。
 
 Swift 一开始为什么要使用逗号？
@@ -179,23 +200,26 @@ Swift 一开始为什么要使用逗号？
 如果没有逗号，解析 Swift 程序会有多难？
 
 有逗号：
+
 ```Swift
 // Declare function
-func foo (arg: Int, arg2: Int)
+func foo (arg: Int， arg2: Int)
 
 // Invoke it
-foo (arg1: 2, arg2: 2)
+foo (arg1: 2， arg2: 2)
 
 // Tuple
-var u = (1, 2, 3)
+var u = (1， 2， 3)
 
 // Array
-var v = [1, 2, 3]
+var v = [1， 2， 3]
 
 // Declare generic functiom
-func foo <U, V> (u:U, v: V) -> (U, V)
+func foo <U， V> (u:U， v: V) -> (U， V)
 ```
+
 没有逗号：
+
 ```Swift
 // Declare function
 func foo (arg: Int arg2: Int)
@@ -212,13 +236,17 @@ var v = [1 2 3]
 // Declare generic function
 func foo <U V> (u: U v: V) -> (U V)
 ```
-可以将其视为校验和和纠错码。冗余是关键。即使有效的程序可以在没有逗号的情况下被明确解析，但逗号的存在使得从部分无效的语法中推断含义变得更加容易，甚至使人类能够更快地浏览代码，这也可能导致眼睛和大脑之间的“数据丢失”，而冗余使您能够更轻松地在头脑中重建数据。
+
+可以将其视为校验和和纠错码。冗余是关键。即使有效的程序可以在没有逗号的情况下被明确解析，但逗号的存在使得从部分无效的语法中推断含义变得更加容易，甚至使人类能够更快地浏览代码，这也可能导致眼睛和大脑之间的“数据丢失”，而冗余使你能够更轻松地在头脑中重建数据。
 
 5) 讨论[如何知道值类型是否包含堆分配和引用计数](https://forums.swift.org/t/how-to-know-if-a-value-type-includes-heap-allocations-and-ref-counting/72919 "如何知道值类型是否包含堆分配和引用计数")
+
 **内容大概**
+
 讨论围绕着如何知道值类型是否包含堆分配和引用计数
 
 Swift性能特征理解：
+
 1. 堆分配比栈分配更昂贵，并产生引用计数成本。
 2. 引用类型（如类）总是使用堆分配。
 3. 写时复制(COW)值类型（如Array）也使用堆分配。
@@ -237,28 +265,38 @@ Swift性能特征理解：
 总结：了解值类型的内存分配和引用计数特征对于优化Swift代码很重要，但目前缺乏有效的工具和文档来获取这些信息。
 
 6) 讨论[如何告诉编译器非隔离对象可以安全地传递到参与者的域中？](https://forums.swift.org/t/how-to-tell-the-compiler-that-the-nonisolated-object-is-safe-to-pass-into-an-actors-domain/72806 "如何告诉编译器非隔离对象可以安全地传递到参与者的域中？")
+
 **内容大概**
+
 问题概述：
+
 作者遇到了一个编译器相关的问题，涉及如何在 Swift 中安全地在 actor 和非隔离对象之间传递数据。具体来说，作者想要告诉编译器，一个旧的 Objective-C 委托和一个 actor 使用相同的底层串行队列，因此在它们之间传递非隔离对象是安全的。
 
 代码示例：
+
 作者提供了一段伪代码，展示了 `Delegate` 类和 `Actor` 类的实现。问题出现在 `Actor` 类的 `usesObject()` 方法中，编译器报错说非可发送类型 `OtherObjCObject` 不能跨越 actor 边界。
 
 当前解决方案：
+
 作者目前的解决方法是为整个包含 `OtherObjCObject` 的库关闭并发检查，但这并不理想，因为该库还包含其他内容。
 
 期望的解决方案：
+
 作者希望能够更精确地告诉编译器，在特定情况下 `OtherObjCObject` 是安全可发送的。例如，能够声明 `var stream: AsyncStream<OtherObjCObject & @unchecked Sendable>` 将会很有帮助，但目前这种语法不起作用。
 
 其他注释：
+
 作者还提到，另一种有用的处理方法是将非 Sendable 对象包装在 @unchecked Sendable 结构中，但在这种情况下，由于需要在 API 调用中进行映射和过滤，这种方法需要将这些细节暴露给公共 API。
 
-总结：
+**总结：**
+
 作者正在寻求一种更精确和灵活的方法来处理 Swift 并发中的隔离域和数据传递问题，特别是在处理遗留 Objective-C 代码时。
 
 7) 讨论[为什么当保留计数非零时会调用“deinit”？](https://forums.swift.org/t/why-would-deinit-be-called-when-retain-count-is-non-zero/72924 "为什么当保留计数非零时会调用“deinit”？")
+
 **内容大概**
-这个讨论主要涉及Swift类实例在仍被多个对象保留时意外被释放的问题。主要观点如下：
+
+这个讨论主要涉及 Swift 类实例在仍被多个对象保留时意外被释放的问题。主要观点如下：
 
 1. 预期行为：类实例只有在不再被强引用（引用计数为零）时才会被释放。
 2. 观察到的异常：即使引用计数非零，`deinit` 方法仍被调用。
@@ -282,23 +320,27 @@ Swift性能特征理解：
 
 [SwiftUI 中 List 的 liststyle 样式及使用详解添加、移动、删除、自定义滑动](https://juejin.cn/post/7387303471148843027/ "SwiftUI 中 List 的 liststyle 样式及使用详解添加、移动、删除、自定义滑动")
 
-**摘要：** 文章详细介绍了在 SwiftUI 中使用 List 组件的各种功能和样式定制方法。首先，文章展示了如何使用List显示静态数据和动态数据，包括如何通过Identifiable协议优化动态数据的显示。接着，讨论了如何自定义List的样式，包括背景色、内间距、分割线颜色和显示与隐藏。此外，还介绍了不同的 List 样式选项，如 plain 、grouped 等，并展示了如何使用 Section 进行分组显示，以及自定义 Header 和Footer 。文章还深入讨论了如何在 List 中实现元素的添加、移动和删除功能，以及如何自定义左滑操作按钮。最后，提供了完整的示例代码和效果图，帮助读者全面理解和应用这些功能。
+**摘要：** 文章详细介绍了在 SwiftUI 中使用 List 组件的各种功能和样式定制方法。首先，文章展示了如何使用List显示静态数据和动态数据，包括如何通过 `Identifiable` 协议优化动态数据的显示。接着，讨论了如何自定义List的样式，包括背景色、内间距、分割线颜色和显示与隐藏。此外，还介绍了不同的 List 样式选项，如 plain 、grouped 等，并展示了如何使用 Section 进行分组显示，以及自定义 Header 和Footer 。文章还深入讨论了如何在 List 中实现元素的添加、移动和删除功能，以及如何自定义左滑操作按钮。最后，提供了完整的示例代码和效果图，帮助读者全面理解和应用这些功能。
 
 [Swift 解决手势冲突的方案](https://juejin.cn/post/7386958406135136306/ "Swift 解决手势冲突的方案")
 
 **摘要：**  这篇文章探讨了在 Swift 开发中处理手势冲突的多种方法。首先介绍了手势冲突的概念，即多个手势识别器竞争同一事件可能导致的问题。随后详细讨论了以下解决方案：
 
 1. 使用手势识别器代理来控制哪些手势可以同时识别。
-2. 调整手势识别器的属性，如设置 cancelsTouchesInView 为 false 以避免阻止其他手势的触摸事件，以及调整 delaysTouchesBegan 和 delaysTouchesEnded 来优化触摸事件的延迟。
-3. 使用 require(toFail:) 方法确保一个手势在另一个失败后再尝试识别。
+2. 调整手势识别器的属性，如设置 `cancelsTouchesInView` 为 false 以避免阻止其他手势的触摸事件，以及调整 `delaysTouchesBegan` 和 `delaysTouchesEnded` 来优化触摸事件的延迟。
+3. 使用 `require(toFail:)` 方法确保一个手势在另一个失败后再尝试识别。
 4. 创建自定义手势识别器以实现复杂的手势逻辑。
-5. 理解事件传播链，通过调整视图层级或自定义 hitTest(_:with:) 方法来影响事件的传播。
+5. 理解事件传播链，通过调整视图层级或自定义 `hitTest(_:with:)` 方法来影响事件的传播。
 
 文章还提供了一个具体案例，演示了如何在包含 UITableView 的弹出视图中避免手势冲突。通过这些技术，开发者可以更好地优化 iOS 应用中的用户交互体验。
 
-
 ## 话题讨论
 
+**了解当代年轻人的网络时代“新名词”**
+
+![](https://files.mdnice.com/user/47553/102b1f0b-e782-4dae-bf26-7271c27fb431.png)
+
+你还知道有哪些？欢迎在评论区留言
 
 ## 关于我们
 
