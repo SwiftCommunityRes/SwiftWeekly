@@ -10,15 +10,15 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：iPhone 17 设计新动向：苹果放弃 RCC 材料
 > 
-> 提案：
+> 提案：正式化“语言模式”术语提案正在审查
 >
-> Swift 论坛：
+> Swift 论坛：提议使用保留字符的部分应用
 >
-> 推荐博文：
+> 推荐博文：迈向无数据竞争错误的 Swift 包生态系统
 >
 > **话题讨论：** 
 > 
-> 
+> 无人驾驶“萝卜快跑”横空出世，你认为无人驾驶出租车最终会取代传统驾驶员出租车吗？
 
 ## 新闻和社区  
 
@@ -30,7 +30,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内部空间，使手机有机会打造更薄的机身或探索其他利用新增空间的方法。然而，苹果及其供应商在使用 RCC 方面一直面临挑战，主要是因为 RCC 在耐久性和脆弱性方面存在问题，并且无法通过苹果的严格跌落测试。
 
-![](https://pics7.baidu.com/feed/aa18972bd40735fa9c42585f6e795abd0e240858.jpeg@f_auto?token=557d79b3ba69500ddd7251497b9f390c)
+![](https://files.mdnice.com/user/47553/195a294c-da21-42c6-8108-c61c4d6255a7.png)
 
 郭明錤在报告中指出，由于 RCC 无法满足苹果对品质的高标准要求，因此 iPhone 17 将不会采用 RCC 作为 PCB 主板材料。这一决策对苹果公司的产品设计和市场策略都可能产生一定影响，同时也可能为竞争对手提供市场机会。(来源：中关村在线)
 
@@ -64,7 +64,7 @@ RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内�
 
 2024 年 7 月 18 日
 
-![](https://pics1.baidu.com/feed/7af40ad162d9f2d35f085f87d390dc1d6227ccc3.jpeg@f_auto?token=60ae0c460a14d51820f6dd563cd777e1)
+![](https://files.mdnice.com/user/47553/abfe96d1-692e-48c7-b7e0-54e0994f5c5c.png)
 
 据彭博社报道，苹果公司正在积极洽谈从各大好莱坞电影公司购买更多电影版权，以扩充其流媒体平台 Apple TV + 的内容库。
 
@@ -84,76 +84,95 @@ RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内�
 
 ## 提案
 
+### 通过的提案
+
+[SE-0423](https://github.com/apple/swift-evolution/blob/main/proposals/0423-dynamic-actor-isolation.md "SE-0423") **非严格并发上下文中的动态 actor 隔离执行** 提案通过审查。该提案已在 **第四十八期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0439](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0439-trailing-comma-lists.md "SE-0439") **允许在逗号分隔的列表中使用尾随逗号** 提案通过审查。该提案已在 **第五十七期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0441](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0441-formalize-language-mode-terminology.md "SE-0441") **正式化“语言模式”术语** 提案正在审查。
+
+“快速版本”一词可以指工具链/编译器版本或语言模式。这种模糊性是混淆的一贯根源。该提案正式化了工具选项和API中的术语语言模式。
 
 ## Swift论坛
 
 1) 提议[Unicode 规范化](https://forums.swift.org/t/pitch-unicode-normalization/73240 "Unicode 规范化")
-**内容大概**
-这是一个关于在Swift标准库中引入Unicode标准化功能的提案。主要内容包括：
 
-1. 介绍了Unicode标准化的概念，包括规范等价性和兼容等价性，以及四种标准化形式（NFD、NFC、NFKD、NFKC）。
+**内容大概**
+
+这是一个关于在 Swift 标准库中引入 Unicode 标准化功能的提案。主要内容包括：
+
+1. 介绍了 Unicode 标准化的概念，包括规范等价性和兼容等价性，以及四种标准化形式（NFD、NFC、NFKD、NFKC）。
 
 2. 解释了标准化在文本处理中的重要性，特别是在字符串比较和数据结构中的应用。
 
-3. 指出了当前Foundation库中标准化API的局限性。
+3. 指出了当前 Foundation 库中标准化 API 的局限性。
 
 4. 提出了三个层次的新API：
-   - 针对String和Character的标准化方法
-   - 用于自定义存储和增量标准化的API
+   - 针对 String 和 Character 的标准化方法
+   - 用于自定义存储和增量标准化的 API
    - 有状态的标准化器
 
-5. 提议添加一些辅助功能，如检查字符串是否已标准化、Unicode标量的新属性等。
+5. 提议添加一些辅助功能，如检查字符串是否已标准化、Unicode 标量的新属性等。
 
-6. 讨论了标准化在不同Unicode版本间的稳定性问题。
+6. 讨论了标准化在不同 Unicode 版本间的稳定性问题。
 
-这个提案旨在改进Swift的文本处理能力，使开发者能更方便、高效地处理Unicode文本。它强调了标准化在确保字符串等价性和提高性能方面的重要作用。
+这个提案旨在改进 Swift 的文本处理能力，使开发者能更方便、高效地处理 Unicode 文本。它强调了标准化在确保字符串等价性和提高性能方面的重要作用。
 
 2) 讨论[Quatable 实现需要很长时间进行类型检查](https://forums.swift.org/t/equatable-implementation-takes-a-long-time-to-type-check/73241 "Quatable 实现需要很长时间进行类型检查")
+
 **内容大概**
-这个讨论主要涉及Swift中Equatable协议实现的性能问题。
 
-1. 讨论者假设底层模型是一个class，或者有其他原因无法使用自动合成的Equatable实现。
+这个讨论主要涉及 Swift 中 Equatable 协议实现的性能问题。
 
-2. 有人建议将相关的状态提取到一个单独的struct中，然后依赖自动合成的Equatable实现。
+1. 讨论者假设底层模型是一个 class，或者有其他原因无法使用自动合成的 Equatable 实现。
 
-3. 讨论者尝试isolate了缓慢的`func ==`实现，并对结果感到困惑：
-   - 在完整项目中，Xcode报告`func ==`大约需要240-250毫秒。
-   - 在干净的新项目中，同样的函数只需要120-130毫秒。
-   - 将SwiftUI的Color属性改为String类型后，时间进一步减少到约60毫秒。
+2. 有人建议将相关的状态提取到一个单独的 struct 中，然后依赖自动合成的 Equatable 实现。
+
+3. 讨论者尝试 isolate 了缓慢的 `func ==` 实现，并对结果感到困惑：
+   - 在完整项目中，Xcode 报告 `func ==` 大约需要 240-250 毫秒。
+   - 在干净的新项目中，同样的函数只需要 120-130 毫秒。
+   - 将 SwiftUI 的 Color 属性改为 String 类型后，时间进一步减少到约 60 毫秒。
 
 4. 移除属性会逐渐减少类型检查时间，但没有发现单个属性造成显著差异。
 
-5. 这些结果在Xcode 15.4和16.0 beta 3 (16A5202i)中都相同。
+5. 这些结果在 Xcode 15.4 和 16.0 beta 3 (16A5202i) 中都相同。
 
 6. 讨论者询问是否应该提交这个问题供进一步调查。
 
-这个讨论突显了Swift编译器在处理复杂的Equatable实现时可能存在的性能问题，特别是在涉及SwiftUI组件时。它也反映了开发者在优化代码性能时可能遇到的困惑。
+这个讨论突显了 Swift 编译器在处理复杂的 Equatable 实现时可能存在的性能问题，特别是在涉及 SwiftUI 组件时。它也反映了开发者在优化代码性能时可能遇到的困惑。
 
 3) 讨论[从 Range 和 ClosedRange 创建 Vector 结构](https://forums.swift.org/t/create-a-vector-structure-from-range-and-closedrange/73232 "从 Range 和 ClosedRange 创建 Vector 结构")
+
 **内容大概**
-这段讨论主要涉及在Swift中创建一个通用的Vector结构，支持从不同类型的范围（Range和ClosedRange）创建向量
 
-1. 有人建议使用UnsafeMutableBufferPointer的`allocate(capacity:)`方法来简化代码并避免使用未绑定的指针。
+这段讨论主要涉及在 Swift 中创建一个通用的 Vector 结构，支持从不同类型的范围（Range 和 ClosedRange）创建向量
 
-2. 讨论了使用自定义类型而非Array的原因，可能是为了在语句之间保持稳定的缓冲区地址。
+1. 有人建议使用 `UnsafeMutableBufferPointer` 的 `allocate(capacity:)` 方法来简化代码并避免使用未绑定的指针。
 
-3. 提出了一个基于协议的实现方案，定义了VectorType协议，并对Float、Double和Int类型进行了扩展。
+2. 讨论了使用自定义类型而非 Array 的原因，可能是为了在语句之间保持稳定的缓冲区地址。
 
-4. 实现了一个泛型Vector结构，包含了从Range和ClosedRange创建向量的静态方法。
+3. 提出了一个基于协议的实现方案，定义了 VectorType 协议，并对 Float、Double 和 Int 类型进行了扩展。
 
-5. 使用了Accelerate框架中的vDSP函数来高效地生成Float和Double类型的范围。
+4. 实现了一个泛型 Vector 结构，包含了从 Range 和 ClosedRange 创建向量的静态方法。
 
-6. 创建了一个DataBuffer类来管理底层的内存分配和释放。
+5. 使用了 Accelerate 框架中的 vDSP 函数来高效地生成 Float 和 Double 类型的范围。
 
-7. 代码示例展示了如何创建和使用不同类型的Vector。
+6. 创建了一个 DataBuffer 类来管理底层的内存分配和释放。
+
+7. 代码示例展示了如何创建和使用不同类型的 Vector。
 
 8. 讨论者提到代码可以进一步优化和简化，但他倾向于在代码中明确表示所有可能性。
 
-这个实现提供了一种灵活的方式来创建不同数值类型的向量，并展示了如何利用Swift的泛型和协议来创建可重用的数学工具。
+这个实现提供了一种灵活的方式来创建不同数值类型的向量，并展示了如何利用 Swift 的泛型和协议来创建可重用的数学工具。
 
 4) 提议[使用保留字符的部分应用](https://forums.swift.org/t/partial-application-using-a-reserved-character/73225 "使用保留字符的部分应用")
+
 **内容大概**
-这个讨论主要涉及向Swift语言添加部分应用（partial application）功能的提议。
+
+这个讨论主要涉及向 Swift 语言添加部分应用（partial application）功能的提议。
 
 1. 提议者建议引入部分应用功能，允许开发者通过预填充现有函数的部分参数来创建新函数。
 
@@ -172,7 +191,7 @@ RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内�
    let partialFoo = foo$("foo", 5)
    ```
 
-5. 这种语法在SwiftUI中可能很有用，例如：
+5. 这种语法在 SwiftUI 中可能很有用，例如：
    ```swift
    Button("Some Text", action: foo$("foo", 5))
    ```
@@ -184,17 +203,19 @@ RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内�
 
 7. 讨论者认为这种方法可以在不改变函数调用方式的情况下实现部分应用。
 
-8. 提到Swift 3中移除了柯里化（currying），但认为现在可以探索将某些函数式编程特性引入语言的替代方法。
+8. 提到 Swift 3 中移除了柯里化（currying），但认为现在可以探索将某些函数式编程特性引入语言的替代方法。
 
-9. 讨论者认为重新审视这些话题可能会产生更符合Swift当前哲学的新想法。
+9. 讨论者认为重新审视这些话题可能会产生更符合 Swift 当前哲学的新想法。
 
-10. 有人提出关于weak self如何影响这种函数调用的疑问。
+10. 有人提出关于 weak self 如何影响这种函数调用的疑问。
 
-这个提议旨在为Swift增加更多函数式编程的特性，提高代码的可重用性和灵活性，同时保持语言的简洁性和明确性。
+这个提议旨在为 Swift 增加更多函数式编程的特性，提高代码的可重用性和灵活性，同时保持语言的简洁性和明确性。
 
 5) 讨论[在 Swift 协议中，您是否可以拥有一个 func 参数，它是一个协议，如果它也符合它，您可以用不同的协议定义进行交换？](https://forums.swift.org/t/in-a-swift-protocol-can-you-have-a-func-parameter-that-is-a-protocol-where-you-can-swap-out-with-a-different-protocol-definition-if-it-also-conforms-to-it/73222 "在 Swift 协议中，您是否可以拥有一个 func 参数，它是一个协议，如果它也符合它，您可以用不同的协议定义进行交换？")
+
 **内容大概**
-这个讨论主要涉及Swift协议的灵活性和类型系统。
+
+这个讨论主要涉及 Swift 协议的灵活性和类型系统。
 
 1. 提问者想要创建一个协议，其中包含一个函数，该函数接受一个协议类型的参数，但希望能够用符合该协议的其他协议来替换这个参数类型。
 
@@ -216,11 +237,11 @@ RCC 原本被寄予厚望，因为它能够显著减薄主板厚度，节省内�
 
 5. 询问是否有可能直接在协议定义中实现这种灵活性。
 
-这个问题涉及Swift的类型系统和协议的设计，反映了开发者在处理复杂类型关系时遇到的挑战，以及对更灵活的协议系统的需求。
+这个问题涉及 Swift 的类型系统和协议的设计，反映了开发者在处理复杂类型关系时遇到的挑战，以及对更灵活的协议系统的需求。
 
 ## 推荐博文
 
-[迈向无数据竞争错误的Swift包生态系统](https://www.swift.org/blog/ready-for-swift-6/ "迈向无数据竞争错误的Swift包生态系统")
+[迈向无数据竞争错误的 Swift 包生态系统](https://www.swift.org/blog/ready-for-swift-6/ "迈向无数据竞争错误的 Swift 包生态系统")
 
 **摘要：** 这篇官方文章介绍了 Swift 6 引入了编译时数据竞争安全检查功能，允许各模块逐步采用，从而提升整个生态系统的安全性。Swift Package Index 的“Ready for Swift 6”页面追踪了这一进展，自五月以来，已显著减少了数据竞争错误。目前，超过 43% 的包没有数据竞争错误。
 
@@ -229,15 +250,23 @@ Swift Package Index 显示“Safe from data races”标签以帮助评估包的�
 
 [Swift 与 SwiftUI 学习系列： print 函数详解](https://juejin.cn/post/7388091090322014234/ "Swift 与 SwiftUI 学习系列： print 函数详解")
 
-**摘要：** 文章深入探讨了 Swift 中 print 函数的多种用法及其扩展功能。文章首先介绍了 print 函数的基础用法，包括直接输出字符串或变量的值以及如何使用字符串插值将变量嵌入输出。接着讨论了如何通过自定义分隔符和结尾符来控制输出格式，以及使用 debugPrint 和 dump 函数进行更详细的输出。进一步分析了 print(_:separator:terminator:) 函数的各个参数及其用法，以及如何通过 print(_:separator:terminator:to:) 函数将输出定向到自定义的 TextOutputStream。通过这些示例和详细讲解，读者可以全面掌握 Swift 中 print 函数的强大功能和灵活性。
+**摘要：** 文章深入探讨了 Swift 中 print 函数的多种用法及其扩展功能。文章首先介绍了 print 函数的基础用法，包括直接输出字符串或变量的值以及如何使用字符串插值将变量嵌入输出。接着讨论了如何通过自定义分隔符和结尾符来控制输出格式，以及使用 debugPrint 和 dump 函数进行更详细的输出。
+
+进一步分析了 `print(_:separator:terminator:)` 函数的各个参数及其用法，以及如何通过 `print(_:separator:terminator:to:)` 函数将输出定向到自定义的 `TextOutputStream`。通过这些示例和详细讲解，读者可以全面掌握 Swift 中 print 函数的强大功能和灵活性。
 
 [Swift 网络爬虫与数据可视化的结合](https://juejin.cn/post/7383992257807106058/ "Swift 网络爬虫与数据可视化的结合")
 
-**摘要：**  本文介绍了使用 Swift 语言进行网络爬虫开发，并结合数据可视化的应用。首先，文章简要介绍了网络爬虫的概念和用途，并阐述了 Swift 语言在编写网络爬虫时的优势，包括简洁、安全和高性能。接着，文章通过实际案例展示了如何使用 Swift 和 Alamofire 库开发一个简单的爬虫，抓取电商网站的用户评论数据，并进行情感分析。最后，文章展示了如何使用数据可视化工具将情感分析结果以图表形式展示，从而帮助商家了解用户满意度和发现产品潜在问题。通过结合 Swift 网络爬虫和数据可视化技术，可以更直观地揭示数据背后的模式和趋势。
+**摘要：**  本文介绍了使用 Swift 语言进行网络爬虫开发，并结合数据可视化的应用。首先，文章简要介绍了网络爬虫的概念和用途，并阐述了 Swift 语言在编写网络爬虫时的优势，包括简洁、安全和高性能。接着，文章通过实际案例展示了如何使用 Swift 和 Alamofire 库开发一个简单的爬虫，抓取电商网站的用户评论数据，并进行情感分析。
 
+最后，文章展示了如何使用数据可视化工具将情感分析结果以图表形式展示，从而帮助商家了解用户满意度和发现产品潜在问题。通过结合 Swift 网络爬虫和数据可视化技术，可以更直观地揭示数据背后的模式和趋势。
 
 ## 话题讨论
 
+近日无人驾驶“萝卜快跑”横空出世，让广大出租车司机惶恐不安，担心被萝卜抢了饭碗。那么，你认为无人驾驶出租车最终会取代传统驾驶员出租车吗？
+
+1. 会的，科技的发展总是会逐步取代传统行业。何况无人驾驶价格实惠，真正的萝卜白菜价，省钱永远是硬道理。
+2. 不会，无人驾驶缺少与乘客间必要的沟通，无法灵活应对特殊突发事件，安全问题无法避免。
+3. 无人驾驶的性价比一定会越来越高，同时对司机而言，更残酷的竞争和更难的就业问题也会引发社会关注，或许日后相关的国家法律政策才是成败的关键。
 
 ## 关于我们
 
