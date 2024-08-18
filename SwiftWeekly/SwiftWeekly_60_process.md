@@ -208,6 +208,28 @@ await confirmation { confirmed in
 
 ## 推荐博文
 
+[深入探究 Swift 中 String 的内存布局及底层实现](https://juejin.cn/post/7403657162528768041/ "深入探究 Swift 中 String 的内存布局及底层实现")
+
+**摘要：** 这篇博客深入探讨了 Swift 中的 String 类型的内存布局和底层实现。文章通过查看内存、汇编代码及 Swift 源码，详细分析了 String 的内部结构。主要内容包括：
+
+空字符串：String内部有一个_StringGuts结构体，包含_StringObject成员，_StringObject持有一个Builtin.BridgeObject类型的_object和一个UInt64类型的_countAndFlagsBits。
+
+小字符串：当字符串长度不超过15时，字符串内容直接存储在变量地址中，使用16个字节存储，前15个字节存储字符，最后1个字节存储长度和标志位。
+
+大字符串：当字符串长度超过15时，字符串变量的内存布局发生变化，地址中的部分字节存储字符串长度，另一部分存储字符串内容的地址。_object字段通过位操作和偏移量管理字符串的实际存储地址。
+
+平台差异：文章也讨论了64位、32位和16位平台上的不同内存布局，并结合 Mach-O 文件分析了字符串在内存中的位置。
+
+最终，文章总结了 Swift 字符串的内存布局：在64位平台上， String 占用16个字节，长度小于等于15的字符串直接存储在这16字节中。
+
+[Swift 开发新高度：自己动手实现 Optional 类型](https://juejin.cn/post/7402539566975582245/ "Swift 开发新高度：自己动手实现 Optional 类型")
+
+**摘要：** 这篇文章讲述了如何自己实现 Swift 中的 Optional 类型。作者介绍了 Swift 内置的 Optional 是一个枚举类型，具有 some 和 none 两个 case，并使用泛型来处理不同类型的数据。作者随后展示了如何定义一个自定义的 Optional 类型 CustomOptional，并为其添加了方法来访问、解包值，以及通过 map 和 flatMap 方法实现可选链。通过这些步骤，读者可以更深入地理解 Swift Optional 的底层实现和代数数据类型的强大功能。
+
+[在 SwiftUI 中追踪几何变化](https://swiftwithmajid.com/2024/08/13/tracking-geometry-changes-in-swiftui/ "在 SwiftUI 中追踪几何变化")
+
+**摘要：**  这篇博客介绍了如何在 SwiftUI 中使用新的 onGeometryChange 修饰符来追踪视图的几何变化。作者详细说明了 onGeometryChange 的三个参数：可观察的结果类型、用于几何转换的闭包，以及处理转换结果的闭包。作者提供了多个示例，展示了如何在 ScrollView 中追踪视图的尺寸和位置变化，并强调了该修饰符对性能优化的重要性。
+
 
 ## 话题讨论
 
