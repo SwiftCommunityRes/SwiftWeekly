@@ -8,22 +8,27 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 > **周报精选**
 >
-> 新闻和社区：苹果拟9月10日举行今年最重磅新品发布会，iPhone 16亮相？都有哪些看点？
+> 新闻和社区：苹果拟 9 月 10 日举行今年最重磅新品发布会，iPhone 16 亮相？都有哪些看点？
 > 
-> 提案：
+> 提案：精确控制编译器警告的标志的提案正在审查中
 >
-> Swift 论坛：
+> Swift 论坛：提议讨论整数泛型参数
 >
-> 推荐博文：
+> 推荐博文：Swift 中的 Typed Throws
 >
 > **话题讨论：** 
 > 
-> 
+> 如果微信不支持 iPhone 16，你选微信还是 Apple
+>
+>**上期话题结果**
 
+![](https://files.mdnice.com/user/47553/5dd9f815-d920-40ca-acc6-6909bdf92191.jpeg)
+
+根据投票结果可以看出，超过一半的朋友希望 Apple 能更好地将 AI 与 Swift 和 Xcode 集成。期待 iPhone 16 的发布带来亮眼的新功能。
 
 ## 新闻和社区  
 
-### 苹果据称正洽谈投资OpenAI 英伟达也有意跟投
+### 苹果据称正洽谈投资 OpenAI 英伟达也有意跟投
 
 2024 年 8 月 30 日
 
@@ -47,7 +52,7 @@ OpenAI 成立之初是一家非营利组织，该公司在 2019 年转为一家�
 
 相比之下，作为 AI 龙头股的英伟达在投资领域更为活跃。自 2023 年以来，英伟达旗下投资部门 NVentures 已投资了十多家AI制药企业。(来源：科技板日报)
 
-### 消息称苹果公司服务部门将裁员约百人，波及Apple Books / Apple News等业务
+### 消息称苹果公司服务部门将裁员约百人，波及 Apple Books / Apple News 等业务
 
 2024 年 8 月 28 日
 
@@ -59,7 +64,7 @@ OpenAI 成立之初是一家非营利组织，该公司在 2019 年转为一家�
 
 裁员在苹果公司并不常见。据IT之家此前报道，今年 4 月，苹果向美国加利福尼亚州提交的必要文件显示公司永久裁员 600 多人。外界认为，可能是苹果放弃汽车项目之后，2000 多人的开发团队中部分转岗到苹果其它项目，而这 600 多人被苹果裁员。(来源：IT之家)
 
-### 苹果拟9月10日举行今年最重磅新品发布会，iPhone 16亮相？都有哪些看点？
+### 苹果拟 9 月 10 日举行今年最重磅新品发布会，iPhone 16 亮相？都有哪些看点？
 
 2024 年 8 月 23 日
 
@@ -67,7 +72,7 @@ OpenAI 成立之初是一家非营利组织，该公司在 2019 年转为一家�
 
 古尔曼援引知情人士消息表示，虽然具体时间尚未公布，但该公司正在为这一天做准备。发布会之后，新款手机预计将于 9 月 20 日正式上市销售，这与苹果近年来的做法一致。
 
-![](https://pics7.baidu.com/feed/aa18972bd40735fa06b1ae9d36028abd0f240837.jpeg@f_auto?token=05098713aa4dee2b3e8dfeaafe855ae4)
+![](https://files.mdnice.com/user/47553/9e5edb73-32e3-46d8-81bb-9c904fefa37c.png)
 
 马克·古尔曼此前曾表示，有知情人士向他透露，苹果的洛杉矶新店正在为 9 月 16 日那一周开业全力准备。众所周知，苹果公司喜欢在新产品上市之际开新店。
 
@@ -77,7 +82,7 @@ OpenAI 成立之初是一家非营利组织，该公司在 2019 年转为一家�
 
 iPhone 16 ‌机型将搭载配合 Apple Intelligence 使用的更强大芯片 A18，整个 iPhone 16 ‌系列都将支持新的 iOS 18‌。
 
-![](https://pics1.baidu.com/feed/8b82b9014a90f6031bcad86b9e413615b051ed02.jpeg@f_auto?token=c2173f911395f0c5fee2095011c2dfc5)
+![](https://files.mdnice.com/user/47553/962a9f93-acbb-4b07-a706-21145a5fb512.png)
 
 iPhone 16 Pro 和 Pro Max 的显示屏会稍微大一些，尺寸分别为 6.3 英寸和 6.9 英寸。
 
@@ -105,11 +110,18 @@ iPhone 16 Pro 和 Pro Max 将配备 4800 万像素的超广角摄像头，像素
 
 ## 提案
 
+### 正在审查的提案
+
+[SE-0443](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0443-warning-control-flags.md "SE-0443") **精确控制编译器警告的标志** 提案正在审查。
+
+本提案引入了新的编译器选项，允许对编译器如何发出特定警告进行精细控制，使它们可以作为警告或错误来处理。
 
 ## Swift论坛
 
 1) 提议[整数泛型参数](https://forums.swift.org/t/integer-generic-parameters/74181 "整数泛型参数")
+
 **内容大概**
+
 这篇讨论围绕通过引入整数泛型参数来增强 Swift 处理具有内联存储的固定容量数据结构的能力。对于像嵌入式 Swift 这样注重性能的代码库，这特别有用，在这些场景中，开发人员需要高效且类型安全的数据结构。目前，Swift 的局限性需要繁琐且容易出错的技术，例如手动创建具有特定元素数量的结构体，并使用不安全的操作进行索引。
 
 **动机:**
@@ -119,16 +131,19 @@ iPhone 16 Pro 和 Pro Max 将配备 4800 万像素的超广角摄像头，像素
 **提议的解决方案:**
 
 该提案引入了通过整数参数对泛型类型进行参数化的概念。这是通过在泛型参数列表中使用新的语法实现的，其中整数通过 let 关键字声明。例如：
+
 ```Swift
 struct Vector<let N: Int, T> { /* 实现待定 */ }
 ```
 
 在这里，N 是一个字面整数参数，允许使用固定大小 N 定义 Vector 类型。这使得可以创建固定维度的矩阵或向量，例如：
+
 ```Swift
 struct Matrix4x4 {
     var matrix: Vector<4, Vector<4, Double>>
 }
 ```
+
 **详细设计:**
 
 1. 声明语法:
@@ -158,7 +173,9 @@ struct Matrix4x4 {
 	* 未来的工作可能还会探索整数参数的可变参数包，这可能允许定义具有任意维度的多维数组或矩阵。
 
 2) 讨论[[GSoC-2024] Visual Studio Code 中 Swift 宏的扩展（详细文章） - Lokesh.T.R（Alex Hoppen 和 Adam Fowler）](https://forums.swift.org/t/gsoc-2024-expansion-of-swift-macros-in-visual-studio-code-detailed-post-lokesh-t-r-alex-hoppen-adam-fowler/74163 "[GSoC-2024] Visual Studio Code 中 Swift 宏的扩展（详细文章） - Lokesh.T.R（Alex Hoppen 和 Adam Fowler）")
+
 **内容大概**
+
 Lokesh T.R 是来自印度 Chennai Vel Tech 大学的二年级学生，他参与了 2024 年的 Google Summer of Code (GSoC) 项目，专注于在 Visual Studio Code (VS Code) 中扩展 Swift 宏。在导师 Alex Hoppen 和 Adam Fowler 的指导下，Lokesh 的主要目标是实现一个代码操作，允许用户在 VS Code 编辑器中直接查看 Swift 宏的展开内容。
 
 **项目概述**
@@ -196,30 +213,36 @@ Lokesh T.R 是来自印度 Chennai Vel Tech 大学的二年级学生，他参与
     * Lokesh 计划实施涵盖各种嵌套宏级别所有语义功能的全面测试用例。这包括在 VS Code 中的端到端测试，以确保“Expand Macro”代码操作在真实世界场景中的稳健
 
 3) 提议[Non-Discardable throwing Tasks](https://forums.swift.org/t/pitch-non-discardable-throwing-tasks/74138/7 "Non-Discardable throwing Tasks")
+
 **内容大概**
+
 在 Swift 中，使用包含抛出函数的任务时，常见的问题是错误可能会被无意中忽略。这是因为当前的 Task 初始化器默认允许丢弃错误，这可能导致严重且难以发现的 bug。
 
 当前行为：
 
 当前的 Task 初始化器定义如下：
+
 ```Swift
 extension Task where Failure == any Error {
     @discardableResult
     public init(priority: TaskPriority? = nil, operation: sending @escaping @isolated(any) () async throws -> Success)
 }
 ```
-由于使用了 @discardableResult 属性，开发者可以忽略错误而不会收到任何警告，这可能导致关键错误被无意中忽略。
+
+由于使用了 `@discardableResult` 属性，开发者可以忽略错误而不会收到任何警告，这可能导致关键错误被无意中忽略。
 
 提议的更改：
 
-提议中建议移除 Task 初始化器中的 @discardableResult 属性。这样一来，忽略错误将不再是默认行为，从而提高代码的安全性，确保开发者在必要时有意识地选择忽略错误。
+提议中建议移除 Task 初始化器中的 `@discardableResult` 属性。这样一来，忽略错误将不再是默认行为，从而提高代码的安全性，确保开发者在必要时有意识地选择忽略错误。
 
 例如，要有意忽略错误，开发者需要显式地写成：
+
 ```Swift
 _ = Task {
     try await dontCareIfThisThrowsOrNot()
 }
 ```
+
 这一更改旨在引入警告，帮助发现潜在的 bug，提高代码的安全性，并减少无意中的错误处理遗漏。
 
 论据：
@@ -229,7 +252,9 @@ _ = Task {
 一个相关的讨论主题也指出了同样的问题，这表明 Swift 社区中的其他开发者也遇到了类似的挑战。
 
 4) 讨论[最小化结构体的 MemoryLayout 大小/步幅有哪些好处？](https://forums.swift.org/t/what-are-the-benefits-of-minimizing-the-memorylayout-size-stride-of-a-struct/74205 "最小化结构体的 MemoryLayout 大小/步幅有哪些好处？")
+
 **内容大概**
+
 在 Swift 中，结构体的内存布局由其存储属性的声明顺序决定。通过重新排列这些属性，可以减少结构体的 MemoryLayout.size 和 MemoryLayout.stride。这种优化看似有吸引力，但它的实际好处是什么呢？
 
 **主要好处：**
@@ -242,6 +267,7 @@ _ = Task {
 * 一些开发者希望使用更少的寄存器来表示类型（例如，2 个寄存器而不是 4 个），以实现代码大小和性能上的微小提升。然而，对于大多数开发者来说，这些问题微不足道，不值得过多关注。
 
 5) 讨论[并发 101](https://forums.swift.org/t/concurrency-101/74161 "并发 101")
+
 **内容大概**
 
 1. 挂起点和线程切换
@@ -292,6 +318,10 @@ async/await 的好处在于它简化了异步代码的结构，使其比传统�
 
 ## 话题讨论
 
+**如果微信不支持 iPhone 16，你选微信还是 Apple**
+
+1、微信
+2、Apple
 
 ## 关于我们
 
