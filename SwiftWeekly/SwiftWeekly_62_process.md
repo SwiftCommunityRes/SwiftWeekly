@@ -75,6 +75,36 @@ App Store 上的多个位置，包括你的产品页面，以及“Today”、�
 
 ## 推荐博文
 
+[在 Swift 中引入对 Oblivious HTTP 的支持](https://www.swift.org/blog/introducing-swift-nio-oblivious-http/ "在 Swift 中引入对 Oblivious HTTP 的支持")
+
+**摘要：** 这篇官方文章介绍了 Swift 中对 Oblivious HTTP（OHTTP）的支持，并发布了新的 SwiftNIO 包 SwiftNIO Oblivious HTTP。Oblivious HTTP 通过加密 HTTP 请求并结合第三方中继服务，保护客户端的身份信息，增强隐私性，避免暴露诸如 IP 地址等数据。
+
+SwiftNIO Oblivious HTTP 包提供两个主要库：
+
+ObliviousHTTP：实现了 RFC 9292 中定义的二进制 HTTP 编码方案和 Oblivious HTTP。
+ObliviousX：提供加密功能的 API，支持 Oblivious HTTP 及其他数据的加密。
+文章通过代码示例演示了如何使用这些库进行 HTTP 消息的序列化、反序列化和加密解密。还提到了未来的开发计划，包括与 SwiftNIO 更好的集成、对其他 Swift 类型的支持，以及对分块 OHTTP 的支持。
+
+SwiftNIO Oblivious HTTP 仍处于早期开发阶段，期待社区的反馈和贡献。。
+
+[Swift 中的任务和任务组](https://juejin.cn/post/7409991384970149914/ "Swift 中的任务和任务组")
+
+**摘要：** 这篇博客介绍了 Swift 中的任务（Task）和任务组（Task Group），并讲解了它们的使用方法及相关高级技巧。
+
+**任务（Task）**是 Swift 并发编程的一部分，允许在非并发环境中创建并发任务，任务在创建后立即运行。文章展示了如何创建任务、处理任务的错误和取消任务。Swift 提供了 `Task.checkCancellation()` 主动抛出错误终止任务，或通过 `Task.isCancelled` 检查任务是否被取消。还介绍了如何设置任务优先级和任务的生命周期状态（运行中、暂停、取消和完成）。
+
+**任务组（Task Group）**用于组合并发执行的多个任务，并等待所有任务完成后返回结果。通过 `withTaskGroup` 或 `withThrowingTaskGroup` 可以创建任务组，并发执行任务。文章提供了如何处理任务组中的错误、如何避免数据竞争，并展示了取消任务组的用法。
+
+最后，作者强调了避免并发修改任务组的操作，推荐使用 `cancelAll()` 来取消任务组中的所有子任务，以及 `addTaskUnlessCancelled()` 来确保任务组未被取消时才添加新任务。。
+
+[递归枚举在 Swift 中的妙用](https://juejin.cn/post/7413311432970928168/ "递归枚举在 Swift 中的妙用")
+
+**摘要：**  这篇博客介绍了 Swift 中递归枚举的使用及其优势。递归枚举允许枚举的某些情况包含自身实例，适用于建模层次化或递归结构的数据，如文件系统。通过 indirect 关键字，Swift 可以安全地处理递归引用，避免内存问题。
+
+文章首先展示了如何用递归枚举实现文件系统模型，并引入了文件、文件夹和别名的概念。然后通过代码示例，展示了如何使用递归枚举创建嵌套文件结构，并递归计算文件夹中的总项目数。
+
+此外，文章还解释了在引用自身时如何正确使用 indirect 关键字，并指出当引用通过集合类型（如数组）实现时，不需要 indirect 标记。
+
 
 ## 话题讨论
 
