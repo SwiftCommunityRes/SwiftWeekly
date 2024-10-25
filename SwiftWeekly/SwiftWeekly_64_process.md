@@ -271,6 +271,20 @@ class DataManager {
 
 ## 推荐博文
 
+[介绍 Swift Testing 框架 ](https://swiftwithmajid.com/2024/10/22/introducing-swift-testing-basics/ "介绍 Swift Testing 框架 ")
+
+**摘要：** Swift Testing 是一个新的测试框架，旨在通过简洁直观的 API 改善测试体验。它基于宏功能，可用于组织和断言测试，与 XCTest 框架兼容。Swift Testing 提供了 @Test 宏来标注测试函数，expect 宏用于断言布尔表达式，通过验证测试是否符合预期来替代 XCTest 中的各种断言函数。此外，require 宏允许在不满足条件时抛出错误并中止测试。框架还提供 Issue.record 方法来记录问题，并与 Xcode 集成，支持丰富的测试结果表示和测试套件组织。。
+
+[用 LLDB 调试 Swift 代码](https://juejin.cn/post/7426232375703617573/ "用 LLDB 调试 Swift 代码")
+
+**摘要：** 本文介绍了使用 LLDB 调试 Swift 代码的高效技巧，帮助开发者优化调试体验。作者首先概述了如何通过命令行获取和修改变量值，主要使用 expression 命令及其标志，便于查看和操作运行时数据。接着，文章探讨了如何获取应用状态，比如通过 bugreport 生成崩溃报告、使用 frame 查看当前堆栈帧，及 language swift 的命令如 demangle 和 refcount 来查看 Swift 特定信息。
+
+在控制程序执行方面，作者详细介绍了设置、管理和自动化断点的各类命令，包括 breakpoint、process、thread 及其快捷方式，提升调试效率。最后，文章介绍了 command、platform 和 gui 等高级命令，说明如何自定义命令、管理平台状态以及使用脚本实现自动化操作。这些命令使开发者在控制台内便能完成深入调试，而不依赖 Xcode 图形界面。通过这些技巧，开发者可高效识别和解决 Swift 应用中的问题。
+
+[讲讲如何相对轻松的方式将 UIKit 项目迁移到 SwiftUI](https://juejin.cn/post/7426588023469260835/ "讲讲如何相对轻松的方式将 UIKit 项目迁移到 SwiftUI")
+
+**摘要：**  这篇博客介绍了如何相对轻松地将 UIKit 项目迁移到 SwiftUI。文章首先讨论了迁移的优点，包括声明式语法、跨平台兼容性以及实时预览功能，提升了开发效率和代码可读性。接着，提出迁移步骤：评估现有代码库，优先迁移小型独立组件，将 UIKit 视图转换为 SwiftUI 视图，以及重写视图控制器。此外，介绍了如何在 SwiftUI 和 UIKit 之间进行互操作，例如使用 UIViewRepresentable 或 UIHostingController 实现混合使用。最后，总结了最佳实践：从小模块开始，充分利用 SwiftUI 的特性，提高开发效率，并适应声明式编程的范式转变。
+
 
 ## 话题讨论
 
