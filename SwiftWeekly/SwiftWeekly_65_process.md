@@ -96,6 +96,34 @@ Swift 团队在讨论访问器的改进，特别是针对 yield-once 协程访�
 
 ## 推荐博文
 
+[ Swift 并发初步](https://onevcat.com/2021/07/swift-concurrency/#%E5%B0%8F%E7%BB%93/ " Swift 并发初步")
+
+**摘要：** 这篇文章介绍了 Swift 并发编程的基础概念，特别是随着 Swift 5.5 引入的异步/并发特性，如何简化并发编程并确保程序的安全性和高效性。以下是其中几个重要概念和要点的总结：
+
+1. **同步和异步**：同步操作会阻塞当前线程直到完成，而异步操作允许线程在等待期间执行其他任务。异步操作能避免UI卡顿，但使用回调可能导致代码复杂和错误难以处理。
+
+2. **串行和并行**：串行操作按顺序执行，异步操作也可以串行执行；并行操作则可以同时执行多个任务，通过使用多个线程来提高效率。
+
+3. **异步函数**：Swift 5.5 引入了 `async` 和 `await`，使得异步操作像同步操作一样书写，简化了回调地狱和错误处理。
+
+4. **结构化并发**：通过 `Task` 和 `async let` 等方式，Swift 提供了任务树和并发任务管理，确保任务之间的正确顺序和资源共享安全。
+
+5. **actor 模型**：解决了并发中共享资源的安全问题，通过 `actor` 确保多个任务不会同时修改同一数据，避免数据竞争。
+
+这些概念结合起来，帮助开发者简洁、高效地编写并发代码，减少潜在的错误和复杂性。
+
+[iOS 12 Swift KVO 崩溃排查](https://juejin.cn/post/7429604512896155660/ "iOS 12 Swift KVO 崩溃排查")
+
+**摘要：** 这篇文章主要分析了 iOS 12 中使用 Swift KVO 导致的崩溃问题。通过崩溃堆栈的分析，发现崩溃与 KVO 相关的 `__old_unswizzled_keyPathsForValuesAffectingValue` 方法调用触发了 `fatalError`。崩溃原因是由于方法交换（method swizzling）未能完全执行，导致未替换的原方法被调用，引发崩溃。文章详细解释了 `KVOKeyPathBridgeMachinery` 和 `NSObject` 之间的交换逻辑，并通过排查发现，Swift KVO 的某些调用未成功触发方法交换，尤其是在多线程环境下执行时更容易发生崩溃。
+
+文章建议修复方案为删除相关的 Swift KVO 调用，尤其是避免在 iOS 12 上使用 Swift KVO。崩溃的激增被认为是由于近期的代码优化将 KVO 操作从主线程移到子线程，增加了多线程冲突的概率。
+
+[介绍 Swift Testing. Traits](https://swiftwithmajid.com/2024/11/05/introducing-swift-testing-traits/ "介绍 Swift Testing. Traits")
+
+**摘要：**  这篇博客介绍了 Swift Testing 框架中的强大特性——**traits（特性）**系统。traits 允许通过注解的方式灵活地控制测试行为。文中首先展示了如何使用 disabled 和 enabled 特性来跳过或有条件地运行测试，如基于功能标志来启用或禁用特定测试。此外，还介绍了组合多个特性以满足特定条件的使用方法，并展示了 bug 特性，可以为被跳过的测试关联一个特定的 bug 标识或 URL。
+
+接着，文章解释了 timeLimit 特性，帮助限制测试的执行时间，避免资源消耗过多。作者还介绍了 tagging（标签） 功能，允许通过为测试或测试套件添加标签来组织测试，例如通过 crucial 标签标记关键测试，方便在 Xcode 的 Test Navigator 中按标签运行和筛选测试。
+
 
 ## 话题讨论
 
