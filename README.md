@@ -96,3 +96,4 @@ CSDN: [https://blog.csdn.net/qq_36478920](https://blog.csdn.net/qq_36478920)
 **感谢您的赞助：** 我们会将您的赞助用于 Swift社区 的建设与维护。
 
 ![](https://github.com/SwiftCommunityRes/article-ios/blob/main/Assets/swift-alipay.png?raw=true) ![](https://github.com/SwiftCommunityRes/article-ios/raw/main/Assets/swift-wechat.png)
+#TEST
