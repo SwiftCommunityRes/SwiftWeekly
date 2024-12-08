@@ -10,22 +10,19 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：苹果印尼投资承诺再提升10倍 消息称他们计划投资10亿美元
 > 
-> 提案：
+> 提案：**原始标识符** 提案通过审查。
 > 
-> Swift 论坛：
+> Swift 论坛：讨论代码来临 2024
 >
-> 推荐博文：
+> 推荐博文：iOS 探索 RxSwift 之内存管理
 >
 > **话题讨论：** 
 > 
-> 
->
->**上期话题结果**
-
+> 为什么现在年轻人都不爱换手机了？
 
 ## 新闻和社区  
 
-### 古尔曼预告苹果“革命性”突破 明年将发布自研Modem芯片
+### 古尔曼预告苹果“革命性”突破 明年将发布自研 Modem 芯片
 
 2024 年 11 月 7 日
 
@@ -113,12 +110,17 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 通过的提案
+
+[SE-0451](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0451-escaped-identifiers.md "SE-0451") **原始标识符** 提案通过审查。
 
 ## Swift论坛
+
 1) 讨论[代码来临 2024](https://forums.swift.org/t/advent-of-code-2024/76301 "代码来临 2024")
 每年12月，Eric Wastl都会发布一系列有趣的编程挑战——Advent of Code。从12月1日至25日，每天发布一个新挑战，难度逐渐增加。参与者可以使用任何编程语言解决，但推荐用Swift进行。
 
 参与步骤：
+
 1.	（可选）克隆Swift模板：
  * 如果使用Xcode，打开模板目录即可开始。
  * 如果使用Swift CLI，运行swift run或swift test执行代码或测试。
@@ -126,30 +128,36 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 3.	使用代码3315857-05237f97加入Swift社区排行榜（最多200人）。
 4.	每天尝试挑战并提交Swift解决方案。排行榜将根据完成速度更新分数（仅供娱乐）。
 
-建议将你的解决方案上传至GitHub，方便学习其他人的技巧与Swift使用方式。期待大家的参与！
+建议将你的解决方案上传至 GitHub，方便学习其他人的技巧与 Swift 使用方式。期待大家的参与！
 
 2) 讨论[重试和截止期限简介：Swift 并发中的弹性](https://forums.swift.org/t/introducing-retry-and-deadline-resiliency-in-swift-concurrency/76290 "重试和截止期限简介：Swift 并发中的弹性")
+
 过去几年，在多个 iOS 项目中处理硬件通信及协议集成，并尝试全面使用 Swift 并发。在此过程中，我开发了两个轻量级开源库：swift-concurrency-deadline 和 swift-concurrency-retry，目前已达到较为稳定的状态，可供他人使用。
+
 主要特点：
+
 * 使用结构化并发
 * 支持 actor 隔离继承
 * 支持自定义时钟（便于测试）
 * 提供详尽文档与近乎 100% 测试覆盖率
 * 无外部依赖，最小化二进制文件体积
 
-:alarm_clock: Deadline
-为异步操作提供截止时间控制，操作超时将抛出 DeadlineExceededError。
+`:alarm_clock: Deadline`为异步操作提供截止时间控制，操作超时将抛出 `DeadlineExceededError`。
+
 示例：
+
 ```Swift
 try await deadline(until: .now + .seconds(5)) {  
   try await URLSession.shared.data(from: url)  
 }  
 ```
+
 更多文档与示例请见：[GitHub - swift-concurrency-deadline。](https://github.com/ph1ps/swift-concurrency-deadline)
 
-:arrows_counterclockwise: Retry
-为异步操作提供重试机制，可基于错误类型定制策略和重试间隔。支持多种回退策略（如指数回退）与错误处理。
+`:arrows_counterclockwise: Retry`为异步操作提供重试机制，可基于错误类型定制策略和重试间隔。支持多种回退策略（如指数回退）与错误处理。
+
 示例：
+
 ```Swift
 let (data, response) = try await retry(maxAttempts: 5) {  
   try await URLSession.shared.data(from: url)  
@@ -161,39 +169,50 @@ let (data, response) = try await retry(maxAttempts: 5) {
   }  
 }  
 ```
+
 更多文档与示例请见：[GitHub - swift-concurrency-retry。](https://github.com/ph1ps/swift-concurrency-retry)
 
-欢迎尝试并提供反馈！希望这些工具能帮助构建更高弹性与可靠性的 Swift 应用。🎉
+欢迎尝试并提供反馈！希望这些工具能帮助构建更高弹性与可靠性的 Swift 应用。
 
 3) 讨论[将 Int32 数组转换为 Int 数组以进行整数运算](https://forums.swift.org/t/convert-arrays-of-int32-to-arrays-of-int-for-integer-arithmetic/76356 "将 Int32 数组转换为 Int 数组以进行整数运算")
+
 该讨论围绕如何通过代码生成及分析评估性能展开，主要集中在 x86 汇编代码的生成和优化上。
 
 生成汇编代码的方法：
+
 1.	使用编译器命令生成：如 Swift CLI 的 -emit-assembly 参数。
 2.	使用工具分析二进制文件：如 macOS 上的 otool -tvV 命令。
 3.	使用在线工具：如 Compiler Explorer (godbolt.org)，查看生成的 LLVM IR 和最终汇编代码。
 
 如何判断代码性能：
+
 评估性能需结合经验和分析技巧，以下是关键点：
+
 1.	无不必要的循环依赖： 确保每次循环迭代独立，避免引入延迟链。
 2.	纯向量化代码： 除循环计数器外，尽量避免标量指令。关键指令如 movdqu (SIMD 加载/存储) 和 paddq (SIMD 加法) 应主导循环。
 3.	避免不必要的加载和存储操作。
 4.	适当的循环展开： 展开两倍循环（每次处理两个 SIMD 向量）以平衡加载、计算和存储操作的开销，接近硬件吞吐极限。
 
 性能分析实例：
+
 在现代 CPU 上，循环性能接近其加载和存储的理论极限（如 2 次加载 + 1 次存储/周期）。即使在旧设备上，该代码也可达到 80% 的峰值效率。进一步展开循环通常代价较高，除非数据长度非常大且固定为某个 2 的幂。
 
 经验与总结：
+
 评估性能需要对汇编指令集和硬件架构的深入理解。通过确保代码结构清晰、向量化充分，以及循环展开合理，便能实现高效执行，无需进一步优化。
 
 4) 讨论[发送，输入输出发送，互斥](https://forums.swift.org/t/sending-inout-sending-mutex/76373 "发送，输入输出发送，互斥")
+
 Swift 6 引入了新的 Mutex 类型及其相关功能，例如 withLock 方法，进一步完善并安全化了并发编程的特性。以下是对其工作原理及使用中遇到的问题的深入探讨。
+
 withLock 方法的签名:
+
 ```Swift
 func withLock<R>(
     _ body: (inout sending State) -> sending R
 ) -> sending R
 ```
+
 * 作用：
  * Mutex 在调用 withLock 时，暂时放弃对 State 的所有权，将其以 inout sending 参数传递给闭包。
  * 闭包可以对状态进行分割，操作完成后，部分状态返回给 Mutex，成为新的保护状态，其余部分通过返回值传递给调用者。
@@ -203,6 +222,7 @@ func withLock<R>(
 
 实现自定义 Mutex 并使用 inout sending
 尝试实现类似 Mutex 的类：
+
 ```Swift
 class NotAMutex<State> {
     var state: State
@@ -218,15 +238,20 @@ class NotAMutex<State> {
     }
 }
 ```
+
 问题：
+
 * 编译错误：
+
 ```Swift
 sending 'self.state' risks causing data races
 ```
+
 Swift 编译器提示此代码可能导致数据竞争，因为 self.state 是类的实例变量 (ivar)，而类的状态管理包含专有的隔离和排他性检查机制。
 
 如何使用自定义 Mutex
 以下示例尝试对非 Sendable 的状态对象进行操作：
+
 ```Swift
 class NotSendable {
     var next: NotSendable?
@@ -242,13 +267,17 @@ func test() {
     }
 }
 ```
+
 错误：
 * 编译器认为闭包捕获的 next 可能导致多次使用，而无法保证安全性。
 * 因为 inout sending 参数在操作完成后仍需重新初始化为非隔离值。
 
 解决方法和进一步尝试
+
 分离隔离区域
+
 尝试用 Optional 类型的扩展实现值的传递和分离：
+
 ```Swift
 extension Optional where Wrapped: ~Copyable {
     static func take(_ self: inout sending Optional) -> sending Optional {
@@ -263,37 +292,47 @@ extension Optional where Wrapped: ~Copyable {
     }
 }
 ```
+
 * 改进：
+
 这种方法有效，但较复杂；编译器能够证明 Optional 的正确分离。
+
 * 局限：
+
 对于更复杂的容器（如 Array），由于内部元素可能有相互依赖，分离变得不直观且难以验证。
 
 Mutex 的实现差异
 
 相比自定义的 NotAMutex，Swift 6 的 Mutex 通过底层机制和优化规避了这些问题：
+
 * 运行闭包仅执行一次： 通过 Swift 编译器保证闭包的执行模型不会导致多次捕获或别名问题。
 * 非复制值的处理： 编译器能智能分析并优化 noncopyable 类型的值传递行为。
 
 总结与建议
+
 1.	原生 Mutex 是推荐方案：
 通过原生 withLock 方法，可安全操作并发状态，而无需手动处理复杂的隔离区域拆分问题。
+
 2.	使用 inout sending：
 理解 sending 的语义对于编写安全并发代码至关重要。具体包括：
  * 确保闭包只运行一次。
  * 明确分离状态的生命周期和隔离域。
+ 
 3.	避免对状态过度操作：
 如果无法使用 Swift 6 的特性，建议在需要多次分离或复杂状态管理时简化模型或引入外部工具来帮助验证状态安全性。
 
 5) 讨论[关于协议继承和泛型的编译器错误？](https://forums.swift.org/t/compiler-bug-w-r-t-protocol-inheritance-and-generics/76316 "关于协议继承和泛型的编译器错误？")
+
 对于Swift中的泛型参数，协议存在自我遵守性问题。问题的核心是：协议类型（如Labeled）在作为泛型参数时，会被视为其存在性类型（any Labeled），而不是直接遵守协议。这种行为导致在某些情况下编译器报错。
 
-当泛型参数有协议遵从性要求（如Storage<V: StorableObject>），传入协议类型会失败，因为any Labeled无法满足StorableObject的遵从性需求。而在没有遵从性约束（如AlternativeStorage<V>）时，协议类型作为泛型参数是可以接受的。
+当泛型参数有协议遵从性要求（如 `Storage<V: StorableObject>`），传入协议类型会失败，因为 any Labeled 无法满足 `StorableObject` 的遵从性需求。而在没有遵从性约束（如 `AlternativeStorage<V>` ）时，协议类型作为泛型参数是可以接受的。
 
-这种限制的原因与Swift的类型系统设计有关：
+这种限制的原因与 Swift 的类型系统设计有关：
+
 1.	存在性类型的语义要求：即使协议没有关联类型或静态方法，仍可能包含无法通过类型检查器验证的语义约束，例如“具有两个可能值”的协议（HasTwoValues）。
 2.	类型逻辑不一致性：如果允许协议自我遵从，可能会在逻辑上引入不一致性。例如，any HasTwoValues将无法满足其语义要求。
 
-尽管代码示例在理论上可能不会导致错误，Swift的设计选择是避免可能的语义或逻辑问题，因此协议默认不具有自我遵从性。这种行为也是SE-0335提案讨论的一部分。
+尽管代码示例在理论上可能不会导致错误，Swift 的设计选择是避免可能的语义或逻辑问题，因此协议默认不具有自我遵从性。这种行为也是 SE-0335 提案讨论的一部分。
 
 ## 推荐博文
 
@@ -322,8 +361,6 @@ Mutex 的实现差异
 3. 产品同质化严重，创新不足。
 
 欢迎在文末留言参与讨论。
-
-
 
 ## 关于我们
 
