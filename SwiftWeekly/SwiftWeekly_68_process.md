@@ -96,9 +96,33 @@ Xcode 的工具链支持存在不稳定性，开发者可能会遇到兼容性�
 
 ## 推荐博文
 
+[SwiftUI 中  UIGestureRecognizerRepresentable 协议使用](https://swiftwithmajid.com/2024/12/17/introducing-uigesturerecognizerrepresentable-protocol-in-swiftui/ "SwiftUI 中  UIGestureRecognizerRepresentable 协议使用")
+
+**摘要：** 这篇博客介绍了 SwiftUI 新增的 UIGestureRecognizerRepresentable 协议，用于将 UIKit 的手势识别器包装并引入 SwiftUI 视图。通过实现 makeUIGestureRecognizer 创建手势，并在 handleUIGestureRecognizerAction 中处理状态和动作，还可通过 makeCoordinator 设置手势代理以增强灵活性。该协议特别适合自定义复杂手势，如检查标记手势或圆形手势，是 SwiftUI 内置手势的有力补充。
+
+[iOS sizeThatFits 和 sizeToFit的区别](https://juejin.cn/post/7448060281766248459/ "iOS sizeThatFits 和 sizeToFit的区别")
+
+**摘要：** 摘要：这篇博客探讨了 iOS 中 sizeThatFits 和 sizeToFit 的区别及应用。
+sizeThatFits 用于计算视图在特定约束下的最佳尺寸，但不会修改视图的实际大小，它更灵活，适合需要自定义尺寸计算的场景。而 sizeToFit 调用 sizeThatFits 计算后，会直接调整视图的 frame 以适应内容，适合简单的自适应布局。
+
+通过 UILabel 的示例，博客展示了 sizeThatFits 如何返回最佳尺寸供开发者使用，以及 sizeToFit 如何直接更新视图大小。对于复杂布局，可以通过重写 sizeThatFits 来实现定制规则。
+
+总结来说，sizeThatFits 提供更多控制，适用于复杂需求；sizeToFit 简单直接，适合快速适配。理解两者的区别，有助于更高效地进行视图布局调整。
+
+[Swift 进阶；泛型](https://juejin.cn/post/6963841629270900767/ "Swift 进阶；泛型")
+
+**摘要：**  这篇文章深入介绍了 Swift 中的泛型特性。泛型作为 Swift 最强大的特性之一，让开发者能够编写灵活且可重用的代码。文章从基础的泛型函数讲起，逐步深入到泛型类型、类型约束、关联类型等进阶概念，最后探讨了泛型 Where 分句的高级用法。通过大量实例代码，详细阐述了如何在实际开发中运用泛型来提高代码的灵活性和复用性，是一篇面向想要掌握 Swift 泛型特性的开发者的完整指南。
 
 ## 话题讨论
 
+**冬天洗澡,一定是很多人都非常纠结的事情,冬天洗澡真的太冷了，冬天你多久洗一次澡？**
+
+1. 一天一洗。
+2. 两天一洗。
+3. 三天一洗。
+4.  其它，看情况
+
+欢迎在文末留言参与讨论。
 
 ## 关于我们
 
