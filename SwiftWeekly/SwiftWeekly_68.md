@@ -1,24 +1,30 @@
 ## 前言
 
-**本期是 Swift 编辑组自主整理周报的第六十八期**，每个模块已初步成型。各位读者如果有好的提议，欢迎在文末留言。
+**本期是 Swift 编辑组自主整理周报的第五十期**，每个模块已初步成型。各位读者如果有好的提议，欢迎在文末留言。
 
 Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly "SwiftWeekly")，欢迎提交 issue，投稿或推荐内容。目前计划每两周周一发布，欢迎志同道合的朋友一起加入周报整理。
 
-事事如意是人生理想，事与愿违却是人生常态。如**Swift社区**一样，历过风风雨雨，方有春华秋实！👊👊👊
+间歇性的努力和蒙混过日子，都是对之前努力的清零。时间永不停歇，社会时刻发展，**Swift社区**也在华丽蜕变！👊👊👊
 
 > **周报精选**
 >
 > 新闻和社区：消息称苹果与腾讯、字节跳动谈判，希望在中国推出 AI 功能
 > 
-> 提案：
+> 提案：Package 特征提案通过审查
 > 
-> Swift 论坛：
+> Swift 论坛：讨论 LSP 与 CMake 和 nightly 工具链集成
 >
-> 推荐博文：
+> 推荐博文：SwiftUI 中  `UIGestureRecognizerRepresentable` 协议使用
 >
 > **话题讨论：** 
 > 
-> 
+> 冬天你多久洗一次澡？
+>
+>**上期话题结果**
+
+![](https://files.mdnice.com/user/47553/f1dc593e-eac2-45db-a42a-52e70939165d.jpeg)
+
+超越一定程度之后，停止或者慢速发展是不是依旧是超越态势？  
 
 ## 新闻和社区  
 
@@ -28,7 +34,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 据外媒报道，苹果公司在去年 6 月 5 日的全球开发者大会上推出的头显产品 Vision Pro，已在太平洋时间今年 1 月 19 日凌晨 5 点，开始在美国市场接受预订，并在 2 月 2 日正式上市，苹果也就此正式切入了 VR/MR 头显市场，在 6 月份开始推向国际市场，开始在更多国家销售。
 
-![](https://upload.techweb.com.cn/s/1080/imgs/2024/1220/1734665980910.jpg)
+![](https://files.mdnice.com/user/47553/dee85b50-6eba-440c-8ccf-20b0859e584d.png)
 
 不过，对于苹果寄予厚望的 Vision Pro，本月早些时候有报道称销量并不乐观，自 2 月份开始上市以来还不到 50 万台，也有外媒提到在前三季度销售了约 37 万台，预计在四季度将再销售 5 万台，全年的销量距 50 万台也会有差距。
 
@@ -46,7 +52,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 据外媒报道，在苹果公司两度提高投资承诺，由最初的 1000 万美元增至 10 亿美元后，iPhone 16 系列在印尼的销售禁令，终于迎来了将解除的曙光，有消息称他们的投资承诺已经得到了印尼方面的认可。
 
-![](https://pics1.baidu.com/feed/bf096b63f6246b606cb78bca2b610643500fa27f.jpeg@f_auto?token=55c8044f486cc5f8be753fa0f191a01c)
+![](https://files.mdnice.com/user/47553/ac412382-16bb-43b5-a043-6171f1c2ada3.png)
 
 外媒援引知情人士的透露报道称，印尼高层在周末已经得到了相关的简报，支持批准苹果的提议，不过目前还不清楚印尼方面会在何时解除 iPhone 16 的销售禁令。
 
@@ -78,11 +84,16 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 提案
 
+### 通过的提案
+
+[SE-0450](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0450-swiftpm-package-traits.md "SE-0450") **Package 特征** 提案通过审查。该提案已在 **第六十四期周报** 正在审查的提案模块做了详细介绍。
 
 ## Swift论坛
+
 1) 讨论[建议：解决边界安全问题](https://forums.swift.org/t/suggestion-tackle-bounds-safety/76516 "建议：解决边界安全问题")
 
 在 Swift 论坛中关于界限安全的讨论中，作者强调界限安全问题的解决应更多依赖开发者优化代码逻辑，而非语言提供额外的安全保障，同时也指出通过合理的优化策略，可以在保证内存安全的同时减少性能开销。
+
 1.	作者承认由于索引越界或范围不正确造成的生产环境崩溃问题，但认为这种问题更多源于开发者的代码习惯，而非语言本身的问题。通过经验积累，作者学会了避免直接操作未知值的索引或范围，从而减少此类问题的发生。
 2.	针对在每次下标操作时都检查索引的提议，作者认为这是过于极端的做法。代码中通常存在“入口点”对索引进行验证，一旦索引通过验证，重复检查显得多余。
 3.	当前行业推动的“内存安全”语言主要是因为传统的方法难以扩展。然而，这种方法无法完全避免因“远程”操作（如更改底层存储）导致索引失效的漏洞，这可能导致更难调试的崩溃或代码安全问题。
@@ -91,10 +102,14 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 2) 讨论[[第二次审查] SF-0007：Subprocess](https://forums.swift.org/t/review-2nd-sf-0007-subprocess/76547 "[第二次审查] SF-0007：Subprocess")
 
-在 SF-0007 提案的第二次审查中，总体来看，SF-0007 提案为 Swift 引入了一个潜力巨大的子进程 API，但在细节上还需要进一步优化和澄清，尤其是在跨平台一致性、闭包隔离、性能优化等方面。
+在 SF-0007 提案的第二次审查中，总体来看，SF-0007 提案为 Swift 引入了一个潜力巨大的子进程 API，但在细节上还需要进一步优化和澄清，尤其是在跨平台一致性、闭包隔离、性能优化等方面。、
+
 1.	第一次审查总结：
+
 该提案得到了很多积极的评论，认为这是现有 Process API 的良好替代方案。然而，也有一些需要作者进一步澄清的问题，包括如何管理存活时间长于父进程的子进程，如何在进程间传递输出，以及一些平台特定 API 的处理问题。
+
 2.	开发者反馈：
+
 * 闭包发送：一些方法要求闭包是发送类型（sending），这使得它们在与其他代码组合时变得不那么容易。希望能探讨是否可以重构实现，使其不需要这一要求。
 * 闭包隔离：提案中的方法似乎缺少对“隔离”（isolated）的参数，这在使用 actor 隔离的上下文中会导致数据竞争问题。
 * AsyncSequence 的性能问题：讨论了使用 AsyncSequence 可能导致的性能问题，并希望能进一步基准测试。
@@ -109,55 +124,80 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 3) 讨论[LSP 与 CMake 和 nightly 工具链集成](https://forums.swift.org/t/lsp-integration-with-cmake-and-nightly-toolchains/76508 "LSP 与 CMake 和 nightly 工具链集成")
 
 在关于 LSP 集成与 CMake 和夜间工具链的讨论中，作者提出在集成 LSP 与 CMake 的过程中，开发者应灵活选择合适的工具链，并关注生成文件的正确配置，特别是在处理项目构建和编译标志时。VSCode 提供了更好的自定义工具链支持，而 Xcode 的兼容性可能有限。
+
 1.	Xcode 与工具链支持：
+
 Xcode 的工具链支持存在不稳定性，开发者可能会遇到兼容性问题。相比之下，VSCode 的 Swift 插件提供了更好的工具链设置功能，允许用户自定义工具链，并应用于所有功能。但 Xcode 会使用其内部版本的工具链，且在处理苹果平台时，可能无法满足工具链的要求。
+
 2.	构建问题与建议：
+
 有些用户在尝试构建项目时遇到问题。特别是，对于使用 CMake 的项目，可能需要尝试不同的生成器（如 CMake generate 或 Ninja generate），以确定哪个适合自己的项目。用户也应该检查生成的文件，确保所有文件都列在其中。
+
 3.	使用 compile_flags.txt：
-对于有库的项目，建议使用 compile_flags.txt 风格的配置，而不仅仅是默认的 CMake 配置。这可以帮助更好地管理编译标志。
+
+对于有库的项目，建议使用 `compile_flags.txt` 风格的配置，而不仅仅是默认的 CMake 配置。这可以帮助更好地管理编译标志。
 4.	配置文件与生成问题：
-一些配置（如 generatedFilesPath 或 index）可能可以简化生成过程，避免需要单独的 compile_commands.json 文件。虽然目前尚不明确如何完全实现这一点，但仍建议通过配置文件进一步探索解决方案。
 
-4) 讨论[在‘@Sendable’中捕获self……请停止它！](https://forums.swift.org/t/capture-of-self-in-a-sendable-please-make-it-stop/76463 "在‘@Sendable’中捕获self……请停止它！")
+一些配置（如 `generatedFilesPath` 或 index）可能可以简化生成过程，避免需要单独的 `compile_commands.json` 文件。虽然目前尚不明确如何完全实现这一点，但仍建议通过配置文件进一步探索解决方案。
 
-在关于 @Sendable 的讨论中，作者指出@Sendable 和 @unchecked Sendable 机制的设计目的是为了帮助开发者捕捉并发问题，并避免潜在的并发错误。虽然开发者可以选择关闭这些警告，但需要承担起确保线程安全的责任，否则可能会导致数据损坏和崩溃。
+4) 讨论[在 @Sendable 中捕获 self……请停止它！](https://forums.swift.org/t/capture-of-self-in-a-sendable-please-make-it-stop/76463 "在 @Sendable 中捕获 self……请停止它！")
+
+在关于 `@Sendable` 的讨论中，作者指出 `@Sendable` 和 `@unchecked Sendable` 机制的设计目的是为了帮助开发者捕捉并发问题，并避免潜在的并发错误。虽然开发者可以选择关闭这些警告，但需要承担起确保线程安全的责任，否则可能会导致数据损坏和崩溃。
+
 1.	编译器的警告作用：
+
 编译器发出的警告并非针对开发者，而是为了提醒潜在的并发问题，尤其是可能发生的不安全访问。编译器认为，当模型（通常是引用类型）被并发访问时，可能会引发并发问题，建议开发者审查代码。
+
 2.	@unchecked Sendable 使用：
-如果开发者确定自己能安全地管理同步问题，可以通过标记类型为 @unchecked Sendable 来告诉编译器“我能确保这是安全的”，即使编译器无法进行进一步的检查。这是开发者对编译器的一种承诺，表明他们将负责确保并发安全。
+
+如果开发者确定自己能安全地管理同步问题，可以通过标记类型为 `@unchecked Sendable` 来告诉编译器“我能确保这是安全的”，即使编译器无法进行进一步的检查。这是开发者对编译器的一种承诺，表明他们将负责确保并发安全。
+
 3.	崩溃的有效性：
+
 如果开发者违反了这种承诺并进行了不安全的访问，崩溃是合理的。处理并发问题时，编译器会倾向于立即崩溃，而不是让潜在的错误悄悄存在，避免数据损坏。
+
 4.	编译器与开发者的关系：
+
 尽管开发者可能感到编译器过于严格或烦人，但从编译器的角度，严格的并发检查有助于避免错误，确保代码的安全性。这类似于 C/C++ 等语言中的指针操作，虽然它们提供了更多自由，但也容易导致空指针访问等错误。
+
 5.	@unchecked Sendable 是否关闭警告：
-@unchecked Sendable 不会影响运行时，而是作为一个标记协议，告诉编译器在并发访问时可以放心地传递类型，但开发者需要对并发安全负责。如果不小心使用了类型，可能会导致并发错误。
 
-5) 提议[Expose attosecond representation of `Duration`](https://forums.swift.org/t/pitch-expose-attosecond-representation-of-duration/76522 "Expose attosecond representation of `Duration`")
+`@unchecked Sendable` 不会影响运行时，而是作为一个标记协议，告诉编译器在并发访问时可以放心地传递类型，但开发者需要对并发安全负责。如果不小心使用了类型，可能会导致并发错误。
 
-在关于 Duration 类型attosecond表示的提案中，作者通过引入对 Int128 类型的支持，使 Duration 类型更易于使用，特别是在需要高精度时间计算的场景中，减少了冗余代码，提高了性能和可读性。
+5) 提议[Expose attosecond representation of Duration](https://forums.swift.org/t/pitch-expose-attosecond-representation-of-duration/76522 "Expose attosecond representation of Duration")
+
+在关于 Duration 类型 attosecond 表示的提案中，作者通过引入对 Int128 类型的支持，使 Duration 类型更易于使用，特别是在需要高精度时间计算的场景中，减少了冗余代码，提高了性能和可读性。
+
 1.	提案介绍：
+
 该提案的目的是通过引入新的 Int128 类型，允许开发者更方便地访问 Duration 类型的飞秒（attosecond）表示，并简化从飞秒创建 Duration 值的过程。
+
 2.	当前 Duration 类型的局限性：
-当前的 Duration 类型有两种方式来构造和分解：一种是低位和高位的属性 _low 和 _high，另一种是通过 components 属性将其分解为秒和飞秒。虽然这些方式有效，但在处理 Duration 的总飞秒表示时存在一些局限性。例如，要生成一个随机 Duration，开发者目前需要编写冗长且低效的代码。
+
+当前的 Duration 类型有两种方式来构造和分解：一种是低位和高位的属性 `_low` 和 `_high`，另一种是通过 components 属性将其分解为秒和飞秒。虽然这些方式有效，但在处理 Duration 的总飞秒表示时存在一些局限性。例如，要生成一个随机 Duration，开发者目前需要编写冗长且低效的代码。
+
 3.	提案的动机与解决方案：
-通过引入 Int128 类型支持，提案简化了这一过程。开发者可以通过新的计算属性 attoseconds 和新的初始化器 init(attoseconds: Int128) 直接处理 Duration 的飞秒表示，从而避免了复杂的分解和运算。
+
+通过引入 Int128 类型支持，提案简化了这一过程。开发者可以通过新的计算属性 attoseconds 和新的初始化器 `init(attoseconds: Int128)` 直接处理 Duration 的飞秒表示，从而避免了复杂的分解和运算。
+
 4.	详细设计：
-新提案通过将 _low 和 _high 属性统一为一个 Int128 类型的表示，提供了更简洁高效的 API。新增的属性 attoseconds 返回 Duration 的总飞秒数，而新的初始化器允许通过传入一个 Int128 来直接创建 Duration 实例。
+
+新提案通过将 `_low` 和 `_high` 属性统一为一个 Int128 类型的表示，提供了更简洁高效的 API。新增的属性 attoseconds 返回 Duration 的总飞秒数，而新的初始化器允许通过传入一个 Int128 来直接创建 Duration 实例。
 
 ## 推荐博文
 
 [SwiftUI 中  UIGestureRecognizerRepresentable 协议使用](https://swiftwithmajid.com/2024/12/17/introducing-uigesturerecognizerrepresentable-protocol-in-swiftui/ "SwiftUI 中  UIGestureRecognizerRepresentable 协议使用")
 
-**摘要：** 这篇博客介绍了 SwiftUI 新增的 UIGestureRecognizerRepresentable 协议，用于将 UIKit 的手势识别器包装并引入 SwiftUI 视图。通过实现 makeUIGestureRecognizer 创建手势，并在 handleUIGestureRecognizerAction 中处理状态和动作，还可通过 makeCoordinator 设置手势代理以增强灵活性。该协议特别适合自定义复杂手势，如检查标记手势或圆形手势，是 SwiftUI 内置手势的有力补充。
+**摘要：** 这篇博客介绍了 SwiftUI 新增的 `UIGestureRecognizerRepresentable` 协议，用于将 UIKit 的手势识别器包装并引入 SwiftUI 视图。通过实现 `makeUIGestureRecognizer` 创建手势，并在 `handleUIGestureRecognizerAction` 中处理状态和动作，还可通过 `makeCoordinator` 设置手势代理以增强灵活性。该协议特别适合自定义复杂手势，如检查标记手势或圆形手势，是 SwiftUI 内置手势的有力补充。
 
 [iOS sizeThatFits 和 sizeToFit的区别](https://juejin.cn/post/7448060281766248459/ "iOS sizeThatFits 和 sizeToFit的区别")
 
-**摘要：** 摘要：这篇博客探讨了 iOS 中 sizeThatFits 和 sizeToFit 的区别及应用。
-sizeThatFits 用于计算视图在特定约束下的最佳尺寸，但不会修改视图的实际大小，它更灵活，适合需要自定义尺寸计算的场景。而 sizeToFit 调用 sizeThatFits 计算后，会直接调整视图的 frame 以适应内容，适合简单的自适应布局。
+**摘要：** 摘要：这篇博客探讨了 iOS 中 `sizeThatFits` 和 `sizeToFit` 的区别及应用。
+`sizeThatFits` 用于计算视图在特定约束下的最佳尺寸，但不会修改视图的实际大小，它更灵活，适合需要自定义尺寸计算的场景。而 sizeToFit 调用 sizeThatFits 计算后，会直接调整视图的 frame 以适应内容，适合简单的自适应布局。
 
-通过 UILabel 的示例，博客展示了 sizeThatFits 如何返回最佳尺寸供开发者使用，以及 sizeToFit 如何直接更新视图大小。对于复杂布局，可以通过重写 sizeThatFits 来实现定制规则。
+通过 UILabel 的示例，博客展示了 `sizeThatFits` 如何返回最佳尺寸供开发者使用，以及 sizeToFit 如何直接更新视图大小。对于复杂布局，可以通过重写 `sizeThatFits` 来实现定制规则。
 
-总结来说，sizeThatFits 提供更多控制，适用于复杂需求；sizeToFit 简单直接，适合快速适配。理解两者的区别，有助于更高效地进行视图布局调整。
+总结来说，`sizeThatFits` 提供更多控制，适用于复杂需求；sizeToFit 简单直接，适合快速适配。理解两者的区别，有助于更高效地进行视图布局调整。
 
 [Swift 进阶；泛型](https://juejin.cn/post/6963841629270900767/ "Swift 进阶；泛型")
 
@@ -165,7 +205,7 @@ sizeThatFits 用于计算视图在特定约束下的最佳尺寸，但不会修�
 
 ## 话题讨论
 
-**冬天洗澡,一定是很多人都非常纠结的事情,冬天洗澡真的太冷了，冬天你多久洗一次澡？**
+**冬天洗澡，一定是很多人都非常纠结的事情，冬天洗澡真的太冷了，冬天你多久洗一次澡？**
 
 1. 一天一洗。
 2. 两天一洗。
