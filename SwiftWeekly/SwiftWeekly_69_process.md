@@ -105,6 +105,92 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## Swift论坛
 
+1) 讨论[是否有可能为开源 Swift 组织一个“筹款”委员会？](https://forums.swift.org/t/possibility-of-organizing-a-fundraising-committee-for-open-source-swift/76816 "是否有可能为开源 Swift 组织一个“筹款”委员会？")
+
+在讨论是否可能成立一个“筹款”委员会来支持开源Swift项目时，文章探讨了目前的开源开发模式及其优劣势：
+1.	现状分析
+* 开源Swift的开发目前主要由Apple资助，其余工作由志愿者在空闲时间完成。
+* 核心工具链和Apple主导的大方向（如并发、~Copyable）得到良好支持，但一些小众功能或中间层基础设施（既非核心也非特定公司需求）常被忽视。
+* 志愿者开发的库缺乏资金支持，常因无法持续投入而被放弃。
+2.	筹款难点
+* 筹款需要计划、协调、跟进和市场推广技能，个人难以胜任。
+* 目前，志愿者通常依赖GitHub Sponsors等方式筹资，但效果有限。
+3.	筹款委员会的可能性
+* 将非Apple来源的筹资确立为社区目标。
+* 为赞助商提供稳定的合作对象。
+* 通过“徽章”标识、显示赞助商Logo或提供广告空间等方式激励资助。
+4.	建议和批评
+* 建议：取消$100的开发者计划费用，这比筹资机制更易实施，且能惠及更多人。
+* 批评：外部资助模式复杂，缺乏可靠性，赞助商可能随时改变主意，导致时间和资源浪费。
+5.	其他问题
+* 开源项目的不稳定性（如分裂、专利纠纷）可能带来风险。
+* Apple有能力自主开发其需要的工具和库，依赖外部资助并非必需。
+
+总结：尽管筹款委员会可能促进Swift社区的发展，但实际操作中存在许多障碍，与其尝试复杂的资助模式，不如直接降低开发者参与门槛，如取消$100费用。
+
+2) 讨论[追溯符合 `BitwiseCopyable`](https://forums.swift.org/t/retroactively-conforming-to-bitwisecopyable/76826 "追溯符合 `BitwiseCopyable`")
+
+讨论了与 Swift Evolution 提案中有关 BitwiseCopyable 协议的相关内容，重点是无法让其他模块中的类型符合该协议的问题。文章指出在包装 C API（如使用 sysctl() 函数）时，若类型未标记为 BitwiseCopyable，可能会导致编译器警告，同时分析了解决此问题的潜在方法、对 Swift 现有行为的修改建议，以及处理 C 中可能影响按位可复制性的联合类型的考虑。
+关键点：
+1.	开发者无法让外部模块中定义的类型符合 Swift 的 BitwiseCopyable 协议。
+2.	包装 C API（如 sysctl()）时，若类型未被识别为 BitwiseCopyable，可能会引发潜在的堆栈破坏问题。
+3.	对 BitwiseCopyable 使用泛型类型约束可以消除编译器警告，但仅限于在安全实践中使用。
+4.	无法为其他模块中定义的现有结构（如 kinfo_proc）添加 BitwiseCopyable 的符合性。
+5.	文中提到，某些 C 类型的 BitwiseCopyable 推断基于其成员类型，这可能会在使用联合类型时带来复杂性。
+6.	建议改进以处理导入的联合类型及其与 BitwiseCopyable 的符合性，并提出修改现有提案的必要性。
+7.	Swift 对导入类型的复杂处理反映出有必要重新定义关于 BitwiseCopyable 符合性的规则，以更好地支持 C 结构的使用。
+
+3) 讨论[如何实现与并发兼容的作用域函数](https://forums.swift.org/t/how-to-implement-scope-functions-compatible-with-concurrency/76838 "如何实现与并发兼容的作用域函数")
+
+讨论了在 Swift 中如何实现与并发兼容的作用域函数。以下是主要内容：
+1.	当前实现方法
+* 采用继承调用者的隔离方式，同时决定如何处理非 Sendable 值（发送或转换为 Sendable）。
+* 这种方法与 Franz Busch 在近期演讲中推荐的内容一致，修改建议也类似于 Ole 的提议。
+2.	标准库行为解释
+* 标准库中的 TaskLocal.withValue 能成功编译，可能是因为其在 Swift 5 语言模式下编译，并未启用严格的并发检查。
+* 相关证据可以从 cmake 配置文件中找到。
+3.	问题与工具链版本
+* 讨论中提到的一些实现（如 @inheritsIsolation 属性）在最新编译器快照中无法正常工作，包括编译器探索器中也会出现问题。
+* 当前编译器尚未提供语言功能，无法声明 withLog 函数与操作与调用者属于同一隔离域，因此无法实现通用的作用域函数。
+4.	可能的解决方案
+* @inheritsIsolation 属性处于草案阶段，若投入使用，可实现目标功能。
+* 现有的 @_inheritActorContext 功能类似，但在某些情况下会出现意外行为，不适合该用例。
+
+4) 讨论[使用 WKWebView 的 evaluateJavascript 与 async let 时的并发警告](https://forums.swift.org/t/concurrency-warning-when-using-wkwebview-evaluatejavascript-and-async-let/76836 "使用 WKWebView 的 evaluateJavascript 与 async let 时的并发警告")
+
+讨论了在 Swift 中使用 async let 和 WKWebView.evaluateJavascript 时遇到的并发警告及相关问题，重点包括类型约束、隔离检查和任务调度的影响。
+1.	问题描述
+* 尝试用 Task(executorPreference: MainActor.shared) { … } 替代任务初始化器，但编译失败，提示 MainActor 不符合预期的 TaskExecutor 类型。
+* 根本问题在于使用 Any 作为返回类型。由于不能跨 Actor 边界发送非 Sendable 类型，需在 async let 声明之前将其强制转换为 Sendable 类型。
+2.	深入分析
+* Any 类型与 Actor 隔离：
+* 如果调用方和被调用方均非隔离，则不会报错，即使返回值非 Sendable，因为没有跨越隔离边界。
+* 同一 Actor 隔离的 async let：
+* 当 async let 的声明和初始化表达式均在同一 Actor 隔离中时，async let 的核心功能（并发执行）被削弱。
+* 隐式闭包为非隔离状态，任务会默认跳到并发执行器，这导致绑定的任务启动顺序不可预测。
+3.	设计模式建议
+* 对于简单场景，应避免在同一 Actor 隔离中使用 async let。直接对函数进行 await 调用通常更合理。
+* 如果 async let 必须使用，则应确保其声明与隔离边界处理一致，以避免非确定性行为。
+4.	讨论与结论
+* 当前的隔离检查逻辑较为保守，尚不足以支持某些模式，可能需要额外开销或改进语言功能。
+* 对于所讨论的用例，直接使用 await 而非 async let 更符合最佳实践，避免了额外的复杂性与潜在问题。
+
+5) 讨论[帮助解决 SwiftPM 依赖问题](https://forums.swift.org/t/help-with-issue-resolving-dependency-with-swiftpm/76840 "帮助解决 SwiftPM 依赖问题")
+
+讨论了在使用 Swift Package Manager (SwiftPM) 管理依赖时遇到的问题，主要包括依赖解析失败、模块构建错误以及潜在的解决方法。
+1.	问题描述
+* 项目中存在命名相关的问题，但在过去的多个项目中，使用相同命名并未出现问题。
+* 在 GitHub Actions 中复现了问题，错误信息指向一个缺失的头文件和无法构建的 Objective-C 模块 OpenAI。
+2.	可能原因
+* 强制推送：作者怀疑在对仓库进行强制推送时可能导致了 SwiftPM 的配置或缓存出现问题。
+* 模块映射文件：错误日志显示模块映射文件引用了一个不存在的头文件，可能与模块配置相关。
+* 依赖解析：当依赖的模块发生更改时，可能需要手动解析依赖以确保成功构建。
+3.	解决尝试
+* 修改了仓库名称以测试问题来源，但未解决问题。
+* 使用本地的 Package.swift 文件来管理依赖，在某些情况下有效，但复杂的依赖解析可能需要在构建前手动处理模块变化。
+4.	对 CI 和测试的看法
+* 在 CI/测试场景中使用 SwiftPM 是有效的，可以避免打开 Xcode，但需要解决模块间依赖问题。
+* 通过终端管理模块/依赖，适合快速编辑和测试。
 
 ## 推荐博文
 
