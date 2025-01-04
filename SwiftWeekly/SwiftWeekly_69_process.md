@@ -194,6 +194,19 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 ## 推荐博文
 
+[【iOS特性】3D Touch - 手搓Live Photo效果](https://mp.weixin.qq.com/s/g1kh3U3tWO8sAP_S--8V5w?token=1812256132&lang=zh_CN/ "【iOS特性】3D Touch - 手搓Live Photo效果")
+
+**摘要：** 这篇博客介绍了如何在 iOS 中实现 3D Touch 手搓 Live Photo 效果。详细讲解了实现过程的四个主要步骤：从相册选取视频、截取视频首帧图片、合成 Live Photo、以及使用 PHLivePhotoView 展示效果。通过结合 Photos 和 PhotosUI 框架，实现了将普通视频转换为 Live Photo 的功能。文章提供了完整的示例代码和实现思路，对想要实现类似功能的 iOS 开发者具有参考价值。
+
+[ SwiftUI 开发当中的状态管理](https://juejin.cn/post/7447749020837855258/ " SwiftUI 开发当中的状态管理")
+
+**摘要：** 摘要：这篇文章深入介绍了 SwiftUI 中的状态管理机制。文章首先解释了为什么需要状态管理，然后详细讲解了 SwiftUI 提供的五种主要状态管理工具：@State（用于局部状态）、@Binding（用于父子视图间状态共享）、@ObservedObject（用于观察外部对象）、@StateObject（用于视图内部状态对象管理）以及 @EnvironmentObject（用于全局状态共享）。最后通过底层原理分析，展示了 SwiftUI 如何通过响应式编程模型和 Combine 框架实现高效的状态管理。文章通过具体示例代码，为开发者提供了实用的 SwiftUI 状态管理指南。
+
+[iOS keychain](https://juejin.cn/post/7452278586096173067/ "iOS keychain")
+
+**摘要：**  文章首先阐述了 keychain 作为一种安全存储私密信息（如密码、证书等）的方式的特点，以及其在备份和应用间数据共享方面的作用。接着介绍了四个常用的操作方法：SecItemAdd（添加）、SecItemDelete（删除）、SecItemUpdate（修改）和 SecItemCopyMatching（查找）。文章还深入讲解了各种保护属性的使用、iCloud 同步机制，以及数据保护 API 的工作原理和不同保护等级的应用场景。通过具体的代码示例，为开发者提供了实用的 keychain 使用指南。
+
+
 
 ## 话题讨论
 
