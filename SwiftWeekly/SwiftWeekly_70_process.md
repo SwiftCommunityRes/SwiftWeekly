@@ -100,6 +100,157 @@ MoffettNathanson 的高级分析师 Craig Moffett 在降级报告中表示，虽
 
 ## Swift论坛
 
+1) 讨论[Non-suspending 替代是 await?](https://forums.swift.org/t/non-suspending-alternative-to-await/77059/1 "Non-suspending 替代是 await?")
+
+讨论的是 Swift 社区中关于非挂起的替代方案，用于处理异步任务时的一些问题和可能的解决方式。核心点包括：
+
+1.	当前的实现方式：通过 Task.detached 启动异步任务，但忽略其结果和错误处理，这样的用法虽然简单，但可能会导致代码中额外的噪音。
+2.	潜在改进建议：提出了可能使用 try? 或引入新的关键字（如 concurrent）来优化语法，以更清晰地表达“运行但不等待”的语义。
+3.	任务分组的作用：在某些情况下，任务分组（withTaskGroup）可以更好地组织并行任务，但需要具体用例中有多个并行任务，单任务场景下未必有优势。
+4.	反思并优化并发模型：作者提出要更仔细地考虑是否真正需要非结构化并发，因为合理的并发模型可以避免不受控的任务悬而未决的问题。
+
+总结：整个讨论旨在优化 Swift 异步任务管理的语法和使用方式，使得开发者可以更高效地处理异步操作，同时避免潜在的任务管理问题。新的建议（如 try? concurrent 或改进任务分组的使用）虽然具有一定潜力，但需要权衡其复杂性和适用场景。
+
+2) 讨论[发送 var 可能会引发数据竞争](https://forums.swift.org/t/sending-a-var-risks-causing-data-races/77051 "发送 var 可能会引发数据竞争")
+
+讨论主题是在 Swift 并发编程中如何避免由 actor 引发的数据竞争问题，具体情境和解决方案如下：
+用户分享了一段代码，描述了如何通过 actor 管理一个 Updater 实例以实现线程安全。然而在调用异步方法 stopUpdates() 时，编译器报错，提示：
+```Swift
+Error: Sending 'self.updater' risks causing data races
+```
+```Swift
+actor Pipeline {
+    let updater = Updater()
+    
+    func startUpdates() {
+        updater.startUpdates()
+    }
+    
+    func stopUpdates() async {
+        await updater.stopUpdates() //Error: Sending 'self.updater' risks causing data races
+    }
+}
+
+final class Updater {
+    func startUpdates() {
+        print("started updates")
+    }
+    
+    func stopUpdates() async {
+        print("stopped updates")
+    }
+}
+```
+错误原因
+* actor的隔离规则：
+Swift 中，actor 提供了线程安全的隔离。任何被 actor 管理的属性（如 updater）都默认是隔离的，跨线程访问时需要满足 Sendable 协议。如果不符合 Sendable，系统会提示潜在的数据竞争风险。
+* Updater不符合Sendable：
+默认情况下，final class Updater 不符合 Sendable，因为它可以被多个线程同时访问，进而引发数据竞争问题。
+
+尝试的解决方法与限制
+1.	将 Updater 标记为 Sendable
+    * 将 Updater 明确标记为 Sendable 是一种解决方案，但会引入以下限制：
+    * 不能添加可变的成员变量：因为 Sendable 的要求是类的实例在并发场景中必须是不可变的，任何可变成员都会导致编译器报错。
+2.	使用 nonisolated 修饰符
+    * 另一种尝试是在 Pipeline 中将 updater 声明为 nonisolated
+
+可能的解决方案
+1.	改为使用 actor 管理 Updater
+    * 将 Updater 转换为一个 actor，使其本身具有线程安全的特性。例如：
+```Swift
+actor Updater {
+    func startUpdates() {
+        print("started updates")
+    }
+    
+    func stopUpdates() async {
+        print("stopped updates")
+    }
+}
+```
+2.	将 Updater 的功能封装在 Pipeline 内
+    * 如果 Updater 只在 Pipeline 中使用，可以直接将其功能整合到 Pipeline 中，避免跨隔离的调用。
+3.	重构以满足 Sendable
+    * 通过避免可变状态或使用不可变的数据类型，使 Updater 符合 Sendable 协议。
+
+总结：这段讨论展示了 Swift 中 actor 的隔离规则和 Sendable 协议的作用。主要挑战在于如何在并发环境中既避免数据竞争，又保留灵活性。常见解决方案包括将共享状态转换为 actor，或在设计时减少对跨线程共享状态的依赖。
+
+3) 提议[Valued break](https://forums.swift.org/t/pitch-valued-break/76995 "Valued break")
+
+提出了一种新方案，旨在改进多行 switch 表达式的实现，提供更灵活的值生成和控制流逻辑。核心内容包括：
+* 问题描述：现有的条件分支（如 if-else）无法将块内生成的值用于块外，现有解决方法如三元运算符、提前声明变量、或滥用闭包（IIFE）均存在局限性。
+* 解决方案：通过引入带标签的 break，使其既能中断控制流，又能返回值。例如：
+```Swift
+let value = mylabel: if condition {
+    break mylabel(3)
+} else {
+    break mylabel(4)
+}
+```
+* 支持更复杂的逻辑（例如嵌套循环和 do 块）。
+* 保持语法兼容性，不引入新关键字。
+
+其他建议：可通过冒号明确返回值的表达式，减少语法歧义和冗余。例如：
+```Swift
+let value = inner: do {
+    if test1(element) {
+        break: 1
+    }
+    break inner: 2
+}
+```
+
+优点：
+1.	不引入新关键字，保持语言简洁。
+2.	与现有语法完全兼容。
+3.	提供更灵活的表达式控制和值返回方式。
+
+总结：该提案旨在提供一种灵活且兼容的方式，解决条件分支和控制流中值生成的限制，为 Swift 开发者带来更多的表达能力。
+
+4) 讨论[Swift 6 传递发送闭包的并发错误](https://forums.swift.org/t/swift-6-concurrency-error-of-passing-sending-closure/77048 "Swift 6 传递发送闭包的并发错误")
+
+在 Swift 6 的并发环境中，问题的核心是闭包隐式捕获了 self，导致不易察觉的错误。以下是主要内容和建议：
+* 问题描述：由于 self 被隐式捕获（如未显式写 await self.writer...），可能导致意外行为，尤其是在并发上下文中。
+* 快速修复：通过显式捕获列表，确保只捕获必要的变量。例如：
+```Swift
+Task { [writer] in
+    // 使用 writer 进行操作
+}
+```
+因为 Writer 是一个 actor，因此可以安全地在闭包中传递。
+
+* 潜在问题：如果 writer 是 var，在 start 和 stop 方法调用之间发生了切换，可能会导致调用错位或遗漏。
+* 对 Recorder 的讨论：
+   1. Recorder 是一个非 Sendable 类型。
+   2. 它参与了并发操作（如使用 Task）。
+这种类型在并发环境中可能非常复杂，使用时需要特别谨慎。因为方法是非隔离的，所以调用顺序无法保证。例如：
+```Swift
+recorder.startRecording()
+recorder.stopRecording()
+```
+在上述代码中，stop 可能在 start 之前发生。
+
+* 解决方法：
+ 1.	推迟创建 Task，并将调用改为异步。
+ 2.	如果 Recorder 与 UI 直接关联，可将其标注为 @MainActor。这可以：
+    * 提供静态隔离，确保更好的调用顺序（在 Swift 6 编译器中）。
+    * 使类型变为 Sendable。
+
+总结：要安全、高效地在并发环境中使用非 Sendable 类型，需明确捕获范围，并考虑使用 @MainActor 或将并发逻辑上移，以减少复杂性和潜在错误。
+
+5) 讨论[适用于非 Apple 平台（如 Android、Web、Windows）的 SwiftUI](https://forums.swift.org/t/swiftui-for-non-apple-platforms-like-android-web-windows/25455 "适用于非 Apple 平台（如 Android、Web、Windows）的 SwiftUI")
+
+SwiftUI 的声明式 UI 模型展现了其跨平台潜力，可用于 Web、Windows 和 Android 等非 Apple 平台。然而，SwiftUI 并非开源项目，因此实现这一愿景需要特殊努力。以下是主要内容和建议：
+* 现状：Apple 的目标是通过 SwiftUI 提供“学习一次、应用到处”的开发体验，但目前局限于 Apple 平台。
+* 潜力：SwiftUI 的声明式和抽象特性（如 Text、Button、VStack）适用于所有类型的用户界面，扩展到其他平台将极大促进 Swift 的普及和应用。
+* 挑战与建议：
+   1.	Apple 主导：最佳方案是 Apple 开源 SwiftUI 的基础算法和 API，允许社区和公司在其他平台上进行实现。
+   2.	中间层支持：Apple 提供中间层算法，用于将声明式代码转换为最终 UI 表现，并实现基于数据的 UI 更新逻辑。
+   3.	社区贡献：由开源项目（如 Vapor）或公司（如微软和 Canonical）负责在非 Apple 平台上的具体实现。
+* 实现的可能性：虽然当前看似遥远，但 Apple 可能早已考虑了跨平台支持。例如，命名为 SwiftUI 并使用 Swift 标志表明其与 Swift 语言的深度关联，或暗示潜在的开放意图。
+* 愿景：如果 SwiftUI 成为真正的跨平台 UI 框架，它将成为开发者对抗 Dart/Flutter 等框架的有力武器，大幅提升 Swift 作为通用编程语言的吸引力。
+
+总结：SwiftUI 的跨平台潜力巨大，但需要 Apple 的支持与社区的协作。开源基础框架和算法是实现这一目标的关键，而 SwiftUI 成为通用跨平台开发工具将是 Swift 生态的革命性进展。
 
 ## 推荐博文
 
