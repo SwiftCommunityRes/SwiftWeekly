@@ -196,6 +196,28 @@ Swift语言指导小组已接受了一份题为“提高数据竞争安全性的
 
 ## 推荐博文
 
+[gRPC Swift 2 介绍](https://www.swift.org/blog/grpc-swift-2/ "gRPC Swift 2 介绍")
+
+**摘要：** 这篇文章介绍了gRPC Swift 2的重大更新，它为开发者提供了现代化的并发支持和更具表现力的API，旨在提升开发体验。gRPC是一个高性能的框架，用于通过网络在不同系统之间进行高效通信。更新后的gRPC Swift 2利用了Swift的现代并发模型（如async/await），简化了开发流程，并且支持Linux和Apple平台上的服务与客户端构建。
+
+文章主要强调以下几个亮点：
+
+1. 提供现代化且易用的API和代码生成。
+2. 完整支持Linux和Apple平台。
+3. 支持HTTP/2传输，具备负载均衡、自动重试等智能客户端特性。
+4. 可插拔的拦截器层，支持身份验证、日志记录、指标等跨切逻辑。
+
+此外，文章还提供了如何使用gRPC Swift构建一个简单的“Hello World”服务的代码示例，展示了如何生成服务端和客户端代码，并使用生成的代码进行网络通信。
+
+
+[Swift的服务器支持驱动Things Cloud](https://www.swift.org/blog/how-swifts-server-support-powers-things-cloud/ "Swift的服务器支持驱动Things Cloud")
+
+**摘要：** 这篇文章讲述了Things Cloud服务从使用Python 2和Google App Engine的后端架构迁移到完全基于Swift的过程。由于原有架构存在性能问题、高内存使用等限制，Things团队决定重写服务器端代码，采用Swift进行开发。文章解释了这一转变的原因，包括Swift在性能、内存管理和类型系统方面的优势，以及其不断发展的服务器端支持。新架构使用了Vapor、SwiftNIO和MySQLKit等Swift包，并通过Terraform和Kubernetes部署在AWS上。新的Swift架构已经在生产环境中运行超过一年，为Things Cloud提供了可靠、高效的跨设备待办事项同步服务，确保了系统的稳定性和可维护性。
+
+[iOS App Store 上架被拒 case](https://juejin.cn/post/7116301510887079967/ "iOS App Store 上架被拒 case")
+
+**摘要：** 这篇文章主要记录了 App Store 上架过程中遇到的一些被拒绝的案例，以及对应的原因分析和解决策略。案例涵盖了从功能完整性、信息需要、隐私确认，到软件需求和上传被拒等不同阶段的问题。文章还详细阐述了各种问题的产生原因，如 APP 功能不全、集成未使用的库、隐私信息填写不全等，并提出相应的解决方案。通过这些案例的分享，开发者可以理解和学习如何避免类似的错误，更顺利地完成 App Store 的上架过程。
+
 
 ## 话题讨论
 
