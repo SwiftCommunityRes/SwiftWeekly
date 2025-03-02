@@ -10,18 +10,21 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：消息称苹果首款大折叠手机目前打样外屏 5.49“±、内屏 7.74”±
 > 
-> 提案：
+> 提案：添加 `Collection` 一致性 `enumerated()`
 > 
-> Swift 论坛：
+> Swift 论坛：讨论使用 Swift Build 改进 SwiftPM 构建
 >
-> 推荐博文：
+> 推荐博文：揭开 iOS 中 weak 指针的神秘面纱：从原理到实践
 >
 > **话题讨论：** 
 > 
-> 
+> 苹果为何选择阿里巴巴作为中国市场的本地化合作伙伴？
 >
 >**上期话题结果**
 
+![](https://files.mdnice.com/user/47553/36fbdd68-b2e2-4262-9be2-2a0a6aef3ee7.jpeg)
+
+都说现在年味淡了，其实是曾经期待过年的那一批人，现在成为了制造年味的人。
 
 ## 新闻和社区  
 
@@ -55,7 +58,7 @@ TikTok 能否摆脱争议重返苹果 App Store？最新消息来了！
 
 博主 @数码闲聊站 透露，苹果公司的首款折叠屏 iPhone 是大折叠，目前打样外屏 5.49"±，内屏 7.74"±。
 
-![](https://pics5.baidu.com/feed/9c16fdfaaf51f3dee4eb1e55de4b95103b2979de.jpeg@f_auto?token=e873e9dec80a9196b42021f08b5843b2)
+![](https://files.mdnice.com/user/47553/d9c55830-84a9-4d24-aaa2-4563243776e7.png)
 
 此前有消息称苹果公司开始加快其首款折叠屏 iPhone 的研发步伐，公司已开始与超薄玻璃（UTG）供应商展开合作，对此蓝思科技表示“涉及保密协议公司不方便回应”。
 
@@ -107,16 +110,36 @@ IT 之家注意到，苹果并非唯一一家曾在 X 平台上暂停广告投�
 
 尽管如此，苹果公司首席执行官蒂姆・库克以及其他高管，如营销主管格雷格・乔斯维亚克，自马斯克收购该平台以来，一直保持着在 Twitter（现 X 平台）上的活跃。不过，苹果前营销主管菲尔・席勒选择离开了 X 平台，转而使用 Mastodon 和 Bluesky 等其他平台。（来源：IT之家）
 
-
 ## 提案
 
+### 通过的提案
+
+[SE-0452](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0452-integer-generic-parameters.md "SE-0452") **整数通用参数** 提案通过审查。该提案已在 **第六十六期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0454](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0454-memory-allocator.md "SE-0454") **工具链的自定义分配器** 提案通过审查。该提案已在 **第七十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0455](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0455-swiftpm-testable-build-setting.md "SE-0455") **SwiftPM @testable 构建设置** 提案通过审查。该提案已在 **第七十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0457](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0457-duration-attosecond-represenation.md "SE-0457") **公开秒表 Duration** 提案通过审查。该提案已在 **第七十期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0459](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0459-enumerated-collection.md "SE-0459") **添加 Collection 一致性 enumerated()** 提案正在审查。
+
+本提案旨在解决 `enumerated()` 返回的序列缺乏 `Collection` 一致性的问题，防止它在需要 `Collection` 的上下文中使用。
+
+[SE-0460](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0460-specialized.md "SE-0460") **Explicit Specialization** 提案正在审查。
+
+本提案引入了一个新属性 `@specialized`，它允许泛型函数的作者为特定类型生成该函数的预专业版本。当函数的非专业版本使用这些类型之一调用时，编译器将生成代码，如果可用，该代码将重新分发到这些预专业版本。
 
 ## Swift论坛
+
 1) 讨论[使用 Swift Build 改进 SwiftPM 构建](https://forums.swift.org/t/evolving-swiftpm-builds-with-swift-build/77596 "使用 Swift Build 改进 SwiftPM 构建")
 
 Swift 论坛于 2025 年 2 月 1 日宣布了一个名为 Swift Build 的新开源项目，该项目将成为 Swift 工具链的一部分，并用于优化 Swift 包管理器（SwiftPM）的构建系统。该项目的目标是在所有受支持的平台上统一构建体验，并提供更强大、灵活的构建功能。
 
 Swift Build 主要特性:
+
 1.	基于 SwiftDriver 的构建
 * Swift Build 将采用 SwiftDriver（Swift 编译器驱动的库实现），以提高构建任务的调度效率，并优化构建依赖图。
 * 这将使 SwiftPM 的构建系统更可扩展，并更容易适应未来的改进。
@@ -142,17 +165,20 @@ Swift 社区鼓励开发者关注该项目的进展，并参与讨论，共同�
 2) 提议[[经修改后接受] SE-0453：InlineArray（以前称为：Vector，固定大小的数组）](https://forums.swift.org/t/accepted-with-modifications-se-0453-inlinearray-formerly-vector-a-fixed-size-array/77678 "[经修改后接受] SE-0453：InlineArray（以前称为：Vector，固定大小的数组）")
 
 2025年2月5日，Swift 论坛宣布接受了提案 SE-0453，但进行了若干修改。 该提案引入了一个名为 InlineArray 的新类型，旨在提供固定大小的数组功能。
+
 * 原提议的初始化方法：
+
 ```Swift
 public init<E: Error>(with next: (Index) throws(E) -> Element) throws(E)
 ```
-将去掉参数标签，改为：init(_:)。
+将去掉参数标签，改为：`init(_:)`。
 
 * 在审查过程中，有人指出 InlineArray 的下标操作与 Span 类型不同。 语言指导小组决定让 InlineArray 采用 Span 中缺失的下标操作。
 
 关于命名：
 
 语言指导小组对该类型的命名进行了深入讨论，考虑了审查线程中的意见和私人反馈。 最终决定采用 InlineArray 这一名称，原因如下：
+
 * 关于 Vector 名称： 小组同意，Swift 与其他语言（如 C++ 和 Rust）对“vector”一词的不同理解可能导致混淆。 此外，Vector 与数学向量的关联性不足，难以仅凭此理由采用该名称。
 * 关于 FixedSizeArray 名称： 虽然该名称准确描述了类型的行为，但未能体现该类型在复制时的性能特征。 InlineArray 通过 Inline 前缀，强调了其存储方式和性能特性。
 
@@ -162,20 +188,21 @@ public init<E: Error>(with next: (Index) throws(E) -> Element) throws(E)
 
 3) 提议[非弹性模块的可扩展枚举](https://forums.swift.org/t/pitch-extensible-enums-for-non-resilient-modules/77649 "非弹性模块的可扩展枚举")
 
-2025年2月4日，Swift 论坛成员 Franz Busch 和 Pavel Yaskevich 提出了一个名为“为非弹性模块引入可扩展枚举”的新提案。 该提案旨在解决非弹性（non-resilient）模块中枚举类型在 API 演进过程中遇到的问题。目前，Swift 包中的公共 API 避免使用枚举类型，因为在不破坏现有代码的情况下，无法向公共枚举添加新案例。该提案建议对非弹性模块中的枚举行为进行调整，使其与弹性模块中的行为保持一致。具体而言，未标记为 @frozen 的枚举将被视为可扩展的，这意味着在未来可以添加新案例，而不会破坏现有代码。对于从其他模块（不在同一包内）导入的此类枚举，开发者在使用 switch 语句时，需要添加 @unknown default: 分支，以处理可能的新增案例。然而，对于同一包内的模块之间的枚举使用，switch 语句仍要求穷尽所有已知案例，无需添加 @unknown default: 分支。该提案的目标是统一 Swift 语言中弹性和非弹性模式下的枚举行为，简化库维护，并鼓励在公共 API 中更广泛地使用枚举。
+2025年2月4日，Swift 论坛成员 Franz Busch 和 Pavel Yaskevich 提出了一个名为“为非弹性模块引入可扩展枚举”的新提案。 该提案旨在解决非弹性（non-resilient）模块中枚举类型在 API 演进过程中遇到的问题。目前，Swift 包中的公共 API 避免使用枚举类型，因为在不破坏现有代码的情况下，无法向公共枚举添加新案例。该提案建议对非弹性模块中的枚举行为进行调整，使其与弹性模块中的行为保持一致。具体而言，未标记为 @frozen 的枚举将被视为可扩展的，这意味着在未来可以添加新案例，而不会破坏现有代码。对于从其他模块（不在同一包内）导入的此类枚举，开发者在使用 switch 语句时，需要添加 `@unknown default:` 分支，以处理可能的新增案例。然而，对于同一包内的模块之间的枚举使用，switch 语句仍要求穷尽所有已知案例，无需添加 `@unknown default:` 分支。该提案的目标是统一 Swift 语言中弹性和非弹性模式下的枚举行为，简化库维护，并鼓励在公共 API 中更广泛地使用枚举。
 
 4) 提议[可替换的库插件](https://forums.swift.org/t/pitch-replaceable-library-plugins/77605 "可替换的库插件")
 
-2025年2月2日，Swift 论坛成员提出了一个名为“可替换库插件”（Replaceable Library Plugins，简称 RLP）的新提案。 该提案旨在为 Swift 包管理器（SwiftPM）引入对动态库的支持，特别是在 Linux 环境中。目前，SwiftPM 在 Linux 上缺乏对非系统二进制库依赖项的支持，这意味着每当应用程序的某个组件发生变化时，开发者需要重新编译并部署整个应用程序。RLP 的引入将允许开发者将这些变化频繁的组件打包为动态库，并在不重新编译整个应用程序的情况下进行替换和升级。这些动态库将通过现有的 .artifactbundle 格式进行分发。需要注意的是，RLP 主要面向组织内部或特定客户的内部使用，组织需要定义自己的“组织定义平台”（Organization-Defined Platforms，ODP），以确保二进制兼容性。要创建 RLP，开发者需要使用 -enable-library-evolution 标志构建一个普通的 SwiftPM 库产品，并将其打包为 .artifactbundle。该提案的目标是为 SwiftPM 引入动态库支持，特别是在 Linux 环境中，以提高应用程序的模块化和可维护性。
+2025年2月2日，Swift 论坛成员提出了一个名为“可替换库插件”（Replaceable Library Plugins，简称 RLP）的新提案。 该提案旨在为 Swift 包管理器（SwiftPM）引入对动态库的支持，特别是在 Linux 环境中。目前，SwiftPM 在 Linux 上缺乏对非系统二进制库依赖项的支持，这意味着每当应用程序的某个组件发生变化时，开发者需要重新编译并部署整个应用程序。RLP 的引入将允许开发者将这些变化频繁的组件打包为动态库，并在不重新编译整个应用程序的情况下进行替换和升级。这些动态库将通过现有的 `.artifactbundle` 格式进行分发。需要注意的是，RLP 主要面向组织内部或特定客户的内部使用，组织需要定义自己的“组织定义平台”（Organization-Defined Platforms，ODP），以确保二进制兼容性。要创建 RLP，开发者需要使用 `-enable-library-evolution` 标志构建一个普通的 SwiftPM 库产品，并将其打包为 `.artifactbundle`。该提案的目标是为 SwiftPM 引入动态库支持，特别是在 Linux 环境中，以提高应用程序的模块化和可维护性。
 
 5) 讨[在 Swift 中使用 C 库：思考](https://forums.swift.org/t/using-the-c-library-from-swift-thoughts/77648 "在 Swift 中使用 C 库：思考")
 
 2025年2月4日，Swift 社区成员 Alastair Houghton 在 Swift 论坛上发起了关于在 Swift 中使用 C 标准库的讨论。 讨论的起因是为 FreeBSD 添加支持的拉取请求中，当前的实现滥用了 Glibc 模块，而 FreeBSD 并不使用 Glibc。这引发了关于创建统一的 C 标准库模块的想法，以简化跨平台开发者在不同操作系统上导入 C 标准库的过程。
 
 当前问题：
+
 * 导入差异： 开发者需要根据操作系统条件导入不同的 C 标准库模块，例如：
 
-```Swift
+```swift
     #if os(Linux)
     import Glibc
     #elseif os(macOS) || os(iOS) || ...
@@ -189,7 +216,7 @@ public init<E: Error>(with next: (Index) throws(E) -> Element) throws(E)
 
 这种方式增加了代码的复杂性和维护成本。
 
-* 类型不一致： 同一 C 类型在不同平台上的导入方式可能不同，例如 FILE * 可能被导入为 OpaquePointer、UnsafeMutablePointer<FILE> 或 UnsafeMutablePointer<FILE>?，这取决于 C 库的定义方式，导致在 Swift 中使用这些类型时缺乏一致性。
+* 类型不一致： 同一 C 类型在不同平台上的导入方式可能不同，例如 FILE * 可能被导入为 `OpaquePointer`、`UnsafeMutablePointer<FILE>` 或 `UnsafeMutablePointer<FILE>?`，这取决于 C 库的定义方式，导致在 Swift 中使用这些类型时缺乏一致性。
 
 建议的解决方案：
 
@@ -197,21 +224,22 @@ public init<E: Error>(with next: (Index) throws(E) -> Element) throws(E)
 
 * 标准库模块： 允许开发者通过以下方式导入特定的 C 标准库：
 
-```Swift
-    import C99 // 或 C11、C23 等
+```swift
+import C99 // 或 C11、C23 等
 ```
 
 * 扩展库模块： 提供一个模块，包含常见的 C 扩展函数，并统一命名，例如：
 
-```Swift
-    import CExtensions
+```swift
+import CExtensions
 ```
 
-在该模块中，函数 strcasecmp 可以在 Windows 上使用，即使在 Windows 上该函数名为 _stricmp。
+在该模块中，函数 `strcasecmp` 可以在 Windows 上使用，即使在 Windows 上该函数名为 `_stricmp`。
 
 实现挑战：
 
 然而，实现上述方案并非易事，主要挑战包括：
+
 * 模块化限制： Clang 模块要求每个 C 类型只能由一个模块定义。例如，FILE 类型必须由定义它的 C 库模块唯一提供。如果在其他地方重新定义该类型，可能会导致编译错误。
 * 头文件问题： 特别是 Glibc 的头文件，存在难以模块化的问题，导致 Glibc 模块存在缺陷，修复这些问题也相当困难。
 
@@ -221,9 +249,26 @@ Alastair Houghton 表示，虽然他个人希望能够通过导入统一的 C �
 
 ## 推荐博文
 
+[【Swift 底层】Swift 底层探索方法介绍](https://juejin.cn/post/7291301474322137146 "【Swift 底层】Swift 底层探索方法介绍")
+
+**摘要：** 本文聚焦 Swift 底层探索方法，指出在探究 Swift 底层原理时常遇无从下手的困境，进而分享多种可行途径。先阐述 Swift 底层探索基础，包括 Swift 源码定义基本功能及通过研究标准库学习底层实现，介绍 Swift 经 LLVM 编译，由 swiftc 完成从 Code 到机器码的系列步骤，且 swiftc 生成可执行文件多生成 SIL 文件这一步骤。接着说明探索方案，如 swiftc 的常用指令，强调常选 SIL 文件分析，并介绍 IR 基本语法、SIL 文件常见指令及 SIL 文件中寄存器的特点。通过创建main.swift文件实例，详细展示利用 SIL 文件探索代码底层操作的过程。还给出 Swift 源码仓库地址、目录结构及常用索引。最后总结，SIL 文件助力探究方法调用与部分数据结构底层实现，Swift 源码有助于理解设计原理，建议二者结合使用。
+
+[iOS Protobuf 的使用](https://juejin.cn/post/7470734300346974262/ "iOS Protobuf 的使用")
+
+**摘要：** 文章围绕 iOS 中 Protobuf 的使用展开，Protobuf 是谷歌推出的语言、平台无关且扩展性好的数据封装格式协议，支持 C++、Python、Java 等语言。首先介绍安装方式，可通过 brew 安装 protobuf 和 swift - protobuf 并检查版本确认安装成功。接着阐述创建 .proto 文件，以示例展示 V3 语法及相关配置。随后说明将 proto 文件转化为 objc 文件的步骤，包括建立文件夹、执行特定终端命令。在 iOS 工程使用部分，强调添加 Protobuf 和 SwiftProtobuf 依赖，导入生成文件并设置编译参数，分别以 OC 和 Swift 代码示例展示构建请求、发送数据、处理响应及对比 Protobuf 与 JSON 数据长度的过程，同时提及确保服务器端支持 Protobuf 并正确配置服务接口。
+
+[揭开 iOS 中 weak 指针的神秘面纱：从原理到实践](https://juejin.cn/post/7470394526323671092/ "揭开 iOS 中 weak 指针的神秘面纱：从原理到实践")
+
+**摘要：** 本文深入探讨 iOS 开发里的 weak 指针，从编译期和运行时讲解它的原理和使用。编译期初始化 `__weak typeof(obj) weakObj = obj;` 时，会转为 `objc_initWeak((void *)&weakObj, obj);`。运行时，`objc_initWeak` 等 4 个初始化函数都调用 storeWeak，`objc_initWeak` 用于初始化新的 weak 指针，`objc_storeWeak` 在 weak 指针赋值时调用。storeWeak 会先解除与旧对象的关联，再和新对象建立关联。关联操作通过 weak_table 这个类似哈希表的数据结构，SideTable 则是获取 weak_table 的入口。对象释放时，`weak_clear_no_lock` 函数会遍历其对应的弱引用表，把 weak 指针赋值为 nil。此外，文章还解答了如不能给 Category  添加 weak 属性、block 中 weak 指针访问成员变量报错、无弱引用时仍执行 `weak_clear_no_lock` 等疑问。
 
 ## 话题讨论
 
+**苹果为何选择阿里巴巴作为中国市场的本地化合作伙伴？**
+
+1. 深厚的技术积累：阿里在人工智能领域有着深厚的技术积累。
+2. 强大的本地化市场理解：阿里对中国市场的理解和洞察非常深刻，能够在本地化服务上提供更好的体验。
+3. 丰富的数据资源：阿里的数据资源涵盖了各个领域的用户行为，这些数据可以用来优化苹果的各项服务，提高用户体验。
+4. 全球化经验：阿里在全球范围内都有广泛的业务布局，具备丰富的跨国合作经验。
 
 ## 关于我们
 

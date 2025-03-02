@@ -10,18 +10,21 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：苹果史上最大投资！4年5000亿美金重注AI+芯片，特朗普专门感谢
 > 
-> 提案：
+> 提案：将 Objective-C 完成处理程序参数导入为 `@Sendable`
 > 
-> Swift 论坛：
+> Swift 论坛：提议提高数据竞争安全性的可接近性
 >
-> 推荐博文：
+> 推荐博文：gRPC Swift 2 的重大更新
 >
 > **话题讨论：** 
 > 
-> 
+> 你如何看待人工智能融入家用电器？
 >
 >**上期话题结果**
 
+![](https://files.mdnice.com/user/47553/97e21bde-af89-407d-b4b4-792c38bc4eb7.png)
+
+苹果选择阿里巴巴作为中国市场的本地化合作伙伴，主要是因为阿里巴巴能帮苹果在中国卖得更好、更接地气。
 
 ## 新闻和社区  
 
@@ -29,7 +32,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 2025 年 2 月 28 日
 
-![](https://pics7.baidu.com/feed/dbb44aed2e738bd48ea92a4b1173f0d9257ff9cc.jpeg@f_auto?token=49d6a6c3f4fa688a1c38cc5a07a80b7b)
+![](https://files.mdnice.com/user/47553/de8a1072-21f8-4f85-8bd0-2a6f234d5e7c.png)
 
 苹果 CEO 库克，发文纪念乔布斯诞辰 70 周年：
 
@@ -37,9 +40,10 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 今天，在他 70 岁诞辰之际，我们缅怀他的传承，并致敬他永恒的影响力。
 
-![](https://pics0.baidu.com/feed/cb8065380cd791234800c40402cc2e8db0b780e2.jpeg@f_auto?token=2e5f11d9054a74de6c7aee6b19afea90)
+![](https://files.mdnice.com/user/47553/7904e62a-157a-4a78-ab78-23120c8bd911.png)
 
-![](https://pics4.baidu.com/feed/a08b87d6277f9e2fb7de69cfb0c89e2bba99f312.jpeg@f_auto?token=efead83679deedc968c37b15ea6856e4)
+![](https://files.mdnice.com/user/47553/3ecc9b55-3c8a-48e4-8081-340fa884133c.jpg)
+
 但美国科技巨头狂热的AI投资计划，乔布斯能想象吗？
 
 星际之门：计划投资 5000 亿美元，加强 ASI/AGI 基础设施建设
@@ -52,11 +56,11 @@ Meta：最高 650 亿美元，扩大 AI 基础设施规模
 
 或许是为了告慰乔布斯，在他诞辰 70 周年来临之际，苹果宣布在未来 4 年内将向本土投资 5000 亿美元。在 X 上，特朗普公开感谢苹果这一计划。
 
-![](https://pics0.baidu.com/feed/0df431adcbef76098f3926ae8125d4c37dd99edd.jpeg@f_auto?token=55db9bc93a8fcdd5c9edbd8055a86cba)
+![](https://files.mdnice.com/user/47553/c93913ba-3221-4a64-b956-5e443561e830.png)
 
 2 月 24 日，苹果宣布了一项重大计划，计划未来四年内在美国投资超过 5000 亿美元，预计将新增约 2 万个就业岗位，24 家工厂。
 
-![](https://pics4.baidu.com/feed/b7fd5266d01609248e34045c7bff42f5e7cd346f.jpeg@f_auto?token=91bb9b857d09d291976483109e32cbf5)
+![](https://files.mdnice.com/user/47553/1e7e0809-cf6e-4d47-b2c6-e3c62825db03.png)
 
 作为此次投资计划的一部分，苹果及其合作伙伴将在休斯顿开设一家先进制造工厂，生产支持「苹果智能」（Apple Intelligence）的服务器。
 
@@ -66,13 +70,13 @@ Meta：最高 650 亿美元，扩大 AI 基础设施规模
 
 这项 5000 亿美元的承诺包括与全美数千家供应商的合作、苹果智能基础设施和数据中心、公司设施、直接就业，以及在 20 个州的 Apple TV+ 节目制作。
 
-![](https://pics2.baidu.com/feed/b3119313b07eca807fab24193fdbe0d2a34483ad.jpeg@f_auto?token=1e11625bfbb0df63b688ad98d97053eb)
+![](https://files.mdnice.com/user/47553/f992789c-3e0d-41f9-9a0e-cae370beae24.jpg)
 
 德州仪器位于犹他州的新半导体晶圆制造工厂
 
 库克表示：「我们对美国创新的未来充满信心，很自豪能通过这笔 5000 亿美元的承诺，巩固我们在美国长期以来的投资。从增加一倍先进制造基金，到在德州建设先进技术工厂，我们很高兴能扩大对美国制造业的支持。
 
-![](https://pics7.baidu.com/feed/29381f30e924b89937ea14dcc1fe6a9a087bf60c.jpeg@f_auto?token=db2ff999bde61b16fb3f2686ce0d035e)
+![](https://files.mdnice.com/user/47553/654b6026-83fb-48c9-958f-3456a0cee903.jpg)
 
 苹果此举被认为是对特朗普政府「美国优先」政策的积极回应，同时也展示了苹果发展AI业务的决心。
 
@@ -102,7 +106,7 @@ Meta：最高 650 亿美元，扩大 AI 基础设施规模
 
 时隔 2 年，该机构收到关于苹果在 App Store 应用销售和分销方式的投诉，该机构于 2023 年 7 月宣布再次对苹果和 ATT 启动正式的反垄断调查。
 
-![](https://pics2.baidu.com/feed/0df431adcbef76090ed738710ab0d4c37ed99ef8.jpeg@f_auto?token=0396d0192b4996e289c66909bc484584)
+![](https://files.mdnice.com/user/47553/38d259d4-0047-47ab-9290-ca5f72575867.png)
 
 据路透社报道，两位知情人士透露，该机构预计将于 2025 年 3 月做出裁决，并可能伴随一笔反垄断罚款。罚款金额尚不清楚，但根据法国法律，最高可达苹果全球营收的 10%，这可能意味着数十亿美元的罚款。
 
@@ -112,12 +116,39 @@ Meta：最高 650 亿美元，扩大 AI 基础设施规模
 
 ## 提案
 
+### 通过的提案
+
+[SE-0453](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0453-vector.md "SE-0453") **向量，固定大小的数组** 提案通过审查。该提案已在 **第六十六期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0456](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0456-stdlib-span-properties.md "SE-0456") **向标准库类型添加 Span 提供属性** 提案通过审查。该提案已在 **第七十期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0458](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0458-strict-memory-safety.md "SE-0458") **选择严格的内存安全检查** 提案通过审查。该提案已在 **第七十期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0461](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md "SE-0461") **默认情况下，在呼叫者的演员上运行非隔离异步函数** 提案正在审查。
+
+Swift 的总体理念是优先考虑安全性和易用性而不是性能，同时仍然提供编写更高效代码的工具。非隔离异步函数的当前行为优先考虑主要行为者的响应性，而牺牲了可用性。
+
+该提案更改了非隔离异步函数的行为，以默认在调用方的行为者上运行，并引入了一种显式方式，以声明异步函数始终关闭行为者来运行。
+
+[SE-0462](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0462-task-priority-escalation-apis.md "SE-0462") **任务优先级升级 API** 提案正在审查。
+
+Swift Concurrency 的很大一部分是其结构化并发模型，其中任务自动形成父子关系，并从父任务中继承某些特征。例如，从中等优先级任务开始的任务，也从中等优先级开始，不仅如此——如果父任务从更高优先级任务开始等待，则父任务及其所有子任务的任务优先级将被升级，以避免优先级反转问题。
+
+此功能是自动的，并且对任何结构化任务层次结构都透明地工作。本提案将讨论公开面向用户的 API，这些 API 可用于参与任务优先级升级。
+
+[SE-0463](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0463-sendable-completion-handlers.md "SE-0463") **将 Objective-C 完成处理程序参数导入为 @Sendable** 提案正在审查。
+
+本提案更改了 Objective-C 导入规则，使完成处理程序参数默认为 `@Sendable`。
 
 ## Swift论坛
+
 1) 提议[[并发] 从调用者上下文同步启动任务](https://forums.swift.org/t/pitch-concurrency-starting-tasks-synchronously-from-caller-context/77960 "[并发] 从调用者上下文同步启动任务")
 
 该提案建议引入一种新的 API，使开发者能够在调用者的上下文中同步启动任务。具体而言，这意味着可以创建一个非结构化任务（或 TaskGroup 的子任务），使其立即在调用线程、actor 或执行器上运行，直到遇到实际的挂起点后才异步执行。这使得从同步函数的上下文中调用异步代码成为可能。例如：
-```Swift
+
+```swift
 func synchronous() { // 同步函数
   // 执行器 / 线程: "T1"
   let task: Task<Void, Never> = Task.startSynchronously {
@@ -133,94 +164,115 @@ func synchronous() { // 同步函数
   // 执行器 / 线程: "T1"
 }
 ```
+
 目前，该功能尚未实现，但开发团队将很快开始相关工作，并在可能的情况下提供早期版本供大家试用。
 
 2) 提议[提高数据竞争安全性的可接近性](https://forums.swift.org/t/accepted-vision-improving-the-approachability-of-data-race-safety/77953 "提高数据竞争安全性的可接近性")
 
 Swift语言指导小组已接受了一份题为“提高数据竞争安全性的易用性”的文档。Swift内置的并发支持有三个目标：
+
 1.	将内存安全保证扩展到低级数据竞争。
 2.	保持对非并发代码的渐进披露，使基本的并发使用变得简单易行。
 3.	使高级并发用例能够自然地实现和推理，以提高性能。
 
-虽然Swift 6语言模式提供了满足第一个目标的正确性基础，但有时会以牺牲第二个目标为代价，导致采用时令人沮丧。随着社区积累了更多的用户经验，现在是时候探讨我们可以在语言中做些什么来解决这个问题了。这份愿景文档概述了改进Swift数据竞争安全功能易用性的方法。需要注意的是，语言指导小组对该文档的接受强烈支持了其中提出的目标，对基本方法表示一般支持，但对任何具体提案仅表示弱支持。文档中的所有提案都必须经过正常的演进审查，这可能导致拒绝或重大修改。
+虽然 Swift 6 语言模式提供了满足第一个目标的正确性基础，但有时会以牺牲第二个目标为代价，导致采用时令人沮丧。随着社区积累了更多的用户经验，现在是时候探讨我们可以在语言中做些什么来解决这个问题了。这份愿景文档概述了改进 Swift 数据竞争安全功能易用性的方法。需要注意的是，语言指导小组对该文档的接受强烈支持了其中提出的目标，对基本方法表示一般支持，但对任何具体提案仅表示弱支持。文档中的所有提案都必须经过正常的演进审查，这可能导致拒绝或重大修改。
 
 3) 讨论[Swift Foundation 日期表示](https://forums.swift.org/t/swift-foundation-date-representation/77954 "Swift Foundation 日期表示")
 
-在Swift 6发布后，开发者在使用Foundation.Date与数据库（如Postgres或SQLite）交互时，遇到了在Linux平台上进行往返操作时的精度问题。具体而言，将Date插入数据库后，再读取出来，可能会导致与原始Date不相等的情况。这种问题在macOS上并未出现。
+在 Swift 6 发布后，开发者在使用 `Foundation.Date` 与数据库（如 Postgres 或 SQLite）交互时，遇到了在 Linux 平台上进行往返操作时的精度问题。具体而言，将 Date 插入数据库后，再读取出来，可能会导致与原始 Date 不相等的情况。这种问题在 macOS 上并未出现。
 
 **问题原因**
 
-导致这一问题的原因在于不同平台上Date的精度差异。在macOS上，Date的精度为微秒，而在Linux上，Date的精度为纳秒。这种差异在将Date转换为数据库兼容的值时，会导致精度损失，从而在读取时无法保证与原始值相等。
+导致这一问题的原因在于不同平台上 Date 的精度差异。在 macOS 上，Date 的精度为微秒，而在 Linux 上，Date 的精度为纳秒。这种差异在将 Date 转换为数据库兼容的值时，会导致精度损失，从而在读取时无法保证与原始值相等。
 
 **具体案例**
 
-以Postgres为例，Date在编码时将时间间隔转换为微秒级的整数值。在解码时，这个整数值再被转换回秒级的浮点数，以创建Date对象。这种转换过程中的浮点运算可能引入舍入误差，导致精度损失。
+以 Postgres 为例，Date 在编码时将时间间隔转换为微秒级的整数值。在解码时，这个整数值再被转换回秒级的浮点数，以创建 Date 对象。这种转换过程中的浮点运算可能引入舍入误差，导致精度损失。
 
 **建议的解决方案**
 
-为了解决这一问题，建议考虑使用定点数表示法来表示Foundation.Date，以确保跨平台的一致性和精度。这将有助于避免由于浮点运算导致的精度损失，确保在不同平台和数据库之间进行Date值的可靠存储和检索。
+为了解决这一问题，建议考虑使用定点数表示法来表示 `Foundation.Date`，以确保跨平台的一致性和精度。这将有助于避免由于浮点运算导致的精度损失，确保在不同平台和数据库之间进行 Date 值的可靠存储和检索。
 
 **相关讨论**
 
-在Swift论坛上，开发者讨论了Date类型在不同平台上的表示差异，以及在与数据库交互时可能遇到的精度问题。他们建议采用定点数表示法来提高精度一致性。
+在 Swift 论坛上，开发者讨论了 Date 类型在不同平台上的表示差异，以及在与数据库交互时可能遇到的精度问题。他们建议采用定点数表示法来提高精度一致性。
 
-通过采用定点数表示法，Foundation.Date可以实现跨平台的一致性，避免由于浮点运算导致的精度损失，确保在不同平台和数据库之间进行Date值的可靠存储和检索。
+通过采用定点数表示法，`Foundation.Date` 可以实现跨平台的一致性，避免由于浮点运算导致的精度损失，确保在不同平台和数据库之间进行 Date 值的可靠存储和检索。
+
 4) 提议[即将推出的功能的采用工具](https://forums.swift.org/t/pitch-adoption-tooling-for-upcoming-features/77936 "即将推出的功能的采用工具")
 
 该提案引入了一种新的、面向功能的代码迁移器，旨在帮助开发人员将其代码库适应即将推出的 Swift 功能。该机制专注于机械迁移，提供源兼容的调整，以在启用新功能时保持代码行为。除了保留语义之外，该提案还设想为各种功能提供全面的采用和教育体验。
 
 提案的关键组成部分：
+
 * 采用模式：一种新的构建模式，可生成带有附加修复程序的编译器警告，指导开发人员修改其代码以准备即将推出的功能。
 * 编译器警告和修复程序：在采用模式下，编译器会发出带有修复程序的警告，这些修复程序是自动建议，以调整代码以与即将推出的功能兼容。
 * 工具集成：该提案建议将此机制集成到现有的构建流程中，使其可在各种构建系统和项目配置中访问。
 
 社区反馈和讨论：
-• 可扩展枚举：开发人员注意到，此工具可以通过提供警告和修复程序来将 @frozen 添加到现有公共枚举中，从而避免 API 中断，从而促进非弹性模块中向可扩展枚举的过渡。
+
+• 可扩展枚举：开发人员注意到，此工具可以通过提供警告和修复程序来将 `@frozen` 添加到现有公共枚举中，从而避免 API 中断，从而促进非弹性模块中向可扩展枚举的过渡。
+
 * 自动修复应用程序：人们对可以自动应用这些修复程序的工具很感兴趣，尤其是对于大型代码库。虽然第三方工具可能会使用编译器输出来应用修复程序，但当前的诊断系统可能需要增强功能才能有效支持此功能。
 * 诊断序列化：讨论包括利用序列化诊断格式来存储诊断组标志，这有助于过滤相关诊断并与外部工具集成。
 
 该提案旨在通过为开发人员提供明确的指导和自动化工具来更新他们的代码库，确保更顺畅的过渡并保持代码完整性，从而简化新 Swift 功能的采用。
 
-5) 提议[将 Objective-C 完成处理程序参数导入为 `@Sendable`](https://forums.swift.org/t/pitch-import-objective-c-completion-handler-parameters-as-sendable/77904 "将 Objective-C 完成处理程序参数导入为 `@Sendable`")
+5) 提议[将 Objective-C 完成处理程序参数导入为 @Sendable](https://forums.swift.org/t/pitch-import-objective-c-completion-handler-parameters-as-sendable/77904 "将 Objective-C 完成处理程序参数导入为 @Sendable")
 
-该提案建议在将 Objective-C 的完成处理程序参数导入 Swift 时，默认将其标记为 @Sendable。具体而言，当前的 Objective-C 互操作性机制在识别用于导入 async 函数的完成处理程序参数时，将默认在这些参数上添加 @Sendable 注解。此更改旨在提高 Swift 6 中与 Objective-C 交互的安全性，避免因缺少 @Sendable 注解而导致潜在的并发问题。
+该提案建议在将 Objective-C 的完成处理程序参数导入 Swift 时，默认将其标记为 `@Sendable`。具体而言，当前的 Objective-C 互操作性机制在识别用于导入 async 函数的完成处理程序参数时，将默认在这些参数上添加 @Sendable 注解。此更改旨在提高 Swift 6 中与 Objective-C 交互的安全性，避免因缺少 `@Sendable` 注解而导致潜在的并发问题。
 
 提案的主要内容：
-* 默认添加 @Sendable 注解： 在将 Objective-C 的完成处理程序参数导入 Swift 时，编译器将自动为这些参数添加 @Sendable 注解，确保在并发环境中安全地使用这些闭包。
+
+* 默认添加 `@Sendable` 注解： 在将 Objective-C 的完成处理程序参数导入 Swift 时，编译器将自动为这些参数添加 `@Sendable` 注解，确保在并发环境中安全地使用这些闭包。
 
 社区反馈与讨论：
-* 避免假阳性警告： 有开发者建议，对于标记为 @MainActor 的方法，其完成处理程序应被视为 @MainActor，而非 @Sendable，以减少不必要的警告。
-* 扩展至其他全局 actor： 讨论中还提到，除了 @MainActor，是否应将该规则扩展至其他全局 actor，以涵盖更多使用场景。
 
-该提案旨在通过自动为导入的 Objective-C 完成处理程序添加 @Sendable 注解，增强 Swift 与 Objective-C 交互时的并发安全性，同时减少开发者手动添加注解的负担。
+* 避免假阳性警告： 有开发者建议，对于标记为 `@MainActor` 的方法，其完成处理程序应被视为 `@MainActor`，而非 `@Sendable`，以减少不必要的警告。
+* 扩展至其他全局 actor： 讨论中还提到，除了 `@MainActor`，是否应将该规则扩展至其他全局 actor，以涵盖更多使用场景。
+
+该提案旨在通过自动为导入的 Objective-C 完成处理程序添加 `@Sendable` 注解，增强 Swift 与 Objective-C 交互时的并发安全性，同时减少开发者手动添加注解的负担。
 
 ## 推荐博文
 
 [gRPC Swift 2 介绍](https://www.swift.org/blog/grpc-swift-2/ "gRPC Swift 2 介绍")
 
-**摘要：** 这篇文章介绍了gRPC Swift 2的重大更新，它为开发者提供了现代化的并发支持和更具表现力的API，旨在提升开发体验。gRPC是一个高性能的框架，用于通过网络在不同系统之间进行高效通信。更新后的gRPC Swift 2利用了Swift的现代并发模型（如async/await），简化了开发流程，并且支持Linux和Apple平台上的服务与客户端构建。
+**摘要：** 这篇文章介绍了 gRPC Swift 2 的重大更新，它为开发者提供了现代化的并发支持和更具表现力的 API，旨在提升开发体验。gRPC 是一个高性能的框架，用于通过网络在不同系统之间进行高效通信。更新后的 gRPC Swift 2 利用了 Swift 的现代并发模型（如 async/await），简化了开发流程，并且支持 Linux 和 Apple 平台上的服务与客户端构建。
 
 文章主要强调以下几个亮点：
 
-1. 提供现代化且易用的API和代码生成。
-2. 完整支持Linux和Apple平台。
-3. 支持HTTP/2传输，具备负载均衡、自动重试等智能客户端特性。
+1. 提供现代化且易用的 API 和代码生成。
+2. 完整支持 Linux 和 Apple 平台。
+3. 支持 HTTP/2 传输，具备负载均衡、自动重试等智能客户端特性。
 4. 可插拔的拦截器层，支持身份验证、日志记录、指标等跨切逻辑。
 
-此外，文章还提供了如何使用gRPC Swift构建一个简单的“Hello World”服务的代码示例，展示了如何生成服务端和客户端代码，并使用生成的代码进行网络通信。
+此外，文章还提供了如何使用 gRPC Swift 构建一个简单的 “Hello World” 服务的代码示例，展示了如何生成服务端和客户端代码，并使用生成的代码进行网络通信。
 
+[Swift 的服务器支持驱动 Things Cloud](https://www.swift.org/blog/how-swifts-server-support-powers-things-cloud/ "Swift 的服务器支持驱动 Things Cloud")
 
-[Swift的服务器支持驱动Things Cloud](https://www.swift.org/blog/how-swifts-server-support-powers-things-cloud/ "Swift的服务器支持驱动Things Cloud")
+**摘要：** 这篇文章讲述了 Things Cloud 服务从使用 Python 2 和 Google App Engine 的后端架构迁移到完全基于 Swift 的过程。由于原有架构存在性能问题、高内存使用等限制，Things团队决定重写服务器端代码，采用 Swift 进行开发。文章解释了这一转变的原因，包括 Swift 在性能、内存管理和类型系统方面的优势，以及其不断发展的服务器端支持。
 
-**摘要：** 这篇文章讲述了Things Cloud服务从使用Python 2和Google App Engine的后端架构迁移到完全基于Swift的过程。由于原有架构存在性能问题、高内存使用等限制，Things团队决定重写服务器端代码，采用Swift进行开发。文章解释了这一转变的原因，包括Swift在性能、内存管理和类型系统方面的优势，以及其不断发展的服务器端支持。新架构使用了Vapor、SwiftNIO和MySQLKit等Swift包，并通过Terraform和Kubernetes部署在AWS上。新的Swift架构已经在生产环境中运行超过一年，为Things Cloud提供了可靠、高效的跨设备待办事项同步服务，确保了系统的稳定性和可维护性。
+新架构使用了 Vapor、SwiftNIO 和 MySQLKit 等 Swift 包，并通过 Terraform 和 Kubernetes 部署在 AWS 上。新的 Swift 架构已经在生产环境中运行超过一年，为 Things Cloud 提供了可靠、高效的跨设备待办事项同步服务，确保了系统的稳定性和可维护性。
 
 [iOS App Store 上架被拒 case](https://juejin.cn/post/7116301510887079967/ "iOS App Store 上架被拒 case")
 
-**摘要：** 这篇文章主要记录了 App Store 上架过程中遇到的一些被拒绝的案例，以及对应的原因分析和解决策略。案例涵盖了从功能完整性、信息需要、隐私确认，到软件需求和上传被拒等不同阶段的问题。文章还详细阐述了各种问题的产生原因，如 APP 功能不全、集成未使用的库、隐私信息填写不全等，并提出相应的解决方案。通过这些案例的分享，开发者可以理解和学习如何避免类似的错误，更顺利地完成 App Store 的上架过程。
+**摘要：** 这篇文章主要记录了 App Store 上架过程中遇到的一些被拒绝的案例，以及对应的原因分析和解决策略。案例涵盖了从功能完整性、信息需要、隐私确认，到软件需求和上传被拒等不同阶段的问题。
 
+文章还详细阐述了各种问题的产生原因，如 APP 功能不全、集成未使用的库、隐私信息填写不全等，并提出相应的解决方案。通过这些案例的分享，开发者可以理解和学习如何避免类似的错误，更顺利地完成 App Store 的上架过程。
 
 ## 话题讨论
 
+**你如何看待人工智能融入家用电器？**
+
+DeepSeek AI 模型正被应用于电视、冰箱、扫地机器人等智能家电。AI 能提升便利性和个性化体验，但也引发隐私和安全担忧。
+
+你的看法是？
+
+1. 非常积极：AI让家电更智能，提升生活便利性。
+2. 比较积极：AI家电有优势，但仍需观察。
+3. 中立：既看到优点，也有疑虑。
+4. 比较消极：担心隐私问题或认为价值有限。
+5. 非常消极：认为风险大于好处，不愿使用。
 
 ## 关于我们
 
