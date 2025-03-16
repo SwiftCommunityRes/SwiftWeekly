@@ -10,19 +10,23 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：iOS 19 的设计大更新，是苹果对 AI OS 的押注
 > 
-> 提案：
+> 提案：`Hashable` 符合 `Async(Throwing)Stream.Continuation`
 > 
-> Swift 论坛：
+> Swift 论坛：提议 values 的交换性观察
 >
-> 推荐博文：
+> 推荐博文：Swift 编译器入门
 >
 > **话题讨论：** 
 > 
-> 
+> 你认为做技术出身，35岁之后有必要读非全日制研究生吗？
 >
 >**上期话题结果**
 
+![](https://files.mdnice.com/user/47553/5a4fc7eb-e263-43d9-a1bc-3627ad5fa2a8.jpg)
 
+AI 融入家电真的提升了生活便利性，比如智能电视能推荐喜欢的节目，冰箱能提醒食材过期，扫地机器人还能自己规划路线。
+
+但同时，隐私和安全问题也值得注意，毕竟这些设备可能收集大量个人数据。总体来说，AI 让家电更聪明，用起来更省心，只要隐私保护做好，绝对是个好趋势！
 
 ## 新闻和社区  
 
@@ -196,7 +200,7 @@ Siri 本应是苹果 AI 战略的核心入口，但多年来，它的功能局�
 
 2025 年 3 月 12 日
 
-![](https://pics4.baidu.com/feed/d62a6059252dd42a62dad44fa245dcbacbeab895.jpeg@f_auto?token=0aaf660e86b4e77ef12b6b8dc5e67967)
+![](https://files.mdnice.com/user/47553/b3c83c24-7a72-4834-a6e4-d7473041f210.jpg)
 
 3 月 10 日消息，苹果公司近日宣布，2024 年承诺推出的“更具个性化”版本的 Siri 将推迟推出。知名科技记者马克·古尔曼称，这一延迟也导致苹果公司计划推出的智能家居中枢发布时间延后。
 
@@ -214,28 +218,65 @@ Siri 本应是苹果 AI 战略的核心入口，但多年来，它的功能局�
 
 ## 提案
 
+### 通过的提案
+
+[SE-0462](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0462-task-priority-escalation-apis.md "SE-0462") **任务优先级升级 API** 提案通过审查。该提案已在 **第七十二期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0463](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0463-sendable-completion-handlers.md "SE-0463") **将 Objective-C 完成处理程序参数导入为 @Sendable** 提案通过审查。该提案已在 **第七十二期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0464](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0464-utf8span-safe-utf8-processing.md "SE-0464") **UTF8Span：在连续字节上进行安全UTF-8处理** 提案正在审查。
+
+我们引入了 UTF8Span，用于在连续存储上高效安全的 Unicode 处理。UTF8Span 是一种类似于 Span 的内存安全不可逃逸类型。
+
+本机 String 以有效编码的 UTF-8 字节的形式存储在内部连续内存缓冲区中。标准库将 String 的 API 实现为内部方法，在此缓冲区上运行，利用有效编码的不变和专门的 Unicode 知识。我们建议将此 UTF-8 缓冲区及其方法作为 API 公开，供更高级的库和开发人员使用。
+
+[SE-0465](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0465-nonescapable-stdlib-primitives.md "SE-0465") **不可可调配类型的标准库原语** 提案正在审查。
+
+本文档建议允许 `Optional` 和 `Result` 保留不可调的类型的实例，并继续在整个 Swift 标准库中增加对不可复制和不可调制类型的支持。
+
+[SE-0466](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0466-control-default-actor-isolation.md "SE-0466") **控制默认演员隔离推断** 提案正在审查。
+
+本提案引入了一个新的编译器设置，用于在模块中默认推断 `@MainActor` 隔离，以减轻顺序代码中的假阳性数据竞赛安全错误。
+
+[SE-0467](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0467-MutableSpan.md "SE-0467") **MutableSpan 和 MutableRawSpan：委托连续记忆的突变** 提案正在审查。
+
+我们最近推出了 `Span` 和 `RawSpan` 类型，提供对借记内存的共享只读访问。该提案为委托独家借入内存的突变添加了助手类型：`MutableSpan` 和 `MutableRawSpan`。
+
+[SE-0468](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0468-async-stream-continuation-hashable-conformance.md "SE-0468") **Hashable 符合 Async(Throwing)Stream.Continuation** 提案正在审查。
+
+该提案为 `Async(Throwing)Stream.Continuation    ` 添加了 `Hashable` 一致性，以简化使用多个流的工作。
+
+[SE-0469](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0469-task-names.md "SE-0469") **任务命名** 提案正在审查。
+
+在本提案中，我们引入了几个新的 API，允许开发人员命名他们的 Swift 任务，以以人类可读的方式识别任务。然后，这些名称可以通过打印名称、编程检查名称属性或通过转储和检查任务的工具来识别任务，例如调试器、快速检查或其他。
 
 ## Swift论坛
-1) 提议[values的交换性观察](https://forums.swift.org/t/pitch-transactional-observation-of-values/78315 "values的交换性观察")
 
-在 Swift 论坛的提案“values的交换性观察”中，提出了一个新的机制，旨在通过可组合的 @Observable 数据源，提供一个 AsyncSequence，以便安全、简洁地观察模型的变化。该机制在第一个 willSet 时启动事务，并在事务结束时于第一个一致性点发出值，与 Swift 并发性进行交互。
+1) 提议[values 的交换性观察](https://forums.swift.org/t/pitch-transactional-observation-of-values/78315 "values 的交换性观察")
+
+在 Swift 论坛的提案“values 的交换性观察”中，提出了一个新的机制，旨在通过可组合的 `@Observable` 数据源，提供一个 `AsyncSequence`，以便安全、简洁地观察模型的变化。该机制在第一个 willSet 时启动事务，并在事务结束时于第一个一致性点发出值，与 Swift 并发性进行交互。
 
 此提案的动机在于，虽然最初的观察工具与 SwiftUI 无缝集成，但其目标更为广泛。通过引入一个闭包初始化的 Observed 类型，作为一个序列来跟踪闭包返回的值，当闭包中的某些内容发生变化时，该序列会发出新值。这使得编写异步序列来跟踪变化变得简单，同时确保访问在并发性方面的安全性。
 
-例如，考虑一个使用 @Observable 标记的简单 Person 类型，其中包含 firstName 和 lastName 属性，以及一个组合属性 name。通过创建一个 Observed 异步序列，可以在每次更新 name 属性时获取新值。此外，如果 Person 类型包含一个可选的 Pet 属性（同样使用 @Observable 标记），则可以创建一个更复杂的表达式，在 person 或其 pet 发生变化时，异步序列会发出相应的问候语。
+例如，考虑一个使用 `@Observable` 标记的简单 Person 类型，其中包含 firstName 和 lastName 属性，以及一个组合属性 name。通过创建一个 Observed 异步序列，可以在每次更新 name 属性时获取新值。此外，如果 Person 类型包含一个可选的 Pet 属性（同样使用 `@Observable` 标记），则可以创建一个更复杂的表达式，在 person 或其 pet 发生变化时，异步序列会发出相应的问候语。
 
 这一提案为非 SwiftUI 系统提供了与 SwiftUI 相同级别的“恰到好处的魔法”，使开发者能够避免在确保 UI 随值变化而更新时所固有的复杂性。
 
 2) 提议[解除函数调用中显式专门化的限制](https://forums.swift.org/t/pitch-lifting-restriction-on-explicit-specialization-in-function-calls/78231 "解除函数调用中显式专门化的限制")
 
 在提案中，建议解除当前对函数调用中显式类型专门化的语法限制。目前，Swift 不允许在调用泛型函数时显式指定类型参数，开发者需要通过传递元类型参数或依赖类型推断来实现。例如，对于一个解码函数，通常需要传递类型的元类型参数：
-```Swift
+
+```swift
 func decode<T>(_ type: T.Type, from data: Data) throws -> T
 ```
-调用时需要提供 MyType.self，这对于新手来说可能并不直观。提议允许在函数调用中直接指定类型参数，如：
-```Swift
+调用时需要提供 `MyType.self`，这对于新手来说可能并不直观。提议允许在函数调用中直接指定类型参数，如：
+
+```swift
 let value = decoder.decode<MyType>(from: data)
 ```
+
 这种语法在其他编程语言（如 C++、Java、Rust、C#）中已被广泛采用。Haskins 还提交了一个实验性的拉取请求，展示了解除此限制的可行性。
 
 总而言之，这一提案旨在使 Swift 的泛型函数调用更加直观，减少对类型推断的依赖，提高代码的可读性和可维护性。
@@ -246,7 +287,7 @@ let value = decoder.decode<MyType>(from: data)
 
 创建测试工作组的想法最初出现在语言指导小组去年夏天审查测试愿景文档期间，并在其批准公告中提到：
 
-	将创建一个新的 Swift 测试工作组，负责监督 Swift 项目内的测试工作，最终归属于生态系统指导小组。
+**将创建一个新的 Swift 测试工作组，负责监督 Swift 项目内的测试工作，最终归属于生态系统指导小组。**
 
 总而言之，Swift 测试工作组的成立标志着 Swift 社区在提升代码质量和测试工具方面迈出了重要一步，期待更多开发者的参与和贡献。
 
@@ -257,16 +298,17 @@ let value = decoder.decode<MyType>(from: data)
 io_uring 是 Linux 于 2019 年引入的异步和批量系统调用解决方案，特别关注 IO 操作。传统的 Unix 平台主要使用同步文件 IO 系统调用，例如 read(2)，这在高并发场景下可能导致内存和 CPU 开销增加。io_uring 通过允许批量提交和完成 IO 操作，减少了系统调用的开销，提高了性能。
 
 提案中介绍的 IORing 结构体提供了以下功能：
+
 * 注册和注销资源（文件和缓冲区），这是一种 io_uring 特有的高效处理文件描述符的方式。
 * 注册和注销事件文件描述符（eventfd），允许异步等待完成事件。
 * 将 IO 请求加入队列。
 * 从队列中取出已完成的 IO 操作。
 
-此外，IOResource<T> 类表示注册的文件描述符和缓冲区，IORequest 结构体表示可以加入内核执行的 IO 操作。这些设计旨在使 Swift 开发者能够直接或通过中间层（如 Swift NIO）利用 io_uring 的优势，从而提升在 Linux 服务器上的可伸缩性和效率。
+此外，`IOResource<T>` 类表示注册的文件描述符和缓冲区，IORequest 结构体表示可以加入内核执行的 IO 操作。这些设计旨在使 Swift 开发者能够直接或通过中间层（如 Swift NIO）利用 io_uring 的优势，从而提升在 Linux 服务器上的可伸缩性和效率。
 
 该提案旨在通过在 Swift System 中引入对 io_uring 的支持，提升 Swift 在 Linux 平台上的异步 IO 能力，满足高性能和高并发应用的需求。
 
-5) 提议[UTF8Span——对连续字节的安全 UTF-8 处理](https://forums.swift.org/t/se-0464-utf8span-safe-utf-8-processing-over-contiguous-bytes/78307 "UTF8Span——对连续字节的安全 UTF-8 处理")
+5) 提议[UTF8Span ——对连续字节的安全 UTF-8 处理](https://forums.swift.org/t/se-0464-utf8span-safe-utf-8-processing-over-contiguous-bytes/78307 "UTF8Span ——对连续字节的安全 UTF-8 处理")
 
 在 Swift 论坛的提案“SE-0464: UTF8Span: Safe UTF-8 Processing Over Contiguous Bytes”中，提出了引入 UTF8Span 类型，以便在连续内存中高效且安全地处理 UTF-8 编码的数据。  ￼
 
@@ -280,31 +322,36 @@ UTF8Span 旨在提供一种轻量级的视图，使开发者能够直接在连�
 
 [Swift 编译器入门](https://theswiftdev.com/the-swift-compiler-for-beginners/ "Swift 编译器入门")
 
-**摘要：** 这篇文章介绍了如何使用Swift编译器（swiftc命令）构建可执行文件，并深入探讨了编译和链接的过程。文章首先展示了如何编译一个简单的Swift源文件，并生成可执行文件。接着，讲解了如何使用Swift编译器的各种参数（如-D DEBUG）来控制编译过程，添加自定义编译标志。对于多个Swift源文件，文章说明了如何将它们一起编译成单个二进制文件。
+**摘要：** 这篇文章介绍了如何使用 Swift 编译器（swiftc 命令）构建可执行文件，并深入探讨了编译和链接的过程。文章首先展示了如何编译一个简单的 Swift 源文件，并生成可执行文件。接着，讲解了如何使用 Swift 编译器的各种参数（如-D DEBUG）来控制编译过程，添加自定义编译标志。对于多个Swift源文件，文章说明了如何将它们一起编译成单个二进制文件。
 
-在编译过程中，swiftc命令将源文件转换为中间的目标文件（.o文件），然后使用链接器（ld命令）将这些目标文件和库文件链接成最终的可执行文件。文章还解释了静态链接和动态链接的概念，静态链接会将代码直接复制到最终的二进制文件中，而动态链接则在运行时解析库。
+在编译过程中，swiftc 命令将源文件转换为中间的目标文件（.o 文件），然后使用链接器（ld 命令）将这些目标文件和库文件链接成最终的可执行文件。文章还解释了静态链接和动态链接的概念，静态链接会将代码直接复制到最终的二进制文件中，而动态链接则在运行时解析库。
 
 文章最后介绍了编译过程中的低级命令和步骤，帮助读者理解编译器和链接器如何协同工作，以生成最终的可执行文件。通过了解这些基础，开发者可以更好地理解程序构建的背后工作原理。
 
 [Swift 编程模式](https://juejin.cn/post/7481580233645572122/ "Swift 编程模式")
 
-**摘要：** 这篇文章探讨了Swift编程语言中的面向对象编程（OOP）和函数式编程（FP）两种范式，并通过具体示例展示了它们的应用和差异。函数式编程通过高阶函数如map()和filter()，提供了更高的抽象层次，避免了命令式编程中的状态管理问题，代码更简洁。面向对象编程则通过封装、继承和多态等特性，将代码组织为对象和类的层次结构，但可能存在过度依赖继承和类层次复杂的问题。
+**摘要：** 这篇文章探讨了 Swift 编程语言中的面向对象编程（OOP）和函数式编程（FP）两种范式，并通过具体示例展示了它们的应用和差异。函数式编程通过高阶函数如 `map()` 和 `filter()`，提供了更高的抽象层次，避免了命令式编程中的状态管理问题，代码更简洁。面向对象编程则通过封装、继承和多态等特性，将代码组织为对象和类的层次结构，但可能存在过度依赖继承和类层次复杂的问题。
 
-Swift支持多种编程范式，枚举、结构体和类都可以定义属性、方法和初始化器，且枚举和结构体是值类型，类是引用类型。协议和扩展为面向协议编程（POP）提供了强大支持，允许开发者定义行为规范而不依赖具体的类层次结构。文章还提到Swift在并发编程方面的劣势，并尝试通过改进parallelMap等函数来实现线程安全。
+Swift 支持多种编程范式，枚举、结构体和类都可以定义属性、方法和初始化器，且枚举和结构体是值类型，类是引用类型。协议和扩展为面向协议编程（POP）提供了强大支持，允许开发者定义行为规范而不依赖具体的类层次结构。文章还提到 Swift 在并发编程方面的劣势，并尝试通过改进 parallelMap 等函数来实现线程安全。
 
-文章通过编程练习帮助读者巩固对Swift中OOP和FP的理解，展示了如何在实际开发中选择合适的编程范式。Swift的灵活性和对多种编程范式的支持使其成为现代iOS开发的强大工具。
+文章通过编程练习帮助读者巩固对 Swift 中 OOP 和 FP 的理解，展示了如何在实际开发中选择合适的编程范式。Swift 的灵活性和对多种编程范式的支持使其成为现代 iOS 开发的强大工具。
 
 [Swift 编译器优化技术：WMO](https://zhuanlan.zhihu.com/p/500171634/ "Swift 编译器优化技术：WMO")
 
-**摘要：** 这这篇文章详细介绍了Swift编译器中的**全模块优化（Whole-Module Optimization, WMO）**技术，并探讨了其对程序性能的提升作用。WMO通过将整个模块作为一个编译单元进行优化，能够显著提高程序的运行效率，通常可以带来2到5倍的性能提升。文章首先解释了相关的术语，如翻译单元、模块、类型检查等，接着深入探讨了WMO的工作原理和实现方式。
+**摘要：** 这这篇文章详细介绍了Swift编译器中的 **全模块优化（Whole-Module Optimization, WMO）** 技术，并探讨了其对程序性能的提升作用。WMO 通过将整个模块作为一个编译单元进行优化，能够显著提高程序的运行效率，通常可以带来2到5倍的性能提升。文章首先解释了相关的术语，如翻译单元、模块、类型检查等，接着深入探讨了 WMO 的工作原理和实现方式。
 
-WMO与传统的单文件编译模式不同，它允许编译器在整个模块范围内进行优化，如函数内联、类型推断、无用代码去除等。文章还比较了WMO与**链接时优化（LTO）**的区别，指出WMO是在模块级别进行优化，而LTO则是在整个程序范围内进行跨模块优化。
+WMO 与传统的单文件编译模式不同，它允许编译器在整个模块范围内进行优化，如函数内联、类型推断、无用代码去除等。文章还比较了 WMO 与 **链接时优化（LTO）** 的区别，指出 WMO 是在模块级别进行优化，而 LTO 则是在整个程序范围内进行跨模块优化。
 
-最后，文章通过Xcode的编译流程和Swift驱动器的实现细节，展示了WMO如何在实际编译过程中发挥作用，并解释了其与增量编译、多线程编译等技术的结合方式。WMO的引入使得Swift编译器能够在保持高效编译的同时，提供更强大的优化能力，从而提升应用程序的性能。
-
+最后，文章通过 Xcode 的编译流程和 Swift 驱动器的实现细节，展示了 WMO 如何在实际编译过程中发挥作用，并解释了其与增量编译、多线程编译等技术的结合方式。WMO 的引入使得 Swift 编译器能够在保持高效编译的同时，提供更强大的优化能力，从而提升应用程序的性能。
 
 ## 话题讨论
 
+**你认为做技术出身，35岁之后有必要读非全日制研究生吗？**
+
+1. 有必要
+2. 没必要
+
+请在评论区给出你的原因。
 
 ## 关于我们
 
