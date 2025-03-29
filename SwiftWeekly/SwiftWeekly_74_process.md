@@ -174,7 +174,100 @@ Meta 此前曾表示，其做出的调整“满足了欧盟监管机构的要求
 
 
 ## Swift论坛
+1) 讨论[序列化和反序列化 API 的未来](https://forums.swift.org/t/the-future-of-serialization-deserialization-apis/78585 "序列化和反序列化 API 的未来")
 
+在 Swift 论坛的讨论中，Kevin Perry 提出了对现有 Codable API 的改进建议，旨在提升序列化和反序列化的性能。现有的 Codable API 存在一些性能瓶颈，例如使用存在类型（existentials）导致的运行时和内存开销，以及动态类型转换带来的性能影响。 ￼
+
+为了解决这些问题，Kevin Perry 借鉴了 Rust 的 Serde 设计，提出了以下核心原则：
+	1.	设计新的 API 以突破 Codable 的性能限制：通过避免使用存在类型和动态类型转换，减少运行时和内存开销。 ￼
+	2.	借鉴 Rust Serde 的设计：采用访问者模式（Visitor Pattern），让解析器驱动反序列化过程，从而避免构建临时的中间表示，提升性能。
+	3.	深度依赖宏以减少手动实现：利用 Swift 的宏功能，自动生成序列化和反序列化的代码，减少开发者的手动编码量。
+
+此外，为了兼容现有的 Codable，建议新的编码器和解码器不仅支持新的协议，还应支持现有的 Encodable 和 Decodable 类型。同时，新的设计应专注于 Swift 生态中常用的序列化格式，避免引入需要外部工具或代码生成的复杂方案。 ￼
+
+这一讨论旨在收集社区的反馈，以确保新的序列化和反序列化 API 能够满足开发者的需求，并在性能和易用性之间取得平衡。
+
+2) 讨论[Swift 6.2 及更高版本对生命周期依赖项的实验性支持](https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638 "Swift 6.2 及更高版本对生命周期依赖项的实验性支持")
+
+在讨论中，语言指导组（LSG）提议在 Swift 6.2 中引入 @lifetime 作为受支持的实验性特性，旨在为非逃逸类型（如 Span）提供生命周期依赖的支持。此前，SE-0446 为 Swift 增加了对非逃逸类型的基本语言支持，但有意省略了函数和属性返回这些类型值的能力，等待未来的提案来添加生命周期依赖。然而，SE-0456 已在标准库中添加了多个返回 Span 的属性，这些属性使用了尚未正式纳入语言的 @lifetime 特性。 ￼
+
+LSG 对于将 @lifetime 正式作为定义生命周期依赖的方式持谨慎态度，因此尚未将其作为正式特性提出。然而，考虑到开发正式特性可能需要数个版本，LSG 希望开发者能够在此期间利用 Span 等非逃逸类型，并反馈使用中的问题和需求。因此，LSG 提议将 @lifetime 作为受支持的实验性特性引入，具体承诺包括：
+	1.	为该实验性特性发布设计文档，可能比正常的演进提案文档更为简略，但会阐述开发者可以使用的功能。该特性将通过适当的 -enable-experimental-feature 标志在官方 Swift 版本中可用。 ￼
+	2.	在官方特性能够表达实验性特性的所有功能之前，不会弃用该实验性特性。弃用的发布版本将包括自动迁移工具，并至少在实验性特性本身的支持周期内可用。
+	3.	如果未来弃用该实验性特性，它将在官方 Swift 版本中继续可用至少三个版本。例如，假设在 Swift 6.2 中引入了该实验性特性，而在 Swift 6.4 中添加了替代它的官方特性。LSG 将在 6.4 版本中宣布该实验性特性被视为弃用，但它仍将在 6.2、6.3、6.4、6.5 和 6.6 版本中可用，为采用该实验性特性的开发者提供足够的迁移时间。 ￼
+	4.	官方特性的部署限制不会比它们所替代的实验性特性更严格，除非绝对必要。
+
+LSG 认为这是一个允许程序员提前利用仍在开发中的特性的良好框架，特别是当一个正式特性被另一个可能复杂得多的特性“解锁”时。对于不确定是否能够在支持窗口内迁移出受支持的实验性特性的程序员，通常应等待官方特性的发布。 ￼
+
+LSG 将在未来几周内创建一个单独的讨论线程，专门讨论 @lifetime 特性。请将任何反馈集中在受支持的实验性特性的概念上。
+
+3) 提议[SwiftPM 对二进制静态库依赖项的支持](https://forums.swift.org/t/pitch-swiftpm-support-for-binary-static-library-dependencies/78619 "SwiftPM 对二进制静态库依赖项的支持")
+
+在 Swift 论坛的提议中，Daniel Grumberg 提出了一个关于 Swift 包管理器（SwiftPM）支持二进制静态库依赖的提案。目前，SwiftPM 对二进制依赖的支持主要局限于 Apple 平台，使用 XCFramework 格式的库。该提案旨在扩展 SwiftPM 的功能，使其在非 Apple 平台上也能支持暴露 C 接口的静态库依赖。
+
+动机：
+
+Swift 作为跨平台语言，应用范围广泛，但 SwiftPM 对二进制依赖的支持存在局限。现有的二进制目标支持：
+	•	在 Apple 平台上使用 XCFramework 格式的库。
+	•	通过工件包（artifact bundles）支持可执行文件。
+
+该提案旨在以安全的方式将 XCFramework 的部分功能引入非 Apple 平台。
+
+提议的解决方案：
+
+提案建议扩展工件包，引入新的工件类型 staticLibrary，以表示二进制静态库依赖。工件清单（artifact manifest）将为每个变体编码以下信息：
+	•	链接器使用的静态库文件路径。
+	•	用于在包的源代码中使用该库的 API 的信息，例如头文件路径和模块映射（module map）。
+
+此外，提案还建议增加一个审计工具，以验证库工件在 Linux 平台上的安全使用，确保分发的工件在各个部署平台上满足依赖要求。
+
+详细设计：
+
+工件清单的 JSON 格式将包含：
+	•	type 字段：指定为 staticLibrary，表示这是一个静态库。
+	•	headerPaths 字段：相对于工件包根目录的头文件目录路径数组，这些路径将作为搜索路径传递给编译器。
+	•	moduleMapPath 字段：可选字段，指定自定义模块映射的路径。
+
+通过这些扩展，SwiftPM 将能够在非 Apple 平台上支持二进制静态库依赖，进一步增强其跨平台能力。
+
+4) 提议[退出测试](https://forums.swift.org/t/st-0008-exit-tests/78692 "退出测试")
+
+在论坛的提议中，Maarten Engels 宣布了对提案 ST-0008 “Exit Tests” 的审查期，该提案旨在为 Swift 测试引入新的功能，允许开发者验证代码是否以特定的退出状态终止。审查期从 2025 年 3 月 20 日开始，持续至 2025 年 4 月 8 日。  ￼ ￼
+
+提案概述：
+
+ST-0008 提议在 Swift 的测试框架中添加新的宏，允许开发者编写测试，期望被测代码以特定的方式退出，例如成功、失败或抛出特定的错误。这对于需要验证进程终止行为的应用程序测试尤为重要。
+
+社区反馈：
+
+社区成员对该提案进行了讨论，主要集中在 API 的命名和可读性上。例如，有人建议将 #expect(exitsWith: .failure) 修改为 #expect(exit: .failure)，认为这样更符合 Swift 的命名惯例，提高了可读性。 此外，还有讨论涉及如何更好地表达测试期望，以及与现有测试宏（如 #expect(throws:)）的一致性。 ￼ ￼
+
+如何试用：
+
+要尝试该特性，开发者需要将 swift-testing 的 main 分支作为依赖项添加到项目中，并在测试目标中引入相应的产品。然后，使用 @_spi(Experimental) import Testing 导入 Swift Testing。详细的设置和示例可参考提供的示例仓库。  ￼
+
+审查参与：
+
+社区鼓励开发者参与审查过程，提供关于提案的反馈和建议。审查的目标是通过建设性的批评改进提案，并最终确定 Swift 的发展方向。更多关于 Swift 演进过程的信息可在相关文档中找到。
+5) 提议[使数组和朋友符合 Comparable](https://forums.swift.org/t/pitch-making-array-and-friends-conform-to-comparable/78634 "使数组和朋友符合 Comparable")
+
+在 Swift 社区的讨论中，Paul Hudson 提出了一个建议：让 Array 等序列类型符合 Comparable 协议。目前，元组可以直接进行比较，例如 (1, 2, 3) < (4, 5, 6) 是有效的，但对数组进行类似的比较（如 [1, 2, 3] < [4, 5, 6]）却会导致编译错误。为了解决这一问题，Paul 提议为 Sequence 添加一个扩展，利用已有的 lexicographicallyPrecedes() 方法，实现序列的比较功能。 ￼
+
+具体实现如下：
+```Swift
+extension Sequence where Element: Comparable {
+    public static func <(lhs: Self, rhs: Self) -> Bool {
+        lhs.lexicographicallyPrecedes(rhs)
+    }
+}
+
+extension Array: Comparable where Element: Comparable { }
+```
+此提案的动机在于，Swift 已经支持元组、字符串和 IndexPath 的比较操作，引入数组的比较符合语言的一致性。此外，其他编程语言（如 Rust、Python、Ruby 等）也支持类似功能。  ￼
+
+然而，社区成员对该提案表达了不同的看法。有人指出，数组的比较可能导致性能问题，特别是在处理大型数组时。此外，数组的比较顺序可能存在多种解释，例如前缀顺序和短词典序，可能导致混淆。
+
+总体而言，该提案引发了关于数组比较的实用性、性能影响和潜在歧义的讨论。社区正在积极探讨如何在保持语言一致性的同时，平衡这些因素。
 
 ## 推荐博文
 
