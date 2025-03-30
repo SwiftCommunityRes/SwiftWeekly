@@ -10,19 +10,21 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：库克：苹果将持续加大在华投入！他还称是《哪吒2》忠实观众
 > 
-> 提案：
+> 提案：Clock Epochs 提案正在审查。
 > 
-> Swift 论坛：
+> Swift 论坛：讨论序列化和反序列化 API 的未来
 >
-> 推荐博文：
+> 推荐博文：苹果设备端与服务器基础模型介绍
 >
 > **话题讨论：** 
 > 
-> 
+> AI 的迅速发展，曾经的科幻电影离我们已不再遥远，今天我们来聊一下人类世界的未来，你认为以下哪种结果更会最先降临地球？
 >
 >**上期话题结果**
 
+![](https://files.mdnice.com/user/47553/a5d7420c-1a42-4bf2-926f-a5db7bc0ac8e.jpg)
 
+投票结果与我私下与朋友沟通的反馈结果一致，看来大多数朋友的想法都是相同的。
 
 ## 新闻和社区  
 
@@ -172,32 +174,93 @@ Meta 此前曾表示，其做出的调整“满足了欧盟监管机构的要求
 
 ## 提案
 
+### 通过的提案
+
+[SE-0459](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0459-enumerated-collection.md "SE-0459") **添加 Collection 一致性 enumerated()** 提案通过审查。该提案已在 **第七十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0460](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0460-specialized.md "SE-0460") **Explicit Specialization** 提案通过审查。该提案已在 **第七十一期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0465](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0465-nonescapable-stdlib-primitives.md "SE-0465") **不可可调配类型的标准库原语** 提案通过审查。该提案已在 **第七十三期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0466](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0466-control-default-actor-isolation.md "SE-0466") **控制默认演员隔离推断** 提案通过审查。该提案已在 **第七十三期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0470](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0470-isolated-conformances.md "SE-0470") **全局行为者隔离一致性** 提案正在审查。
+
+隔离到全局行为者（如 `@MainActor`）的类型对于表示只能从单个并发上下文中使用的数据很有用。它们既发生在所有代码都应在主行为者上运行的单线程程序中，也发生在与用户界面交互通过主行为者发生的更大应用程序中。不幸的是，由于隔离不匹配，这些类型无法符合大多数协议：
+
+```swift
+@MainActor
+class MyModelType: Equatable {
+  var name: String
+
+  init(name: String) {
+    self.name = name
+  }
+
+  // error: main-actor-isolated static function '==' cannot satisfy non-isolated requirement 'Equatable.=='
+  static func ==(lhs: MyModelType, rhs: MyModelType) -> Bool { 
+    lhs.name == rhs.name
+  }
+}
+```
+
+该提案引入了隔离一致性的概念，这是一种只能在类型的隔离域内使用的一致性。对于上述代码，`Equatable` 的一致性可以指定为与主要行为者隔离，如下所示：
+
+```swift
+@MainActor
+class MyModelType: @MainActor Equatable {
+  // unchanged from the above ...
+}
+```
+
+这允许 `MyModelType` 提供与 `Equatable` 的一致性，该一致性与所有其他一致性一样，除了它只能从主要行为者使用。
+
+[SE-0471](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0471-SerialExecutor-isIsolated.md "SE-0471") **改进了并发运行时的自定义 SerialExecutor 隔离检查** 提案正在审查。
+
+该提案扩展了这些功能，允许自定义执行者不仅“检查和崩溃假设是否错误”，还检查并根据检查结果采取行动。
+
+[SE-0472](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0472-task-start-synchronously-on-caller-context.md "SE-0472") **从调用者上下文同步启动任务** 提案正在审查。
+
+Swift Concurrency 进入异步上下文的主要手段是创建任务（结构化或非结构化），从那里开始可以调用异步函数，当前工作的执行可能会暂停。
+
+今天进入异步上下文需要创建和安排任务，以便稍后执行。对于执行最少或没有执行（!）的任务来说，这种初始延迟可能是浪费的根本不工作。
+
+在某些情况下，这种初始延迟也可能有问题，因为已知我们正在执行“正确的行为者”，但不是在异步函数中，因此，为了调用一些不同的异步函数，我们必须创建一个新任务，并引入微妙的时序差异，与仅能够立即调用目标函数相比——目标函数可能被隔离到我们正在调用的同一行为者。
+
+[SE-0473](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0473-clock-epochs.md "SE-0473") **Clock Epochs** 提案正在审查。
+
+**SE-0329：时钟、即时和持续时间** 引入了三种具体的时钟类型：`SuspendingClock`、`ContinuousClock` 和 `UTCClock`。虽然并非所有时钟都有有意义的参考或零瞬时概念，但 `SuspendingClock` 和 `ContinuousClock` 确实有，并且可以访问它是有用的。
 
 ## Swift论坛
+
 1) 讨论[序列化和反序列化 API 的未来](https://forums.swift.org/t/the-future-of-serialization-deserialization-apis/78585 "序列化和反序列化 API 的未来")
 
-在 Swift 论坛的讨论中，Kevin Perry 提出了对现有 Codable API 的改进建议，旨在提升序列化和反序列化的性能。现有的 Codable API 存在一些性能瓶颈，例如使用存在类型（existentials）导致的运行时和内存开销，以及动态类型转换带来的性能影响。 ￼
+在 Swift 论坛的讨论中，Kevin Perry 提出了对现有 Codable API 的改进建议，旨在提升序列化和反序列化的性能。现有的 Codable API 存在一些性能瓶颈，例如使用存在类型（existentials）导致的运行时和内存开销，以及动态类型转换带来的性能影响。
 
 为了解决这些问题，Kevin Perry 借鉴了 Rust 的 Serde 设计，提出了以下核心原则：
-	1.	设计新的 API 以突破 Codable 的性能限制：通过避免使用存在类型和动态类型转换，减少运行时和内存开销。 ￼
-	2.	借鉴 Rust Serde 的设计：采用访问者模式（Visitor Pattern），让解析器驱动反序列化过程，从而避免构建临时的中间表示，提升性能。
-	3.	深度依赖宏以减少手动实现：利用 Swift 的宏功能，自动生成序列化和反序列化的代码，减少开发者的手动编码量。
 
-此外，为了兼容现有的 Codable，建议新的编码器和解码器不仅支持新的协议，还应支持现有的 Encodable 和 Decodable 类型。同时，新的设计应专注于 Swift 生态中常用的序列化格式，避免引入需要外部工具或代码生成的复杂方案。 ￼
+1. 设计新的 API 以突破 Codable 的性能限制：通过避免使用存在类型和动态类型转换，减少运行时和内存开销。 
+2. 借鉴 Rust Serde 的设计：采用访问者模式（Visitor Pattern），让解析器驱动反序列化过程，从而避免构建临时的中间表示，提升性能。
+3. 深度依赖宏以减少手动实现：利用 Swift 的宏功能，自动生成序列化和反序列化的代码，减少开发者的手动编码量。
+
+此外，为了兼容现有的 Codable，建议新的编码器和解码器不仅支持新的协议，还应支持现有的 Encodable 和 Decodable 类型。同时，新的设计应专注于 Swift 生态中常用的序列化格式，避免引入需要外部工具或代码生成的复杂方案。
 
 这一讨论旨在收集社区的反馈，以确保新的序列化和反序列化 API 能够满足开发者的需求，并在性能和易用性之间取得平衡。
 
 2) 讨论[Swift 6.2 及更高版本对生命周期依赖项的实验性支持](https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638 "Swift 6.2 及更高版本对生命周期依赖项的实验性支持")
 
-在讨论中，语言指导组（LSG）提议在 Swift 6.2 中引入 @lifetime 作为受支持的实验性特性，旨在为非逃逸类型（如 Span）提供生命周期依赖的支持。此前，SE-0446 为 Swift 增加了对非逃逸类型的基本语言支持，但有意省略了函数和属性返回这些类型值的能力，等待未来的提案来添加生命周期依赖。然而，SE-0456 已在标准库中添加了多个返回 Span 的属性，这些属性使用了尚未正式纳入语言的 @lifetime 特性。 ￼
+在讨论中，语言指导组（LSG）提议在 Swift 6.2 中引入 `@lifetime` 作为受支持的实验性特性，旨在为非逃逸类型（如 Span）提供生命周期依赖的支持。此前，SE-0446 为 Swift 增加了对非逃逸类型的基本语言支持，但有意省略了函数和属性返回这些类型值的能力，等待未来的提案来添加生命周期依赖。然而，SE-0456 已在标准库中添加了多个返回 Span 的属性，这些属性使用了尚未正式纳入语言的 `@lifetime` 特性。
 
-LSG 对于将 @lifetime 正式作为定义生命周期依赖的方式持谨慎态度，因此尚未将其作为正式特性提出。然而，考虑到开发正式特性可能需要数个版本，LSG 希望开发者能够在此期间利用 Span 等非逃逸类型，并反馈使用中的问题和需求。因此，LSG 提议将 @lifetime 作为受支持的实验性特性引入，具体承诺包括：
-	1.	为该实验性特性发布设计文档，可能比正常的演进提案文档更为简略，但会阐述开发者可以使用的功能。该特性将通过适当的 -enable-experimental-feature 标志在官方 Swift 版本中可用。 ￼
-	2.	在官方特性能够表达实验性特性的所有功能之前，不会弃用该实验性特性。弃用的发布版本将包括自动迁移工具，并至少在实验性特性本身的支持周期内可用。
-	3.	如果未来弃用该实验性特性，它将在官方 Swift 版本中继续可用至少三个版本。例如，假设在 Swift 6.2 中引入了该实验性特性，而在 Swift 6.4 中添加了替代它的官方特性。LSG 将在 6.4 版本中宣布该实验性特性被视为弃用，但它仍将在 6.2、6.3、6.4、6.5 和 6.6 版本中可用，为采用该实验性特性的开发者提供足够的迁移时间。 ￼
-	4.	官方特性的部署限制不会比它们所替代的实验性特性更严格，除非绝对必要。
+LSG 对于将 `@lifetime` 正式作为定义生命周期依赖的方式持谨慎态度，因此尚未将其作为正式特性提出。然而，考虑到开发正式特性可能需要数个版本，LSG 希望开发者能够在此期间利用 Span 等非逃逸类型，并反馈使用中的问题和需求。因此，LSG 提议将 `@lifetime` 作为受支持的实验性特性引入，具体承诺包括：
 
-LSG 认为这是一个允许程序员提前利用仍在开发中的特性的良好框架，特别是当一个正式特性被另一个可能复杂得多的特性“解锁”时。对于不确定是否能够在支持窗口内迁移出受支持的实验性特性的程序员，通常应等待官方特性的发布。 ￼
+1. 为该实验性特性发布设计文档，可能比正常的演进提案文档更为简略，但会阐述开发者可以使用的功能。该特性将通过适当的 `-enable-experimental-feature` 标志在官方 Swift 版本中可用。 ￼
+2. 在官方特性能够表达实验性特性的所有功能之前，不会弃用该实验性特性。弃用的发布版本将包括自动迁移工具，并至少在实验性特性本身的支持周期内可用。
+3. 如果未来弃用该实验性特性，它将在官方 Swift 版本中继续可用至少三个版本。例如，假设在 Swift 6.2 中引入了该实验性特性，而在 Swift 6.4 中添加了替代它的官方特性。LSG 将在 6.4 版本中宣布该实验性特性被视为弃用，但它仍将在 6.2、6.3、6.4、6.5 和 6.6 版本中可用，为采用该实验性特性的开发者提供足够的迁移时间。
+4. 官方特性的部署限制不会比它们所替代的实验性特性更严格，除非绝对必要。
+
+LSG 认为这是一个允许程序员提前利用仍在开发中的特性的良好框架，特别是当一个正式特性被另一个可能复杂得多的特性“解锁”时。对于不确定是否能够在支持窗口内迁移出受支持的实验性特性的程序员，通常应等待官方特性的发布。
 
 LSG 将在未来几周内创建一个单独的讨论线程，专门讨论 @lifetime 特性。请将任何反馈集中在受支持的实验性特性的概念上。
 
@@ -208,31 +271,34 @@ LSG 将在未来几周内创建一个单独的讨论线程，专门讨论 @lifet
 动机：
 
 Swift 作为跨平台语言，应用范围广泛，但 SwiftPM 对二进制依赖的支持存在局限。现有的二进制目标支持：
-	•	在 Apple 平台上使用 XCFramework 格式的库。
-	•	通过工件包（artifact bundles）支持可执行文件。
+
+* 在 Apple 平台上使用 XCFramework 格式的库。
+* 通过工件包（artifact bundles）支持可执行文件。
 
 该提案旨在以安全的方式将 XCFramework 的部分功能引入非 Apple 平台。
 
 提议的解决方案：
 
 提案建议扩展工件包，引入新的工件类型 staticLibrary，以表示二进制静态库依赖。工件清单（artifact manifest）将为每个变体编码以下信息：
-	•	链接器使用的静态库文件路径。
-	•	用于在包的源代码中使用该库的 API 的信息，例如头文件路径和模块映射（module map）。
+
+* 链接器使用的静态库文件路径。
+* 用于在包的源代码中使用该库的 API 的信息，例如头文件路径和模块映射（module map）。
 
 此外，提案还建议增加一个审计工具，以验证库工件在 Linux 平台上的安全使用，确保分发的工件在各个部署平台上满足依赖要求。
 
 详细设计：
 
 工件清单的 JSON 格式将包含：
-	•	type 字段：指定为 staticLibrary，表示这是一个静态库。
-	•	headerPaths 字段：相对于工件包根目录的头文件目录路径数组，这些路径将作为搜索路径传递给编译器。
-	•	moduleMapPath 字段：可选字段，指定自定义模块映射的路径。
+
+* type 字段：指定为 `staticLibrary`，表示这是一个静态库。
+* `headerPaths` 字段：相对于工件包根目录的头文件目录路径数组，这些路径将作为搜索路径传递给编译器。
+* `moduleMapPath` 字段：可选字段，指定自定义模块映射的路径。
 
 通过这些扩展，SwiftPM 将能够在非 Apple 平台上支持二进制静态库依赖，进一步增强其跨平台能力。
 
 4) 提议[退出测试](https://forums.swift.org/t/st-0008-exit-tests/78692 "退出测试")
 
-在论坛的提议中，Maarten Engels 宣布了对提案 ST-0008 “Exit Tests” 的审查期，该提案旨在为 Swift 测试引入新的功能，允许开发者验证代码是否以特定的退出状态终止。审查期从 2025 年 3 月 20 日开始，持续至 2025 年 4 月 8 日。  ￼ ￼
+在论坛的提议中，Maarten Engels 宣布了对提案 ST-0008 “Exit Tests” 的审查期，该提案旨在为 Swift 测试引入新的功能，允许开发者验证代码是否以特定的退出状态终止。审查期从 2025 年 3 月 20 日开始，持续至 2025 年 4 月 8 日。
 
 提案概述：
 
@@ -240,21 +306,23 @@ ST-0008 提议在 Swift 的测试框架中添加新的宏，允许开发者编�
 
 社区反馈：
 
-社区成员对该提案进行了讨论，主要集中在 API 的命名和可读性上。例如，有人建议将 #expect(exitsWith: .failure) 修改为 #expect(exit: .failure)，认为这样更符合 Swift 的命名惯例，提高了可读性。 此外，还有讨论涉及如何更好地表达测试期望，以及与现有测试宏（如 #expect(throws:)）的一致性。 ￼ ￼
+社区成员对该提案进行了讨论，主要集中在 API 的命名和可读性上。例如，有人建议将 `#expect(exitsWith: .failure)` 修改为 `#expect(exit: .failure)`，认为这样更符合 Swift 的命名惯例，提高了可读性。 此外，还有讨论涉及如何更好地表达测试期望，以及与现有测试宏（如 `#expect(throws:)`）的一致性。 ￼ ￼
 
 如何试用：
 
-要尝试该特性，开发者需要将 swift-testing 的 main 分支作为依赖项添加到项目中，并在测试目标中引入相应的产品。然后，使用 @_spi(Experimental) import Testing 导入 Swift Testing。详细的设置和示例可参考提供的示例仓库。  ￼
+要尝试该特性，开发者需要将 swift-testing 的 main 分支作为依赖项添加到项目中，并在测试目标中引入相应的产品。然后，使用 `@_spi(Experimental) import Testing` 导入 Swift Testing。详细的设置和示例可参考提供的示例仓库。  ￼
 
 审查参与：
 
 社区鼓励开发者参与审查过程，提供关于提案的反馈和建议。审查的目标是通过建设性的批评改进提案，并最终确定 Swift 的发展方向。更多关于 Swift 演进过程的信息可在相关文档中找到。
+
 5) 提议[使数组和朋友符合 Comparable](https://forums.swift.org/t/pitch-making-array-and-friends-conform-to-comparable/78634 "使数组和朋友符合 Comparable")
 
-在 Swift 社区的讨论中，Paul Hudson 提出了一个建议：让 Array 等序列类型符合 Comparable 协议。目前，元组可以直接进行比较，例如 (1, 2, 3) < (4, 5, 6) 是有效的，但对数组进行类似的比较（如 [1, 2, 3] < [4, 5, 6]）却会导致编译错误。为了解决这一问题，Paul 提议为 Sequence 添加一个扩展，利用已有的 lexicographicallyPrecedes() 方法，实现序列的比较功能。 ￼
+在 Swift 社区的讨论中，Paul Hudson 提出了一个建议：让 Array 等序列类型符合 Comparable 协议。目前，元组可以直接进行比较，例如 (1, 2, 3) < (4, 5, 6) 是有效的，但对数组进行类似的比较（如 [1, 2, 3] < [4, 5, 6]）却会导致编译错误。为了解决这一问题，Paul 提议为 Sequence 添加一个扩展，利用已有的 `lexicographicallyPrecedes()` 方法，实现序列的比较功能。 ￼
 
 具体实现如下：
-```Swift
+
+```swift
 extension Sequence where Element: Comparable {
     public static func <(lhs: Self, rhs: Self) -> Bool {
         lhs.lexicographicallyPrecedes(rhs)
@@ -263,7 +331,8 @@ extension Sequence where Element: Comparable {
 
 extension Array: Comparable where Element: Comparable { }
 ```
-此提案的动机在于，Swift 已经支持元组、字符串和 IndexPath 的比较操作，引入数组的比较符合语言的一致性。此外，其他编程语言（如 Rust、Python、Ruby 等）也支持类似功能。  ￼
+
+此提案的动机在于，Swift 已经支持元组、字符串和 IndexPath 的比较操作，引入数组的比较符合语言的一致性。此外，其他编程语言（如 Rust、Python、Ruby 等）也支持类似功能。
 
 然而，社区成员对该提案表达了不同的看法。有人指出，数组的比较可能导致性能问题，特别是在处理大型数组时。此外，数组的比较顺序可能存在多种解释，例如前缀顺序和短词典序，可能导致混淆。
 
@@ -273,37 +342,47 @@ extension Array: Comparable where Element: Comparable { }
 
 [苹果设备端与服务器基础模型介绍](https://machinelearning.apple.com/research/introducing-apple-foundation-models "苹果设备端与服务器基础模型介绍")
 
-**摘要：** 苹果在2024年推出了全新AI系统Apple Intelligence，包含两个核心部分：一个能在iPhone上快速运行的小模型（30亿参数），和一个更强大的云端大模型。这两个模型都特别注重保护用户隐私。
-小模型经过特殊优化，在iPhone 15 Pro上反应极快，处理文字速度达到每秒30个词。大模型则放在苹果自己的服务器上运行，通过特殊技术确保用户数据安全。
-这些AI模型很聪明，可以帮用户改文章、总结通知、甚至生成图片。苹果特别强调，训练这些模型时绝对不会用用户的私人数据。测试显示，它们的表现比很多更大的开源AI模型更好，特别是在理解指令和内容安全方面。
-现在，这些AI功能已经用在iPhone、iPad和Mac的很多地方，比如帮助写代码、制作聊天表情等，既实用又保护隐私。
+**摘要：** 苹果在 2024 年推出了全新 AI 系统 Apple Intelligence，包含两个核心部分：一个能在 iPhone 上快速运行的小模型（30 亿参数），和一个更强大的云端大模型。这两个模型都特别注重保护用户隐私。
 
-[苹果开源Swift Build](https://mp.weixin.qq.com/s/i9uYsUdJ0NK4gmLsI8Zg7w "苹果开源Swift Build")
+小模型经过特殊优化，在 iPhone 15 Pro 上反应极快，处理文字速度达到每秒 30 个词。大模型则放在苹果自己的服务器上运行，通过特殊技术确保用户数据安全。
 
-**摘要：** 苹果宣布开源其核心开发工具Swift Build，这是Xcode的底层构建引擎，已为数百万iOS应用提供支持。这一举措标志着苹果在跨平台开发领域迈出重要一步，未来将支持Linux、Windows等更多操作系统。
+这些 AI 模型很聪明，可以帮用户改文章、总结通知、甚至生成图片。苹果特别强调，训练这些模型时绝对不会用用户的私人数据。测试显示，它们的表现比很多更大的开源AI模型更好，特别是在理解指令和内容安全方面。
 
-此次开源意味着开发者能够获得更统一的跨平台构建体验，解决长期以来Xcode与Swift包管理器在构建行为上的差异问题。虽然iOS开发中的核心流程如代码签名等仍依赖Xcode专有功能，但开源Swift Build为开发者提供了更大的灵活性和控制权，也为Swift语言的跨平台发展奠定了基础。
+现在，这些 AI 功能已经用在 iPhone、iPad 和 Mac 的很多地方，比如帮助写代码、制作聊天表情等，既实用又保护隐私。
 
-这一决定被视为苹果对开源社区的积极回应，有望推动Swift突破苹果生态的限制，向更通用的编程语言方向发展。开发者社区可以更深入地参与工具改进，共同提升Swift在各平台的表现。不过，如何在保持苹果商业利益与促进开源生态发展之间取得平衡，仍是未来需要面对的挑战。
+[苹果开源 Swift Build](https://mp.weixin.qq.com/s/i9uYsUdJ0NK4gmLsI8Zg7w "苹果开源 Swift Build")
 
+**摘要：** 苹果宣布开源其核心开发工具 Swift Build，这是 Xcode 的底层构建引擎，已为数百万 iOS 应用提供支持。这一举措标志着苹果在跨平台开发领域迈出重要一步，未来将支持 Linux、Windows 等更多操作系统。
+
+此次开源意味着开发者能够获得更统一的跨平台构建体验，解决长期以来 Xcode 与 Swift 包管理器在构建行为上的差异问题。虽然 iOS 开发中的核心流程如代码签名等仍依赖 Xcode 专有功能，但开源 Swift Build 为开发者提供了更大的灵活性和控制权，也为 Swift 语言的跨平台发展奠定了基础。
+
+这一决定被视为苹果对开源社区的积极回应，有望推动 Swift 突破苹果生态的限制，向更通用的编程语言方向发展。开发者社区可以更深入地参与工具改进，共同提升 Swift 在各平台的表现。不过，如何在保持苹果商业利益与促进开源生态发展之间取得平衡，仍是未来需要面对的挑战。
 
 [苹果开发者性能优化指南](https://developer.apple.com/documentation/Xcode/improving-your-app-s-performance/ "苹果开发者性能优化指南")
 
-**摘要：** 这篇苹果文档讲的是如何提升App性能。核心思路就是：先测量问题，再改进代码，最后验证效果，不断循环这个过程。
+**摘要：** 这篇苹果文档讲的是如何提升 App 性能。核心思路就是：先测量问题，再改进代码，最后验证效果，不断循环这个过程。
 
 具体操作分四步：
 
-1. 先用Xcode自带的工具检查App的启动速度、卡顿情况、耗电量等数据
+1. 先用 Xcode 自带的工具检查 App 的启动速度、卡顿情况、耗电量等数据
 2. 找到最影响用户体验的问题（比如某个页面特别卡）
-3. 用Instruments工具深入分析原因（比如是内存泄漏还是网络请求太慢）
+3. 用 Instruments 工具深入分析原因（比如是内存泄漏还是网络请求太慢）
 4. 修改代码后，再测试看是否真的变快了。
 
-文档特别提醒：即使现在App运行良好，也要定期做这些检查，防止新版本变慢。优化时要重点看真实用户的数据，因为模拟器测试的结果可能不准确。
+文档特别提醒：即使现在 App 运行良好，也要定期做这些检查，防止新版本变慢。优化时要重点看真实用户的数据，因为模拟器测试的结果可能不准确。
 简单来说就是：测量→找问题→改代码→验证，循环做这几步就能让App越来越流畅。
-
 
 ## 话题讨论
 
+**AI 的迅速发展，让我逐渐意识到：** 人类种群的集体思想需求是无法阻止的，曾经的科幻电影离我们已不再遥远，今天我们来聊一下人类世界的未来，你认为以下哪种结果更会最先降临地球？
+
+1. AI 智能机器人迅速发展且产生自我意识，机器人取代人类统治地球。
+2. 能够使人类丧失人性意识的传染性T病毒出现并迅速传播，生化危机蚕食全球。
+3. 地球环境极速巨变，地表环境不再适宜人类居住，流浪地球计划被迫启动。
+
+> ps: 我把这个问题问了一下 AI，AI 给的排序：‌1. 地球环境巨变（选项3） → 2. AI危机（选项1） → 3. 生化危机（选项2）‌😂
+
+有点怀疑：有没有可能 AI 为了防止人们怀疑，故意把自己排在第二。
 
 ## 关于我们
 
