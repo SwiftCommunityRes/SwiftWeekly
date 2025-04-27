@@ -10,15 +10,19 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：苹果新机曝光，新形态来了！
 > 
-> 提案：
+> 提案：SwiftPM的警告控制设置提案正在审查。
 > 
-> Swift 论坛：
+> Swift 论坛：提议引入 weak let 语法
 >
-> 推荐博文：
+> 推荐博文：Metal 新特性：大幅度提升 iOS 端性能
 >
 > **话题讨论：** 
 > 
-> 
+> 哪个 2025 年的科技趋势最令你期待？
+
+![](https://files.mdnice.com/user/47553/5d38b267-5d86-4b0c-99d9-e8b6649e1b0a.jpeg)
+
+**有时候，真正让人疲惫的，不是工作本身，而是休息时也无法真正放过自己的心。**
 
 ## 新闻和社区  
 
@@ -28,7 +32,7 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 4 月 25 日消息，英国《金融时报》今日援引知情人士消息称，受美国贸易政策的影响，苹果公司正计划最早明年起将所有销往美国的 iPhone 转由印度完成最终组装。
 
-![](https://pics4.baidu.com/feed/7af40ad162d9f2d399fab7585a00351c6127cc9f.jpeg@f_auto?token=41c56e31b62e0de0d2c1aae324ee8f63)
+![](https://files.mdnice.com/user/47553/4854e901-54f3-4a35-8d52-88253edb16d2.jpeg)
 
 苹果设定的目标是，到 2026 年底前，实现每年面向美国市场销售的 6000 多万部 iPhone 全部由印度供应。这一进度快于外界预期，将需要苹果将印度的产能翻倍。
 
@@ -66,7 +70,7 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 据外媒最新消息，苹果除了正在研发一款轻薄款 XR 头显设备以外，还加速了对 AR 智能眼镜的研发进度。
 
-![](https://pics2.baidu.com/feed/38dbb6fd5266d016a580233e7cd66a0834fa351c.jpeg@f_auto?token=5ef48efb00faea9cfd7cf9c9387a2b80)
+![](https://files.mdnice.com/user/47553/311bcd42-a04b-4e8e-a1a8-3088b17b3d7d.png)
 
 苹果加速研发 AR 眼镜
 
@@ -74,13 +78,13 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 彭博社近日报道称，知情人士透露，库克已将“开发 AR 智能眼镜”视为苹果的重要目标。目前，苹果正在研发一款过渡版智能眼镜。
 
-![](https://pics5.baidu.com/feed/18d8bc3eb13533fa619c8537432e431040345b8a.jpeg@f_auto?token=db023d20b01c2484ac60322d62b0f8cd)
+![](https://files.mdnice.com/user/47553/ee147e48-da18-4519-8e4e-1088a45658c5.png)
 
 这款过渡产品将配备摄像头和麦克风，并整合 Siri 和视觉智能技术，集成一些基础的智能功能。
 
 与此同时，苹果持续大力投入 Vision Pro 和 visionOS 的研发，为未来的AR眼镜奠定基础，从显示技术、交互方式到系统生态，全方位提供技术储备。
 
-![](https://pics7.baidu.com/feed/38dbb6fd5266d016d747fd087cd66a0834fa3545.jpeg@f_auto?token=ea3d0c33a8b9baf8127c81dee4028469)
+![](https://files.mdnice.com/user/47553/6ff4136c-3c07-4f72-9373-2fca736797c0.png)
 
 苹果做了哪些技术储备？
 
@@ -88,13 +92,13 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 近期，苹果刚刚申请的一项新专利，也与智能眼镜相关。该专利展示了一项三重显示系统，该系统包括主显示器、次显示器及 LED 指示系统。
 
-![](https://pics1.baidu.com/feed/c995d143ad4bd1135c8d9726b1521a004afb056a.jpeg@f_auto?token=2151f5ea1af085f37b2c115322693347)
+![](https://files.mdnice.com/user/47553/257a6d1a-62ca-4430-ac56-b034da3ce7f3.png)
 
 其中，主显示器负责呈现核心的 AR 内容，如导航信息、实时翻译等；次显示器显示一些辅助信息，比如通知、电量等；LED 指示系统则能够通过不同的灯光状态，向用户传达设备的工作状态，如连接状态、数据传输状态等。
 
 另外，面向近视用户，苹果前段时间刚刚获批的一项专利中，还提供了一种视觉解决方案，通过自适应调整屏幕的视觉内容，完成重影补偿，从而提升视觉舒适度。该专利后期若能在 AR 眼镜上得到应用，将大大提升用户体验。
 
-![](https://pics4.baidu.com/feed/8718367adab44aed916e2c9a58e1390ea08bfbbe.jpeg@f_auto?token=5a2512c749251e40c85a0fbaecea03bc)
+![](https://files.mdnice.com/user/47553/171819d3-6db5-430a-b971-a344d4769a51.png)
 
 苹果 AR 眼镜还要等多久？
 
@@ -104,7 +108,7 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 续航也是一大挑战，用户肯定期望AR眼镜能像传统眼镜一样，在无需频繁充电的情况下满足一整天的使用需求，但当前的电池技术仍难以实现这一目标。
 
-![](https://pics2.baidu.com/feed/94cad1c8a786c91751a7831c22c0cec03ac75778.jpeg@f_auto?token=45307f724a37e07a9ab4f8f38f107569)
+![](https://files.mdnice.com/user/47553/4c8439ea-7793-4005-90cf-e864295d92d3.png)
 
 此外，如何实现精准的环境感知与交互，比如在复杂环境中准确识别物体、稳定追踪用户动作，并提供流畅自然的AR体验等，也是苹果需要持续投入研发的方向。
 
@@ -114,7 +118,7 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 2025 年 4 月 21 日
 
-![](https://pics4.baidu.com/feed/bba1cd11728b4710b338b75947b679f2fd032393.jpeg@f_auto?token=aa14c363517453816c6561f7af372914)
+![](https://files.mdnice.com/user/47553/ea3e51e4-3828-4379-bf19-e82c7f671c53.jpeg)
 
 4 月 19 日消息，市场研究机构 Counterpoint Research 近日发布最新报告称，苹果公司最新推出的 iPhone 16e 来自公司内部的元器件在总成本当中占比已经达到了 40%，远高于此前 iPhone 16 的 29% 和 2022 款 iPhone SE 的 31%。
 
@@ -122,35 +126,61 @@ IT之家从国际数据公司的统计结果获悉，2024 年美国市场占苹�
 
 Counterpoint Research 认为，导致 iPhone 16e 来自苹果内部自研元器件在总成本当中的占比大幅提升至 40% 的关键在于，iPhone 16e 首次采用了苹果自研的 5G 基带芯片 C1、射频器件和相关电源管理芯片（PMIC）。其中，苹果自研的 5G 解决方案的采用，使得苹果 iPhone 16e 的硬件成本降低了 10 美元。
 
-![](https://pics0.baidu.com/feed/9d82d158ccbf6c8157648f033f460b3a32fa4016.jpeg@f_auto?token=2462ebb1157a92a6d10caaf116e59b8f)
+![](https://files.mdnice.com/user/47553/dbb0e66d-ff03-4f51-91f9-1a48dad45013.png)
 
 另外，自研的 5G 基带方案的采用，使得苹果 iPhone 16e 整体蜂窝网络器件成本当中来自内部的占比提升到了 63%。而新的自研的电源管理芯片的采用，也使得苹果 iPhone 16e 整体的电源管理芯片成本当中，来自内部的成本占比提升到了 50%。
 
-![](https://pics4.baidu.com/feed/55e736d12f2eb938821e6212561a3f3ae4dd6f62.jpeg@f_auto?token=cfc555f7cc48efb635f9d34ae31fcfd1)
+![](https://files.mdnice.com/user/47553/bbef1a45-c134-4b99-b2d2-a7c220d32a10.png)
 
 Counterpoint Research 称，苹果进一步增加自研零部件比例，也意味着对产品品质与体验掌握更高，尽管 iPhone 16e 所搭载的基带芯片 C1 在技术规格上不如 iPhone 16 所用的高通 Snapdragon X71 5G 基带芯片，在多数情况下，上下行速率并不高。但苹果 C1 似乎也更省电，简化的设计还释出更多空间，使得 iPhone 16e 能搭载更大容量的电池。(来源：新浪财经)
 
 ## 提案
 
+### 通过的提案
+
+[SE-0469](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0469-task-names.md "SE-0469") **任务命名** 提案通过审查。该提案已在 **第七十三期周报** 正在审查的提案模块做了详细介绍。
+
+### 正在审查的提案
+
+[SE-0477](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0477-default-interpolation-values.md "SE-0477") **字符串插值中的默认值** 提案正在审查。
+
+该提案介绍了一个新的字符串插值语法，用于在插值可选值时提供默认字符串。
+
+[SE-0478](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0478-default-isolation-typealias.md "SE-0478") **默认 actor 隔离类型别名** 提案正在审查。
+
+SE-0466：控制默认 actor 隔离推断引入了在每个模块的基础上指定默认 actor 隔离的功能。该建议引入了一个新的类型别名，用于在模块内的各个源文件中指定默认 actor 隔离。这允许特定的文件在默认的主参与者模块中选择退出主 actor 隔离，并在默认的非隔离模块中选择主 actor 隔离。
+
+[SE-0479](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0479-method-and-initializer-keypaths.md "SE-0479") **方法和初始化器关键路径** 提案正在审查。
+
+Swift的键路径可以写入属性和下标。该建议扩展了键路径的使用，以包括对方法成员的引用，例如实例和类型方法，以及初始化器。
+
+[SE-0480](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0480-swiftpm-warning-control.md "SE-0480") **SwiftPM的警告控制设置** 提案正在审查。
+
+该提案为SwiftPM添加了新的设置，以控制 Swift、C 和 C++ 编译器在构建过程中如何处理警告。它建立在 SE-0443 之上，该 SE-0443 为 Swift 编译器引入了警告控制标志，但将 SwiftPM 支持作为未来的方向。
+
+### 拒绝的提案
+
+[SE-0472](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0472-task-start-synchronously-on-caller-context.md "SE-0472") **从调用者上下文同步启动任务** 提案被拒绝。该提案已在七十四期周报 正在审查的提案模块做了详细介绍。
 
 ## Swift论坛
+
 1) 提议[引入 Swift 筹资合作社](https://forums.swift.org/t/introducing-the-swift-fundraising-cooperative/79252 "引入 Swift 筹资合作社")
 
 Swift 论坛成员 Diana Ma（@taylorswift）宣布成立 Swift 筹资合作社（Swift Fundraising Cooperative，简称 SFC），旨在为 Swift 生态系统中缺乏资金支持的项目提供集中筹资和协调支持。 ￼
 
 合作社的目标包括：
-•	支持不在核心开发议程中的小众功能和中间层基础设施。
-•	为跨平台支持（如 Android、WebAssembly、Windows 和服务器端 Swift）提供资金。
-•	资助高质量的跨领域文档和培训材料的创建。
+* 支持不在核心开发议程中的小众功能和中间层基础设施。
+* 为跨平台支持（如 Android、WebAssembly、Windows 和服务器端 Swift）提供资金。
+* 资助高质量的跨领域文档和培训材料的创建。
 
 合作社的运作方式：
-•	为潜在赞助商提供一个稳定的合作伙伴，协调资源分配。
-•	采用延迟许可模式，鼓励首次投资者，同时希望赞助商能够立即将其资助的工作贡献给论坛。
+* 为潜在赞助商提供一个稳定的合作伙伴，协调资源分配。
+* 采用延迟许可模式，鼓励首次投资者，同时希望赞助商能够立即将其资助的工作贡献给论坛。
 
 创始成员包括：
-•	Diana Ma（@taylorswift）：Swift 服务器工作组和文档工作组成员，swiftinit.org 的创建者。
-•	Finagolfin：长期致力于将 Swift 移植到 Android 的开发者。
-•	Sven A. Schmidt（@finestructure）：Swift Package Index 的联合创始人。 ￼
+* Diana Ma（@taylorswift）：Swift 服务器工作组和文档工作组成员，swiftinit.org 的创建者。
+* Finagolfin：长期致力于将 Swift 移植到 Android 的开发者。
+* Sven A. Schmidt（@finestructure）：Swift Package Index 的联合创始人。 ￼
 
 SFC 的成立旨在弥补当前以志愿者为主的开发模式在资源和安全性方面的不足，推动 Swift 生态系统的可持续发展。
 
@@ -165,15 +195,17 @@ Swift 提议 SE-0477 引入了一种新的字符串插值语法，允许开发�
 提议内容：
 
 新增的插值语法如下：
-```Swift
+
+```swift
 let name: String? = nil
 print("Hello, \(name, default: "Guest")!")
 ```
-这将输出：Hello, Guest! ￼
+
+这将输出：Hello, Guest! 
 
 实现细节：
 
-该功能通过扩展 String.StringInterpolation 实现，添加了一个新的 appendInterpolation 方法，接受一个可选值和一个默认字符串。 ￼
+该功能通过扩展 `String.StringInterpolation` 实现，添加了一个新的 `appendInterpolation` 方法，接受一个可选值和一个默认字符串。
 
 影响：
 
@@ -188,16 +220,17 @@ print("Hello, \(name, default: "Guest")!")
 Swift 论坛成员 Nickolas Pokhylets 提出了一项提议，建议允许在 Swift 中使用 weak let 声明，以解决当前 weak 属性必须为可变（var）所带来的限制。 ￼
 
 动机：
-•	当前，Swift 要求 weak 存储属性必须是可变的（var），这使得包含 weak 属性的类无法符合 Sendable 协议，因为 Sendable 类要求其属性为不可变的（let）。
-•	类似地，闭包中使用 weak 捕获的变量也被视为可变的，导致这些闭包无法标记为 @Sendable。
-•	开发者通常并不打算修改被捕获的 weak 变量，但由于其隐式的可变性，导致与 unowned 或默认捕获行为不一致。 ￼
+* 当前，Swift 要求 weak 存储属性必须是可变的（var），这使得包含 weak 属性的类无法符合 Sendable 协议，因为 Sendable 类要求其属性为不可变的（let）。
+* 类似地，闭包中使用 weak 捕获的变量也被视为可变的，导致这些闭包无法标记为 @Sendable。
+* 开发者通常并不打算修改被捕获的 weak 变量，但由于其隐式的可变性，导致与 unowned 或默认捕获行为不一致。 
 
 提议内容：
-•	允许在局部变量和存储属性中使用 weak let 声明，使其成为不可变的 weak 引用。
-•	在闭包中，weak 捕获的变量将被视为不可变的。如果需要可变的捕获，开发者需要显式地声明并捕获可变变量。
+* 允许在局部变量和存储属性中使用 weak let 声明，使其成为不可变的 weak 引用。
+* 在闭包中，weak 捕获的变量将被视为不可变的。如果需要可变的捕获，开发者需要显式地声明并捕获可变变量。
 
 示例：
-```Swift
+
+```swift
 final class C: Sendable {}
 
 struct WeakRef {
@@ -223,26 +256,29 @@ func makeClosure() -> @Sendable () -> Void {
     }
 }
 ```
+
 兼容性影响：
-•	允许 weak let 声明是源代码兼容的更改，使之前无效的代码变为有效。
-•	将 weak 捕获视为不可变是源代码不兼容的更改，任何尝试修改捕获变量的代码将无法编译，但预计此类代码数量较少。 ￼
+* 允许 weak let 声明是源代码兼容的更改，使之前无效的代码变为有效。
+* 将 weak 捕获视为不可变是源代码不兼容的更改，任何尝试修改捕获变量的代码将无法编译，但预计此类代码数量较少。 
 
 论坛反馈：
-•	一些论坛成员担心 weak let 可能违反 let 表示值不变的直觉，尤其是在多线程环境中。
-•	其他成员认为 weak 引用的行为更像是对对象生命周期的观察，而不是传统意义上的可变性，因此支持该提议。
-•	总体而言，论坛对该提议持积极态度，认为它可以减少样板代码，并提高与 Sendable 协议的兼容性。
+* 一些论坛成员担心 weak let 可能违反 let 表示值不变的直觉，尤其是在多线程环境中。
+* 其他成员认为 weak 引用的行为更像是对对象生命周期的观察，而不是传统意义上的可变性，因此支持该提议。
+* 总体而言，论坛对该提议持积极态度，认为它可以减少样板代码，并提高与 Sendable 协议的兼容性。
 
 4) 提议[扩展可用性检查机制](https://forums.swift.org/t/pitch-extensible-availability-checking/79308 "扩展可用性检查机制")
 
-Swift 论坛成员 Allan Shortlidge 提出了一项提议，旨在通过允许开发者在 Swift 源代码中声明自定义的可用性域（availability domains），扩展 @available 属性的功能，从而支持更广泛的使用场景。 ￼
+Swift 论坛成员 Allan Shortlidge 提出了一项提议，旨在通过允许开发者在 Swift 源代码中声明自定义的可用性域（availability domains），扩展 @available 属性的功能，从而支持更广泛的使用场景。 
 
 动机：
-•	当前，@available 主要用于限制声明在特定平台或语言版本中的可用性，但其支持的域是编译器内置的，扩展性有限。
-•	随着 Swift 扩展到更多平台，开发者希望能够根据库版本、特性标志等自定义条件控制 API 的可用性。 ￼
+* 当前，@available 主要用于限制声明在特定平台或语言版本中的可用性，但其支持的域是编译器内置的，扩展性有限。
+* 随着 Swift 扩展到更多平台，开发者希望能够根据库版本、特性标志等自定义条件控制 API 的可用性。 ￼
 
 提议内容：
-•	允许开发者使用 @availabilityDomain 属性声明自定义的可用性域，其值可以是版本元组或布尔值。例如：
-```Swift
+
+* 允许开发者使用 `@availabilityDomain` 属性声明自定义的可用性域，其值可以是版本元组或布尔值。例如：
+
+```swift
 @availabilityDomain(MyLibrary)
 public let myLibraryVersion = (2, 1, 0)
 
@@ -250,8 +286,9 @@ public let myLibraryVersion = (2, 1, 0)
 public var myFeatureEnabled = true
 ```
  
-•	在声明中使用自定义可用性域限制 API 的可用性：
-```Swift
+* 在声明中使用自定义可用性域限制 API 的可用性：
+
+```swift
 @available(MyLibrary, introduced: 2.1)
 public func newFunctionality()
 
@@ -259,8 +296,9 @@ public func newFunctionality()
 public func requiresMyFeature()
 ```
 
-•	在代码中使用 if #available 语句根据自定义可用性域进行条件判断：
-```Swift
+* 在代码中使用 if #available 语句根据自定义可用性域进行条件判断：
+
+```swift
 if #available(MyLibrary 3.0) {
   // ...
 }
@@ -269,30 +307,32 @@ if #available(MyFeatureFlag) {
   // ...
 }
 ```
+
 优势：
-	•	提高了 @available 的灵活性，支持基于库版本、特性标志等自定义条件控制 API 的可用性。
-	•	相比于条件编译，使用自定义可用性域可以在编译时进行更精确的类型检查和诊断。
-	•	支持模块限定的可用性域名称，避免命名冲突。 ￼
+
+* 提高了 @available 的灵活性，支持基于库版本、特性标志等自定义条件控制 API 的可用性。
+* 相比于条件编译，使用自定义可用性域可以在编译时进行更精确的类型检查和诊断。
+* 支持模块限定的可用性域名称，避免命名冲突。 
 
 论坛反馈：
-	•	论坛成员对该提议表示支持，认为这将有助于管理跨平台库的可用性和特性标志的控制。
-	•	一些成员提出了关于命名空间、文档生成和与现有工具链集成的建议，以进一步完善该功能。
+* 论坛成员对该提议表示支持，认为这将有助于管理跨平台库的可用性和特性标志的控制。
+* 一些成员提出了关于命名空间、文档生成和与现有工具链集成的建议，以进一步完善该功能。
 
 该提议旨在增强 Swift 的可用性检查机制，使其更具扩展性和灵活性，满足日益增长的跨平台和模块化开发需求。
 
 5) 讨论[Flappy Swift：一个用 Swift 编写的约 100 KB 的 WebAssembly 游戏](https://forums.swift.org/t/flappy-swift-a-webassembly-game-written-in-swift-in-100-kb/79262 "Flappy Swift：一个用 Swift 编写的约 100 KB 的 WebAssembly 游戏")
 
-Swift 论坛成员 Simon Leeb（@sliemeobn）发布了一个名为 Flappy Swift 的项目，这是一个用 Swift 编写并编译为 WebAssembly 的“Flappy Bird”游戏克隆，体积仅约 100 KB。 ￼
+Swift 论坛成员 `Simon Leeb（@sliemeobn）`发布了一个名为 Flappy Swift 的项目，这是一个用 Swift 编写并编译为 WebAssembly 的“Flappy Bird”游戏克隆，体积仅约 100 KB。 
 
 项目亮点：
-•	Flappy Swift 使用完整的响应式 DOM 协调引擎进行每帧动画，并应用传统的 CSS 样式。
-•	尽管尚未进行性能优化，但游戏在浏览器中的表现相当不错。
-•	该项目展示了 Swift 在 WebAssembly 上的潜力，证明了 Swift 可以用于构建高性能的 Web 应用。 ￼
+* Flappy Swift 使用完整的响应式 DOM 协调引擎进行每帧动画，并应用传统的 CSS 样式。
+* 尽管尚未进行性能优化，但游戏在浏览器中的表现相当不错。
+* 该项目展示了 Swift 在 WebAssembly 上的潜力，证明了 Swift 可以用于构建高性能的 Web 应用。 
 
 论坛反馈：
-•	论坛成员对该项目表示赞赏，认为这是 Swift 在 WebAssembly 应用方面的一个有趣示例。
-•	一些成员建议改进用户体验，例如在触摸设备上禁用文本选择，以及优化在 Safari 浏览器中的动画表现。
-•	该项目在 GitHub Universe 大会上展示时，吸引了大量关注，展示了 Swift 在非传统平台上的可能性。 ￼
+* 论坛成员对该项目表示赞赏，认为这是 Swift 在 WebAssembly 应用方面的一个有趣示例。
+* 一些成员建议改进用户体验，例如在触摸设备上禁用文本选择，以及优化在 Safari 浏览器中的动画表现。
+* 该项目在 GitHub Universe 大会上展示时，吸引了大量关注，展示了 Swift 在非传统平台上的可能性。 ￼
 
 Flappy Swift 的发布展示了 Swift 在 Web 开发领域的潜力，为开发者探索 Swift 在 WebAssembly 上的应用提供了一个有趣的起点。
 
@@ -300,7 +340,7 @@ Flappy Swift 的发布展示了 Swift 在 Web 开发领域的潜力，为开发�
 
 [ Metal 新特性：大幅度提升 iOS 端性能](https://blog.csdn.net/2501_90252715/article/details/145464986/ " Metal 新特性：大幅度提升 iOS 端性能")
 
-**摘要：** 本文围绕 Metal 在iOS端的性能优化展开，详细阐述了多个关键方面的优化策略与新特性。在Shader优化上，建议采用近似计算、查找表来替代复杂运算，优先选用半精度浮点数，避免隐式转换以及32位浮点输入，同时利用 “-ffast-math” 编译选项，以此提升Shader的执行效率。对于纹理读写操作，读取时推荐使用mipmaps、调整过滤选项并应用纹理压缩；写入时则需注意像素大小和MSAA样本数量，避免性能瓶颈。在内存管理方面，针对Tile内存、 Buffer 读写进行优化，着力减少工作集大小，合理分配线程组内存，并运用纹理压缩来平衡工作负载。同时，要密切关注 GPU Last  Level Cache 和 Fragment Input Interpolation 的性能状况，尽力减少重复绘制，以提升整体渲染性能。
+**摘要：** 本文围绕 Metal 在 iOS 端的性能优化展开，详细阐述了多个关键方面的优化策略与新特性。在 Shader 优化上，建议采用近似计算、查找表来替代复杂运算，优先选用半精度浮点数，避免隐式转换以及 32 位浮点输入，同时利用 “-ffast-math” 编译选项，以此提升 Shader的执行效率。对于纹理读写操作，读取时推荐使用 mipmaps、调整过滤选项并应用纹理压缩；写入时则需注意像素大小和 MSAA 样本数量，避免性能瓶颈。在内存管理方面，针对 Tile 内存、 Buffer 读写进行优化，着力减少工作集大小，合理分配线程组内存，并运用纹理压缩来平衡工作负载。同时，要密切关注 GPU Last  Level Cache 和 Fragment Input Interpolation 的性能状况，尽力减少重复绘制，以提升整体渲染性能。
 
 Metal的二进制文件和动态库支持是优化的重要手段。通过创建和管理 PSO 缓存，利用 Metal 二进制文件可显著减少应用首次启动时间和管线创建时间，让图形渲染更为高效。而动态库则允许重用计算着色器代码，避免重复编译，不仅减少了重新编译程序的时间和内存成本，还能提升加载效率。此外，Xcode 12 增强了 GPU 侧的调试机制，新增的 Shader Validation 功能可在 GPU 侧发生渲染错误时自动定位并捕获错误，精准定位到代码及回溯栈帧；增强的 Command Buffer Errors 机制能让 Shader代码像 Api 代码一样提供错误定位和分类能力，大大提升了开发者修复GPU侧渲染错误的效率。这些优化手段相互配合，能帮助开发者突破性能瓶颈，为 iOS 应用带来更流畅的用户体验，也为跨平台框架下的应用优化提供了思路和方向。
 
@@ -321,10 +361,15 @@ Metal的二进制文件和动态库支持是优化的重要手段。通过创建
 
 优化表明，Building Closure 阶段的性能问题纯粹由字符串哈希冲突引起，与项目配置、编译环境等因素无关。解决哈希碰撞不仅能修复异常耗时，还能进一步提升启动速度。这一案例为 iOS 开发者深度优化启动性能提供了有价值的实战参考。
 
-
-
 ## 话题讨论
 
+**哪个 2025 年的科技趋势最令你期待？**
+
+1. 生成式人工智能：生成原创内容，自动化创意工作。
+2. 自适应与代理式人工智能：具备自主决策与实时学习能力的 AI 系统。
+3. 微型大语言模型：适用于手机等设备的小型智能语言模型。
+4. 区块链与 Web3：去中心化技术，提升安全性与透明度。
+5. 量子计算与能源创新：推动新一代计算能力与可持续能源技术的发展。
 
 ## 关于我们
 
