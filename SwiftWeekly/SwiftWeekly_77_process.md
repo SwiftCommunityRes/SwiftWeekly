@@ -30,7 +30,51 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
+1) 提议[宣布成立生态系统指导小组](https://forums.swift.org/t/announcing-the-ecosystem-steering-group/79892 "宣布成立生态系统指导小组")
 
+Swift 核心团队宣布成立“生态系统指导小组”（Ecosystem Steering Group），旨在加强 Swift 开发者生态系统的支持结构。该小组将专注于开发者和文档工具的演进、Swift.org 网站、包管理器以及包生态系统的支持工作。此外，还将支持 Swift 向更多平台的扩展，并简化创建此类移植的工具。该小组还将支持 Swift 在云端 IDE 和持续集成系统等标准或行业领先的开发者生产力工具中的发展。核心团队将选择生态系统指导小组的首批成员。
+
+2) 讨论[为什么 InlineArray 类型语法糖提案进入评审阶段？](https://forums.swift.org/t/why-did-the-inlinearray-type-sugar-proposal-come-to-review/79817 "为什么 InlineArray 类型语法糖提案进入评审阶段？")
+
+Swift 社区成员对 InlineArray 类型语法糖（如 [5 x Int]）的提案进入正式评审阶段感到疑惑，认为该提案尚未充分讨论。一些成员指出，类似的语法在十年前曾短暂讨论过，但并未形成共识。他们担心当前的评审流程可能忽视了社区的反馈，导致讨论变得形式化。对此，核心团队成员 John McCall 表示，提案进入评审并不意味着已被接受，后续将在语言指导小组（LSG）中进行深入讨论，欢迎社区继续提出替代方案。他强调，过度猜测评审流程会影响建设性的讨论，并计划将相关讨论移至新线程，以保持评审的专注性。
+
+3) 提议[已接受 SE-0481：weak let](https://forums.swift.org/t/accepted-se-0481-weak-let/79895/7 "已接受 SE-0481：weak let")
+
+Swift 核心团队正式接受了 SE-0481 提案，引入对 weak let 的支持，允许开发者声明弱引用的不可变变量。此前，Swift 强制所有 weak 变量必须使用 var 声明，这在 Sendable 类型中引发了问题，因为可变属性与 Sendable 要求不兼容。该提案解决了这一限制，使得开发者可以在不引入额外封装结构的情况下，声明符合 Sendable 要求的弱引用属性。此外，提案还明确了在闭包中对 weak 捕获的处理方式，默认将其视为不可变，除非明确声明为可变，从而增强了语言的一致性和类型安全性。该变更被认为是源代码兼容的，并为 Swift 的并发和内存管理特性提供了更强的支持。
+
+4) 提议[轮询期望（Polling Expectations）](https://forums.swift.org/t/pitch-polling-expectations/79866 "轮询期望（Polling Expectations）")
+
+Swift 社区成员 Rachel Brindle 提出在 Swift Testing 框架中引入“轮询期望”（Polling Expectations）的功能，旨在提升测试异步或延迟行为的能力。该功能允许开发者在指定的时间段内持续评估一个表达式，直到其通过（passesOnce）或在整个时间段内始终通过（passesAlways）。这对于测试如 ViewModel 属性在网络请求或数据库查询后更新的场景尤为有用。 ￼
+
+目前，该功能的初步实现已在 swiftlang/swift-testing 的 polling-expectations 分支中提供，需通过 @_spi(Experimental) import Testing 引入。示例代码如下：
+```Swift
+await #expect(until: .passesOnce) {
+    taskDispatcher.finishedTaskCalled == "Important Task"
+}
+```
+社区成员对该提案表示支持，并就 API 设计展开讨论。有人建议将 passesOnce 和 passesAlways 分为不同的宏，以更清晰地表达其语义。此外，关于使用超时时间（timeout）作为停止条件的可行性也引发了讨论。由于 Swift Testing 的并行测试运行器可能导致测试时间不稳定，使用固定的超时时间可能会导致测试结果不一致。因此，有人建议改为使用评估次数作为停止条件，以提高测试的可靠性。 ￼
+
+该提案仍在积极讨论中，欢迎社区成员提出更多建议和反馈。
+
+5) 提议[演进嵌入式 Swift 文档](https://forums.swift.org/t/evolving-embedded-swift-documentation/79818 "演进嵌入式 Swift 文档")
+
+随着嵌入式 Swift 的不断发展和社区的壮大，原先托管在 swiftlang/swift 仓库中的文档面临以下挑战： ￼
+1.	文档难以被发现，且未在 GitHub 仓库之外托管。
+2.	贡献文档需要克隆 swiftlang/swift 仓库并导航复杂的 swift-ci 流程，对新贡献者而言具有一定门槛。
+3.	文档试图涵盖多个构建系统、SDK 集成和语言模式等广泛主题，单人维护难以应对不断增长的内容。 ￼
+
+为了解决这些问题，文档已迁移至 swift-embedded-examples 仓库，并采用 DocC 目录结构进行组织。初步迁移版本已在 Swift Package Index 上可供查看。 ￼
+
+新文档结构（仍在完善中）包括：
+•	嵌入式 Swift 概览：从 swiftlang/swift 移植的愿景文档。
+•	入门指南：如使用 Swiftly 安装 nightly 工具链的指南。
+•	示例教程：基于 swift-embedded-examples 仓库的示例驱动教程，例如 Raspberry Pi Pico 的 LED 闪烁项目。
+•	构建系统支持：涵盖 Bazel、CMake、Make、SwiftPM 和 Xcode 的集成指南（目前为占位符）。
+•	SDK 支持：如与 Raspberry Pi Pico 的集成（需更新以适应现代 Swift CMake 用法）。
+•	语言细节：包括 ABI、存在类型（Existentials）和非最终泛型方法等主题（大部分需重写）。
+•	开发进展：如状态页面和 Swift 6.x 的发行说明（后者尚缺）。 ￼ ￼
+
+目前文档仍在积极开发中，社区成员被鼓励参与内容撰写、结构优化和信息流改进等工作。有兴趣的开发者可在论坛中分享想法、提交 GitHub issue 或发起 pull request。
 
 ## 推荐博文
 
