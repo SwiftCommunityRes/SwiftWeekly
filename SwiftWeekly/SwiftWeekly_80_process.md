@@ -174,6 +174,29 @@ Sergio 成功将 Apache POI 集成到 Swift 中，用于处理 Excel（XLS）文
 
 ## 推荐博文
 
+[Swift 中 Accelerate 框架简介](https://www.appcoda.com/accelerate-framework/ "Swift 中 Accelerate 框架简介")
+
+**摘要：** 摘要：这篇文章介绍了 iOS 和 macOS 中一个常被忽视、但功能强大的框架：Accelerate。Accelerate 提供了高性能的数学运算和图像处理工具，大大简化了开发者在向量、矩阵运算、信号处理、大数运算以及图像计算等方面的工作，广泛应用于需要高效计算的场景，比如机器学习。
+
+文章在 Swift Playground 中，通过多个例子演示了 Accelerate 的不同模块和用法：
+
+* BLAS：展示了如何用 cblas_saxpy 计算 A*x + y，以及用 cblas_sdot 做向量点积运算。
+* LAPACK：通过 sgesv_ 求解线性方程组，演示如何解 3 元一次方程组。
+* simd：演示了在 Swift 中更简洁的向量计算方式，例如用 double3 直接进行向量运算。
+* vecLib：展示了用 vvfabsf、vvintf、vvsqrtf、vvrecf 等函数进行向量绝对值、取整、开方、取倒数等运算。
+* vDSP：通过 vDSP_vdist 计算路径中各点到原点的距离，并进一步求出路径总长度。
+最后提到，Accelerate 框架还包括用于神经网络的 BNNS 和用于图像处理的 vImage，文章未展开介绍。
+
+整体而言，文章通过丰富的示例说明 Accelerate 能在 Swift 中高效完成复杂的数学计算，是开发者在涉及高性能运算时的重要工具。
+
+[深入剖析 RxSwift 中的 Queue：环形队列的 Swift 实战](https://juejin.cn/post/7520515648999325730/ "深入剖析 RxSwift 中的 Queue：环形队列的 Swift 实战")
+
+**摘要：** 在 RxSwift 的高性能事件调度背后，隐藏着一个低调却强大的数据结构 —— 环形队列（Circular Queue）。本篇文章将深入剖析 RxSwift 中环形队列的实现原理，从为何选择它，到关键的数据结构布局、入队出队操作、动态扩缩容机制，再到它在实际场景中的应用价值。通过源码级拆解与性能分析，你将理解这个“小而美”结构如何支撑响应式编程中的高吞吐、低延迟任务调度，甚至可以将其复用到自己的项目中，打造轻量、缓存友好的事件处理队列。
+
+[Swift 隐藏宝藏：“逆天改命”调整方法重载（function overloading）优先级](https://juejin.cn/post/7517957492140965939/ "Swift 隐藏宝藏：“逆天改命”调整方法重载（function overloading）优先级")
+
+**摘要：** Swift 拥有强大的方法重载机制，但当多个重载方法同时满足调用条件时，编译器该如何抉择？本篇文章深入解析 Swift 中方法重载的优先级判断原则：“具体胜于抽象、简单优于复杂”。不仅如此，作者还揭秘了如何通过 @_disfavoredOverload 修饰符手动干预编译器的选择逻辑，实现“逆天改命”式的优先级调整。通过多个实战示例，你将掌握 Swift 中隐藏的重载决策机制，并学会在合适场景下灵活应用这一技巧，写出更具可控性的代码。
+
 
 ## 话题讨论
 
