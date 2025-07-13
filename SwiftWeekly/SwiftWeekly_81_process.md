@@ -95,6 +95,124 @@ Sabih 已在 Apple 供职 30 年，于 2019 年加入领导团队，担任运营
 
 
 ## Swift论坛
+1、讨论[提议改进 EncodingError 和 DecodingError 的描述信息](https://forums.swift.org/t/se-0489-improve-encodingerror-and-decodingerrors-printed-descriptions/81021 "提议改进 EncodingError 和 DecodingError 的描述信息")
+
+该提议旨在提升 EncodingError 和 DecodingError 的 description（即打印输出）内容，使其在调试和日志记录时更具可读性和诊断价值。当前，这些错误类型的描述往往过于简略，尤其当涉及嵌套路径或上下文信息时，开发者很难快速定位问题。
+
+现有输出示例：
+```Swift
+typeMismatch(Swift.String, Swift.DecodingError.Context(codingPath: [CodingKeys(stringValue: "user", intValue: nil)], debugDescription: "Expected String."))
+```
+改进后的输出示例：
+```Swift
+Expected to decode String but found Int instead.
+- codingPath: user
+- debugDescription: Expected String.
+- underlyingError: none
+```
+该提议不会改变错误类型的行为或结构，仅影响它们符合 CustomStringConvertible 协议的输出内容，因此对 ABI 和现有代码无影响。改进后的格式更易读，也更适合日志分析工具。
+
+社区广泛支持该提案，认为这是一个“低风险、高收益”的增强，特别对调试 JSON 解码问题具有实际帮助。提案目前状态为 已接受（Accepted）。
+
+2、讨论[介绍Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能](https://forums.swift.org/t/introducing-equatable-package-that-provides-macros-for-generating-equatable-conformances-for-structs-for-high-performance-swiftui-view-diffing/80924 "介绍Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能")
+
+该帖子介绍了一个名为 Equatable 的新 Swift 包，它通过宏自动生成结构体的 Equatable 实现，旨在显著提升 SwiftUI 的视图 diff 性能。由 Point-Free 团队发布，该库专为 Swift 5.9+ 的宏系统设计，目标是减少手写 == 实现的负担，并避免 @unchecked Sendable 式的隐患。
+
+使用示例非常简单：
+```Swift
+@Equatable
+struct State {
+  var count = 0
+  var name = ""
+}
+```
+展开后会自动生成：
+```Swift
+extension State: Equatable {
+  static func == (lhs: Self, rhs: Self) -> Bool {
+    lhs.count == rhs.count &&
+    lhs.name == rhs.name
+  }
+}
+```
+优势包括：
+•	减少重复样板代码
+•	自动追踪结构体成员变更
+•	支持嵌套结构与更复杂类型
+•	为 SwiftUI 等依赖 Equatable 的性能优化提供基础
+
+社区反响热烈，很多人认为这对 Swift 宏系统是一次实际且极具价值的落地应用，特别适合用在 SwiftUI 状态管理（如 Observable 模型）中。
+
+3、讨论[讨论关于 Swift 支持 Android 的可行性与方向](https://forums.swift.org/t/thoughts-on-swift-for-android/80961 "讨论关于 Swift 支持 Android 的可行性与方向")
+
+该帖子由 Swift 核心成员 @compnerd 发起，探讨 Swift 官方更好地支持 Android 平台的可能路径。虽然 Swift 工具链在 Android 上已可构建使用多年，但目前仍缺乏系统性的支持，主要局限在少数社区驱动的尝试中。
+
+帖子提出几个关键问题：
+•	Swift 是否应将 Android 作为一等公民平台进行支持？
+•	Swift 标准库和 Foundation 是否应该包含更完善的 Android 支持逻辑？
+•	SwiftPM（包管理器）是否应支持交叉编译和 Android 相关配置？
+•	是否需要建立 CI 流程验证 Android 构建稳定性？
+
+此外，还讨论了潜在目标：
+•	提供 Swift 编写跨平台共享逻辑（iOS + Android）能力
+•	为服务器端 Swift 提供 Android 客户端组件
+•	在 Kotlin/Java 主导的平台上引入 Swift 编程体验
+
+社区反应积极，许多开发者表达了对在 Android 上用 Swift 进行跨平台开发的兴趣。也有人提出可借鉴 Kotlin Multiplatform 的经验，同时建议聚焦工具链、标准库兼容性和开发者文档改进等优先事项。
+
+该帖目前属于开放性讨论，尚无正式提案，但可能为未来 Swift 在 Android 支持方向的推进打下基础。
+
+4、讨论[讨论Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较](https://forums.swift.org/t/performance-of-accelerate-framework-vs-swift-on-apple-silicon/80919 "讨论Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较")
+
+该讨论由开发者发起，探讨在 Apple Silicon（如 M 系列芯片）上使用 Accelerate 框架与纯 Swift 实现在数值计算（如向量加法）方面的性能差异。Accelerate 是 Apple 提供的高性能计算框架，基于底层 SIMD 和硬件优化，但其 API 是 C 接口，使用起来不够 Swifty。
+
+对比测试代码（简化版）：
+```Swift
+// Accelerate
+vDSP_vadd(array1, 1, array2, 1, &result, 1, vDSP_Length(count))
+```
+```Swift
+// Swift
+for i in 0..<count {
+  result[i] = array1[i] + array2[i]
+}
+```
+一些关键讨论点包括：
+•	Accelerate 通常仍比纯 Swift 更快，尤其是在处理大数组和浮点数据时，但差距随着 Swift 编译器优化改进而变小
+•	Accelerate 的性能来源包括：SIMD 向量化、内存对齐优化、L1/L2 cache 友好布局
+•	Swift 编译器在 release 模式下能生成相当高效的代码，但目前还未总是实现自动向量化
+•	对比时应开启编译优化(如 -O) 并考虑架构特异性（M1/M2 的 vector 单元）
+
+部分社区成员建议使用 Accelerate 进行性能关键路径处理，同时将 Swift 封装作为更友好的调用接口。此外，也有人希望 Swift 能更自然地支持向量化与并行计算，以减少依赖 C 框架。
+
+该帖提供了关于 Swift 数值性能在 Apple 平台上的实际表现的重要观察，尤其对高性能计算、图像处理和机器学习开发者具有参考价值。
+
+5、讨论[讨论actor 的设计初衷与使用价值](https://forums.swift.org/t/what-is-the-point-of-having-actor/80908 "讨论actor 的设计初衷与使用价值")
+
+该讨论源于开发者提出的疑问：Swift 中的 actor 关键字是否真的有必要？为何不直接使用现有的 class 搭配 DispatchQueue 或锁来实现线程安全？这引发了社区对 actor 语义、用途和优势的深入讨论。
+
+主要观点包括：
+	•	actor 是 Swift 为数据隔离并发模型引入的结构，语义明确，能自动确保内部状态不会被并发访问破坏
+	•	与手动加锁或 GCD 相比，actor 更安全、可组合、具备类型系统支持。例如你不能在 actor 外部同步访问其隔离的属性
+	•	Swift 的 actor 模型基于串行执行上下文，使得即便内部有可变状态，也不需要显式同步机制
+
+示例：
+```Swift
+actor Counter {
+  var value = 0
+
+  func increment() {
+    value += 1
+  }
+}
+```
+上述 Counter 的状态操作在并发环境下是安全的，开发者无需考虑竞争条件或死锁问题。
+
+同时也讨论了局限性：
+•	actor 成员访问是异步的（需 await），对某些性能敏感场景可能不够轻量
+•	actor 不等同于“快速并发”，更像是“安全并发”，主要用途在于状态封装而非高并行度
+
+总体来说，社区共识是：actor 提供了 Swift 原生的、现代化的并发数据保护机制，适合替代容易出错的传统手动同步代码，尤其适合大型项目和团队协作场景。
 
 
 ## 推荐博文
