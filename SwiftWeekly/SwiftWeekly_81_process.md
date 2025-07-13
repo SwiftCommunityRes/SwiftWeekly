@@ -217,6 +217,29 @@ actor Counter {
 
 ## 推荐博文
 
+[Foundation Models：苹果设备端模型的边界探索](https://onevcat.com/2025/06/foundation-models/ "Foundation Models：苹果设备端模型的边界探索")
+
+**摘要：** 摘要：在 WWDC 2025中，苹果推出了 Foundation Models 框架，使开发者能够在设备端运行 AI 模型。知名开发者王巍（onevcat）测试显示，经过2-bit量化的3B模型在 iPhone 上运行流畅，推理速度达10–30 tokens/s，内存占用约1–1.5GB。尽管部署时上下文窗口从65K缩减至4096 tokens，并发性能下降，以及 @Generable 宏存在 token 开销等限制，Tool Calling 功能展现出“工具导向编程”的潜力。整体框架稳定，适合摘要、分类等任务，开发者可立即着手探索，尤其关注上下文管理和 Tool Calling 应用。随着苹果持续优化，该框架有望成为 iOS 设备端 AI 的重要基础设施。
+
+[SwiftLog 和 OSLog：选择、使用以及坑](https://onevcat.com/2024/04/swift-log/ "SwiftLog 和 OSLog：选择、使用以及坑")
+
+**摘要：** iOS 开发中，SwiftLog和OSLog是两大主流日志框架。 SwiftLog 适合跨平台和需要自定义后端的场景，而 OSLog 作为苹果原生方案，在性能和系统集成上更胜一筹，是 Apple 平台开发的首选。
+
+相比简单的 print 语句，这两个框架提供了日志分级、元数据记录和隐私保护等关键功能。使用 OSLog 时，通过 Logger 实例可以方便地记录不同级别的日志，并利用 Console.app 进行高级过滤和分析。
+
+实际使用中需要注意一些细节：框架中的日志可能丢失源代码定位信息， OSLogStore 的部分功能存在限制，以及在异步代码中要注意避免意外的对象生命周期延长。
+
+对于纯 Apple 平台开发，推荐直接使用 OSLog；需要跨平台或特殊需求时， SwiftLog 是更好的选择。合理使用这些现代日志框架能显著提升应用的调试效率和运行性能。
+
+[深入探究 iOS 中 UIImage 的图像截取与拉伸技术](https://blog.csdn.net/weixin_30820933/article/details/147524801/ "深入探究 iOS 中 UIImage 的图像截取与拉伸技术")
+
+**摘要：** 这篇文章深入探讨了iOS开发中UIImage类的图像处理技术，重点介绍了两种关键方法： stretchableImageWithLeftCapWidth: 和 resizableImageWithCapInsets: 。
+
+文章首先概述了 UIImage 的基本功能，包括图像加载、属性获取、变换和处理等。然后详细解析了两种图像拉伸方法：
+ stretchableImageWithLeftCapWidth: 方法通过设置左侧和顶部不变区来实现单向拉伸，适用于简单场景。
+ resizableImageWithCapInsets: 方法则更灵活，允许开发者定义上下左右四个边缘的不变区，支持多方向拉伸。
+文章通过具体代码示例展示了两种方法的使用方式，并比较了它们的适用场景和优缺点。此外，还介绍了如何结合这两种方法优化图像处理，以及在实际开发中的应用案例和性能优化建议。
+
 
 ## 话题讨论
 
