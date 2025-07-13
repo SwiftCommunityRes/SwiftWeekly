@@ -10,26 +10,34 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 >
 > 新闻和社区：Apple 宣布首席运营官交接
 > 
-> 提案：
+> 提案：可扩展的枚举提案正在审查
 > 
-> Swift 论坛：
+> Swift 论坛：讨论关于 Swift 支持 Android 的可行性与方向
 >
-> 推荐博文：
+> 推荐博文：Foundation Models：苹果设备端模型的边界探索
 >
 > **话题讨论：** 
 > 
-> 
+> 你对哪一项 Apple Intelligence 功能最感兴趣？
 >
 >**上期话题结果**
 
-
+![](https://files.mdnice.com/user/47553/dfd89d4a-d363-4903-ad06-3e334b6dbb76.jpeg)
 
 ## 话题讨论
 
+**你对哪一项 Apple Intelligence 功能最感兴趣？**
+
+ 1. 信息和 FaceTime 中的实时翻译
+ 2. 屏幕截图/事件识别的视觉智能
+ 3. Apple Watch 上的锻炼助手
+ 4. 设备端开发者基础模型框架
+
+欢迎在评论区交流分享。
 
 ## 新闻和社区  
 
-### 苹果迟迟不在美国制造iPhone：库克被批
+### 苹果迟迟不在美国制造 iPhone：库克被批
 
 2025 年 7 月 10 日
 
@@ -47,7 +55,7 @@ Peter Navarro 表示，库克在有意拖延时间，他从未采取实际行动
 
 Apple 7 月 9 日宣布 Jeff Williams 将于本月晚些时候卸任首席运营官一职，由 Apple 运营高级副总裁 Sabih Khan 继任。此次人事交接系公司长期规划的领导层继任计划的一部分。Jeff 将继续向 Apple CEO Tim Cook 汇报工作，并管理 Apple 世界级设计团队和 Apple Watch 业务，以及公司的健康相关业务。Jeff 将于今年晚些时候退休，届时 Apple 设计团队将直接向 Cook 汇报。
 
-![](https://img1.gamersky.com/upimg/pic/2025/07/09/small_202507090903055485.jpg)
+![](https://files.mdnice.com/user/47553/fa2f3b2a-29f0-463e-886e-dcb5e6960ec6.png)
 
 “Jeff 和我共事多年， Apple 今天的成功离不开他的贡献。他帮助构建了享誉全球的供应链体系；推出了 Apple Watch 并主导其发展；制定了 Apple 的健康战略；以非凡的智慧、热忱和奉献精神领导着我们的世界级设计师团队。”Apple CEO Tim Cook 表示，“他多年来对 Apple 的持续投入和忠诚友情，将令我永远心怀感激。Jeff 留下了宝贵财富，在于他创建的优秀团队。我们会十分想念他，同时他已将未来的工作托付给了出类拔萃的接班人。”
 
@@ -55,7 +63,7 @@ Apple 7 月 9 日宣布 Jeff Williams 将于本月晚些时候卸任首席运营
 
 Sabih 已在 Apple 供职 30 年，于 2019 年加入领导团队，担任运营高级副总裁。过去六年，他负责管理 Apple 的全球供应链体系，确保产品质量并监管规划、采购、生产、物流和产品交付等职能，以及 Apple 的供应商责任项目，为全球生产工厂的员工提供保护与培训。他的团队还与供应商合作推进绿色生产，以支持 Apple 的环境倡议，帮助节约资源、保护地球。
 
-![](https://img1.gamersky.com/upimg/pic/2025/07/09/small_202507090903304469.jpg)
+![](https://files.mdnice.com/user/47553/f28b42e5-d4cb-4ec2-8f7c-6822f098e80d.png)
 
 在 Apple 任职期间，Jeff 打造的供应链覆盖了美国、中国、印度、日本和东南亚等地，为 Apple 的发展提供支持，并惠及全球用户。他领导的供应商责任计划通过关键的培训和教育项目，提升了全球工人的权益保障标准。Jeff 还对 iPod 和 iPhone 的面世发挥了重要作用。他领导 Apple Watch 项目长达十余年，并制定了公司的健康战略，帮助用户实现更加健康的生活方式、深入了解自身健康状况、获得重要的健康保障。过去几年来，Jeff 还负责管理 Apple 行业领先的设计团队。
 
@@ -93,41 +101,68 @@ Sabih 已在 Apple 供职 30 年，于 2019 年加入领导团队，担任运营
 
 ## 提案
 
+### 通过的提案
+
+[SE-0474](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0474-yielding-accessors.md "SE-0474") **Yielding 访问器** 提案通过审查。
+
+### 正在审查的提案
+
+[SE-0487](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0487-extensible-enums.md "SE-0487") **可扩展的枚举** 提案正在审查。
+
+该提案为开发人员提供了将非弹性 Swift 库中的公共枚举标记为可扩展的能力。这使得 Swift 枚举在此类库的公共 API 中更加有用。
+
+[SE-0488](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0488-extracting.md "SE-0488") **更广泛地应用 extracting() 切片模式** 提案正在审查。
+
+对容器进行切片是一项重要的操作，不可复制值对该操作的拼写产生了重大影响。当我们在标准库中引入不可复制原语时，我们允许通过一系列 `extract()` 方法对 `UnsafeBufferPointer` 和相关类型进行切片。在引入 `MutableSpan` 时，我们对这些进行了扩展。
+
+既然我们已经支持了生命周期依赖的拼写，我们建议将 `extract()` 方法添加到 `Span` 和 `RawSpan` 中，以及 SE-0437 中遗漏的 `UnsafeBufferPointer` 家族成员。
+
+[SE-0489](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0489-codable-error-printing.md "SE-0489") **改进 EncodingError 和 DecodingError 的打印描述** 提案正在审查。
+
+`EncodingError` 和 `DecodingError` 不指定任何自定义调试描述。默认的描述以一种难以阅读的格式隐藏了有用的信息。缺乏经验的开发人员可能会认为它们根本不是人类可读的，即使它们包含有用的信息。建议将 `EncodingError` 和 `DecodingError` 与 `CustomDebugStringConvertible` 一致，并提供格式良好的调试输出。
 
 ## Swift论坛
+
 1、讨论[提议改进 EncodingError 和 DecodingError 的描述信息](https://forums.swift.org/t/se-0489-improve-encodingerror-and-decodingerrors-printed-descriptions/81021 "提议改进 EncodingError 和 DecodingError 的描述信息")
 
-该提议旨在提升 EncodingError 和 DecodingError 的 description（即打印输出）内容，使其在调试和日志记录时更具可读性和诊断价值。当前，这些错误类型的描述往往过于简略，尤其当涉及嵌套路径或上下文信息时，开发者很难快速定位问题。
+该提议旨在提升 `EncodingError` 和 `DecodingError` 的 description（即打印输出）内容，使其在调试和日志记录时更具可读性和诊断价值。当前，这些错误类型的描述往往过于简略，尤其当涉及嵌套路径或上下文信息时，开发者很难快速定位问题。
 
 现有输出示例：
-```Swift
+
+```swift
 typeMismatch(Swift.String, Swift.DecodingError.Context(codingPath: [CodingKeys(stringValue: "user", intValue: nil)], debugDescription: "Expected String."))
 ```
+
 改进后的输出示例：
-```Swift
+
+```swift
 Expected to decode String but found Int instead.
 - codingPath: user
 - debugDescription: Expected String.
 - underlyingError: none
 ```
-该提议不会改变错误类型的行为或结构，仅影响它们符合 CustomStringConvertible 协议的输出内容，因此对 ABI 和现有代码无影响。改进后的格式更易读，也更适合日志分析工具。
+
+该提议不会改变错误类型的行为或结构，仅影响它们符合 `CustomStringConvertible` 协议的输出内容，因此对 ABI 和现有代码无影响。改进后的格式更易读，也更适合日志分析工具。
 
 社区广泛支持该提案，认为这是一个“低风险、高收益”的增强，特别对调试 JSON 解码问题具有实际帮助。提案目前状态为 已接受（Accepted）。
 
-2、讨论[介绍Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能](https://forums.swift.org/t/introducing-equatable-package-that-provides-macros-for-generating-equatable-conformances-for-structs-for-high-performance-swiftui-view-diffing/80924 "介绍Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能")
+2、讨论[介绍 Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能](https://forums.swift.org/t/introducing-equatable-package-that-provides-macros-for-generating-equatable-conformances-for-structs-for-high-performance-swiftui-view-diffing/80924 "介绍Equatable 宏库：为结构体自动生成 Equatable 以提升 SwiftUI 性能")
 
-该帖子介绍了一个名为 Equatable 的新 Swift 包，它通过宏自动生成结构体的 Equatable 实现，旨在显著提升 SwiftUI 的视图 diff 性能。由 Point-Free 团队发布，该库专为 Swift 5.9+ 的宏系统设计，目标是减少手写 == 实现的负担，并避免 @unchecked Sendable 式的隐患。
+该帖子介绍了一个名为 Equatable 的新 Swift 包，它通过宏自动生成结构体的 Equatable 实现，旨在显著提升 SwiftUI 的视图 diff 性能。由 Point-Free 团队发布，该库专为 Swift 5.9+ 的宏系统设计，目标是减少手写 == 实现的负担，并避免 `@unchecked Sendable` 式的隐患。
 
 使用示例非常简单：
-```Swift
+
+```swift
 @Equatable
 struct State {
   var count = 0
   var name = ""
 }
 ```
+
 展开后会自动生成：
-```Swift
+
+```swift
 extension State: Equatable {
   static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.count == rhs.count &&
@@ -135,39 +170,41 @@ extension State: Equatable {
   }
 }
 ```
+
 优势包括：
-•	减少重复样板代码
-•	自动追踪结构体成员变更
-•	支持嵌套结构与更复杂类型
-•	为 SwiftUI 等依赖 Equatable 的性能优化提供基础
+* 减少重复样板代码
+* 自动追踪结构体成员变更
+* 支持嵌套结构与更复杂类型
+* 为 SwiftUI 等依赖 `Equatable` 的性能优化提供基础
 
 社区反响热烈，很多人认为这对 Swift 宏系统是一次实际且极具价值的落地应用，特别适合用在 SwiftUI 状态管理（如 Observable 模型）中。
 
-3、讨论[讨论关于 Swift 支持 Android 的可行性与方向](https://forums.swift.org/t/thoughts-on-swift-for-android/80961 "讨论关于 Swift 支持 Android 的可行性与方向")
+3、讨论[关于 Swift 支持 Android 的可行性与方向](https://forums.swift.org/t/thoughts-on-swift-for-android/80961 "讨论关于 Swift 支持 Android 的可行性与方向")
 
-该帖子由 Swift 核心成员 @compnerd 发起，探讨 Swift 官方更好地支持 Android 平台的可能路径。虽然 Swift 工具链在 Android 上已可构建使用多年，但目前仍缺乏系统性的支持，主要局限在少数社区驱动的尝试中。
+该帖子由 Swift 核心成员 `@compnerd` 发起，探讨 Swift 官方更好地支持 Android 平台的可能路径。虽然 Swift 工具链在 Android 上已可构建使用多年，但目前仍缺乏系统性的支持，主要局限在少数社区驱动的尝试中。
 
 帖子提出几个关键问题：
-•	Swift 是否应将 Android 作为一等公民平台进行支持？
-•	Swift 标准库和 Foundation 是否应该包含更完善的 Android 支持逻辑？
-•	SwiftPM（包管理器）是否应支持交叉编译和 Android 相关配置？
-•	是否需要建立 CI 流程验证 Android 构建稳定性？
+* Swift 是否应将 Android 作为一等公民平台进行支持？
+* Swift 标准库和 Foundation 是否应该包含更完善的 Android 支持逻辑？
+* SwiftPM（包管理器）是否应支持交叉编译和 Android 相关配置？
+* 是否需要建立 CI 流程验证 Android 构建稳定性？
 
 此外，还讨论了潜在目标：
-•	提供 Swift 编写跨平台共享逻辑（iOS + Android）能力
-•	为服务器端 Swift 提供 Android 客户端组件
-•	在 Kotlin/Java 主导的平台上引入 Swift 编程体验
+* 提供 Swift 编写跨平台共享逻辑（iOS + Android）能力
+* 为服务器端 Swift 提供 Android 客户端组件
+* 在 Kotlin/Java 主导的平台上引入 Swift 编程体验
 
 社区反应积极，许多开发者表达了对在 Android 上用 Swift 进行跨平台开发的兴趣。也有人提出可借鉴 Kotlin Multiplatform 的经验，同时建议聚焦工具链、标准库兼容性和开发者文档改进等优先事项。
 
 该帖目前属于开放性讨论，尚无正式提案，但可能为未来 Swift 在 Android 支持方向的推进打下基础。
 
-4、讨论[讨论Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较](https://forums.swift.org/t/performance-of-accelerate-framework-vs-swift-on-apple-silicon/80919 "讨论Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较")
+4、讨论[讨论 Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较](https://forums.swift.org/t/performance-of-accelerate-framework-vs-swift-on-apple-silicon/80919 "讨论 Apple Silicon 上 Accelerate 框架与纯 Swift 的性能比较")
 
 该讨论由开发者发起，探讨在 Apple Silicon（如 M 系列芯片）上使用 Accelerate 框架与纯 Swift 实现在数值计算（如向量加法）方面的性能差异。Accelerate 是 Apple 提供的高性能计算框架，基于底层 SIMD 和硬件优化，但其 API 是 C 接口，使用起来不够 Swifty。
 
 对比测试代码（简化版）：
-```Swift
+
+```swift
 // Accelerate
 vDSP_vadd(array1, 1, array2, 1, &result, 1, vDSP_Length(count))
 ```
@@ -177,27 +214,31 @@ for i in 0..<count {
   result[i] = array1[i] + array2[i]
 }
 ```
+
 一些关键讨论点包括：
-•	Accelerate 通常仍比纯 Swift 更快，尤其是在处理大数组和浮点数据时，但差距随着 Swift 编译器优化改进而变小
-•	Accelerate 的性能来源包括：SIMD 向量化、内存对齐优化、L1/L2 cache 友好布局
-•	Swift 编译器在 release 模式下能生成相当高效的代码，但目前还未总是实现自动向量化
-•	对比时应开启编译优化(如 -O) 并考虑架构特异性（M1/M2 的 vector 单元）
+
+* Accelerate 通常仍比纯 Swift 更快，尤其是在处理大数组和浮点数据时，但差距随着 Swift 编译器优化改进而变小
+* Accelerate 的性能来源包括：SIMD 向量化、内存对齐优化、L1/L2 cache 友好布局
+* Swift 编译器在 release 模式下能生成相当高效的代码，但目前还未总是实现自动向量化
+* 对比时应开启编译优化(如 -O) 并考虑架构特异性（M1/M2 的 vector 单元）
 
 部分社区成员建议使用 Accelerate 进行性能关键路径处理，同时将 Swift 封装作为更友好的调用接口。此外，也有人希望 Swift 能更自然地支持向量化与并行计算，以减少依赖 C 框架。
 
 该帖提供了关于 Swift 数值性能在 Apple 平台上的实际表现的重要观察，尤其对高性能计算、图像处理和机器学习开发者具有参考价值。
 
-5、讨论[讨论actor 的设计初衷与使用价值](https://forums.swift.org/t/what-is-the-point-of-having-actor/80908 "讨论actor 的设计初衷与使用价值")
+5、讨论[讨论 actor 的设计初衷与使用价值](https://forums.swift.org/t/what-is-the-point-of-having-actor/80908 "讨论 actor 的设计初衷与使用价值")
 
-该讨论源于开发者提出的疑问：Swift 中的 actor 关键字是否真的有必要？为何不直接使用现有的 class 搭配 DispatchQueue 或锁来实现线程安全？这引发了社区对 actor 语义、用途和优势的深入讨论。
+该讨论源于开发者提出的疑问：Swift 中的 actor 关键字是否真的有必要？为何不直接使用现有的 class 搭配 `DispatchQueue` 或锁来实现线程安全？这引发了社区对 actor 语义、用途和优势的深入讨论。
 
 主要观点包括：
-	•	actor 是 Swift 为数据隔离并发模型引入的结构，语义明确，能自动确保内部状态不会被并发访问破坏
-	•	与手动加锁或 GCD 相比，actor 更安全、可组合、具备类型系统支持。例如你不能在 actor 外部同步访问其隔离的属性
-	•	Swift 的 actor 模型基于串行执行上下文，使得即便内部有可变状态，也不需要显式同步机制
+
+* actor 是 Swift 为数据隔离并发模型引入的结构，语义明确，能自动确保内部状态不会被并发访问破坏
+* 与手动加锁或 GCD 相比，actor 更安全、可组合、具备类型系统支持。例如你不能在 actor 外部同步访问其隔离的属性
+* Swift 的 actor 模型基于串行执行上下文，使得即便内部有可变状态，也不需要显式同步机制
 
 示例：
-```Swift
+
+```swift
 actor Counter {
   var value = 0
 
@@ -206,11 +247,12 @@ actor Counter {
   }
 }
 ```
+
 上述 Counter 的状态操作在并发环境下是安全的，开发者无需考虑竞争条件或死锁问题。
 
 同时也讨论了局限性：
-•	actor 成员访问是异步的（需 await），对某些性能敏感场景可能不够轻量
-•	actor 不等同于“快速并发”，更像是“安全并发”，主要用途在于状态封装而非高并行度
+* actor 成员访问是异步的（需 await），对某些性能敏感场景可能不够轻量
+* actor 不等同于“快速并发”，更像是“安全并发”，主要用途在于状态封装而非高并行度
 
 总体来说，社区共识是：actor 提供了 Swift 原生的、现代化的并发数据保护机制，适合替代容易出错的传统手动同步代码，尤其适合大型项目和团队协作场景。
 
@@ -219,30 +261,27 @@ actor Counter {
 
 [Foundation Models：苹果设备端模型的边界探索](https://onevcat.com/2025/06/foundation-models/ "Foundation Models：苹果设备端模型的边界探索")
 
-**摘要：** 摘要：在 WWDC 2025中，苹果推出了 Foundation Models 框架，使开发者能够在设备端运行 AI 模型。知名开发者王巍（onevcat）测试显示，经过2-bit量化的3B模型在 iPhone 上运行流畅，推理速度达10–30 tokens/s，内存占用约1–1.5GB。尽管部署时上下文窗口从65K缩减至4096 tokens，并发性能下降，以及 @Generable 宏存在 token 开销等限制，Tool Calling 功能展现出“工具导向编程”的潜力。整体框架稳定，适合摘要、分类等任务，开发者可立即着手探索，尤其关注上下文管理和 Tool Calling 应用。随着苹果持续优化，该框架有望成为 iOS 设备端 AI 的重要基础设施。
+**摘要：** 摘要：在 WWDC 2025中，苹果推出了 Foundation Models 框架，使开发者能够在设备端运行 AI 模型。知名开发者王巍（onevcat）测试显示，经过 2-bit 量化的 3B 模型在 iPhone 上运行流畅，推理速度达 10–30 tokens/s，内存占用约 1–1.5GB。尽管部署时上下文窗口从 65K 缩减至 4096 tokens，并发性能下降，以及 `@Generable`   宏存在 token 开销等限制，Tool Calling 功能展现出“工具导向编程”的潜力。整体框架稳定，适合摘要、分类等任务，开发者可立即着手探索，尤其关注上下文管理和 Tool Calling 应用。随着苹果持续优化，该框架有望成为 iOS 设备端 AI 的重要基础设施。
 
 [SwiftLog 和 OSLog：选择、使用以及坑](https://onevcat.com/2024/04/swift-log/ "SwiftLog 和 OSLog：选择、使用以及坑")
 
-**摘要：** iOS 开发中，SwiftLog和OSLog是两大主流日志框架。 SwiftLog 适合跨平台和需要自定义后端的场景，而 OSLog 作为苹果原生方案，在性能和系统集成上更胜一筹，是 Apple 平台开发的首选。
+**摘要：** iOS 开发中，SwiftLog 和 OSLog  是两大主流日志框架。 SwiftLog 适合跨平台和需要自定义后端的场景，而 OSLog 作为苹果原生方案，在性能和系统集成上更胜一筹，是 Apple 平台开发的首选。
 
 相比简单的 print 语句，这两个框架提供了日志分级、元数据记录和隐私保护等关键功能。使用 OSLog 时，通过 Logger 实例可以方便地记录不同级别的日志，并利用 Console.app 进行高级过滤和分析。
 
-实际使用中需要注意一些细节：框架中的日志可能丢失源代码定位信息， OSLogStore 的部分功能存在限制，以及在异步代码中要注意避免意外的对象生命周期延长。
+实际使用中需要注意一些细节：框架中的日志可能丢失源代码定位信息，OSLogStore 的部分功能存在限制，以及在异步代码中要注意避免意外的对象生命周期延长。
 
 对于纯 Apple 平台开发，推荐直接使用 OSLog；需要跨平台或特殊需求时， SwiftLog 是更好的选择。合理使用这些现代日志框架能显著提升应用的调试效率和运行性能。
 
 [深入探究 iOS 中 UIImage 的图像截取与拉伸技术](https://blog.csdn.net/weixin_30820933/article/details/147524801/ "深入探究 iOS 中 UIImage 的图像截取与拉伸技术")
 
-**摘要：** 这篇文章深入探讨了iOS开发中UIImage类的图像处理技术，重点介绍了两种关键方法： stretchableImageWithLeftCapWidth: 和 resizableImageWithCapInsets: 。
+**摘要：** 这篇文章深入探讨了 iOS 开发中 UIImage 类的图像处理技术，重点介绍了两种关键方法： `stretchableImageWithLeftCapWidth: ` 和 `resizableImageWithCapInsets:`。
 
 文章首先概述了 UIImage 的基本功能，包括图像加载、属性获取、变换和处理等。然后详细解析了两种图像拉伸方法：
- stretchableImageWithLeftCapWidth: 方法通过设置左侧和顶部不变区来实现单向拉伸，适用于简单场景。
- resizableImageWithCapInsets: 方法则更灵活，允许开发者定义上下左右四个边缘的不变区，支持多方向拉伸。
+1. `stretchableImageWithLeftCapWidth:` 方法通过设置左侧和顶部不变区来实现单向拉伸，适用于简单场景。
+2. `resizableImageWithCapInsets:` 方法则更灵活，允许开发者定义上下左右四个边缘的不变区，支持多方向拉伸。
+
 文章通过具体代码示例展示了两种方法的使用方式，并比较了它们的适用场景和优缺点。此外，还介绍了如何结合这两种方法优化图像处理，以及在实际开发中的应用案例和性能优化建议。
-
-
-## 话题讨论
-
 
 ## 关于我们
 
