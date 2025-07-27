@@ -119,7 +119,129 @@ Apple 宣布计划从 2026 年起，在沙特开设首批数家 Apple Store 零�
 
 
 ## Swift论坛
+1、讨论[介绍Swift Erlang Actor System：构建类 Erlang 的分布式 Actor 模型](https://forums.swift.org/t/introducing-swift-erlang-actor-system/81248 "介绍Swift Erlang Actor System：构建类 Erlang 的分布式 Actor 模型")
+该帖介绍了一个全新的开源项目：Swift Erlang Actor System，灵感来自 Erlang 的并发与容错模型，旨在为 Swift 带来轻量、可分布式、可监督的 Actor 架构。
 
+核心特性包括：
+•	类似 Erlang 的 actor 结构，每个 actor 是独立的轻量线程，拥有唯一标识
+•	支持**消息发送 (tell) 和异步请求 (ask)**模式
+•	支持actor 监控与监督树 (supervision)，自动重启失败子 actor
+•	支持在本地或远程集群运行多个 actor 系统（基于 NIO）
+•	可自定义调度器与行为定义，支持高扩展性
+
+示例：
+```Swift
+struct Greeter: Behavior {
+  func receive(context: ActorContext, message: String) async throws {
+    print("Hello, \(message)!")
+  }
+}
+
+// 创建系统与 actor
+let system = ActorSystem()
+let greeter = try await system.spawn(name: "greeter", behavior: Greeter())
+await greeter.tell("Swift")
+```
+
+设计目标并非替代 Swift 原生 actor 类型，而是提供类似 Akka/Erlang 的高阶抽象：关注 actor 间通信与容错结构，而非仅数据隔离。特别适用于构建长生命周期的服务端组件、聊天系统、游戏服务器或微服务框架。
+
+社区反馈积极，许多开发者对该系统如何与 Swift 并发原语（如原生 actor、Task）协同工作提出兴趣，也有人提到可作为 Swift 分布式计算生态的重要尝试。该项目仍处于早期阶段，作者欢迎社区贡献与反馈。
+
+2、讨论[项目进展GSoC 2025：改进 Swift 测试框架的控制台输出](https://forums.swift.org/t/gsoc-2025-progress-feedback-request-for-an-improved-swift-testing-console-output/81214 "项目进展GSoC 2025：改进 Swift 测试框架的控制台输出")
+
+该帖由 Google Summer of Code 2025 学生项目参与者 @Aditya_Narayan 发布，展示了其正在进行的项目成果：改进 Swift Package Manager 测试输出的可读性和信息丰富性，并征求社区反馈。
+
+目前的 Swift 测试输出风格较为简洁，缺乏清晰的视觉分隔和上下文提示，特别在大型测试套件中，开发者难以快速定位失败信息。该项目的目标是提供更结构化、更具可视层级的控制台输出体验。
+
+核心改进包括：
+•	更清晰的测试生命周期提示（测试开始、成功、失败等）
+•	颜色高亮（例如绿色表示通过，红色表示失败）
+•	缩进与层次结构：使测试组与测试用例输出更具结构感
+•	支持环境变量启用增强格式，保持默认行为向后兼容
+
+示例输出（简化）：
+```Swift
+Running test suite MyPackageTests
+
+✓ MathTests.testAddition
+✓ MathTests.testSubtraction
+𐄂 MathTests.testDivisionByZero
+  → Error: Division by zero
+
+Test run finished:
+✓ 2 passed
+𐄂 1 failed
+```
+该项目计划在 SwiftPM 中实现完整集成，目前处于开发中期阶段，作者欢迎社区提出 UI、功能和行为上的反馈建议。
+
+此项工作有望提升 Swift 开发者的测试体验，特别在 TDD 和 CI 场景下提供更高效的问题定位能力。社区普遍鼓励并支持该方向，部分成员提出增加自定义 formatter 和可配置输出级别等建议。
+
+3、提议[预提议基于数据依赖的测试串行化机制](https://forums.swift.org/t/pre-pitch-data-dependent-test-serialization/81251 "预提议基于数据依赖的测试串行化机制")
+该帖提出一个早期想法，旨在改进 Swift 测试执行模型：允许基于数据依赖关系对测试进行自动串行化（Serialization），以解决测试间共享资源时可能出现的竞争条件或不确定行为。
+
+当前 SwiftPM 的测试运行机制默认高度并发，在某些情况下会导致如下问题：
+•	多个测试访问相同的数据库、文件系统或全局状态，产生冲突
+•	开发者只能通过全局串行化（例如 --parallel false）或人为组织测试文件回避问题，这既不理想也不具扩展性
+
+该预提议设想一种声明式机制，允许测试指定其资源依赖，例如：
+```Swift
+@SharedResource("UserDefaults")
+func testUsesUserDefaults() {
+  ...
+}
+```
+SwiftPM 可据此自动将共享同一资源的测试用例串行执行，而无冲突的测试仍可并发运行，从而在并发性与正确性之间取得平衡。
+
+目前该想法尚未形成完整 pitch，作者希望征求社区意见，包括：
+	•	是否存在类似需求场景？
+	•	最合适的声明方式是什么？属性宏？测试注解？测试分组？
+	•	是否应由 SwiftPM 或 XCTest 层来实现？
+
+社区反馈积极，多数人认同该提议对中大型项目及集成测试尤为重要，也有人提到类似机制在其他测试框架（如 pytest fixtures）中已有良好实践。该方向有望在未来形成正式提案，提升 Swift 测试系统的灵活性与可靠性。
+
+4、提议[提议用 repo 工具替代 update-checkout 脚本管理 Swift 项目依赖](https://forums.swift.org/t/pitch-replacing-the-update-checkout-script-with-repo/81182 "提议用 repo 工具替代 update-checkout 脚本管理 Swift 项目依赖")
+该提议建议用 Google 的 repo 工具替代当前维护 Swift 工程多仓库依赖的 update-checkout 脚本。update-checkout 是当前 Swift 社区用于同步 Swift 项目主仓库（如 swift, llvm-project, swift-tools-support-core 等）的一种 Bash 脚本，但随着依赖图复杂度上升，其维护变得困难且不易扩展。
+
+提议中指出，repo 工具具备以下优势：
+•	更强的多仓库版本协调与同步能力（通过 manifest.xml）
+•	跨平台兼容，支持 Linux 与 macOS
+•	能够追踪特定 commit，而非仅使用 branch
+•	已广泛应用于 Android 等大型开源项目中，生态成熟
+
+一个典型的 repo manifest 可能如下所示：
+```xml
+<manifest>
+  <remote name="github" fetch="https://github.com/apple/" />
+  <project name="swift" path="swift" revision="main" />
+  <project name="llvm-project" path="llvm-project" revision="main" />
+  ...
+</manifest>
+```
+若该提议被采纳，Swift 项目贡献者在初次设置与同步多个仓库时，将可通过简单命令获取所有组件：
+```bash
+repo init -u https://github.com/apple/swift-manifest
+repo sync
+```
+社区讨论重点集中在工具引入的额外依赖、是否适用于所有平台开发者、与现有 CI/CD 系统的集成难度等方面。有成员建议可以并行支持两种机制过渡一段时间，或将 repo 工具集成进更高层的开发脚本中以隐藏复杂性。
+
+总体来说，该提议被认为是迈向更可维护和现代化工程管理的潜在步骤，尤其对于频繁参与 Swift 项目源码开发的工程师来说更具意义。
+
+5、讨论[讨论标准库 Concurrency 模块中互斥锁的使用现状](https://forums.swift.org/t/use-of-mutex-within-the-stdlibs-concurrency-module/81191 "讨论标准库 Concurrency 模块中互斥锁的使用现状")
+该帖由社区成员发起，探讨 Swift 标准库 Concurrency 模块内部使用互斥锁（mutex）的具体原因与影响，尤其在 Swift 强调无锁并发（如基于任务、actor 等模型）的背景下，这种设计引发了一定疑问。
+
+提问集中于以下几点：
+•	Swift 的并发系统是否仍依赖传统互斥锁？
+•	使用锁的部分是否对性能或可扩展性构成瓶颈？
+•	是否考虑使用 lock-free 数据结构或调度机制替代？
+
+Swift 核心开发者 @Philippe_Hausler 做出回应，指出：
+•	确实存在互斥锁使用，但仅限于必要场景，如保护底层任务调度器的数据结构、执行器管理等
+•	某些数据结构（如运行队列或调度表）在多线程高并发环境下仍需锁保护，以避免竞态条件
+•	Swift 并发的高层抽象（如 async let、Task、actor）本质上是无锁或封装锁机制，开发者通常无需直接接触锁
+
+总结来看，虽然 Swift Concurrency 强调结构化并发与数据隔离，但在标准库底层实现中，为了性能与正确性，适当使用互斥锁仍属合理工程权衡。这一实现细节对最终用户影响极小，主要关注点是正确性、安全性与可维护性。
+
+社区对此表示理解，同时也鼓励未来继续探索 lock-free 或更优化的数据结构，以充分发挥 Apple Silicon 等多核平台的潜力。
 
 ## 推荐博文
 
