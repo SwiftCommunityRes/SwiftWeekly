@@ -104,7 +104,143 @@ AI已成为苹果赢得资本市场青睐的软肋
 
 
 ## Swift论坛
+1、讨论[为 Swift AsyncAlgorithms 开启新一轮开发：引入 share 算法](https://forums.swift.org/t/kickoff-of-a-new-season-of-development-for-asyncalgorithms-share/81447 "为 Swift AsyncAlgorithms 开启新一轮开发：引入 share 算法")
 
+该帖开启了 Swift AsyncAlgorithms 包的新发展阶段，重点是引入一种称为 share 的新算法，以支持多个消费者并行共享同一个异步序列的值。
+
+背景与需求
+许多场景中，相同的数据源可能需要同时被 UI 更新、日志记录、网络传输等独立路径消费，但不能互相阻塞或丢失值。已有方案无法满足这些独立又并行的消费需求。 ￼
+
+提议方案
+将在 AsyncSequence 上新增 share(bufferingPolicy:) 扩展方法，允许多个迭代器并发消费相同数据流。新 API 示例：
+```Swift
+extension AsyncSequence where Element: Sendable {
+  public func share(
+    bufferingPolicy: AsyncBufferSequencePolicy = .unbounded
+  ) -> some AsyncSequence<Element, Failure> & Sendable
+}
+```
+行为亮点：
+* 共享缓冲区：维护一个共享 buffer，供所有迭代路径使用，根据 policy 决定缓冲行为（无限、旧值优先、最新值优先等）。
+* 无值丢失与背压机制：当缓冲区耗尽，可让消费者等待；生产者则暂停生成新值，确保消费方不会漏值。 ￼
+
+社区讨论亮点
+* 关于 .bounded(n) 策略的作用机制：当缓冲区值少于 n 时，所有消费者将 await，维持背压而非丢失值。 ￼
+* 如何检测值被丢弃：可以结合 .enumerated() 和 reductions 算法辅助判断数据缺口，为用户提供提示或日志。 ￼
+
+总结与展望
+这项工作是 Swift AsyncAlgorithms 向支持多消费者共享流数据能力迈出的重要一步。它为 UI、网络、日志等模块独立且并发消费数据提供了优雅解法。该 API 是对现有功能的补充，无破坏性，且具有灵活扩展的潜力。社区普遍支持这方向，并期待后续进一步完善行为控制与检测机制。
+
+2、讨论[Valkey 的 Swift 客户端：valkey-swift](https://forums.swift.org/t/new-swift-client-for-valkey-redis/81480 "Valkey 的 Swift 客户端：valkey-swift")
+
+Valkey-swift 是一个全新的 Swift 客户端包，专为 Valkey（一个高性能的键值存储服务，Redis 的一个分支）设计，借助现代 Swift 并发机制构建，目前已发布预览版本 v0.1.0。 ￼
+
+核心特性一览：
+* 完整命令支持
+自动生成所有 Valkey（包括字符串、列表、集合、有序集合、流、哈希、地理空间、Pub/Sub、HyperLogLog、Bloom、JSON 模块）命令，保持与 Valkey 8.1.3 兼容，并将轻松适配即将发布的 9.0 版本。API 可通过 ValkeyClient 或 ValkeyConnection 调用。 ￼
+示例：
+```Swift
+try await valkeyClient.set("Key1", value: "Test")
+let value = try await valkeyClient.get("Key1")
+```
+
+* 高级流水线（Pipelining）机制
+提供两种流水线执行方式：
+1.	使用 execute(_:) 一次提交多个命令并接收一个响应元组；
+2.	使用 Swift 并发特性，通过同一个连接在多个并发任务中发送命令，避免等待前一个命令响应完成。 ￼
+示例：
+```Swift
+let (lpushResult, rpopResult) = await valkeyClient.execute(
+    LPUSH("Key2", elements: ["entry1", "entry2"]),
+    RPOP("Key2")
+)
+```
+* Pub/Sub 支持
+提供直观的 AsyncSequence 接口处理订阅消息，并自动管理订阅与取消订阅生命周期，降低使用复杂度与潜在错误。 ￼
+示例：
+```Swift
+try await valkeyClient.withConnection { connection in
+    try await connection.subscribe(channels: ["channel1"]) { subscription in
+        for try await event in subscription {
+            print(String(buffer: event.message))
+        }
+    }
+}
+```
+
+* 集群支持
+通过 ValkeyClusterClient 实现分片路由、拓扑发现、连接池管理、故障转移与熔断机制，支持横向扩展与高可用性。 ￼
+* Redis 协议兼容性
+基于 RESP 协议构建，因此可与 Redis 通信（兼容至 Redis v7.2.4 之前）。 ￼
+
+社区反馈亮点：
+
+* 社区对 valkey-swift 的现代 API 和并发整合给予高度认可：“APIs look great and fit right into modern Structured Concurrency.”  ￼
+
+* 开发团队计划整合 Swift Metrics 和 Swift Distributed Tracing，并继续推进至 1.0 正式版本（时间未定）。 ￼
+
+3、提议[简化 InlineArray 类型语法糖](https://forums.swift.org/t/accepted-se-0483-inlinearray-type-sugar/81509 "简化 InlineArray 类型语法糖")
+
+该提案 SE-0483 已被语言指导组接受，目标是为 Swift 引入一种更简洁的语法，用以声明固定长度、内联存储的数组 —— 即 InlineArray，旨在提升高性能代码的开发 ergonomics 。语法糖采用如下形式：
+```Swift
+[5 of Int]
+```
+代表 InlineArray<5, Int> 类型的数组，即包含 5 个 Int 元素，存储在线程栈或结构体内部，无需堆分配。 ￼
+
+关键语法变化和设计考虑：
+* 分隔符从原提案的 x 改为 of，理由是 of 更贴近 Swift 中其他介词关键词（如 in, as），且更不可能与变量名冲突。 ￼
+* 虽然语法糖中没有显式标明“inline（内联）”特性，语言团队认为这与 Swift 中 [...] 语法表示 Array 类似，用户会自然理解其为高性能、固定大小数组。 ￼
+* 针对未来可能扩展语法支持固定值字面量构造（例如 “[5 of 0]”），团队建议若未来加入相关特性，应使用不同语法以避免混淆。 ￼
+
+该提案为 Swift 提供了一个简明可读的语法来使用固定容量的内联数组类型，兼顾性能与表达力，尤其适用于嵌入式系统、graphics、游戏开发等对性能敏感的场景。
+
+4、提议[SwiftPM 自定义模板改进包创建流程](https://forums.swift.org/t/pitch-improving-package-creation-with-custom-templates-swiftpm-template-initialization/81525 "SwiftPM 自定义模板改进包创建流程")
+
+提议内容是对现有 swift package init 命令的一项扩展，旨在让 SwiftPM 官方支持使用 自定义可复用包模板，简化复杂项目初始化的流程，从而替代目前常见的第三方脚本或工具方式。
+
+设计目标与动机：
+* 当前 SwiftPM 仅支持一些硬编码模板（如 library、executable、macro 等），无法满足复杂项目初始化需求（如 HTTP 服务、OpenAPI 项目等）。
+* 本提议在 SwiftPM 内引入模板机制，使模板可以像 Swift 包一样被声明、共享并从注册表或本地引用使用。
+* 模板支持可配置参数和逻辑，可通过如下方式调用：
+```Swift
+swift package init --type PartsService --package-id author.template-example
+```
+接着，SwiftPM 将：
+1.	创建临时工作目录
+2.	初始化基础包结构
+3.	提示用户进行配置选择（如是否添加数据库、是否生成 README 等）
+4.	最终将生成内容复制到目标目录 ￼
+
+核心优势：
+* 与 SwiftPM 深度集成，无需跳出工具链使用外部脚本。
+* 极高的可发现性与可共享性：模板本身可发布至包注册表，被团队或社区复用。
+* 增强灵活性与一致性：支持各种用例的初始化流程，例如 REST API 服务、CLI 工具、模块化项目结构等。
+
+这个提案有望大幅提升 Swift 包初始化体验，让开发者用更一致、更模块化的方式快速启动新项目
+
+5、提议[嵌入式 Swift 的链接（linkage）模型](https://forums.swift.org/t/embedded-swift-linkage-model/81441 "嵌入式 Swift 的链接（linkage）模型")
+
+该帖子探讨了 Embedded Swift 与 “Desktop Swift” 在链接模型方面的不同设计，并提出了一种更适合嵌入式环境下的链接策略，以改善符号生成与控制。
+
+链接模型对比
+* Desktop Swift 链接模型
+在编译库时，会在目标对象文件（.o）中生成所有 public、package 和 open 声明的符号。即使某些成员可以通过 @inlinable 或跨模块优化进行内联，但其规范实现仍保留在对象文件中。
+* Embedded Swift 链接模型
+嵌入式模块会将所有实体定义保存在中间表示（SIL）中，存储于 .swiftmodule 文件内。编译时，编译器可以生成整个模块依赖的特化版本代码，也可选择生成空对象文件（适用于库）。这种方式通过泛型特化（specialization）消除类型元数据依赖，是嵌入式 Swift 的核心机制。
+
+类比与设计启发
+
+这种模型类似于 C/C++ 中的 inline 函数或模板实例化：定义保存在头文件中，在使用端生成对应代码，并通过链接时消除重复定义。
+
+嵌入式模型存在的问题
+* 非 Swift 客户端使用时的符号冲突
+若将多个 Swift 静态库集成至非 Swift 客户端（如 C 程序），容易因重复定义相同模块符号而引发链接错误。虽可通过 -mergeable-symbols 标志指导链接器去重，但这无法保证每个符号在单个对象文件中仅被定义一次。
+* 缺乏链接时多态支持
+无法像传统 C 模式那样，通过链接不同实现库来选择具体行为；嵌入式 Swift 会在编译时将实现内联到客户端，从而无法动态替换实现，这种神经性通过 -mergeable-symbols 掩盖但不解决问题。
+* 实现隐藏不足
+因 .swiftmodule 包含所有实现定义，internal 或 @_implementationOnly 导入无法隐藏模块依赖，与 Desktop Swift 的链接模型相比缺少封装能力。
+
+总结：该帖子清晰阐释了 Embedded Swift 链接模型的设计理念及其与 Desktop Swift 的区别，并点出了当前设计在静态库集成、符号管理和模块封装方面的挑战。该讨论为未来优化 Embedded Swift 在嵌入式系统和混合语言项目中的构建流程提供了有价值的参考方向。
 
 ## 推荐博文
 
