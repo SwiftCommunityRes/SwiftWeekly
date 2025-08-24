@@ -232,6 +232,20 @@ extension ByteBuffer {
 
 ## 推荐博文
 
+[swift使用swift-protobuf协议通讯，使用指北 ](https://juejin.cn/post/7381826917086232614/ "swift使用swift-protobuf协议通讯，使用指北")
+
+**摘要：**  文章全面介绍了如何在 Swift 中利用 Swift-protobuf 进行高效的协议通信。首先，作者解释了 Protocol Buffers 的优势，如高效性、简洁性和版本兼容性，以及适用场景。介绍了如何安装 Swift-protobuf 编译器，并通过示例展示了如何编译 .proto 文件生成 Swift 代码。随后，文章详细介绍了如何将生成的 Swift 代码集成到项目中，确保项目能够顺利使用 Swift-protobuf。此外，文章还探讨了常见问题的解决方法，特别是关于模块引用错误的处理。作者还通过一个简单的 SwiftUI 示例演示了如何创建、序列化和反序列化协议消息对象，帮助读者理解实际应用中的操作流程。这篇文章结构清晰，内容详尽，为想要在 Swift 应用中应用 Protocol Buffers 的开发者提供了全面的指导和实用技巧。
+
+[Swift 中的仓库设计模式详解](https://www.avanderlee.com/swift/repository-design-pattern/ "Swift 中的仓库设计模式详解")
+
+**摘要：**  这篇Swift博客详细介绍了如何使用仓库（Repository）设计模式在Swift应用中管理数据访问逻辑。文章从定义仓库接口开始，使用Swift的协议（protocol）来描述数据操作方法，例如创建、删除和查找用户。接着演示了如何创建多个仓库实现，包括基于内存和基于UserDefaults的实现，这些实现隐藏了具体数据存储的细节。最后，文章展示了如何在应用中使用ViewModel来操作数据，通过依赖注入不同的仓库实现，实现了数据访问逻辑的灵活切换。通过仓库设计模式，开发者能够更好地组织和测试应用的数据访问层，提升代码的灵活性和可维护性。
+
+[迈向无数据竞争错误的 Swift 包生态系统](https://www.swift.org/blog/ready-for-swift-6/ "迈向无数据竞争错误的 Swift 包生态系统")
+
+**摘要：**  Swift 6 引入了编译时数据竞争安全检查功能，允许各模块逐步采用，从而提升整个生态系统的安全性。Swift Package Index 的“Ready for Swift 6”页面追踪了这一进展，自五月以来，已显著减少了数据竞争错误。目前，超过 43% 的包没有数据竞争错误。
+
+Swift Package Index 显示“Safe from data races”标签以帮助评估包的安全性。在 Swift 6 兼容性矩阵中，包可以显示兼容性绿勾，即使存在潜在数据竞争问题。Swift 6 的编译时数据竞争安全检查消除了许多潜在并发错误，提升了代码的安全性和可维护性。开发者应尽快更新包，以促进整个生态系统的安全过渡。
+
 
 ## 话题讨论
 
