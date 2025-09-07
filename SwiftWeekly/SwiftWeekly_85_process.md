@@ -272,6 +272,18 @@ String(validating: bytes, as: Unicode.ASCII.self)
 讨论显示大家都希望能有更简洁、更语义化的解决方案，以提升固定格式字符串处理的可读性与易用性。
 
 ## 推荐博文
+[掌握Swift Foundation Formatter API。自定义格式样式 ](https://swiftwithmajid.com/2023/07/04/mastering-swift-foundation-formatter-api-custom-format-styles/ "掌握Swift Foundation Formatter API。自定义格式样式")
+
+**摘要：**  本篇博客介绍了如何使用 Swift Foundation Formatter API 中的自定义格式样式。作者分享了自己在每个项目中都使用该 API 并构建自定义格式化逻辑的经验。博客中详细讲解了 FormatStyle 协议以及如何创建符合该协议的自定义格式样式。通过示例，展示了如何创建短数字格式样式和粗体数字格式样式，并说明了如何在自定义类型中重用这些格式样式。最后，作者还提供了一种封装格式化逻辑的方法，并在文章结尾鼓励读者跟随作者的 Twitter 并针对本文提出问题。。
+
+[ ElasticSearch 与 Swift 集成](https://juejin.cn/post/7326265442837528586/ " ElasticSearch 与 Swift 集成")
+
+**摘要：**  本篇博客详细介绍了 Elasticsearch 与 Swift 的集成，旨在帮助开发者将强大的搜索引擎功能整合到 Swift 应用程序中，提升用户体验。文章首先介绍了 Elasticsearch 和 Swift 的背景，分别强调了Elasticsearch作为基于Lucene的搜索引擎的特性，以及Swift作为苹果主要开发语言的优势。
+核心概念与联系部分深入解释了集成前需要了解的核心概念，包括 Elasticsearch 的索引、查询、分词、词典等原理，以及Swift的类型安全、自动引用计数、高性能等特点。接着，文章详细探讨了集成的操作步骤，包括安装Elasticsearch、创建索引、使用Swift访问Elasticsearch、执行搜索查询等步骤。
+
+[swift 的内购测试](https://swiftwithmajid.com/2024/01/09/storekit-testing-in-swift/ "swift 的内购测试")
+
+**摘要：**  这篇博客介绍了在 Swift 中使用 StoreKitTest 框架进行应用内购买测试的方法。作者首先概述了最近 StoreKit 框架的重大变化，强调了新版本充分采用了 Swift 语言的异步和等待特性。随后，博客详细介绍了 StoreKitTest 框架，该框架允许我们编写测试用例以验证应用在应用内购买、退款、ask-to-buy 和订阅过期等方面的处理能力。通过示例代码，演示了如何使用 SKTestSession 类型执行购买、管理交易、模拟退款以及测试应用对交易更新的反应。博客还提到了创建 StoreKit 配置文件的必要性。
 
 
 ## 话题讨论
