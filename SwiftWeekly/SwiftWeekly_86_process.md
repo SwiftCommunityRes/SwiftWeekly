@@ -120,7 +120,156 @@ Apple 持续探索创新方式，联结中国与世界各地的多元社区。�
 
 
 ## Swift论坛
+1、提议[模块选择器用于名称消歧义](https://forums.swift.org/t/se-0491-module-selectors-for-name-disambiguation/82124 "模块选择器用于名称消歧义")
 
+该提案进入评论审查阶段（Review）（2025 年 9 月 13 日至 9 月 26 日）。其目标是为 Swift 引入一种新的语法机制，用来在存在模块或类型名冲突时帮助消歧。例如，当多个模块导出同名类型或声明时，通过指明模块来明确引用的是哪个定义。
+
+提案核心内容
+* 新语法使用 Module::Name 的形式，即在名字之前加上模块选择器（module selector） Module::，例如：
+```Swift
+_ = RocketEngine::Fuel()
+```
+表示明确取用 RocketEngine 模块里的 Fuel，绕开作用域中其他同名类型。 ￼
+
+* 提案还提供工具链支持，启用编译标志 -enable-experimental-feature ModuleSelector 后使用这个特性。提供给 macOS、Linux、Windows 等环境使用。 ￼
+* 在候选名称查找（name lookup）中，当使用模块选择器时，只有声明在该模块中或被该模块 re-export 的声明会被视为候选。这样可确保选择器的精确性。 ￼
+
+
+社区反馈与争议点
+* 多数人支持该改动，认为冲突情况在实际项目里确实常见，“名称遮蔽”（name shadowing）与模块导出问题会带来维护成本。 ￼
+* 对 :: 语法的接受度较高，有人觉得它类似 C++ 的模块限定符，用起来直观。 ￼
+也有人觉得 :: 在 Swift 感觉稍微“别扭”（awkward），尤其是它放在成员类型或成员路径中的优先级／解析顺序（precedence and parsing）问题。 ￼
+* 有人建议提供备用语法或更明确的标记，例如用类似 #module(ModuleName).Member 的形式，但被认为过于冗长或语法结构复杂。 ￼
+* 对靶向成员类型中的模块限定（qualified member types）例如 T.Foo::Bar 的支持是否应被允许，是一个争议点。有反馈认为在泛型上下文中对成员类型做模块限定可能会引入混淆。 ￼
+* 还有关文档工具与编码工具支持的问题，比如 DocC、接口文档、导出头文件、Swift interface 文件命名中如何处理带 :: 的名称，因为 :: 在某些文件系统或 URL 中可能不被允许或创建歧义。 ￼
+
+
+优点 & 潜在风险
+
+优点：
+* 能明确开发者意图，避免命名冲突带来的编译或 API 混淆问题。
+* 提高大型代码库中，跨模块引用类型时的可读性与维护性。
+* 用户可从手写代码层面解决某些名称遮蔽问题，而不是依赖重构或导出策略。
+
+风险 / 实现挑战：
+* :: 的语法在某些上下文中解析优先级可能引起困惑，特别是与成员访问 ., 泛型成员或关联类型混用时。
+* 构建工具链、接口生成工具、文档生成、文件命名等需要兼容性处理。
+* 语言设计保持简洁性与一致性的挑战：加入新的限定符号可能让语法曲线稍稍上升。
+
+总结
+
+SE-0491 是一个实用性很强的提案，旨在解决 Swift 生态中命名冲突、模块导出与类型遮蔽带来的维护困难。提案的语法形式 Module::Name 被多数社区成员看好，接受度较高。当前讨论的重点在于语法细节（优先级、解析）、与现有语言特性（泛型、成员类型等）的兼容性，以及工具链/文档/接口展示等侧边问题。
+
+
+2、提议[非可复制值的部分重新初始化](https://forums.swift.org/t/partial-reinitialization-of-noncopyable-values/82153 "非可复制值的部分重新初始化")
+
+提案内容
+* 提案由 Joe Groff 发起，目标是为 Swift 中的 非可复制类型（noncopyable types） 引入一个新能力：在某些情况下，对其被部分消费（partial consumption）的字段进行重新赋值，从而使整个值变为“完整”（whole）状态。  ￼
+* 背景是 SE-0429 已允许对非复制类型中的部分成员进行消费，也就是说可以对 struct/tuple/enum 的某些字段进行“消费”（例如调用消耗成员的 consuming 方法），但一旦某个字段被消费，对象整体就无法被包括该字段在内地恢复为完整状态，除非重建整个值。  ￼
+* 提案示例中，假设有这样一个类型：
+```Swift
+struct BufferedFile: ~Copyable {
+  var file: File
+  var buffer: Buffer
+  consuming func takeBufferAndCloseFile() -> Buffer {
+    file.close()
+    return buffer
+  }
+}
+```
+在目前状态，如果 file 被消费（例如关闭），就不能仅通过对 file = newFile 来恢复，而必须重建整个 BufferedFile 实例。该提案希望允许这样的部分重初始化。  ￼
+设计细节与限制
+* 部分重新初始化只适用于 存储属性（stored properties），并且只能发生在类型定义所在模块，或者是 public 且标注 @frozen 的类型。对于未标注 @frozen 的公共类型，其存储布局可能未来变化，不能安全依赖。  ￼
+* 在部分重新初始化之前，字段必须被消费（partial consumption）；在退出方法或 value 生命周期之前，这些被消费的字段要被重新赋值，才能保证类型状态恢复完整。否则会被视为错误。这样可以避免绕过类型的初始化器或析构器（deinit）带来的语义破坏。  ￼
+* 对于具有自定义 deinit 的类型，此提案允许在部分消费之后仍然支持重新初始化，只要在值存活期间消费的字段被重新初始化。这样能让 deinit 在对象完全终结前仍然正常执行类型预期的行为。  ￼
+* 提案不会改变现有语法行为，不会破坏源兼容性，也不会影响 ABI，因为只是新增行为，无需改变运行时类型布局。  ￼
+
+社区反馈要点
+* 很多同样使用非可复制类型的开发者表示这是他们“最缺失的功能之一”，能明显简化某些写法，减少样板和错误。  ￼
+* 有人对 public 类型非 @frozen 的限制提出疑问，是否可能未来通过某种方式标记某些公共存储属性明确为“可被部分重新初始化”，即使类型本身不是 @frozen。  ￼
+* 有用户关心这项功能是否适用于计算属性（computed properties）或只有 setter/或私有 setter /只读属性等情形，因为这些属性可能无法公开成为存储属性或可重写的字段。提案中对此类情况有明确限制，并非所有属性都能支持重初始化。  ￼
+
+总结
+
+这个提案在 Swift 的非可复制类型（noncopyable）系统中填补了一个用户体验上的重要空白：允许部分消费后的值通过赋值恢复完整性，而不是必须重建整个实例。它在 API 安全性、兼容性上都有较为谨慎的设计（限制于存储属性、@frozen 类型、模块边界等）。如果实现，它将提升非可复制类型的可用性与编程便利性。
+
+如果你要写报告，我可以帮你列一些这个提案可能的风险或未来关注点，以便平衡视角。你要我加这些吗？
+
+3、讨论[“真实安全 (reality-safe)”隔离模型中允许这种访问的可能性](https://forums.swift.org/t/finding-a-way-to-allow-this-in-reality-safe-isolation-violation/82145 "“真实安全 (reality-safe)”隔离模型中允许这种访问的可能性")
+
+该帖由 Jeremy Bannister 发布于 2025 年 9 月中旬，讨论 Swift 并发隔离模型中一个被认为“不必要严格”的访问限制，以及社区是否可以允许在某些条件下越过该限制。
+
+样例代码与问题
+
+以下代码在 Swift 6.2 中不会编译：
+```Swift
+actor Foo {
+    let bar: Bar
+
+    init() {
+        self.bar = .init(constant: 7)
+    }
+
+    nonisolated var constant: Int {
+        bar.constant // Error: Actor-isolated property 'bar' cannot be referenced from a nonisolated context
+    }
+}
+
+class Bar {
+    let constant: Int
+    init(constant: Int) { self.constant = constant }
+}
+```
+问题是：在一个 actor 类型中，bar 属性是 actor 隔离的；但 constant 只是读取一个不可变存储属性 (let constant)。作者觉得，如果整个访问路径都是不可变的（actor 的 let 存储 + Bar.constant 是 let），理论上这是安全的，所以希望允许这种访问，至少在类型是非公共（non-public）的情况下。
+
+社区反馈与观点
+* John McCall 回复说，他同意这种访问在这种情形下是安全的，只要 “整个访问路径都是不可变的”。也就是说，当 bar 是 let，而其类型 Bar.constant 也是 let，并且都不是可以被外部修改的情况，则允许可能没有安全问题。 ￼
+* 对于公共类型（public types），有观点认为自动放宽这类访问可能引入未显式的承诺（promise），因为公共接口通常需要非常明确的隔离与可变性语义。非公共类型情况则不那么敏感。 ￼
+* 有人提出变通方案，例如给 Bar 类型提供一个 Sendable 包装，或在类型中显式展示可安全地使用的不可变版本。也有提出为这种访问提供专门的语言标记或关键字，以便明确表明路径是不可变的，从而被编译器允许。 ￼
+
+总结与可能演进
+
+这个讨论暴露了 Swift 隔离模型中一个细节：即使整个路径是不可变的，actor 隔离规则目前不允许在 nonisolated 上访问 actor 中的 let 存储属性。对于许多开发者来说，这个限制在实际应用里显得过于保守。
+
+如果语言未来演进，可能方向包括：
+* 在非公开／模块内部的类型中，对完全不可变访问路径的允许；
+* 引入标记／关键字以明确声明某个属性链是不可变的；
+* 在语言规范或者编译器诊断中更好地说明为何这类访问被禁止，以及在什么情况下可以放宽。
+
+4、讨论[Swift 中声明式编程未来方向的思考](https://forums.swift.org/t/thoughts-about-future-directions-for-declarative-programming-in-swift/82139 "Swift 中声明式编程未来方向的思考")
+
+作者 Alexander Kozin 等在论坛中发起讨论：当前 SwiftUI 已经是一种声明式风格。问题是，未来 Swift（例如 Swift 7）是否会更“声明式”——甚至让更多语言特性（非仅 UI）都倾向声明式，或者提供类似的语法支持。
+
+核心观点与社区反馈
+* SwiftUI 的声明式风格被认为是函数式（functional）风格的一种体现，而 Swift 本身已有部分函数式特性，所以很多人认为可声明式的编程风格“不太可能被完全颠覆／重写”，但可以增强或扩展。  ￼
+* 一个被频繁提及的方向是 referential transparency（引用透明性）：即让函数不依赖外部可变状态，纯粹地根据输入返回输出。有人认为这是声明式编程中非常重要、但当前 Swift 中支持不够的部分。  ￼
+* “函数标色”（colouring functions / effect-typing）的建议也被多次提出。比如标记函数是否非确定性（nonDeterministic）、是否与文件系统交互、是否处理敏感数据等。这样的标记可以帮助开发者在编译／静态分析阶段检测不希望发生的调用或副作用。  ￼
+* 有人指出，即便现在没有语言内建支持这些标记／效果系统（effects），有些模式可以手工实现，比如把文件系统依赖作为参数传递，或使用协议封装。只是这些做法在代码量／样板上会变得复杂。  ￼
+
+潜在方向与挑战
+* 扩展语言以支持 效果系统／函数标色(effect annotations)，让编译器能在类型系统层面了解函数副作用。
+* 在语言中加入机制以强制或支持引用透明（或更强的不变性）编程风格。
+* 提供语法糖／DSL／语言构造，使得声明式风格更自然、更易用，并能在 UI 之外场景也通用。
+* 一大挑战是如何让这些特性兼容现有生态，同时不使语言变得过于复杂／难学。还有效率与性能安全等问题：标色／效果检查是否会引入编译开销？函数调用路径的副作用检测能否做到静态可靠？
+
+总结
+
+这是一场较为开放性的未来语言方向讨论，社区整体认可声明式编程风格在 Swift 中的重要性，并希望能在未来版本中看到更强力的语言支持，比如效果系统、副作用标识、引用透明性等。虽然没有具体提案进入实现阶段，但这个方向被认为对提升代码安全性、可测试性、可组合性及整体可维护性非常有价值。
+
+
+5、讨论[@unknown default 的用途与新规则](https://forums.swift.org/t/whats-the-deal-with-unknown-default/82150 "@unknown default 的用途与新规则")
+
+作者 Bawenang (Bawenang Rukmoko) 在帖子中提出一个问题：在 Swift 6 模式下，对通过 switch 匹配一个可能来自外部库的 non-frozen 枚举（Variant）时，即使所有已知 case 都被覆盖，编译器也报错（“may have additional unknown values; this is an error in the Swift 6 language mode”），并强制要求加上 default 或 @unknown default。作者想知道：为什么现在 default 是必须的？有没有办法让代码故意不含 default，以便在未来为新增 case 强制编译错误，而不是默默忽略。
+
+社区反馈与解释
+* Swift 官方文档与核心团队解释说，对于 non-frozen 枚举，如果你依赖库演化（library evolution mode，即库可以新增 case 而不重新编译使用者代码），就必须包含一个 default 或 @unknown default 分支，即使在当前所有 case 都显式列出。这个要求是为了避免未来枚举新增 case 导致未被 switch 覆盖而造成未定义行为或运行时错误。  ￼
+* 使用 @unknown default 的好处在于，当枚举未来新增了 case，并且你重新编译使用者代码时，编译器会发出警告提醒你：有 case 新增未被显式处理。相比之下，仅用 default 的话，就不会有警告，你可能不知道 library 更新了枚举。  ￼
+* 如果你确实希望编译器在枚举新增 case 时 switch 语句报错（而不仅仅是警告），可以通过将枚举标记为 @frozen 或关闭 library evolution（不开启 “Build for Distribution” / -enable-library-evolution）来实现。这样枚举被视为不会新增 case，switch 可被视为完全穷尽，不需要 default。  ￼
+* 还有一个“包内模块”（same Swift package 内的模块）之间的情况：如果枚举定义与使用在同一个 package 中并一同编译，编译器假设这些模块会被同时更新，因此可能不强制要求 default。但强迫这种做法可能有构建工具或包管理器方面的限制。  ￼
+
+总结
+
+这个讨论主要是澄清 Swift 语言在 non-frozen 枚举上对 switch 语句的新规则：在开启 library evolution 的情况下 默认必须有一个 fallback 分支（default 或 @unknown default），以保证向后兼容性和安全性。@unknown default 在这种情形下被推荐，因为它能在未来枚举新增 case 时提醒开发者修改代码。若希望不使用 fallback 并让添加 case 时变为编译错误，需要使枚举稳定（@frozen）或不启用库演化模式。
 
 ## 推荐博文
 
