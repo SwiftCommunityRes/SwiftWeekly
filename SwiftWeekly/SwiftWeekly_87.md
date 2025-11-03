@@ -1,316 +1,356 @@
 ## 前言
 
-**本期是 Swift 编辑组自主整理周报的第八十五期**，每个模块已初步成型。各位读者如果有好的提议，欢迎在文末留言。
+> 写给每一位还在坚持的开发者
 
-Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly "SwiftWeekly")，欢迎提交 issue，投稿或推荐内容。目前计划每两周周一发布，欢迎志同道合的朋友一起加入周报整理。
+你好，欢迎来到 **Swift 社区周刊第 87 期**。
 
-岁月浅浅，余生漫漫，许他万般风霜，任他山高海阔，愿人静、物简、天灿、心安。👊👊👊
+这里是属于所有 Swift 开发者的精神角落 —— 我们用代码记录变化，也用热爱连接彼此。
 
-> **周报精选**
+这一期，我们为你整理了：
+
+> **Swift Weekly 精选速览**
 >
-> 新闻和社区：苹果「联姻」谷歌：AI 增强版 Siri 将整合 Gemini，搁置收购 Perplexity 计划
-> 
-> 提案：小编只看到了月食，各位读者有没有看到血月？
-> 
-> Swift 论坛：提议 Swift for Wasm：2025 年 Q3 更新
->
-> 推荐博文：swift 的内购测试
->
->**上期话题结果**
+> * **苹果重磅发布**：M5 芯片正式亮相，AI、本地计算与 GPU 性能全线进化。
+> * **Swift 论坛热帖**：一个“未赋值变量”竟能拥有神秘默认值？编译器 Bug 现场复盘。
+> * **提案聚焦**：可等待赋值（Awaitable Assignment）提案引发热议，Swift 并发语法或迎重大简化。
+> * **精选博文**：为什么 SwiftUI 不再需要 MVVM？一文读懂声明式 UI 的范式转向。
+> * **话题讨论**：企业文化是凝聚人心的精神内核，还是束缚思想的无形枷锁？
 
-![](https://files.mdnice.com/user/47553/603162cb-6b87-4a1a-8fef-6b1e2c9ecd7d.jpg)
+我们知道，写代码的日子有时孤独、焦虑、也有点倦。
 
-大部分朋友还是希望请示直属领导，避免比不要的误会。
+但“成功就是多一点的坚持，这一分钟不放弃，下一分钟就会有希望。生活的温柔，就藏在每一个日出日落里，藏在每一步的挣扎努力中！👊👊👊”
+
+Swift 周报已在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly "SwiftWeekly")，
+欢迎提交 issue、推荐内容或加入我们，一起让 Swift 社区更有温度。
+
+**上期话题结果**
+
+![](https://files.mdnice.com/user/47553/6e9ae3a1-cd14-4616-a683-fea9f9592078.png)
 
 ## 话题讨论
 
-小编只看到了月食，各位读者有没有看到血月？请在评论区分享。
+**企业文化，是凝聚精神还是束缚思想?**
 
-1、有
-2、没有
-
-![](https://files.mdnice.com/user/47553/d2472647-be1c-4452-8602-04462cdda8ed.jpg)
+1. 精神内核派：优秀的文化能带来认同感与归属感，让员工在共同价值中找到方向。
+2. 思想枷锁派：过度强调统一与服从，容易压制个性和创造力，创新因此被束缚。
 
 ## 新闻和社区  
 
-### Apple Koregaon Park 零售店于 9 月 4 日在印度浦那市开幕迎客
+### 动摇索尼独供地位：三星为 iPhone 18 系列在美建厂
 
-2023 年 9 月 4 日
+*2025 年 10 月 16 日*
 
-![](https://www.apple.com.cn/newsroom/images/2025/09/apple-koregaon-park-opens-to-customers-this-thursday-september-4-in-pune/article/Apple-Koregaon-Park-India-media-preview-storefront_Full-Bleed-Image.jpg.large_2x.jpg)
+苹果正在为 **iPhone 18 系列** 相机重构供应链：
+三星电子将时隔近十年重返苹果相机传感器供应体系，并计划在 **美国德州奥斯汀新建生产线**，预计 2027 年投产。
 
-印度，浦那市， Apple 今日预览了 Apple Koregaon Park 零售店，这是 Apple 在浦那市的首家、在印度的第四家零售店。 全新零售店位于大型文化与学习中心的核心地带，诚邀顾客探索和选购 Apple 全系产品，获取个性化服务与专家支持，并通过 Today at Apple 课程学习如何进一步利用手中的设备。
+**关键点速览**
 
-“Apple 零售团队无比热爱与顾客沟通联结。在班加罗尔市的全新零售店开幕仅数日后，我们又怀着激动的心情揭晓了浦那市的 Apple Koregaon Park 零售店。” Apple 零售业务兼人力高级副总裁 Deirdre O’Brien 表示，“在这个以历史和创意著称的城市里，Apple Koregaon Park 零售店为顾客提供了美妙的新空间，体验 Apple 的一切，无论他们想选购新产品，为已拥有并喜爱的设备寻求支持，还是找寻灵感、将心中创意化为现实。”
+* Doosan Tesna 投资 1713 亿韩元扩充测试产能（约 8.58 亿元人民币）
+* 测试设备从 Teradyne 转向 **Advantest 系统**，暗示传感器复杂度提升
+* 苹果此举意在 **分散索尼供应风险**、提高链路韧性
+* 2027 年量产，或影响 iPhone 18 / 19 系列相机质量走向
 
-![](https://www.apple.com.cn/newsroom/images/2025/09/apple-koregaon-park-opens-to-customers-this-thursday-september-4-in-pune/article/Apple-Koregaon-Park-India-media-preview-product-zone_big.jpg.large_2x.jpg)
+**背景简析**
 
-Apple Koregaon Park 零售店汇聚了来自印度 11 个邦的 68 名团队成员，他们时刻准备帮助顾客选购新设备，包括 iPhone 16 系列机型、iPad Air 与 Apple Pencil Pro、搭载 M4 芯片的 MacBook Air 等等。零售店团队还提供个性化设置与支持，迁移至 iOS 的详细指导，以及 Apple Trade In 折抵换购及分期付款计划等零售服务。
+Doosan Tesna 作为三星体系半导体测试主力，约 90% 收入来自三星 System LSI 部门。
+此次投产标志三星重新拿下苹果关键相机组件订单，也预示苹果在高端影像链上的「双源布局」正式成型。
 
-顾客进入零售店后可立即探索产品展示桌与 avenue 长廊上呈现的 Apple 服务，如 Apple Music 和 Apple TV+。对于在线下单的顾客，专属的 Apple Pickup 到店取货区域简化了购物流程，供顾客选择方便的时间顺畅提取在线购买的产品。
+![](https://files.mdnice.com/user/47553/5d0d3cbc-f78d-4092-8bea-27155a95bd69.png)
 
-专属的商务团队可提供量身定制的指导、设备支持和工具，帮助各种规模的企业成长与发展。Apple Koregaon Park 零售店与其他 Apple 设施一样，采用 100% 可再生能源，且已实现碳中和。
+### 苹果发布 M5 芯片：AI、GPU、续航全线升级
 
-![](https://www.apple.com.cn/newsroom/images/2025/09/apple-koregaon-park-opens-to-customers-this-thursday-september-4-in-pune/article/Apple-Koregaon-Park-India-media-preview-Apple-Pickup_big.jpg.large_2x.jpg)
+*2025 年 10 月 16 日*
 
-Apple 致力于支持与丰富学生的学业和生活。在 Apple Koregaon Park 零售店，这一承诺通过 Today at Apple 延伸至整个社区，面向所有 Apple 用户提供免费店内日常课程，鼓励他们学习新知、发挥创意。
+苹果正式推出自研 **M 系列第五代芯片——M5**，并同步发布三款首发设备：
+**14 英寸 MacBook Pro、iPad Pro 与 Vision Pro。**
 
-### 苹果「联姻」谷歌：AI 增强版 Siri 将整合 Gemini，搁置收购 Perplexity 计划
+![](https://files.mdnice.com/user/47553/dd6f27d7-bfb0-4453-9cdc-393d4595be77.png)
 
-2025 年 9 月 3 日
+#### M5 核心参数亮点
 
-9 月 3 日消息，苹果公司已于本周和谷歌达成新的协议，开始评估谷歌开发的 Gemini AI 模型，而且已不再考虑收购 Perplexity。
+* 台积电 **N3P（第三代 3nm）工艺**
+* 10 核 GPU，每核带神经加速单元
+* 图形性能较 M4 提升 **最高 45%**
+* 统一内存带宽：120GB/s → **153GB/s**
 
-苹果公司目前正在测试多种 AI 方案，除了自家研发的模型之外，还积极探索整合 OpenAI、Anthropic、谷歌的技术。古尔曼透露苹果目前尚未最终确定使用哪家技术，但谷歌 Gemini 已成为重点考察对象，这一进展标志着双方在 AI 领域的合作进入实质性测试阶段。
+#### 各设备升级一览
 
-消息源透露苹果正在开发名为「世界知识解答」（World Knowledge Answers）的 AI 驱动搜索产品，计划明年发布，将整合到 Siri 中，提供基于 AI 的网络搜索服务。古尔曼指出，谷歌的 AI 模型很可能为这一搜索工具提供技术支持。
+**MacBook Pro (14")**
 
-苹果 iPhone 17 系列将于 9 月 10 日发布，将带来 iPhone 17 Air、iPhone 17、iPhone 17 Pro、iPhone 17 Pro Max 四款机型。
+* AI 任务处理速度提升 3.5 倍
+* 图形与游戏性能最高提升 1.6 倍
+* 起售价：12,999 元
 
-因设计过于超薄，iPhone 17 Air 无法容纳物理 SIM 卡槽，仅支持 eSIM，这意味着 iPhone 17 Air 国行版必须依赖 eSIM 技术，联通、移动、电信三大运营商是否支持备受消费者关注。
+**iPad Pro (M5)**
 
-目前暂不确定 iPhone 17 系列是否真如传闻没有卡槽，但联通会针对 iPhone 无卡槽情况去做相应支持。
+* 存储读写速度翻倍
+* 256GB/512GB 版标配 12GB 内存
+* 支持 Wi-Fi 7、蓝牙 6、自研 C1X 蜂窝芯片
+* 起售价：8,999 元
 
-接下来营业厅可能会有 eSIM 的办理操作，但具体要等通知。
+**Vision Pro (M5)**
 
-![](https://files.mdnice.com/user/47553/e5bcb016-765a-4a11-a31d-b35fbcbe2cf5.png)
+* 渲染像素提升 10%，刷新率最高 120Hz
+* 电池续航延长至 2.5 小时
+* 起售价：29,999 元
+* 新头带设计提升佩戴稳定性，但重量上升至 750–800g
 
-此外，移动、电信多家营业厅工作人员也表示，目前暂未接到相关通知。
+![](https://files.mdnice.com/user/47553/c9a7ef1b-8dc8-4f4f-90cc-92873df2a96e.png)
 
-据了解，今年 7 月，中国联通短暂上线过 eSIM 手机业务开通办理页面。
+> 小结：
+> 
+> M5 不仅是性能升级，更是苹果 AI 芯片布局的关键节点。
+> 
+> GPU 加速 + 神经单元融合，正在让 Mac 和 iPad 逐步进入「本地 AI 计算」时代。
 
-页面显示，在 eSIM 手机商用试验阶段，首次办理本业务的用户需通过线下渠道办理。
+### 政企动态 | 李乐成会见苹果 CEO 蒂姆·库克
 
-用户可重新填写非首次办理的证件信息，或预约联通工作人员上门办理，或携带个人有效证件及需要开通服务的 eSIM 手机前往联通自有营业厅办理（合作厅不支持）。（来源：快科技）
+*2025 年 10 月 15 日*
 
-### 苹果内部AI聊天机器人“Asa”曝光，为零售员工打造专属AI
+在北京，工业和信息化部部长 **李乐成** 会见了苹果公司 CEO **蒂姆·库克**。
+双方围绕苹果在华业务、产业链合作与电子信息领域创新进行了深入交流。
 
-2025 年 9 月 2 日
+![](https://files.mdnice.com/user/47553/9d495584-4452-403b-bf10-f3ca4d9388a6.jpg)
 
-MacRumors 网站的亚伦·佩里斯（Aaron Perris）透露，苹果正在内部测试一款名为 “Asa” 的 AI 聊天机器人。这款工具旨在赋能 Apple Store 零售员工，帮助他们快速掌握 iPhone 等产品的特色和差异化使用场景，从而提升与顾客互动时的解说能力，改善店内体验。
-
-佩里斯分享的截图显示，“Asa” 已被整合进苹果内部的 “SEED” 应用服务，该平台原本就作为教育培训和销售辅助工具。引入 “Asa” 意味着苹果正通过 AI 来强化其零售体验。对员工而言，“Asa” 不仅仅是一个简单的常见问题解答（FAQ）系统，它更是一个能够即时响应问题并提供情境化建议的智能工具。
-
-![](https://files.mdnice.com/user/47553/a50cfef8-f186-46e6-b1ee-9adcdcb81697.png)
-
-苹果一直将其零售店视为品牌体验的关键延伸，它不仅是销售场所，更是传播产品哲学和设计理念的据点。“Asa” 的部署旨在迅速提升每位员工的专业知识水平，避免因个人经验差异导致顾客获得不一致的信息。这一做法也符合苹果长期以来在零售端强调“一致体验”的策略。
-
-尽管 “Asa” 是苹果首次在内部零售场景大规模引入的 AI 助手，但公司尚未对外发布任何面向消费者的“通用型聊天机器人”。与谷歌、OpenAI 和三星等竞争对手快速整合 AI 服务不同，苹果选择了更为谨慎的步伐。它首先从内部环节入手，确保 AI 的实际价值和可靠性，然后逐步将其扩展到更广泛的产品策略中。
-
-![](https://files.mdnice.com/user/47553/79ff5011-1a79-4977-be74-060da5c1f395.png)
-
-这引发了外界的猜测，即将到来的 2025 年秋季新品发布会是否会带来更多与 AI 相关的惊喜。苹果过去多次强调设备端 AI（on-device AI）的隐私和性能优势。如果 “Asa” 在内部证明其价值，或许意味着某种形式的 AI 助手未来将集成到 iPhone 或其他苹果设备中，成为与竞争品牌抗衡的重要武器。
-
-总而言之，“Asa” 的出现既是苹果强化零售销售能力的一项工具，也是其 AI 布局的一场前哨战。尽管目前尚未面向普通用户，但此举透露出苹果的战略思维:先确保内部流程和体验质量，再将成熟的 AI 技术推向市场。对消费者而言，或许还需要等待，但对于即将到来的秋季发布会，外界的期待值只会更高。（来源：AIbase 基地）
+> 李乐成：“中国拥有完备的产业体系和巨大消费潜力，将坚定推进智能产业化。”
+>
+> 库克：“苹果将继续加大在华投资，与中国产业链协同创新，实现互利共赢。”
 
 ## 提案
 
+> Swift Evolution 提案更新：3 项通过，4 项审查中。
+>
+> 以下为重点摘要与开发者关注点👇
+
+### 通过的提案
+
+[SE-0491](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0491-module-selectors.md "SE-0491") **用于名称消歧义的模块选择器** 提案通过审查。该提案已在 **第八十六期周报** 正在审查的提案模块做了详细介绍。
+
+[SE-0492](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0492-section-control.md "SE-0492") **部分安置控制** 提案通过审查。
+
+本提案通过 `@section` 与 `@used` 属性控制全局变量在二进制文件的布局位置，适用于系统与嵌入式场景。
+
+[SE-0494](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0494-add-is-identical-methods.md "SE-0494") **添加 `isIdentical(to:)` 方法，用于与具体类型快速比较** 提案通过审查。
+
+我们针对具体类型提出了新的 `isIdentical(to:)` 实例方法，以快速确定两个实例是否必须相等的边值。
+
 ### 正在审查的提案
 
-[SE-0490](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0490-environment-constrained-shared-libraries.md "SE-0490") **环境受限共享库** 提案正在审查。
+[SE-0493](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0493-defer-async.md "SE-0493") **`defer` 体中支持 `async` 调用** 提案正在审查。
 
-SwiftPM 目前不支持 Linux 上的非系统二进制库依赖项。该提案增加了对环境受限共享库的支持，这是一种跨机器共享的动态库，无需重新编译和重新部署这些机器上运行的所有应用程序即可升级。我们将通过现有的 `.artifactbundle` 格式分发环境受限共享库。
+为 `defer` 语句引入 `await`，支持异步清理逻辑。
+
+[SE-0495](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0495-cdecl.md "SE-0495") **C 兼容函数和枚举** 提案正在审查。
+
+新增 `@c` 属性，让 Swift 函数和枚举可直接暴露给 C 调用，取代实验性 `@_cdecl`。
+
+> 注意：本提案旨在正式化和扩展长期实验 `@_cdecl`。虽然是实验，但这个属性已被广泛使用，因此我们将根据需要参考它，以便在本文档中澄清。
+
+[SE-0496](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0496-inline-always.md "SE-0496") **`@inline(always)`属性** 提案正在审查。
+
+指示编译器**始终内联**指定函数，给予开发者更明确的性能控制。
+
+[SE-0497](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0497-definition-visibility.md "SE-0497") **客户端中的控制功能定义可见性** 提案正在审查。
+
+扩展 `@inlinable` 的能力，平衡构建依赖与跨模块优化。
 
 ## Swift论坛
 
-1、讨论[项目进展 GSoC 2025：在 VS Code 中集成 Swiftly 支持](https://forums.swift.org/t/gsoc-2025-bringing-swiftly-support-to-vs-code/81886 "项目进展 GSoC 2025：在 VS Code 中集成 Swiftly 支持")
+### 1、未赋值变量的“神秘默认值”Bug
 
-由 Priyambada Roul 在 GSoC 2025 项目期间开发的该集成成果已上线，旨在将 Swiftly（Swift 工具链管理器）无缝引入 Visual Studio Code Swift 扩展中，显著提升 Swift 开发体验。
+论坛讨论帖：[未赋值变量出现神秘默认值](https://forums.swift.org/t/mysterious-default-value-for-un-assigned-variable/82670 '未赋值变量的“神秘默认值”Bug')
 
-已完成的集成功能包括：
-
-* 一键切换 Swift 工具链：可在 VS Code 内点击当前版本，即时切换已安装的 Swift toolchain。
-* 直接安装新工具链：无需离开编辑器，即可安装并可视化查看进度。
-* 显示当前 Swift 版本：状态栏直接展示当前活跃工具链信息。
-* 自动同步项目 .swift-version：VS Code 能读取项目所需工具链并提示切换。
-
-Swiftly 命令行工具增强：
-* 支持机器可读 JSON 输出，以及 JSONL 格式的安装进度更新。
-* 错误报告优化，提高用户调试体验。
-
-学到的技术洞见：
-
-Priyambada 分享了开发过程中获取的经验，包括使用 VS Code 扩展 API、进程间通信（IPC）、标准 I/O 流处理、安全跨平台支持（macOS 与 Linux 工具链）等技术实现细节。
-
-未来计划：
-
-* 为新用户提供“一键快速设置 Swiftly”体验
-* 增强边缘场景（edge cases）处理能力
-* UI 界面进一步美化
-* 计划添加 Windows 支持，目前尚未实现
-
-社区反响热烈：
-
-* Konrad Malawski 表示这项集成将极大改善开发者切换工具链的便捷性，并将在 Swift 社区博客上汇总所有 GSoC 项目。
-* Swift 用户高度认可这一功能：“I’ve been needing to jump toolchains far more often lately, and the swiftly & VS Code integration there is going to be perfect…”
-
-总结：这项 GSoC 项目实现了 Swiftly 与 VS Code 的深度融合，大大简化了 Swift 工具链管理流程，提升了编辑器友好度，并获得广泛社区认可。随着未来的改进推进（尤其是 Windows 支持），将使 Swift 在多平台开发环境中的使用体验更加流畅。
-
-2、提议[Swift for Wasm：2025 年 Q3 更新](https://forums.swift.org/t/swift-for-wasm-q3-2025-updates/81956 "提议Swift for Wasm：2025 年 Q3 更新")
-
-Swift 官方在 WWDC 宣布 Swift 6.2 正式支持 WebAssembly 后，社区和贡献者对 Swift for WebAssembly（Wasm）的支持进行了大量推进。本次更新由 Max Desiatov 汇总，涵盖了多个重要进展，详情如下：
-
-关键更新一览：
-
-* Breaking Change: 架构 triple 名称更新原 wasm32-unknown-wasi triple 被重命名为 wasm32-unknown-wasip1，其中的 p1 明确表示 WASI Preview 1，以区分未来可能出现的 WASI Preview 2 (wasip2)。虽然名称改变需要更新构建参数中的 --triple，但功能保持一致，使用 --swift-sdk 的用户不受影响。
-* CLI 可执行文件支持 Embedded Swift 并发在使用 main 开发快照版本的 Swift toolchain 构建的可执行文件中，已启用 Embedded Swift 并发（如 swift run）。不过某些 async 函数（如 Task.sleep）尚未可用。
-* 浏览器端也支持 Embedded Swift 并发利用 JavaScriptKit 的 JavaScriptEventLoop，Embedded Swift 并发已可用于浏览器端应用，例如 WebGPUDemo 示例包所展示。
-* Wasm 构建已覆盖众多 Swift 库的 CI swiftlang/github-workflows 引入了 enable_wasm_sdk_build 和 enable_embedded_wasm_sdk_build 配置选项，使多个 Swift 库（如 swift-algorithms、swift-foundation、swift-nio、swift-system 等）现已支持 Wasm CI 构建。
-* LLDB 已集成 Wasm 插件 Wasm 插件已合并至 upstream LLDB，预计在 Swift LLVM 21 rebranch 中可用，便于调试 Wasm 平台上的 Swift 代码。
-* Swift SDK 包含 Foundation 模块 Swift Wasm SDK 在 main 分支和 6.2 开发快照中均已包含 Foundation，但 Embedded Swift 模式尚不支持 Foundation。
-* WasmKit 新版本与 Android 支持 WasmKit 0.1.6 发布，新增 Android 支持并移除对 Swift 5.9 的兼容。
-* JavaScriptKit 多项功能增强发布范围涵盖 0.31 到 0.35 版本，新增特性包括：
-* 支持指定 TaskExecutor 与 TaskPriority 的 JSClosure API；
-* 引入 JavaScriptFoundationCompat 模块，便于与 Foundation 类型互操作；
-* 改进 Embedded Swift 支持；
-* 增强 BridgeJS 插件，实现 Swift 与 JavaScript/TypeScript 的双向集成。
-* 新建 Swift for Wasm GitHub 项目看板在 swiftlang 组织下设立了 Swift for Wasm 项目板块，以便追踪计划与进展。
-* 新增 DOMRefTypes 示例 swift-for-wasm-examples 仓库中加入了一个 DOMRefTypes 示例，演示通过 C 互操作使用复杂的 Wasm 引用类型。
-* 修复关键兼容性问题解决了 “import WASILibc 在 Embedded Swift for WASI 中不可用” 的问题，以及处理了错误的 va_list C 互操作行为。
-
-总结：
-
-这批更新显著推动了 Swift 在 WebAssembly 平台上的实用性与稳定性：
-
-* 标准化 triple 名称提升构建一致性；
-* Embedded Swift 的并发支持已扩展至 CLI 与浏览器应用；
-* 多个 Swift 库现已获得 CI 构建的 Wasm 支持；
-* 加入 Foundation、调试支持、Android 兼容及互操作工具，形成更完整生态；
-* 示例代码与项目看板完善开发者体验与协作流程。
-
-这些改进对希望以 Swift 构建跨平台（网页、嵌入式、服务端等）应用的开发者而言，无疑是令人振奋的进展。
-
-
-3、讨论[iOS 18 对 Observations 结构体的支持在发布前被移除？](https://forums.swift.org/t/ios-18-support-for-the-observations-struct-is-being-dropped-before-release/81942 "iOS 18 对 Observations 结构体的支持在发布前被移除？")
-
-原帖作者 Lucas van Dongen 提出疑问：他们原本认为 Observations 结构体是已经回溯支持到 iOS 18 的，但文档现在表明它仅适用于 iOS 26。此变化被认为对采用 Swift 并发和数据流 API 的开发者而言是一项重大遗憾。
-
-核心反馈与回应：
-
-* Philippe Hausler（Swift 核心成员）解释称：“由于 Observations 是一个类型，根本无法回溯（back-port）到旧平台，它需要底层系统功能支持，iOS 18 及更早版本不具备该能力。”
-* Jon Shier 提到社区已存在替代方案：“swift-perception 是对 Observable 机制（包括 Observations 类型）的完整回移实现，并包括 Perception 类型，以及 SwiftUI 和 UIKit 的集成。”
-* Josh 进一步呼吁：“是否可以重新评估将其 back-port？对很多团队来说，这会是迁移到 Swift 并发、替代旧流式库的重要突破。”
-
-总结
-
-* Observations 类型确实未能回溯支持 iOS 18，因其设计依赖底层系统能力，不具备 retro-deployment 可行性。
-* 社区已有替代库（如 swift-perception）提供类似功能，可在早于 iOS 26 的平台中使用。
-* 多位用户呼吁考虑再次引入或支持回移，以加快团队采用 Swift 并发与新观察模型的步伐。
-
-4、讨论[@isolated(any) 的发展及其当前限制](https://forums.swift.org/t/isolated-any-evolution-and-current-limitations/81923 "@isolated(any) 的发展及其当前限制")
-
-原帖作者 Sergey Petrachkov 是一名平台工程师，正在开发一个用于测试的 mocking 框架，并尝试使用 @isolated(any) 类型来统一处理 actor-isolated 与非隔离的闭包。然而在 Swift 6.2 中，他发现同步调用 @isolated(any) 类型的闭包虽然目前可行，但已出现警告，并将在未来版本（如 Swift 6.3 或 7）中演变为错误。
-
-为了绕开这一限制，他尝试利用 completion.isolation 并通过 assumeIsolated 方法同步执行，但编译器报错，这表明这样的行为违背了当前的并发隔离检查逻辑。
-
-社区回应与解决思路
-
-* Ole Begemann 提议作为临时方案，可将 @isolated(any) 的闭包赋给一个 nonisolated(unsafe) 的本地变量，从而绕过并发性检查。例如：
+用户 **MojtabaHs** 发现 Swift 出现诡异行为：未初始化的变量在闭包捕获后似乎“自动拥有”了默认值。
 
 ```swift
-nonisolated(unsafe) let unsafeSyncFunc: () -> Void = isolatedAnyFunc
-unsafeSyncFunc()
+func foo(date: Date, action: () -> Void) -> Date {
+    action()
+    return date
+}
+
+var actionDate: Date!
+
+let resultDate = foo(date: Date.now) {
+    actionDate = resultDate
+    print("Assigned")
+}
+
+print(actionDate == resultDate)  // false
+print(actionDate)                // Optional(2001-01-01 00:00:00 +0000)
 ```
 
-虽然该方法能够编译通过，但仅作为应急手段，且仍然触发警告。
+现象：
+即使 `actionDate` 未初始化，它被捕获后出现了奇怪的默认值。
+类似现象也出现在 `Int`、`Bool`、`Double` 等类型上（分别变为 0、false、0.0）。
 
-* Jamie（警告的引入者）解释指出，此警告是设计使然——之前未提示是编译器的一处缺失，这本应一直是个错误。若要“说服”编译器接受这种潜在不安全操作，通常需要显式表明不安全性质（比如使用 unsafeBitCast 等低级方法）。他提出一种更结构化但不完全安全的实现方式：使用枚举封装 isolated 与 nonisolated 两种情况，通过 unsafeBitCast 将函数拆分保存，再根据当前 isolation 调用。这需要谨慎使用，且存在布局兼容性风险。
-* Ole 还指出 Swift Evolution 已有提案 SE-0431（关于 @isolated(any) 函数类型的设计），其详细讨论了 future direction，计划支持局部函数或闭包带 value-specific 隔离（如 isolated captures），从而在某些场景下可允许调用不跨隔离边界 —— 若调用者与闭包 isolation 一致，则可以同步调用而无需 await。
+**社区分析：**
 
-小结
+* **bbrk24**：怀疑是“零初始化”导致的比特模式误读（`Date` 的内部存储 0 会映射为 2001-01-01）。
+* **jamieQ**：问题在于“闭包捕获顺序错误”，在局部作用域中会被编译器检测到错误。
+* **xwu**：确认是 Swift 顶层脚本模式的旧 Bug，不会出现在普通作用域中。
+* **Slava Pestov**：指出问题可能来自编译器处理 resilient struct 存储属性的系统性缺陷。
 
-* `@isolated(any)` 表示闭包隔离信息是动态的（可绑定任意 actor），但这也限制了它的静态调用方式。
-* 当前 Swift 的设计不允许将 `@isolated(any)` 类型闭包无声转换为同步调用，因此触发警告，且未来将被提升为错误。
-* 临时绕开方案包括使用 `nonisolated(unsafe) `或高级的 unsafe 封装，但这些方法都不够优雅且可能潜藏风险。
-* 社区期望未来语言支持 value-specific isolation 或 isolated captures，提供更安全、直观的调用策略。
+**结论：**
 
-这场讨论突出显示了 Swift 在隔离模型上的类型系统限制，特别是在测试与 mocking 框架中对同步执行闭包的需求与语言设计保护并发安全之间的矛盾。如果你希望对未来或其他社区反馈进行跟踪，我可以继续帮忙整理。
+* 属于编译器 Bug，而非语言特性。
+* 避免在闭包中捕获尚未初始化的变量。
+* 若遇到类似问题，应提交最小重现场景给 Swift 项目组。
 
-5、讨论[通过限制字符集提升 String 可用性](https://forums.swift.org/t/opinions-on-the-best-way-to-improve-string-ergonomics-by-restricting-allowed-characters/81895 "通过限制字符集提升 String 可用性")
+### 2、Approachable Concurrency 示例编译失败
 
-该帖由 Jeremy Bannister 发布于 2025 年 8 月 31 日，讨论在处理已知格式的字符串（如 Social Security Number）时，Swift 应否提供更简洁易用的类型或 API。开发者希望避免复杂的 `String.Index` 操作，例如：
+原帖：[帮助理解 Approachable Concurrency 示例代码编译失败](https://forums.swift.org/t/help-with-approachable-concurrency-sample-code/82634 'Approachable Concurrency 示例编译失败')
+
+作者 **ibex10** 在 Swift 6.2 的“Approachable Concurrency”示例中遇到编译错误：
 
 ```swift
-extension SSN {
-    var standardWrittenForm: String {
-        rawValue[...2] + "-" + rawValue[3...4] + "-" + rawValue[5...]
-    }
+struct Image {
+  static var cachedImage: [URL: Image] = [:]
+
+  static func create(from url: URL) async throws -> Image {
+    if let image = cachedImage[url] { return image }
+    let image = try await fetchImage(at: url)
+    cachedImage[url] = image
+    return image
+  }
+
+  @concurrent
+  static func fetchImage(at url: URL) async throws -> Image {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    return await decode(data: data)
+  }
 }
 ```
 
-他们更倾向于用更直观的方式实现格式化行为，并寻求社区建议，如使用 [Character]、String.UTF8View 等方式实现更语义清晰的操作。
+错误提示：
 
-
-社区建议一览：
-
-* Xiaodi Wu (xwu) 建议使用固定长度的 ASCII-或 UTF-8 数组，如：
-
-```swift
-let rawValue: [9 of UTF8.CodeUnit]  // 即 [9 of UInt8]
+```txt
+Static property 'cachedImage' is not concurrency-safe because it is nonisolated global shared mutable state
 ```
 
-简洁明了，避免了复杂索引操作。
+**社区排查：**
 
-* Karl Traunmüller (ktraunmueller) 分享了自己实现的 ASCIIString 类型，用于处理已知只包含 ASCII 内容的字符串，具备针对该场景定制的 API。
-* Ole Begemann (ole) 推荐使用 Sequence 的标准 API 组合实现，比如：
+* **EngOmarElsayed**：建议检查语言版本；命令行编译通过，说明 Xcode 构建设置问题。
+* **Dmitry Kozhinov**：提醒要启用严格并发检查 `SWIFT_STRICT_CONCURRENCY = Complete`。
+* **Robert Ryan**：指出部分设置仅作用于特定 target；Intel 与 Apple Silicon 行为可能不同。
 
-```swift
-rawValue.prefix(3) + "-" +
-rawValue.dropFirst(3).prefix(2) + "-" +
-rawValue.dropFirst(5)
-```
+**结论：**
+该问题与构建配置和 actor 隔离设置有关，非语法错误。可通过确保语言模式和严格并发设置一致来解决。
 
-这方法虽稍繁，但可读、无侵入，且性能足够好。
+### 3、提案：Awaitable Assignment（可等待赋值）
 
-* Slava Pestov 提出一种优雅可选方案：使用 Regex 提取分组：
+原帖：[Awaitable Assignment 提案](https://forums.swift.org/t/pitch-awaitable-assignment/82627 '提案：Awaitable Assignment（可等待赋值）')
 
-```swift
-let m = try! #/(...)(..)(....)/#.wholeMatch(in: rawValue)!
-return "\(m.1)-\(m.2)-\(m.3)"
-```
-
-同时他认为最干净的做法是直接存储数字为 [Int8] 或类似结构，避免依赖 String 的奇怪索引行为。
-
-* Ole Begemann 还推荐更高效的字符串构造方式：
+提案希望允许在赋值语句中自然使用 `await`，让跨隔离域赋值更直观：
 
 ```swift
-String(decoding: bytes, as: Unicode.ASCII.self)
-String(validating: bytes, as: Unicode.ASCII.self)
+await self.storage = produceValue()
 ```
 
-前者始终返回字符串（对非法字节使用替代字符），后者用于安全尝试。
+目前语法要求必须在隔离上下文内，否则报错：
 
-总结：
+```swift
+@MainActor
+class IsolatedTest {
+  var storage: Int = 5
 
-社区整体认为 Swift 已经提供了足够的 API 来安全处理字符串，但在面对固定格式或受限字符集的场景时，现有方法略显繁琐。不同开发者提出了几种思路：
+  nonisolated func performAssignment() async {
+    // 错误：Main actor-isolated property 不能从非隔离上下文修改
+    await self.storage = produceValue()
+  }
+}
+```
 
-* 用固定长度的字节数组来替代 String；
-* 使用自定义的 ASCIIString 类型；
-* 利用 prefix、dropFirst 等组合 API；
-* 借助正则表达式分组来简化逻辑。
+**提案目标：**
 
-讨论显示大家都希望能有更简洁、更语义化的解决方案，以提升固定格式字符串处理的可读性与易用性。
+* 放宽限制，允许 `await prop = expr` / `await obj[key] = expr`。
+* 减少 `MainActor.run` 等样板代码。
+
+**社区反馈：**
+
+* 优点：可读性更高、异步代码更自然。
+* 担忧：可能鼓励跨 actor 的零散修改，破坏并发安全性。
+
+**结论：**
+该提案聚焦于语法一致性改进，尚处草案阶段，未来可能进入正式 SE 流程。
+
+### 4. 已接受提案 SE-0494：`isTriviallyIdentical(to:)`
+
+原帖：[SE-0494：Add isIdentical(to:) methods for quick comparison](https://forums.swift.org/t/accepted-with-modifications-se-0494-add-isidentical-to-methods-for-quick-comparison-to-concrete-types/82695 '已接受提案 SE-0494：isTriviallyIdentical(to:)')
+
+Swift 新增实例方法 `isTriviallyIdentical(to:)`，用于**常量时间**判断两个对象是否“显然相同”。
+
+**核心说明：**
+
+* 原名 `isIdentical(to:)`，审核后改为 `isTriviallyIdentical(to:)`。
+* 用于**快速对象比较**（如缓存、memoization）。
+* 不做深度比较，仅判断是否“显然相同”。
+
+**设计理由：**
+
+* “Trivially” 表示快速、底层、非语义层的恒等性判断。
+* 命名平衡了技术表达与直观可读性。
+
+**最终决定：**
+
+* 提案已修改通过。
+* `Span` 类型也将加入该方法。
+* 目标是提供一种**性能优化型比较手段**。
+
+### 5、讨论 TaylorTorch：Swift 封装 LibTorch 的新尝试
+
+原帖：[TaylorTorch：现代 Swift 封装 LibTorch](https://forums.swift.org/t/taylortorch-a-modern-swift-wrapper-for-libtorch/82630 "TaylorTorch：Swift 封装 LibTorch 的新尝试")
+
+作者 **Pedro N. Rodriguez H** 推出 **TaylorTorch** —— 一个结合 Swift 自动微分与 PyTorch C++ 引擎（LibTorch）的新框架。
+
+**主要特性：**
+
+* 纯 Swift API，采用协议导向与 Sequential 构建方式。
+* 支持常见层（Linear、Conv、Multi-Head Attention、BatchNorm、GNN 等）。
+* 支持图神经网络（GNN），提供 MNIST、Seq2Seq、Karate Club 等示例。
+
+**项目链接：**
+
+* GitHub：[github.com/pedronahum/TaylorTorch](https://github.com/pedronahum/TaylorTorch)
+* Swift Package Index：[swiftpackageindex.com/pedronahum/TaylorTorch](https://swiftpackageindex.com/pedronahum/TaylorTorch)
+
+**未来规划：**
+
+* 扩展更多算子与层类型。
+* 引入 GPU / Metal 支持。
+* 构建丰富的模型库，推动 Swift 深度学习生态复兴。
 
 ## 推荐博文
 
-[掌握 Swift Foundation Formatter API。自定义格式样式 ](https://swiftwithmajid.com/2023/07/04/mastering-swift-foundation-formatter-api-custom-format-styles/ "掌握 Swift Foundation Formatter API。自定义格式样式")
+[Swift 并发编程中的全局执行器详解](https://juejin.cn/post/7562024713381855242/ "Swift 并发编程中的全局执行器详解")
 
-**摘要：**  本篇博客介绍了如何使用 Swift Foundation Formatter API 中的自定义格式样式。作者分享了自己在每个项目中都使用该 API 并构建自定义格式化逻辑的经验。博客中详细讲解了 FormatStyle 协议以及如何创建符合该协议的自定义格式样式。通过示例，展示了如何创建短数字格式样式和粗体数字格式样式，并说明了如何在自定义类型中重用这些格式样式。最后，作者还提供了一种封装格式化逻辑的方法，并在文章结尾鼓励读者跟随作者的 Twitter 并针对本文提出问题。。
+**亮点摘要：**
+全局执行器让 Swift 并发更结构化。通过 `@MainActor` 或自定义执行器划分领域，开发者能自然定义线程边界，避免陷入锁管理。
 
-[ElasticSearch 与 Swift 集成](https://juejin.cn/post/7326265442837528586/ "ElasticSearch 与 Swift 集成")
+这是从“写并发”到“设计并发”的一次思维转变。
 
-**摘要：**  本篇博客详细介绍了 Elasticsearch 与 Swift 的集成，旨在帮助开发者将强大的搜索引擎功能整合到 Swift 应用程序中，提升用户体验。文章首先介绍了 Elasticsearch 和 Swift 的背景，分别强调了Elasticsearch作为基于Lucene的搜索引擎的特性，以及Swift作为苹果主要开发语言的优势。
-核心概念与联系部分深入解释了集成前需要了解的核心概念，包括 Elasticsearch 的索引、查询、分词、词典等原理，以及Swift的类型安全、自动引用计数、高性能等特点。接着，文章详细探讨了集成的操作步骤，包括安装Elasticsearch、创建索引、使用Swift访问Elasticsearch、执行搜索查询等步骤。
+[SwiftUI 为什么弃用 MVVM？拥抱声明式 UI 的新范式](https://juejin.cn/post/7560558010063618086/ "SwiftUI 为什么弃用 MVVM？拥抱声明式 UI 的新范式")
 
-[swift 的内购测试](https://swiftwithmajid.com/2024/01/09/storekit-testing-in-swift/ "swift 的内购测试")
+**亮点摘要：**
+SwiftUI 的声明式特性让 MVVM 显得多余。
+UI 应该响应状态，而非由中间层驱动。
 
-**摘要：**  这篇博客介绍了在 Swift 中使用 StoreKitTest 框架进行应用内购买测试的方法。作者首先概述了最近 StoreKit 框架的重大变化，强调了新版本充分采用了 Swift 语言的异步和等待特性。随后，博客详细介绍了 StoreKitTest 框架，该框架允许我们编写测试用例以验证应用在应用内购买、退款、ask-to-buy 和订阅过期等方面的处理能力。通过示例代码，演示了如何使用 SKTestSession 类型执行购买、管理交易、模拟退款以及测试应用对交易更新的反应。博客还提到了创建 StoreKit 配置文件的必要性。
+SwiftData、编程式导航的出现，意味着「更轻、更直观」的架构正在成为主流。
+
+[Swift Approachable Concurrency (易用并发)](https://juejin.cn/post/7551726019867607079/ "Swift Approachable Concurrency (易用并发)")
+
+**亮点摘要：**
+Swift 6.2 引入默认主线程执行、自动推断隔离域等机制，让多线程开发更安全、更接近自然逻辑。
+
+`@concurrent` 标记后台任务，其余代码自动主线程安全执行。对 UI 项目尤为友好。
 
 ## 关于我们
 
-**Swift社区**是由 Swift 爱好者共同维护的公益组织，我们在国内以微信公众号的运营为主，我们会分享以 **Swift实战**、**SwiftUl**、**Swift基础**为核心的技术内容，也整理收集优秀的学习资料。
+**Swift 社区** 是由 Swift 爱好者共同维护的技术组织，主要通过微信公众号运营。
 
-欢迎关注公众号:Swift社区，后台点击进群，可以进入我们社区的交流讨论群。希望我们Swift社区是大家在网络空间中的另一份共同的归属。
+我们专注于 **Swift 实战、SwiftUI、Swift 基础** 三大方向，每周为你带来精选内容与最新生态资讯。
+
+**关注公众号：「Swift社区」**
+后台回复 “进群” 即可加入开发者交流圈。
 
 <img width="500" alt="Swift社区" src="https://user-images.githubusercontent.com/24238160/132703149-34121c6c-fd18-491c-a697-58a0fabf3060.png">
 
