@@ -97,129 +97,128 @@ Swift 周报在 [GitHub 开源](https://github.com/SwiftCommunityRes/SwiftWeekly
 
 
 ## Swift论坛
-1、讨论[介绍Swift Erlang Actor System：构建类 Erlang 的分布式 Actor 模型](https://forums.swift.org/t/introducing-swift-erlang-actor-system/81248 "介绍Swift Erlang Actor System：构建类 Erlang 的分布式 Actor 模型")
-该帖介绍了一个全新的开源项目：Swift Erlang Actor System，灵感来自 Erlang 的并发与容错模型，旨在为 Swift 带来轻量、可分布式、可监督的 Actor 架构。
+1、提议[提议改进类型检查器的路线图](https://forums.swift.org/t/roadmap-for-improving-the-type-checker/82952 "提议改进类型检查器的路线图")
 
-核心特性包括：
-•	类似 Erlang 的 actor 结构，每个 actor 是独立的轻量线程，拥有唯一标识
-•	支持**消息发送 (tell) 和异步请求 (ask)**模式
-•	支持actor 监控与监督树 (supervision)，自动重启失败子 actor
-•	支持在本地或远程集群运行多个 actor 系统（基于 NIO）
-•	可自定义调度器与行为定义，支持高扩展性
+该贴由 Slava Pestov 于 2025 年 10 月 30 日发布，概述了 Swift 编译器“表达式类型检查（expression type-checking）”部分的当前已完成工作、正在进行中的改进、以及未来计划。其目标是减少编译器因类型检查“太慢”或“无法在合理时间内完成”而给开发者造成的痛点。  ￼
 
-示例：
+核心内容
+
+* 贴文首先介绍了类型检查器的基本机制：通过为子表达式引入类型变量、构造约束（如子类型、调用、重载选择等）、使用解约束（constraint solving）过程来确定类型。对“类型基于重载（type-based overloading）”的解释尤为深入。  ￼
+* 因为重载带来的“或（disjunction）”约束组合可能呈指数增长，类型检查在最坏情况下算法复杂度极高，因此编译器设定了两类保护机制：每个表达式限制“尝试分支次数（disjunction choice）”与“分配内存规模（arena size）”。超过界限，编译器中止并报错 “the compiler is unable to type-check this expression in reasonable time”。  ￼
+* 已完成的改进（Swift 6.2）：通过剖析大型项目和慢表达式发现瓶颈，优化回溯机制、图算法、约束求解 arena 内存使用等。比如某表达式从 ~10 秒下降为 ~6 秒。  ￼
+* 正在进行中的改进（main 分支／Swift 6.3 预览）：优化“分支选择算法（disjunction selection）”，使得类型检查器能更快判定选项；优化 arena 使用，使许多表达式从几十秒降至数秒。  ￼
+* 未来计划（更为长期）：
+* 优化“绑定”逻辑（bindings subsystem），减少与类型变量相关的二次或更高复杂度操作。  ￼
+* 移除或简化现存性能「hack」，如针对特定操作符的硬编码优化。  ￼
+* 改进“salvage mode”（用于失败后诊断的机制），避免其本身引入性能瓶颈或产生误诊断。  ￼
+* 探索语言层面的变化，例如在运算符查找、文字常量推断、以及泛型绑定等方面，为类型检查器减少指数复杂度的触发条件。  ￼
+
+总结
+
+该路线图明确指出，Swift 类型检查器虽已具备合理性能，但在某些极端或大型表达式场景中仍然可能“卡住”或表现不佳。通过一系列工程改进（性能优化、算法重构、约束求解改良）和语言辅助（可能的语法/语言模式改动），Swift 团队旨在显著改善开发者体验。对日常编码、尤其是涉及大量泛型、重载或复杂表达式的代码库而言，这些改进是非常有益的。
+
+2、提议[在 defer 语句中支持异步调用](https://forums.swift.org/t/support-async-calls-in-defer-bodies/81790 "在 defer 语句中支持异步调用")
+
+该提案由 Frederick Kellison‑Linn（论坛用户名 “Jumhyn”）于 2025 年8 月23日发布，旨在允许在 async 上下文中 defer 块内使用 await 调用异步函数。当前 Swift 中，即使函数标记为 async，其 defer 块也不允许出现 await。 ￼
+
+核心内容
+
+* 动机：defer 用于在函数退出时执行清理逻辑（如关闭资源、撤销状态等）。但当清理逻辑本身需要异步操作（例如异步释放、网络日志发送、清理外部系统状态）时，目前无法直接在 defer 中调用 await，开发者只能手动在每个退出点重复调用或启动不受保证完成的 Task。 ￼
+* 提议方案：允许在 async 上下文中的 defer 块体内书写 await，且在函数或作用域退出时，编译器隐式 await 所有这些 defer 块中的异步调用，使其在退出前完成。示例如下：
 ```Swift
-struct Greeter: Behavior {
-  func receive(context: ActorContext, message: String) async throws {
-    print("Hello, \(message)!")
-  }
-}
-
-// 创建系统与 actor
-let system = ActorSystem()
-let greeter = try await system.spawn(name: "greeter", behavior: Greeter())
-await greeter.tell("Swift")
-```
-
-设计目标并非替代 Swift 原生 actor 类型，而是提供类似 Akka/Erlang 的高阶抽象：关注 actor 间通信与容错结构，而非仅数据隔离。特别适用于构建长生命周期的服务端组件、聊天系统、游戏服务器或微服务框架。
-
-社区反馈积极，许多开发者对该系统如何与 Swift 并发原语（如原生 actor、Task）协同工作提出兴趣，也有人提到可作为 Swift 分布式计算生态的重要尝试。该项目仍处于早期阶段，作者欢迎社区贡献与反馈。
-
-2、讨论[项目进展GSoC 2025：改进 Swift 测试框架的控制台输出](https://forums.swift.org/t/gsoc-2025-progress-feedback-request-for-an-improved-swift-testing-console-output/81214 "项目进展GSoC 2025：改进 Swift 测试框架的控制台输出")
-
-该帖由 Google Summer of Code 2025 学生项目参与者 @Aditya_Narayan 发布，展示了其正在进行的项目成果：改进 Swift Package Manager 测试输出的可读性和信息丰富性，并征求社区反馈。
-
-目前的 Swift 测试输出风格较为简洁，缺乏清晰的视觉分隔和上下文提示，特别在大型测试套件中，开发者难以快速定位失败信息。该项目的目标是提供更结构化、更具可视层级的控制台输出体验。
-
-核心改进包括：
-•	更清晰的测试生命周期提示（测试开始、成功、失败等）
-•	颜色高亮（例如绿色表示通过，红色表示失败）
-•	缩进与层次结构：使测试组与测试用例输出更具结构感
-•	支持环境变量启用增强格式，保持默认行为向后兼容
-
-示例输出（简化）：
-```Swift
-Running test suite MyPackageTests
-
-✓ MathTests.testAddition
-✓ MathTests.testSubtraction
-𐄂 MathTests.testDivisionByZero
-  → Error: Division by zero
-
-Test run finished:
-✓ 2 passed
-𐄂 1 failed
-```
-该项目计划在 SwiftPM 中实现完整集成，目前处于开发中期阶段，作者欢迎社区提出 UI、功能和行为上的反馈建议。
-
-此项工作有望提升 Swift 开发者的测试体验，特别在 TDD 和 CI 场景下提供更高效的问题定位能力。社区普遍鼓励并支持该方向，部分成员提出增加自定义 formatter 和可配置输出级别等建议。
-
-3、提议[预提议基于数据依赖的测试串行化机制](https://forums.swift.org/t/pre-pitch-data-dependent-test-serialization/81251 "预提议基于数据依赖的测试串行化机制")
-该帖提出一个早期想法，旨在改进 Swift 测试执行模型：允许基于数据依赖关系对测试进行自动串行化（Serialization），以解决测试间共享资源时可能出现的竞争条件或不确定行为。
-
-当前 SwiftPM 的测试运行机制默认高度并发，在某些情况下会导致如下问题：
-•	多个测试访问相同的数据库、文件系统或全局状态，产生冲突
-•	开发者只能通过全局串行化（例如 --parallel false）或人为组织测试文件回避问题，这既不理想也不具扩展性
-
-该预提议设想一种声明式机制，允许测试指定其资源依赖，例如：
-```Swift
-@SharedResource("UserDefaults")
-func testUsesUserDefaults() {
-  ...
+func f() async {
+  await setUp()
+  defer { await performAsyncTeardown() }   // 新支持
+  try await doSomething()
 }
 ```
-SwiftPM 可据此自动将共享同一资源的测试用例串行执行，而无冲突的测试仍可并发运行，从而在并发性与正确性之间取得平衡。
+只有当包裹 defer 的函数或闭包是 async 的情况下，这样的 await 才被允许。 ￼
 
-目前该想法尚未形成完整 pitch，作者希望征求社区意见，包括：
-	•	是否存在类似需求场景？
-	•	最合适的声明方式是什么？属性宏？测试注解？测试分组？
-	•	是否应由 SwiftPM 或 XCTest 层来实现？
+* 源码兼容性：该改动为新增特性，不改变现有语义。现有 defer 块仍然只能同步执行，因此不会破坏兼容性。 ￼
+* 替代方案被放弃：提案中讨论了添加 defer async { … } 语法或显式标注 async defer，但认为不必要，因为只要函数为 async 且使用 await，已有语义足够。 ￼
 
-社区反馈积极，多数人认同该提议对中大型项目及集成测试尤为重要，也有人提到类似机制在其他测试框架（如 pytest fixtures）中已有良好实践。该方向有望在未来形成正式提案，提升 Swift 测试系统的灵活性与可靠性。
+社区反馈
 
-4、提议[提议用 repo 工具替代 update-checkout 脚本管理 Swift 项目依赖](https://forums.swift.org/t/pitch-replacing-the-update-checkout-script-with-repo/81182 "提议用 repo 工具替代 update-checkout 脚本管理 Swift 项目依赖")
-该提议建议用 Google 的 repo 工具替代当前维护 Swift 工程多仓库依赖的 update-checkout 脚本。update-checkout 是当前 Swift 社区用于同步 Swift 项目主仓库（如 swift, llvm-project, swift-tools-support-core 等）的一种 Bash 脚本，但随着依赖图复杂度上升，其维护变得困难且不易扩展。
+* 多位开发者表达了强烈支持，认为这是“许多场景一直缺少”的功能。例如开发者 Tony Allevato 表示：“我也遇到这个问题，不得不用 Task { … } 绕过，真希望能直接用 await。” ￼
+* 讨论中也提出一些细节问题，例如：当多个 defer 块含异步调用时，其执行顺序是否仍为“后进先出”（LIFO）、是否应并行调用或串行 await。开发者倾向认为应保持当前 defer 的逆序串行执行。 ￼
+* 对于取消情形 (task cancellation) 和作用域退出时异步 defer 的行为，也有讨论：是否 defer 中的 await 会因取消而跳过？提案暂时假定与现有 async let 的行为类似。 ￼
 
-提议中指出，repo 工具具备以下优势：
-•	更强的多仓库版本协调与同步能力（通过 manifest.xml）
-•	跨平台兼容，支持 Linux 与 macOS
-•	能够追踪特定 commit，而非仅使用 branch
-•	已广泛应用于 Android 等大型开源项目中，生态成熟
+总结
 
-一个典型的 repo manifest 可能如下所示：
-```xml
-<manifest>
-  <remote name="github" fetch="https://github.com/apple/" />
-  <project name="swift" path="swift" revision="main" />
-  <project name="llvm-project" path="llvm-project" revision="main" />
-  ...
-</manifest>
+这项提案为 Swift 的并发语义增加了一个实用且易用的提升 —— 让 defer 清理逻辑也能自然地支持 await。对那些在函数退出时需执行异步清理任务的代码（如日志、资源释放、状态同步）尤其有益。提案遵循语义清晰、兼容性低风险的原则。目前已进入更正式的审查阶段（SE-0493: Support async calls in defer bodies） ￼。如果被采纳，将减少很多样板代码、提高并发 cleanup 场景的安全性与可读性。
+
+3、讨论[介绍Swift SDK for Android](https://forums.swift.org/t/announcing-the-swift-sdk-for-android/82845 "介绍Swift SDK for Android")
+
+该公告由 Swift Android Workgroup 发布于 2025 年10月24日，标志着 Swift 正式推出 Android 平台支持的 SDK 预览版本。 ￼
+
+核心亮点
+
+* SDK 支持在 Android 设备上用 Swift 开发原生代码，用户可在 Windows 安装器中获取，或在 Linux/macOS 上单独下载。 ￼
+* 提供 “Getting Started” 指南与 “Swift for Android Examples” 演示仓库，帮助开发者快速将已有 Swift 包迁移到 Android。 ￼
+* 强调已有超过 25% 的包库（通过 Swift Package Index）已能构建 Android，一些 UI-无关的核心逻辑可以跨平台复用。 ￼
+* 提及 swift‑java 项目（Swift ↔ Java 互操作桥接）已整合，用于 Swift 与 Android 原生 Java/Kotlin 代码的双向绑定。 ￼
+* 下一步计划：工作组正在制定“Swift on Android”愿景文档，并建立了项目看板和正式 CI 流程以支持 SDK 的长期发展。 ￼
+
+总结
+
+这次发布是 Swift 向 Android 跨平台生态迈出的关键一步。对于已有 iOS 或 macOS 使用 Swift 的开发者来说，这意味着他们可以用同一语言和工具链向 Android 扩展业务逻辑。虽然当前处于 预览 模式，尚未覆盖全部 UI 框架与工具链成熟度，但其生态兼容性与跨平台潜力是极具意义的。建议你在项目中关注：Swift 包是否标注 Android 兼容、互操作（Swift ↔ Java/Kotlin）桥接方案、以及 Android 环境下 Swift 工具链支持情况。
+
+4、讨论[介绍Swift Configuration](https://forums.swift.org/t/introducing-swift-configuration/82368 "介绍Swift Configuration")
+
+该帖子由 Honza Dvorsky 于 2025 年9 月25日 发布，宣布 Swift Configuration 的初始发行版本。该库旨在为 Swift 应用与库提供统一的配置读取接口，简化不同来源（环境变量、命令行参数、JSON/YAML 文件、内存值）组合使用的场景。  ￼
+
+核心功能如下：
+
+* 使用 ConfigReader(providers: [...]) 创建配置读取器，并可按顺序组合多个配置源，从而实现优先级覆盖机制（如 JSON 默认 → 环境变量覆盖）示例：
+```Swift
+let config = ConfigReader(providers: [
+    EnvironmentVariablesProvider(),
+    try await JSONProvider(filePath: "/etc/config.json")
+])
+let httpTimeout = config.int(forKey: "http.timeout", default: 60)
+print(httpTimeout) // 若环境变量 HTTP_TIMEOUT=15，则打印 15  
+```  [oai_citation:1‡Swift Forums](https://forums.swift.org/t/introducing-swift-configuration/82368?utm_source=chatgpt.com)  
 ```
-若该提议被采纳，Swift 项目贡献者在初次设置与同步多个仓库时，将可通过简单命令获取所有组件：
-```bash
-repo init -u https://github.com/apple/swift-manifest
-repo sync
-```
-社区讨论重点集中在工具引入的额外依赖、是否适用于所有平台开发者、与现有 CI/CD 系统的集成难度等方面。有成员建议可以并行支持两种机制过渡一段时间，或将 repo 工具集成进更高层的开发脚本中以隐藏复杂性。
 
-总体来说，该提议被认为是迈向更可维护和现代化工程管理的潜在步骤，尤其对于频繁参与 Swift 项目源码开发的工程师来说更具意义。
+* 支持同步、异步、甚至“热重载（hot-reloading）”的访问模式；支持命名空间/分层（namespacing/scoped readers）、访问日志（access logging）以及敏感值遮蔽（secret redaction）等功能。  ￼
+* 内置 Provider 包括环境变量、命令行参数、JSON 和 YAML 文件、内存值；同时开放 ConfigProvider 协议，允许开发者实现并共享自定义来源。  ￼
+* 虽然初版为 0.1.0 预发行版，作者提醒对 API 稳定性有要求的库或产品可能要等 1.0 正式版。但鼓励社区尝试并反馈，以塑造 1.0 版本。  ￼
 
-5、讨论[讨论标准库 Concurrency 模块中互斥锁的使用现状](https://forums.swift.org/t/use-of-mutex-within-the-stdlibs-concurrency-module/81191 "讨论标准库 Concurrency 模块中互斥锁的使用现状")
-该帖由社区成员发起，探讨 Swift 标准库 Concurrency 模块内部使用互斥锁（mutex）的具体原因与影响，尤其在 Swift 强调无锁并发（如基于任务、actor 等模型）的背景下，这种设计引发了一定疑问。
+社区反响 &使用建议：
 
-提问集中于以下几点：
-•	Swift 的并发系统是否仍依赖传统互斥锁？
-•	使用锁的部分是否对性能或可扩展性构成瓶颈？
-•	是否考虑使用 lock-free 数据结构或调度机制替代？
+* 多位开发者表示这是 Swift 在服务端配置管理方面“非常需要”的功能扩展。  ￼
+* 有用户询问其在 iOS 应用中的适用性，作者确认是可以用于 iOS／SwiftUI 项目，并建议在 App 初始化阶段创建 ConfigReader 并传递至视图层。  ￼
+* 有用户关心与 Swift Argument Parser 的集成问题：建议如果只需读取命令行参数，则使用 Argument Parser；如需跨来源组合、库级配置则用 Swift Configuration。  ￼
 
-Swift 核心开发者 @Philippe_Hausler 做出回应，指出：
-•	确实存在互斥锁使用，但仅限于必要场景，如保护底层任务调度器的数据结构、执行器管理等
-•	某些数据结构（如运行队列或调度表）在多线程高并发环境下仍需锁保护，以避免竞态条件
-•	Swift 并发的高层抽象（如 async let、Task、actor）本质上是无锁或封装锁机制，开发者通常无需直接接触锁
+为何值得关注：
 
-总结来看，虽然 Swift Concurrency 强调结构化并发与数据隔离，但在标准库底层实现中，为了性能与正确性，适当使用互斥锁仍属合理工程权衡。这一实现细节对最终用户影响极小，主要关注点是正确性、安全性与可维护性。
+* 对于服务器端、命令行工具、跨平台 Swift 应用而言，配置管理常为“散落”且硬编码的痛点。Swift Configuration 提供了标准化的 API 和扩展机制。
+* 如果你的项目或团队正在用 Swift 构建后台服务、工具或库，这个包意味着未来你可以统一配置逻辑、避免重复编写“读取 env → file → args”的样板。
+* 初版虽为 0.x，但已被纳入 2025 年10 月的 “What’s New in Swift” 中作为生态亮点：版本 0.2.0 已发布。  ￼
 
-社区对此表示理解，同时也鼓励未来继续探索 lock-free 或更优化的数据结构，以充分发挥 Apple Silicon 等多核平台的潜力。
+5、讨论[Swift Collections 1.3.0](https://forums.swift.org/t/swift-collections-1-3-0/82429 "Swift Collections 1.3.0")
+
+该版本由 Karoy Lorentey 于 2025 年9 月29 日发布，目标面向 Swift 在“低层系统编程”场景中的容器类型需求，新增多个“拥有权感知（ownership-aware）”的数据结构变体。  ￼
+
+核心新增功能
+
+* 新模块 BasicContainers：包括两种新数组类型
+* UniqueArray<Element>：一个**非可复制（noncopyable）**的数组变体，取消 Array 的写时复制机制（copy-on-write），支持存放“非可复制元素”。  ￼
+* RigidArray<Element>：更进一步，除了不可复制，还禁止动态扩容。初始化时指定容量，超出后插入视为编程错误。适用于资源受限或延迟敏感场景。  ￼
+* 新模块 TrailingElementsModule：提供 TrailingArray，用于 C 风格“紧跟可变尾部存储”的互操作场景。  ￼
+* 模块 ContainersPreview：发布实验性类型 Box<T>，一个包装任意值的非可复制、堆分配盒子。  ￼
+* 本版支持 Swift 工具链版本 6.0、6.1 和 6.2。  ￼
+
+社区反馈与讨论
+
+* 一位开发者认为 UniqueArray 的命名可能引起误解，初读以为是“唯一元素数组（如 ordered set）”。  ￼
+* 核心作者回应：命名经团队反复讨论，决定保留 Unique 前缀，并强调这是一个原型 playground 包，未来若纳入标准库还可能修改。  ￼
+* 社区用户提问是否有基准测试（benchmark）比较 Array、UniqueArray、RigidArray。作者回应正在做，但主要用于验证没犯错误，而非追求极致性能差异。  ￼
+* 有使用者反映，在他们的场景中反而更多倾向选择 RigidArray，因为他们更看重容量固定和可预测性，而 UniqueArray 动态扩容这一特性反而让他们觉得“中间地带”的吸引力不强。  ￼
+
+总结
+
+Swift Collections 1.3.0 是一次非常针对系统级／嵌入式／性能敏感场景的容器库升级，引入了“不可复制”与“固定容量”两种新维度。对于大多数应用而言，经典 Array 仍足够，但如果你的项目涉及“非可复制元素类型”或对容量与内存行为有严格控制需求（如游戏引擎、图形处理、嵌入式系统），则 UniqueArray 与 RigidArray 提供了有价值的新工具。
 
 ## 推荐博文
 
