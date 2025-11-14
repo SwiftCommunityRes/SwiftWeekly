@@ -93,6 +93,138 @@ iPhone Pocket 是特别版产品。短带款提供八种色彩外观：柠檬色
 
 ## Swift论坛
 
+### 1、支持 ~Copyable、~Escapable 在标准库简单协议中
+
+作者：Ben Cohen ｜ 发布日期：2025 年 11 月 7 日
+[阅读原帖](https://forums.swift.org/t/support-copyable-escapable-in-simple-standard-library-protocols/83083 "支持 ~Copyable、~Escapable 在标准库简单协议中")
+
+这是一项针对 Swift 标准库协议的小而关键的提案，目标是让这些协议能够兼容“非可复制（non-Copyable）”和“可逃逸（Escapable）”类型，从而进一步推动 Swift 新的所有权模型在生态中的采用。
+
+**核心要点：**
+* 提议将以下协议声明为精炼（refine） ~Copyable 与 ~Escapable：
+* Equatable, Comparable, Hashable
+* CustomStringConvertible, CustomDebugStringConvertible
+* TextOutputStream, TextOutputStreamable
+* 同时，将 LosslessStringConvertible 标记为精炼 ~Copyable。  ￼
+* 此外，提案建议更新 Optional 与 Result 的 Equatable/Hashable 关联条件，使其支持元素类型满足 ~Copyable & ~Escapable 的情形。  ￼
+* 提出该变更不会改变现有语义或破坏兼容性，而是扩展协议的可适用类型集合。  ￼
+* 提案背景：目前标准库协议大量依赖于类型为 “可复制” 或 “不可逃逸” 的假设，这限制了将非可复制类型或资源型类型（如唯一所有权结构）用于这些协议的情况。通过该变更，可让这些类型更方便地参与如 Hashable、Equatable 等通用协议。  ￼
+
+**小结：**
+
+如果你的代码或库即将采用 Swift 的所有权模型（非可复制类型、借用/消耗语义）——那么这项提案是极其有意义的。它删减了因为标准协议“假定可复制／不可逃逸”而导致的障碍，让更多种类的类型能参与生态内常用协议。你可在未来项目中留意：当标准库版本支持后，可尝试将自定义非可复制类型也纳入 Equatable、Hashable、CustomStringConvertible 等协议。这将提升资源型类型的可用性与通用性。
+
+### 2、为任意 Swift PM 包生成文档的提案
+
+作者：Chris McGee ｜ 发布日期：2025 年11 月12 日
+[查看提案](https://forums.swift.org/t/pitch-documentation-generation-for-any-swiftpm-package/83174 "为任意 Swift PM 包生成文档的提案")
+
+这则 pitch 提出了一个简化并标准化 Swift 包文档生成流程的建议：通过新增 swift package generate-documentation 命令，让任何使用 DocC 的 SwiftPM 包能“一键生成” HTML API 文档，而无需手动配置插件、symbol-graph、archive 合并等繁琐步骤。 ￼
+
+**核心要点：**
+* 动机：目前虽然 DocC 能生成 API 文档，但对包作者而言，配置门槛高、流程繁琐，许多包因此缺乏优质文档。 ￼
+* 提案：将文档生成流程内置于 SwiftPM，通过新命令自动发现产品／目标、生成 symbol graph、合并多个目标文档并输出为统一浏览结构。示例界面如下：
+```bash
+swift package generate-documentation
+```
+无需手动指定具体 target。 ￼
+
+* 理想效果：包作者与使用者均能快速浏览包的 API、模块结构与文档内容，从而提升 Swift 社区中包的可发现性与可用性。
+* 符合生态趋势：随着 DocC 与 SwiftPM 的深度融合，该提案希望将文档生成变为默认而非附加操作。
+
+**小结：**
+如果你或你的团队正在维护 SwiftPM 包，尤其是希望提高包的文档质量与使用友好度，这一提案值得密切关注。一旦实现，你将能更轻松地为你的库发布在线文档，而无须额外插件或复杂配置。建议在周报中提醒团队：在该命令支持后可立即评估迁移路径。
+
+### 3、通用化 ContiguousBytes 以支持 Span 等类型
+
+作者：Douglas Gregor ｜ 发布日期：2025 年11 月 7 日
+[查看提案](https://forums.swift.org/t/pitch-generalize-contiguousbytes-to-support-span-et-al/83082 "通用化 ContiguousBytes 以支持 Span 等类型")
+
+这篇 pitch 针对标准库中的协议 ContiguousBytes 提出了增强建议：让它能够支持新引入的“连续存储视图”（如 Span、RawSpan 等）以及“非可复制（non-Copyable）”和“不可逃逸（non-Escapable）”类型，从而提升其适用范围。
+
+**核心要点：**
+* 背景：ContiguousBytes 目前用于表示能够输出其底层字节存储（如 Data, Array<UInt8> 等）并提供 withUnsafeBytes 闭包访问。 ￼
+* 问题：新的 Span 类型家族设计为轻量 “借用视图”，可能是不可逃逸或非可复制类型，因此当前 ContiguousBytes 限制其 Self: ~Copyable, ~Escapable 无法使这些类型符合协议。 ￼
+* 提案：修改 ContiguousBytes 定义，将其要求调整为更加通用：
+```Swift
+public protocol ContiguousBytes: ~Escapable, ~Copyable {
+    func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R
+    func withBytes<R, E>(_ body: (RawSpan) throws(E) -> R) throws(E) -> R
+}
+```
+同时让 Span, MutableSpan, RawSpan, MutableRawSpan, UTF8Span, InlineArray 等类型都符合该协议。 ￼
+
+* 讨论要点包括：
+* 是否应优先使用 withBytes(RawSpan) 而非传统 withUnsafeBytes。
+* 如何处理旧 API 与新 API 的交互、可用性注解（availability）与编译器支持。 ￼
+
+**小结：**
+
+对于希望在 Swift 中使用低级字节视图或固定容量/借用数组等新型存储类型的开发者而言，这项提案具有重要意义。它可让这些类型与现有标准库字节接口兼容，从而简化诸如序列化、数据解析、网络字节流等场景的 API 设计。建议项目团队关注该提案的进展，并在未来考虑采用 Span 类型及其字节访问优化。
+
+### 4、恢复提议：为元组自动生成 Hashable 一致性（SE-0283）
+
+作者：Joshua Cleetus ｜ 发布日期：2025 年 11 月 9 日
+[阅读原帖](https://forums.swift.org/t/pitch-automatic-hashable-conformance-for-tuples-revival-of-se-0283/83105 "恢复提议：为元组自动生成 Hashable 一致性（SE-0283）")
+
+这篇 pitch 提出了一个实用而常见的改进建议：当元组的所有元素都遵循 Hashable 协议时，让编译器自动将该元组类型识别为 Hashable。这项功能意在节省手动扩展元组协议的一致性代码，并促进元组在诸如 Dictionary 或 Set 中作为键的使用。
+
+核心要点如下：
+* 痛点描述：目前，尽管 (Int, String) 的元素类型 Int 和 String 均为 Hashable，但元组 (Int, String) 本身并不自动符合 Hashable，因此不能直接用作字典键。提案指出这是与语言可读性和生态惯例不一致之处。  ￼
+* 提案方案：当元组 (T0, T1, …, Tn) 中每个 Ti 都符合 Hashable 时，自动生成如下扩展：
+```Swift
+extension (T0, T1, …, Tn): Hashable
+  where T0: Hashable, T1: Hashable, …, Tn: Hashable
+{
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(0)         // 类型判别符，防止不同元组混淆
+    hasher.combine(self.0)
+    hasher.combine(self.1)
+    …
+    hasher.combine(self.n)
+  }
+}
+```
+注：== 运算符对于元组元件数不超过 6 已由标准库通过重载提供，无需再次生成。  ￼
+
+* 适用规则：
+* 若且仅若所有元组元素均遵循 Hashable，元组即自动符合 Hashable。
+* 若任何一个元素不符合 Hashable，则该元组不自动符合。
+* 嵌套元组、元素为元组、元素为数组（如 Array<T> 若 T: Hashable）等均支持。  ￼
+* 兼容性与实现影响：
+* 仅为新增自动一致性，不会破坏现有代码，因为没有移除任何功能；手动扩展的情形仍可用。
+* 对 ABI 无影响，因为这是源级扩展，不涉及运行时布局改变。  ￼
+* 历史背景：
+* 原提案 SE-0283（2020）曾被接受，目标让元组同时自动符合 Equatable、Comparable 和 Hashable。  ￼
+* 但因“非名义类型（non-nominal type）”自动一致性实现在运行时/编译器中存在挑战，最终被撤回。  ￼
+* 该 pitch 是对 SE-0283 的“限定复兴”——聚焦仅 Hashable 且待编译器对元组一致性支持成熟。  ￼
+
+**小结：**
+这项提案虽看似“小改”，但对于许多使用元组作为复合键、缓存标识、数据结构的开发者而言，是一个极具可用价值的提升。若被采纳，将大幅减少样板代码，并提升元组类型在 Swift 生态中的整合度。但其是否会实施，仍取决于编译器对于“非名义类型自动协议一致性”底层机制的成熟度。
+
+
+### 5、为什么 removeLast(_:) 不返回值？
+
+作者：Matt Neuburg ｜ 发布日期：2025 年 11 月 10 日
+[阅读原帖](https://forums.swift.org/t/why-doesnt-removelast-return-a-value/83116 "为什么 removeLast(_:) 不返回值？")
+
+在这篇讨论中，用户 Matt Neuburg 提出一个长期困扰：在 Swift 中，removeLast() 会移除并返回最后一个元素，但其重载方法 removeLast(_:)（移除多个元素）却仅移除而不返回这些元素。他认为从“最少惊讶原则（Least Surprise Principle）”出发，removeLast(_:) 理应返回被移除的元素集合。讨论中标准库团队成员及其他用户给出了性能与设计层面的解释。
+
+核心观点：
+* 问题背景：虽然 removeLast() 在 Array 等可变集合类型上移除最后一个元素并返回它，但 removeLast(_ n: Int) 仅移除最后 n 个元素，不返回它们。Matt 指出自己每次都必须先做 let removed = array.suffix(n)，然后再 array.removeLast(n)，感觉繁琐且容易出错。  ￼
+* 标准库团队解释（Tony Allevato）：当只移除一个元素时返回值「廉价」且直观；但若移除多个元素，若要返回这些元素，就必须在移除前复制它们或生成一个切片（slice）保持原始存储。两者皆可能带来性能开销：
+* 返回 slice：需保留原底层存储直到切片销毁，可能禁用 COW 优化。  ￼
+* 复制数组：若大多数用户不需要返回值，这将给所有人埋下不必要开销。  ￼
+* 社区建议与延伸思考：
+* 可以通过扩展提供 removeLastAndReturn(_:)（或类似命名）手动实现返回值行为。  ￼
+* Ben Cohen 指出：随着 Span 等轻量视图类型引入，未来或许可以为此类方法返回“消耗视图（draining span）”——类似于 Rust 中 drain 的概念，在不额外分配的情况下返还移除元素。  ￼
+
+**小结：**
+
+这个讨论虽然不是语言提案，而是 “为什么如此设计” 的反思，对日常 Swift 开发者依然有价值。若你所在项目常用 removeLast(_:) 移除多个元素且需要获取它们，建议采取以下实践：
+* 若需要被移除元素，先做 let removed = array.suffix(n) 再 array.removeLast(n)。
+* 或者封装一个自定义扩展方法（如 removeLastAndReturn(_:)）明确返回 ArraySlice 或 Array。
+* 关注未来标准库是否会针对此情景增强 API（例如支持 Span 或类似技术）。
 
 ## 推荐博文
 
