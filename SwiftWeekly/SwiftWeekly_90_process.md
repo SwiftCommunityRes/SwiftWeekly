@@ -104,6 +104,189 @@
 
 
 ## Swift论坛
+### 1、提案 Task Cancellation Shields（任务取消屏蔽）
+
+作者：Konrad ‘ktoso’ Malawski 🐟🏴 | 发布日期：2025 年 11 月 23 日
+
+[查看原帖](https://forums.swift.org/t/pitch-task-cancellation-shields/83379, "提案 Task Cancellation Shields（任务取消屏蔽）")
+
+这个提议提出为 Swift Concurrency 增加新的机制——“取消屏蔽 (cancellation shield)”，允许某段代码在其作用域内 忽略任务取消 (cancellation) 的影响，从而保证即使任务被取消，该段代码仍会执行 — 常见用途如清理 (cleanup)／释放资源／确保最终状态一致等。
+
+✅ 背景与动机
+* 在当前 Swift 的并发模型中，任务取消 (Task.cancel()) 是“协作式 (cooperative)”的 —— 被取消的任务并不会强制终止，而是在下一个等待 (await) 点抛出 CancellationError 或根据 Task.checkCancellation() 手动检查取消状态。  ￼
+* 但是在某些场景（例如资源清理、网络请求回调、文件/数据库关闭等），开发者可能希望即使任务取消，也能强制执行“必须做”的收尾逻辑。目前一般 workaround 是用 withTaskCancellationHandler 或 spawn 新任务，这带来了样板、多余的不确定性。
+* 此前已有对 async defer 的扩展提案（允许在 defer 中 await），即为了解决类似清理逻辑的问题。Task Cancellation Shields 可视为该方向的进一步补充，提供系统级、语法/运行时层面的支持。  ￼
+
+
+🔧 提案内容与 API 设想
+* 引入一个新的 API：例如 withTaskCancellationShield { … }。在其闭包 (closure) 内，取消请求对这段代码不起作用 —— 即使外层任务已被取消，该闭包也会完整执行。  ￼
+* “屏蔽”取消并不会阻止任务的取消状态，仅仅使被包裹代码 无法观察到 取消 (例如不会因为 Task.isCancelled == true、不会抛 CancellationError、也不会触发 cancellation handlers) 。  ￼
+* 任务的子任务 (child tasks) 仍然可以被取消并感知取消 —— 屏蔽只针对封装块本身生效。  ￼
+* 通过这种机制，可以在 defer、清理、资源回收、状态同步等语义关键区块中保证可靠执行，而不受外部取消影响。
+
+示例伪代码：
+```Swift
+defer { 
+  await withTaskCancellationShield {
+     try await cleanupResources()
+  }
+}
+```
+
+
+👍 社区反应 / 支持理由
+* 多名开发者和社区成员表达强烈支持，认为这是“构建结构化并发 (Structured Concurrency) 时的核心需求之一”。  ￼
+* 一位评论者指出，当下常见 workaround（如 Task.value { … }.value）很笨重，且语义不清晰，而 cancellation shield 是更干净、更安全、更系统的解决方案。  ￼
+* 还有支持者强调，这样的机制有利于让 cleanup / teardown 代码更易写、更可靠，也方便库或框架层抽象资源管理逻辑。  ￼
+
+
+⚠️ 潜在问题 / 讨论焦点
+
+虽然多数反馈积极，但这个提案也引起了关于语义与一致性的讨论 — 比如：
+* 取消语义 vs 清理语义：允许忽略取消可能破坏对取消语义 (cancellation contract) 的一致理解 —— 本来取消意味着“放弃执行”，但 shield 会让某些代码绕过这一语义。需要文档／规范明确哪些场景适合屏蔽取消。
+* 滥用风险：如果大量代码都被 shield 包裹，可能导致取消失效 (cancellation meaningless)，从而降低 cancellation 对资源回收 /响应用户取消的效果。
+* 子任务与继发取消：shield 内部启动的新任务是否也受 shield 保护？当前说明是子任务仍可取消 —— 这意味着 shield 只针对当前同步/异步 block，不会“屏蔽全局取消传递”。这种设计是折中，但可能让模型更复杂。  ￼
+
+
+📄 小结
+
+Task Cancellation Shields 提案为 Swift 并发带来了一个很实用、也很必要的新语义——允许开发者在面对协作式取消 (cooperative cancellation) 时，为关键清理逻辑加上一道“屏蔽层”，确保资源释放、状态恢复或日志写入等工作能可靠执行。这对于资源管理、网络请求、文件 I/O、clean-up、defer/cleanup 模式、库设计都有潜在助益。
+
+### 2、提案“可检测 Task 执行时间”的功能￼
+
+作者：Swift Testing Workgroup / Maarten Engels ｜ 发布日期：2025 年 11 月 24 日
+
+[查看原帖](https://forums.swift.org/t/possible-feature-inspect-task-execution-time/83396, "提案“可检测 Task 执行时间”的功能")
+
+这条帖子讨论了一个潜在特性 —— 在 Swift 并发模型中，允许用户“检查 / 度量一个 Task 在实际运行 (executing / working) 时所消耗的时间 (CPU-time / active execution time)”。作者表示已有实验性实现，目前希望征集社区对此功能的需求、用途与反馈。 ￼
+
+为何提出
+* 目前在并发环境中 (尤其是测试 /异步任务密集场景) 很难区分一个 Task 是“活动执行中 (running / working)” 还是“挂起 / 等待中 (suspended / waiting)”。这使得基于 wall-clock time 的超时 /性能度量不可靠。 ￼
+* 如果能测量真正的运行时间 (不包含挂起 /等待)，将更加准确地进行性能剖析 (profiling)、测试超时控制、资源监控等。尤其在非 Apple 平台、无法使用 Instruments 等工具时，这可能是非常有价值的调试手段。 ￼
+
+提案内容 / 设想
+* 为 Task 添加 API，让使用者能够获取 Task 的实际运行时间 (execution time)，包括其子任务 (child tasks) 的运行时间，但排除其挂起 /等待期间。 ￼
+* 该功能主要定位于测试、性能监控与调试场景。作者欢迎社区讨论其可能的广泛用途，以及对 API 设计、命名、安全性 / 隐私 (例如是否记录敏感信息)、测量精度 /开销等方面的建议。 ￼
+
+潜在用途 (不仅限于测试)
+* 性能剖析 (profiling)：衡量某个异步任务在真实 CPU 执行上花费多少时间，比仅看 wall-clock 更可靠。
+* 超时 /资源限制判断：对 Task 的实际执行时间 (而非挂起时间) 设定限制，更准确地判断“活跃计算”是否过久。
+* 多平台兼容：在不支持原生 profiling / Instruments 的平台 (如 Linux) 上，也能通过 Swift 提供的 API 做性能监控。
+* 负载分析 /监控：用于长运行或后台服务中的异步工作量统计，帮助判断负载、资源消耗与调度效率。
+
+总结
+
+这项提案虽仍处于探索阶段，但它旨在填补 Swift 并发当前的一大盲区 —— 没有手段测量 Task 的真实执行时间 (active runtime)。如果采纳，它将为测试、调试、性能监控以及跨平台支持带来实质性好处。
+
+对你的项目或团队来说，这意味着未来有可能：
+* 精准地判断异步任务耗时／性能瓶颈
+* 为测试／基准 (benchmark) 提供更可靠、与挂起时间无关的度量
+* 在非 Apple 平台上构建监控 / 诊断工具
+
+
+### 3、什么是 “potential suspension point”（潜在挂起点）？
+
+作者：ibex10 ｜ 发布日期：2025 年 11 月 23 日
+
+[阅读原帖](https://forums.swift.org/t/what-is-a-potential-suspension-point/83375, "什么是 “potential suspension point”（潜在挂起点）")
+
+这篇帖子讨论了在 Swift concurrency 中经常提到的术语 “potential suspension point”（潜在挂起点） 的真正含义，以及它与实际挂起（suspension）的区别。
+
+核心内容：
+* 在 Swift 中，每当你对一个 async 函数调用前加上 await，这个 await 就被认为是一个 潜在挂起点。  ￼
+* “潜在挂起点”并不保证一定会挂起 —— 它只是“可能会”挂起。是否真的挂起，取决于被调用函数链中是否有实际做出挂起的动作（例如执行 I/O、调用 Task.yield()、等待锁、等待网络响应等）。  ￼
+* 举例说明：
+```Swift
+func maybeSuspend(_ shouldSuspend: Bool) async {
+  if shouldSuspend {
+    await Task.yield()
+  } else {
+    await say("life goes on")  // say 只是普通 async，但不挂起
+  }
+}
+```
+* 如果 shouldSuspend == true，调用 maybeSuspend(true) 会真正挂起，因为执行了 Task.yield()。
+* 如果 shouldSuspend == false，即使写了 await, 调用 maybeSuspend(false) 也 不会挂起 —— 因为它调用的是一个不会挂起的 async 函数。  ￼
+
+* 一句话总结：“await = potential suspension point”, 只是告诉编译器 “这里可能会暂停”，但不保证一定暂停。  ￼
+
+为什么 “potential suspension point” 很重要
+* 并发安全 / Actor 隔离 /可重入性 —— 任何带 await 的地方，都可能是任务挂起／恢复点。如果你在 actor 内部写 await，挂起期间可能有其他任务进入 actor，从而改变状态。这是 actor 重入 (re-entrancy) 风险的重要来源。  ￼
+* 取消 /超时 /资源清理 —— 因为挂起是动态的，不是所有 await 都会暂停，所以在设计 async 函数时，若需要在挂起后恢复清理逻辑、检查取消状态等，就必须假设可能挂起 (即 treat every await as a real suspension), 而不是依赖 “调用不挂起” 的假设。
+* 性能 /调试 / scheduler 行为 —— 编译器将 async 函数转译成状态机 (state-machine)，await 是状态切换点 (yield / resume)。了解哪些点是 “潜在”的挂起，有助于分析性能、线程切换、任务切换、调试断点等。  ￼
+
+总结
+* “潜在挂起点 (potential suspension point)” ≠ “真正挂起点 (actual suspension)” — 它只是一个可能挂起的地方。
+* 每个 await 都是潜在挂起点 — 即使实际不会挂起，我们也应当假设可能挂起，以保证并发安全、actor 隔离、取消处理等正确性。
+* 对于 Swift 并发 (async/await) 编程者来说，理解这一点非常关键 — 它影响我们对状态一致性、调度、取消、资源管理、性能等方面的设计和预期。
+
+### 4、讨论：Running func on Background —— 在后台线程运行普通函数
+
+作者：EngOmarElsayed ｜ 发布日期：2025 年 11 月 23 日
+
+[阅读原帖](https://forums.swift.org/t/running-func-on-background/83378, "讨论：Running func on Background —— 在后台线程运行普通函数")
+
+这篇帖子讨论了在使用现代并发特性（Approachable Concurrency）时，如果当前上下文为主 actor（UI 线程），但希望将某个普通（non-isolated／non-async）函数“丢到后台线程执行”，有没有合适方式 —— 特别是为了后台任务（如 analytics、日志、轻量后台处理），而不希望该函数阻塞主线程，也不想将其转成 async。
+
+🔎 背景与问题
+* 提问者表示，他有一个函数希望在后台执行，因为它涉及与 UI 无关的后台逻辑（例如 analytics），而当前调用者常为 @MainActor。但他不想将这个函数声明为 async。  ￼
+* 因为 caller 是 MainActor，如果直接调用，会运行在主线程，不适合耗时或后台逻辑。
+
+💡 讨论与建议方案
+
+社区成员给出了几种思路：
+* 使用 Task.detached
+最简单、直接的方法是用 detached task 将函数丢到后台执行 — 例如：
+```Swift
+public func identify(event: IdentifyEvent) {
+  Task.detached {
+    self.identifySynchronous(event: event)
+  }
+}
+```
+这样不依赖当前 actor，也不要求函数为 async。  ￼
+
+* 如果需要 await，或希望利用并发特性，也可以使用 @concurrent + async wrapper
+即为逻辑包一层 async 函数，并用 @concurrent 标记，让它不继承 MainActor，再从主线程触发。  ￼
+* 对于“fire-and-forget”（只记录、发送事件，无需等待结果）的场景，建议使用一个线程安全的事件队列 + 异步流 (e.g. AsyncStream) 模型：主线程同步提交事件到队列，由后台专门处理流中的事件，保证顺序与线程安全性。  ￼
+
+“你仍然需要异步 somewhere，因为要从当前 actor 跳出，这是异步的本质。” —— 论坛回应者指出，要跳出 actor，就必然涉及挂起 /切换执行上下文。  ￼
+
+✅ 总结建议
+* 如果你只是想在后台运行一个普通同步函数，不需要等待返回，也不依赖 actor 隔离状态，最简单的是使用 Task.detached { … } — 兼容性最好、代码也最清晰。
+* 如果你希望保持顺序、线程安全，并可能有较多后台任务 (event-driven、analytics、日志等)，考虑“事件队列 + AsyncStream / 消费器” 模式。这样可以集中后台处理逻辑，避免并发任务间竞争，也更可控。
+* 避免仅仅因为“想后台”就把函数转成 async — async／await 并不自动意味着“线程切换”。真正切换线程或 executor 的方式是 detached task / non-actor async / global executor。  ￼
+
+### 5、讨论：Swift Package Manager (SwiftPM) 是否应该停止 “默认为很低 macOS 版本”的行为
+
+作者：MahdiBM ｜ 发布日期：2025 年 11 月 27 日
+
+[查看原帖](https://forums.swift.org/t/can-swiftpm-not-default-to-low-macos-versions/83441, "讨论：Swift Package Manager (SwiftPM) 是否应该停止 “默认为很低 macOS 版本”的行为")
+
+这篇帖子讨论了一个影响 Swift 包生态兼容性和新特性使用门槛的问题 —— 目前 SwiftPM 默认支持非常老旧的 macOS 版本，这给使用新语言或库特性的开发者带来了不便。作者提议：SwiftPM 应该“抬高”默认 macOS 最低版本要求，而不是保留过低默认版本。
+
+🔎 背景与问题
+* 以某个库（例如 swift-nio）为例，作者希望在库中使用新引入的底层类型如 Span —— 这些类型依赖较新的标准库/运行时支持，不在非常旧的 macOS 版本中可用。因为 SwiftPM 的默认最低版本设得很低 (例如 10.12)，库想兼容默认设定时，就无法把这些现代特性暴露在主 API 中。 这样一来，为了兼容旧系统，开发者不得不回退到较旧 / 较弱 / 不够理想的实现方式。 ￼
+* 换句话说，旧的默认最低部署目标限制了包作者“使用现代 Swift /新标准库功能 + 同时兼容所有被 SwiftPM 默认支持的系统”—— 造成了一种 “向后兼容 vs. 新功能使用” 的两难。
+
+💡 社区讨论与观点
+* 提高默认最低版本：部分用户建议，SwiftPM 的默认 macOS 最低版本应该提升（例如设为 10.15 或更高），这样库可以直接使用现代特性 (如 Span、back-deployed API 等) 而无需每处加 availability 判断或为旧系统保留 fallback。 ￼
+* 当前机制不完全阻止使用新特性：也有人指出，目前在包中仍可以手动设置 platforms 字段（在 Package.swift 中指定 minimum macOS version），或在某些 API 上添加 @available(...) 注解，以兼容不同系统版本。也就是说，并不是“绝对不可能用”。 ￼
+* 依赖关系 & 兼容性复杂性：一个难点是，若一个包 A 提升了最低部署目标，而另一个包 B 仍然保持旧版本，两者之间的依赖关系可能变得复杂。特别是对于广泛用作基础库 (like swift-nio) 的项目，这种变更可能引发兼容性问题。 ￼
+
+✅ 为什么这个提议值得重视
+* 降低使用现代功能的门槛：如果默认最低版本不是那么老旧，库作者可以更大胆地使用现代 Swift、新标准库 / runtime 特性 (Span、back-deployed APIs、其它补丁)；这样整个生态能更快迁移到新特性。
+* 减少兼容性样板代码：当前为了同时兼容老系统和使用新功能，很多库不得不写大量 availability 检查或 fallback 实现，这既冗余又容易出错。抬高默认版本可以简化代码。
+* 规范化现代包生态：现代的 macOS 用户多数都运行 fairly recent 版本，设定较新的最低版本可以更贴近真实用户环境，从而让库设计与现实更一致。
+
+⚠️ 风险与挑战
+* 排除旧系统支持：将默认最低版本抬高意味着部分老系统/设备可能无法运行新包，这对某些仍服务老 macOS 用户群的项目而言是问题。
+* 依赖链兼容性问题：部分较旧依赖可能仍要求低 macOS 版本，如果改变默认最低版本，会让它们难以兼容或需要 fork／重构。
+* 消费者 / 应用作者承担更多判断责任：对于使用库的人，需要留意目标运行环境是否满足最低版本要求，可能需要额外测试或兼容性处理。
+
+📄 小结
+
+这条讨论为 Swift 包生态带出了一个值得深入考虑的问题 — 当现代 Swift / 标准库 / runtime 功能不断推进时，保持对极旧系统的默认支持 可能反而成为一种阻碍，而不是保障。将 SwiftPM 的默认最低 macOS 版本“抬高”——从而简化现代功能使用、减少兼容样板、提升生态总体质量——是一个具有说服力的提议，尤其对那些愿意放弃对非常老系统支持的库/项目而言。
 
 
 ## 推荐博文
