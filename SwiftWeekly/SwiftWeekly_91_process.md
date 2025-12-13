@@ -468,6 +468,20 @@ https://www.bloomberg.com/news/articles/2025-12-06/apple-rocked-by-executive-dep
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周“提升技能 + 开阔思路”：
+
+[iOS 知识点 - 多线程总结（GCD/Operation/Swift Concurrency/线程安全/线程通信）](https://juejin.cn/post/7581324171398201390/ "iOS 知识点 - 多线程总结（GCD/Operation/Swift Concurrency/线程安全/线程通信）")
+
+**摘要：** iOS多线程技术旨在优化应用性能，通过将耗时任务分配到后台线程来避免阻塞主线程，从而保持用户界面的流畅响应。系统提供了从底层的pthread到高级的Swift Concurrency等多种技术方案。开发者需要根据具体场景，在并发效率、线程安全以及线程间通信之间进行权衡和选择，以构建既高效又稳定的应用。
+
+[使用 Swift Package 插件将自定义字体加载到您的应用程序中](https://www.polpiella.dev/load-custom-fonts-with-no-code-using-swift-package-plugins/ "i使用 Swift Package 插件将自定义字体加载到您的应用程序中")
+
+**摘要：**  本文介绍了如何使用Swift Package插件将自定义字体加载到应用程序中。通过创建一个 Swift Package 来包含共享的字体文件和字体加载代码，可以加快新应用的发布速度，减少代码重复，并提供一个统一更新字体文件的地方。结合 Swift Package 的可重用性和 Swift Package 插件的强大功能，甚至可以在构建时从字体文件自动生成所有必要的代码。本文使用 SwiftGen 来演示如何实现这一点。首先创建一个名为 "Fonts" 的 Swift Package ，并在其中添加自定义字体资源。然后添加 SwiftGen 插件来生成加载字体所需的代码。最后，可以使用生成的代码来在 SwiftUI 和 UIKit 中使用自定义字体。
+
+[在 Swift 中如何取消后台任务](https://swdevnotes.com/swift/2023/how-to-cancel-a-background-task-in-swift// "在 Swift 中如何取消后台任务")
+
+**摘要：**  本文演示了在 Swift 5.5中使用 async/await 异步编程时取消后台任务的不同方法。文章强调了取消不必要的任务的重要性，以防止不需要的后台任务干扰应用程序的性能。文章提供了各种取消任务的方法，包括使用取消标志、使用 Task.checkCancellation() 检查任务取消情况以及使用 Task.isCancelled 来将取消传播到子任务。文章为每种方法提供了示例代码，并解释了每种方法的优点和缺点。
+
 
 ## 关于我们
 
