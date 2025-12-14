@@ -465,6 +465,192 @@ https://www.bloomberg.com/news/articles/2025-12-06/apple-rocked-by-executive-dep
 
 ## Swift论坛
 
+### 1、提案：为关联类型支持 **抑制默认约束**（Suppressed Associated Types With Defaults）
+
+作者：Kavon Farvardin ｜ 发布日期：2025 年12 月 10 日
+[阅读原帖](https://forums.swift.org/t/pitch-suppressed-associated-types-with-defaults/83663 "Pitch: Suppressed Associated Types With Defaults")
+
+该 pitch 提出增强 Swift 协议的表达能力，通过让协议关联类型可以**抑制默认引入的 `Copyable` 和/或 `Escapable` 约束**，从而避免不必要的类型约束，提升协议对所有权模型的支持能力。([Swift Forums][1])
+
+**核心问题**：
+在现行规则下，协议的关联类型如果没有显式约束，会默认被推断为必须是 `Copyable` 和 `Escapable`，即便协议逻辑并不需要这些能力。结果是某些协议（如泛型队列、缓冲类型）无法被希望使用“非可复制”类型的 conformer 实现，例如：
+
+```swift
+protocol Queue<Element>: ~Copyable {
+  associatedtype Element
+  associatedtype Allocator = DefaultAllocator
+  …
+}
+```
+
+因默认规则，`Queue.Element` 被隐式要求是 `Copyable` / `Escapable`，使得像 `LinkedList<Element: ~Copyable>` 这样的定义无法符合该协议，从而限制了表达力。([Swift Forums][1])
+
+**提案解决方案**：
+允许在协议关联类型声明中显式抑制默认的 `Copyable` / `Escapable` 要求，例如：
+
+```swift
+protocol Queue<Element>: ~Copyable {
+  associatedtype Element: ~Copyable
+  associatedtype Allocator: ~Copyable = DefaultAllocator
+  …
+}
+```
+
+这样协议不再对关联类型引入默认的 `Copyable` 条件，从而让实现者更灵活地使用非可复制/非可逃逸类型作为类型见证（type witness）。与现有泛型参数默认行为一致，此提案也允许保留默认条件在适合场景下继续生效。([Swift Forums][1])
+
+**默认行为细节**：
+
+* 对于主要关联类型（primary associated types，即通常由泛型参数提供的关联类型），如果抑制默认约束，则不会自动增加 `Copyable` / `Escapable`；但若未抑制，则仍旧会默认引入这些约束。
+* 对于普通（non-primary）关联类型，则不会默认引入约束，这样不会影响那些仅属于实现细节、不用于泛型接口的类型。([Swift Forums][1])
+
+** 小结**
+
+该提案针对 Swift 的所有权 / 泛型系统中的限制提出了一种精细控制关联类型约束的新语法，使库设计者可以声明真正“所需的约束”而非默认推断的约束。这有助于在现代 Swift（包含 `~Copyable` / `~Escapable`）中，定义更宽泛的协议并兼容更多实现者，特别是那些实现非可复制或资源型数据结构的情况。
+
+如该功能获得采纳，将显著提升协议泛型表达力与库设计的灵活性。
+
+---
+
+### 2、提案：移除对生成 C 产物的限制
+
+作者：Doug Schaefer ｜ 发布日期：2025 年 12 月 8 日
+[查看原帖](https://forums.swift.org/t/pitch-remove-restrictions-on-generation-of-c-artifacts/83611 "Pitch: Remove restrictions on generation of C artifacts")
+
+这条 pitch 是围绕 **SwiftPM 插件在构建过程中生成 C/C++ 相关工件（header、module map、API notes 等）目前受限的问题** 提出解决方案。作者指出，现有的限制阻碍了像 Swan 这类库在构建时自动生成并正确集成这些 C 产物，从而迫使开发者将这些生成的文件手动 check-in 到源码库，这既不理想又增加维护负担。([Swift Forums][1])
+
+**核心问题：**
+
+* Swift Package Manager 允许通过构建工具插件引入代码生成逻辑，但目前 **插件生成的 C/C++ header、module map、API notes 等文件在构建中不能正确被包含**，要么发出警告，要么被当作资源错误地打包，而不会作为 C 模块的一部分用于编译。([Swift Forums][1])
+* 这使得诸如 Swan 等项目必须在源码库中预先提交生成结果，而无法在构建时根据依赖版本动态生成，导致代码版本与绑定信息容易失配。([Swift Forums][1])
+
+**提案内容与短期方案：**
+
+* 放宽 SwiftPM 对插件生成的 C 产物的限制，让这些文件 **可以被视为公共头文件并纳入构建流程**。具体做法是：在当前版本中，硬编码将插件输出目录下的 `include` 目录视为公共头文件目录，由 SwiftPM 构建系统自动纳入 C 模块搜索路径。([Swift Forums][1])
+* 这样以来，插件生成的 C header、module map 等就能像普通 C 源文件一样被识别和编译，**消除了必须把生成结果 check-in 到源码库的痛点**。([Swift Forums][1])
+* 未来计划进一步让这个目录名可通过构建设置配置，而不是写死为 `include`，提供更灵活的集成方式。([Swift Forums][1])
+
+**讨论与背景：**
+
+* 有社区成员提问具体受限是什么，回答指出现有机制会对意外文件发出警告或将其当成资源处理，而不纳入编译流程，这实质上妨碍了 C 产物的正常构建集成。([Swift Forums][1])
+* Swift 核心构建团队成员也解释了这些限制最初是出于当时没有合适方式去包含头文件和模块映射 (module maps)，所以决定暂不支持插件生成非 Swift 代码，但现在生态已有需求且基础设施有所改进。([Swift Forums][1])
+
+**小结：**
+这一 pitch 旨在 **消除 SwiftPM 对构建时生成 C/C++ 工件的不必要障碍**，让生成的头文件、module map 和 API notes 能像普通源文件一样纳入构建，减少手工维护生成文件的负担。初步方案通过硬编码插件输出的 `include` 目录来实现目标，并计划在未来将路径设为可配置。若获进一步推进，将显著改善依赖 C/C++ 库（尤其通过代码生成机制构建绑定）的 SwiftPM 集成体验。
+
+### 3、SE-0501：HTML 覆盖率报告
+
+作者：Bassam (Sam) Khouri ｜ 发布日期：2025 年 12 月 8 日
+[阅读原帖](https://forums.swift.org/t/se-0501-html-coverage-report/83601 "SE-0501: HTML Coverage Report")
+
+该提案目前进入 **Swift Evolution 审查阶段**（Review，从 2025 年 12 月 8 日开始至 12 月 22 日）。其目标是 **增强 SwiftPM 的测试覆盖率输出**，让开发者不仅能获得 JSON 格式的覆盖率数据，还能直接生成 **更易于阅读和浏览的 HTML 覆盖率报告**。([Swift Forums][1])
+
+**为什么需要这个改进？**
+目前 `swift test --enable-code-coverage` 可以生成 JSON 格式覆盖率报告（用于机器消费或 CI 分析），但 **不适合人类直接查看**。这个 pitch 建议添加一个新的覆盖率格式选项，使覆盖率报告能以 HTML • 静态网页的形式输出，并通过 libℓ𝓁𝓋𝓂-cov 工具直接生成，提升日常开发与 CI 报告的可用性和便捷性。([Swift Forums][2])
+
+** 🔍 核心功能预期**
+
+* **新增覆盖率格式选项**
+  SwiftPM 将支持 `--coverage-format html`（或类似参数）并可与 `json` 同时指定，使得 `swift test` 在一次运行中输出多个格式的覆盖率报告。([Swift Forums][2])
+
+* **无需外部脚本**
+  当前生成 HTML 覆盖报告通常需要开发者手动调用 LLVM-cov 或额外脚本，而提案中 SwiftPM 将 **自动调用 LLVM-cov 生成 HTML**，减轻用户负担。([Swift Forums][2])
+
+* **与现有机制共存**
+  JSON 报告不会被移除；HTML 报告只是作为可选输出格式新增。([Swift Forums][2])
+
+* **支持 CI & 本地开发**
+  HTML 报告更适合在 CI 工件 (artifacts) 中查看，或用于团队审查、展示覆盖率情况。([Swift Forums][2])
+
+---
+
+### 🧠 社区讨论要点
+
+* 支持者认为：
+
+  * **体验更好**：自动生成 HTML 报告相比手写脚本更方便。
+  * **现代化**：许多语言/框架提供类似覆盖率网页（如 Go、Python），SwiftPM 也应有。([Swift Forums][2])
+
+* 有审慎观点认为：
+
+  * 既然 SwiftPM 已输出 JSON，外部工具也能生成 HTML，直接在 SwiftPM 内集成是否值得？
+    即是否将这一输出格式纳入核心工具本身可能增加维护负担。([Swift Forums][2])
+
+---
+
+** 📌 小结**
+
+SE-0501 提案试图为 SwiftPM 测试覆盖率工具链增加一个 **第一类支持的 HTML 报告输出**，使覆盖率数据不仅适合机器处理，也便于人类阅读分析。它是对现有 `swift test` 覆盖率支持的一个“可选增强”，不会移除或破坏现有 JSON 机制，但将提升开发者的工作流便利性。现在该提案正在公开审查中，社区可在指定讨论期内提出反馈。([Swift Forums][1])
+
+[1]: https://forums.swift.org/t/se-0501-html-coverage-report/83601?utm_source=chatgpt.com "SE-0501: HTML Coverage Report - Proposal Reviews - Swift Forums"
+[2]: https://forums.swift.org/t/pitch-adding-html-coverage-support/82358?utm_source=chatgpt.com "[Pitch] Adding HTML coverage support - Pitches - Swift Forums"
+
+### 4、预告：Swift 社区将亮相 FOSDEM 2026（布鲁塞尔）
+
+作者：Swift 社区组织者 ｜ 发布日期：2025 年 12 月 9 日
+[阅读原帖](https://forums.swift.org/t/save-the-date-swift-community-event-at-fosdem-26-fri-jan-30/83620 "Save the date: Swift community event at FOSDEM 26")
+
+这是一则 **社区活动预告帖**：Swift 社区将在 **FOSDEM 2026** 期间举办一场线下聚会，邀请所有对 Swift 感兴趣的开发者参与交流。
+
+**活动信息要点：**
+
+* **活动名称：** Swift Community Event @ FOSDEM 26
+* **时间：** 2026 年 1 月 30 日（周五）
+* **地点：** 比利时 · 布鲁塞尔（FOSDEM 会期期间）
+* **性质：** 社区主导的线下交流活动，而非正式大会分会场
+
+**活动目标与背景：**
+
+* FOSDEM 是欧洲规模最大、最具影响力的开源开发者大会之一，长期以来是 Swift 开源社区进行线下交流的重要节点。
+* 该活动旨在：
+
+  * 促进 Swift 开源贡献者、工具作者与普通使用者之间的面对面交流
+  * 讨论 Swift 在 **服务器、系统编程、跨平台（Linux / WASM / Android）** 等方向的最新进展
+  * 加强 Swift 社区在更广泛开源生态中的可见度
+
+**后续安排：**
+
+* 本帖仅为 **“Save the Date”** 预告，具体议程、地点细节、报名方式将在后续帖子中公布。
+* 组织者鼓励计划参加 FOSDEM 2026 的 Swift 开发者提前预留时间，并关注 Swift Forums 的更新。
+
+**小结：**
+
+如果你计划参加 **FOSDEM 2026**，这将是一次难得的机会，与 Swift 语言的核心贡献者和社区成员进行线下交流。对关注 Swift 开源生态、语言演进和跨平台发展的开发者来说，非常值得关注并加入行程规划。
+
+### 5、小提案：为 Swift Argument Parser 添加“轻量兄弟”库
+
+作者：Eliot Arntz ｜ 发布日期：2025 年 12 月 10 日
+[阅读原帖](https://forums.swift.org/t/a-little-brother-for-swift-argument-parser/83634 "A Little Brother for Swift Argument Parser")
+
+这篇帖子介绍了一个围绕 **Swift Argument Parser** 的新想法：创建一个更 **轻量、易用、极简 API 的“弟弟”库**，目标是在日常命令行参数解析场景中提供更简单直接的体验，而无需引入 Swift Argument Parser 完整框架。
+
+** 核心内容**
+
+* **目的不是替换 Argument Parser**，而是提供一个更简洁的替代方案，用于那些无需全面 CLI 功能（如自动帮助生成、复杂命令分层、子命令等）的简单场景。
+* 该“轻量弟弟”（暂未正式命名）旨在：
+
+  * 支持快速定义并解析基础参数（如 flags、options、位置参数），
+  * 提供极简的 DSL 或函数式 API，
+  * 最小化样板并简化常见参数处理逻辑。
+* 作者表示，这个库不太可能包含 Swift Argument Parser 那样的所有高级功能（如自动化 help/usage 输出、validation hooks、complex subcommands 等），而是聚焦于常见的“快速解析需求”。
+
+** 思路与讨论热点**
+
+* 有人建议这种轻量库可以借鉴类似 JavaScript / Python 的解析模式，让常用参数配置更接近直觉写法，例如：
+
+  ```swift
+  let args = parse(["--verbose", "-o", "file.txt"])
+  let verbose = args.flag("--verbose", default: false)
+  let output = args.option("-o", default: "out.txt")
+  ```
+* 另有观点强调，轻量解析并不能完全替代 Argument Parser 的强类型、自动文档、shell 完成等特性，但作为一个互补工具，它可以让小工具 / 脚本的参数逻辑更灵活。
+* 有用户提到追求“超轻量”的同时要注意不要引入模糊的 API 约束，保持 Swift 的类型安全与可组合性。
+
+** 小结**
+
+这次讨论围绕一个 **简化版的命令行参数解析库** 展开，目的是在某些不需要 Argument Parser 全功能的场景中提供更直观、更轻量的解决方案。一些开发者认为，随着 Swift 在脚本、命令行工具和小型自动化工具中的应用增多，轻量级参数解析库会是一个受欢迎的补充。该项目仍处于早期构思阶段，具体实现细节和 API 设计尚未敲定。
+
+如果你正在开发 CLI 工具且觉得 Swift Argument Parser 有些过重，这个轻量方案值得关注，也许未来能让你写出更简洁的参数处理代码。
+
 
 ## 推荐博文
 
