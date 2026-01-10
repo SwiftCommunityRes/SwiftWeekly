@@ -160,7 +160,346 @@ iPhone 中国用户，不该交全球最高「苹果税」
 
 
 ## Swift论坛
+### 1、提案：为单参数数组和字典初始化器支持尾随闭包语法
 
+作者：Tony Allevato ｜ 发布日期：2025 年 12 月 22 日
+[阅读原帖](https://forums.swift.org/t/support-trailing-closure-syntax-for-single-argument-array-and-dictionary-initializers/83900 "Support trailing-closure syntax for single-argument Array and Dictionary initializers")
+
+该提案讨论是否允许 Swift 为 **单参数的 `Array` 和 `Dictionary` 初始化器** 使用 **尾随闭包（trailing closure）语法**，从而提升构造集合时的可读性和一致性。
+
+## 🔎 当前语法限制
+
+在 Swift 中，如果你想基于表达式构造数组/字典，你需像这样写：
+
+```swift
+let arr = Array<Int>(repeating: 0, count: 5)
+let dict = Dictionary<String, Int>(uniqueKeysWithValues: [
+  ("a", 1), ("b", 2)
+])
+```
+
+但当初始化器接收单一封闭的参数是可构造集合（例如用某种映射或生成器构造元素序列）时，现行语法无法使用尾随闭包，这看起来不够“ Swift 化”。提议希望增强语法，使得此类初始化器也支持更加简洁的尾随闭包写法。
+
+## 💡 提案示例
+
+设想如果支持尾随闭包，构造数组可以写成：
+
+```swift
+let arr = Array<String> {
+  ["a", "b", "c"]
+}
+```
+
+而不是：
+
+```swift
+let arr = Array<String>(["a", "b", "c"])
+```
+
+同样，对于字典：
+
+```swift
+let dict = Dictionary<String, Int> {
+  ["a": 1, "b": 2]
+}
+```
+
+其语义等价于现有的：
+
+```swift
+let dict = Dictionary<String, Int>(uniqueKeysWithValues: [
+  ("a", 1), ("b", 2)
+])
+```
+
+📌 **条件**：仅针对**单个参数**的初始化器 —— 即编译器无歧义地知道这个初始化器在接收一个集合值的情形。
+
+## 🧠 讨论重点
+
+### ✔️ 提升一致性和可读性
+
+支持尾随闭包可让集合初始化更贴近 Swift 常见习惯，例如：
+
+* SwiftUI 构建视图时广泛使用尾随闭包；
+* Swift 标准库许多 API（如 `map`, `filter`）也使用尾随闭包表达操作逻辑。
+
+让集合构造支持尾随闭包，能让语法更加统一、直观。
+
+### ⚠️ 歧义与解析难点
+
+讨论指出可能存在以下解析问题：
+
+* 如果初始化器有多个参数，或有默认参数，则尾随闭包是否有歧义？
+* 对于字典，有多个不同构造方式（例如 `uniqueKeysWithValues:`、`keys:` + `values:` 等），何种初始化器才可启用尾随闭包？
+* 编译器是否容易区分尾随闭包表示的意图（是构造器参数，还是表达式块）？
+
+若未来支持，语法或需限制于**无标签 / 单参数的明显构造场景**。
+
+## 📌 社区观点
+
+**支持的声音**：
+
+* 有用户认为这将减少样板代码，使表达更加自然；
+* 当生成集合逻辑较复杂时，尾随闭包可以提升可读性，并在多行构造器中表现更好；
+* 与 SwiftUI 的使用习惯一致，有助于降低上下文切换认知成本。
+
+**审慎或保留的意见**：
+
+* 有人指出使用尾随闭包可能导致“看起来像函数体”而非构造值，影响可预测性；
+* 字典初始化器重载较多，若允许尾随闭包，可能会出现不明确的候选集（compiler overload）；
+* 有必要明确该语法仅适用于“一个无二义性参数”的初始化器。
+
+## 🧩 小结
+
+该提案旨在让 Swift 支持为 **单参数的 `Array` 和 `Dictionary` 初始化器** 使用尾随闭包语法，从而提升集合构造的可读性与一致性。它延续了 Swift 中尾随闭包的一贯设计风格，尤其与 SwiftUI 等 DSL 风格内容一致。不过在语义解析与重载分辨上仍需谨慎处理。
+
+如果后续进入正式 SE 流程，建议关注以下：
+
+* 语法边界 —— 哪些初始化器能启用尾随闭包？
+* 编译器解析策略 —— 如何避免与现有语法冲突？
+* 可读性 / 易用性评估 —— 何时使用更自然、何时可能造成困惑？
+
+### 2、讨论：枚举一组元类型参数包（Enumerating a Parameter Pack of Metatype Instances）
+
+作者：Slava Pestov ｜ 发布日期：2025 年 12 月 22 日
+[阅读原帖](https://forums.swift.org/t/enumerating-a-parameter-pack-of-metatype-instances/83898 "Enumerating a Parameter Pack of Metatype Instances")
+
+这篇帖子讨论了在 Swift 泛型与参数包（parameter packs）组合使用时，如何更好地 **遍历一组类型的元类型（metatype）**。目标是让开发者能够在编译时或运行时方便地对任意一组类型执行统一逻辑，从而增强参数包在元编程与泛型库实现中的表达能力。
+
+## 🔎 核心问题
+
+Swift 当前支持类型参数包（parameter packs），允许泛型接受任意数量的类型参数，例如：
+
+```swift
+func foo<T...>() { … }
+```
+
+在某些场景下，你可能会有一个类型参数包的元类型集合（如 `T.self...`），并希望对其中的每个类型执行某些操作：
+
+```swift
+func doSomethingWithTypes<T...>(_: T.Type...) {
+  // 想枚举参数包中的每个元类型
+}
+```
+
+但目前 Swift 对这种“批量处理元类型”的语义支持较弱，无法直接在单一循环或表达式内遍历参数包中的所有 `T.self` 项。
+
+## 🧠 讨论内容与示例设想
+
+帖子提出了几个关键思路与讨论点：
+
+### 1）显式遍历参数包中的类型
+
+一种设想是有更简洁的语法来迭代元类型参数包，例如：
+
+```swift
+for type in typesOf[T...] {
+    …
+}
+```
+
+使得可以在运行时依次处理 `T0.self`, `T1.self`, … 等类型。
+
+### 2）结合宏或泛型构造
+
+讨论中提到，参数包遍历可能结合宏系统实现更丰富的编译时代码生成，但也有人指出，在没有宏的情况下，能否仅依靠类型系统与泛型展开（pack expansion）进行静态遍历仍然值得探索。
+
+## 📌 核心关注点
+
+* **元类型与参数包的语义组合**
+  当前 Swift 的泛型参数包只能在特定上下文用扩展语法展开（例如作为函数参数列表、元组成员、函数返回多个值等），但无法直接把它抽象成可迭代的集合来使用。因此想要通用处理参数包中的 `Type.self` 仍显繁琐。
+
+* **循环 / 迭代语法缺失**
+  将多个 `T.self` 统一处理时，语言层面没有提供循环语义或内建机制展开参数包。通常需要手动递归定义辅助函数或宏来辅助实现。
+
+* **宏系统或编译器扩展可能解决**
+  有人认为 Swift 的宏机制可以协助解决这类元编程难题，即在编译期根据参数包自动展开代码，而非在运行时动态处理。这也是 Swift 宏未来发展方向之一。
+
+## 🧩 小结
+
+这篇讨论重点聚焦于 Swift 泛型与参数包在处理 **一组元类型（metatype）** 时的表达力瓶颈。当前语言不直接支持“将参数包视为可迭代集合并统一遍历其元类型”的语法或语义，因此讨论集中在以下方向：
+
+* 是否需要语言级别为类型参数包提供更简洁的枚举 / 遍历机制；
+* 是否结合宏系统在编译期间展开参数包，从而支持更强的元编程能力；
+* 如何在不引入宏的情况下，通过现有类型系统表达类似能力。
+
+对那些在泛型库、反射 / 序列化工具或元编程中需要批量处理类型元数据的场景而言，这类能力将显著简化代码与提升表达力。虽然目前仍处于讨论探索阶段，但这反映了社区对 Swift 参数包与元类型组合语义的进一步追求。
+
+### 3、提案：在更多位置支持 `#warning` 提示
+
+作者：Xiaodi Wu ｜ 发布日期：2025 年 12 月 22 日
+[阅读原帖](https://forums.swift.org/t/allow-warning-in-more-places/83889 "Allow `#warning` in more places")
+
+这篇帖子提出一个语法改进建议：让 Swift 的 `#warning` 指令 **可以在更多上下文中有效使用**，从而提高开发者标注临时代码、提醒注意事项或突出待办问题（TODO）的可见性。
+
+## 🔎 当前限制
+
+Swift 已支持 `#warning("message")`，用于在编译时发出自定义警告；但目前它只能用于 **文件顶层、类型/函数声明外的逻辑**。如果放在某些上下文（例如 `if`, `switch`, `do` 块或局部作用域）中，则编译器报错提示其无法在该处使用。
+
+例如：
+
+```swift
+func f() {
+    #warning("this code needs review") // ❌ 无效（当前不允许）
+}
+```
+
+在这种情况下，开发者不得不将警告放在函数外，或用注释代替，无法在真正对应逻辑的位置发出编译时提醒。
+
+## 📌 提案内容
+
+* 允许 `#warning` 在更多位置有效，包括但不限于：
+
+  * 局部作用域中（如函数体内）
+  * 条件语句块内（如 `if` / `switch` / `guard`）
+  * 循环块内（如 `for` / `while`）
+  * `do` 代码块或更细粒度控制流上下文
+
+* 目标效果是让编译器在更多地方都能发出自定义警告，而不是只能在全局范围或类型级别发出。
+
+## 🧠 社区讨论要点
+
+**支持观点：**
+
+* 很多开发者认为这将提升代码可维护性：
+
+  * 当某段逻辑需要审查、修复或有明显欠缺时，可直接在该逻辑内部标注 `#warning`。
+  * 在大型代码库或复杂流程中，这种警告能更直观地提醒代码审查者（Instead of TODO 注释被忽略）。
+
+* 有人提到这是传统 C/Objective-C 中常见的做法，Swift 支持更广泛的警告位置有助于“提醒更贴近代码位置”。
+
+**审慎意见：**
+
+* 核心开发者提醒需注意语义一致性：
+
+  * 如果允许在局部作用域发出编译时警告，应明确其语义何时触发。
+  * `#warning` 本质上是编译器机制，而不是注释，因此它的激活位置若过多可能产生噪音；需要考虑是否影响每日开发体验。
+
+* 讨论也涉及 IDE 体验：
+
+  * 如果 `#warning` 在局部位置出现，Xcode 编译警告面板、导航会如何显示？
+  * 是否需要在 IDE 层做特殊处理，使局部警告也易于查找？
+
+## 🧩 小结
+
+这个提案旨在扩展 Swift 的 `#warning` 能力，让开发者可以更自由地在**任何代码块或局部作用域中发出编译时警告提示**，而不是受限于文件顶层或声明外。其好处是：
+
+* 可以更精确地标注需要重视的地方
+* 提高警告提示的可见性与语义关联性
+* 减少丢失注释 TODO/警告的风险
+
+不过，为了不会过度噪声化编译器输出，需要在语义定义与 IDE 支持上做进一步考量。目前该想法仍处于讨论阶段，并未形成正式提案。
+
+### 4、讨论：让 `Dictionary.mapValues(_:)` 获得关联键（Key）信息
+
+作者：taylorswift ｜ 发布日期：2026 年 1 月 1 日
+[阅读原帖](https://forums.swift.org/t/giving-dictionary-mapvalues-access-to-the-associated-key/83904 "Giving Dictionary.mapValues(_:) access to the associated key")
+
+这条论坛讨论聚焦在 Swift 标准库的 `Dictionary.mapValues(_:)` 方法上：**当前它只接受一个只带 `Value` 的转换闭包，但有时我们希望在映射值时也能访问对应的键（Key）**，以便根据键的内容决定新值。社区正在探讨是否需要改进这一 API。
+
+## 🔎 现状与问题
+
+当前 Swift 的 `Dictionary.mapValues(_:)` 提供的是一个只接收值的闭包，例如：
+
+```swift
+let newDict = oldDict.mapValues { value in
+    // 只能访问 value，没法看到 key
+}
+```
+
+若想在映射时同时用到键，就只能使用下面这些笨拙或低效的模式：
+
+```swift
+let new: [Key: NewValue] = .init(
+    uniqueKeysWithValues: old.lazy.map { (key, value) in
+        (key, transform(id: key, payload: value))
+    }
+)
+
+let new2: [Key: NewValue] = old.reduce(into: [:]) {
+    $0[$1.key] = transform(id: $1.key, payload: $1.value)
+}
+```
+
+但这种写法**会对字典重新做哈希**并重新构造存储 —— 性能不如标准库现有的 `mapValues(_:)` 实现。([Swift Forums][1])
+
+## 🧠 讨论亮点
+
+### 性能与功能兼顾的需求
+
+* 标准库内部 `mapValues(_:)` 的实现**不需要重新哈希**，因为它沿用原字典的存储结构，只替换值部分。但现有 API 不把键传给闭包，导致开发者无法直接写出既高效又能用到键的映射逻辑。
+* 讨论认为：若能为 `mapValues` 添加新重载，让闭包接收 `(Key, Value)`，则可以避免“笨拙模式”的性能损失。例如：
+
+  ```swift
+  extension Dictionary {
+      @inlinable
+      func mapValues<T>(
+          _ transform: (Key, Value) throws -> T
+      ) rethrows -> Dictionary<Key, T>
+  }
+  ```
+
+  这样的重载既与现有的 `mapValues { value in … }` 保持兼容，又能让用户在闭包里访问 key。([Swift Forums][2])
+
+### 社区讨论
+
+* 有人指出这种 API 在实际项目中非常常见，而且历史上就有人提出对带键 context 的 map 函数的需求。([Swift Forums][1])
+* 现有的实现模式（如 `uniqueKeysWithValues` 或 `reduce(into:)`）由于需要重新插入键-值对，其性能不如库内部优化过的 `mapValues`。([Swift Forums][1])
+* 讨论还举出为 `OrderedDictionary`（来自 swift-collections）也增加类似支持的潜在好处，因为那里的键序信息更多。([Swift Forums][1])
+
+### 现有 workaround
+
+* 若新值类型与旧值类型一致，可以用更低级方式在原字典上原地修改：
+
+  ```swift
+  var dict = old
+  for index in dict.indices {
+      let (key, value) = dict[index]
+      dict.values[index] = transform(id: key, payload: value)
+  }
+  ```
+
+  但这种方式不适用于改变值类型的情景。
+
+## 🧩 小结
+
+目前社区正在探讨增强 `Dictionary.mapValues(_:)` 的能力，使其在映射值时 **同时提供对应的键作为参数**，从而提升 API 的表达力和性能效率。现有的方案虽能手动实现，但都要付出哈希或结构重建的性能代价。若未来标准库采纳这样的重载，开发者就能更加直接、安全地基于键值对进行高效转换。
+
+### 5、介绍《使用 Swift 编程》一书（An Introduction to Programming Using Swift）
+
+作者：hryde ｜ 发布日期：2026 年 1 月 1 日
+[阅读原帖](https://forums.swift.org/t/an-introduction-to-programming-using-swift/83901 "An Introduction to Programming Using Swift")
+
+这篇 Community Showcase 帖子介绍了 **《An Introduction to Programming Using Swift》** 这本面向初学者的 Swift 编程教材的最新进展，并发布了其 **Beta 0.5.1 版本**，旨在帮助新人系统学习 Swift 编程。([Swift Forums][1])
+
+**主要内容：**
+
+* 《An Introduction to Programming Using Swift》最早由作者在 Swift 2 时代开始编写，后随着语言演进不断重写，当前在 **Swift 6.0/6.x 环境下重新整理后进入 beta 发布阶段**。([Swift Forums][1])
+* 该书体量庞大，超过 **2,600+ 页**，包括 **25 章正文 + 12 个附录**。📘 目前 Beta 版 **0.5.1 已包含校对完成的第 1–17 章**，涵盖对初学者最重要的语言基础和核心概念部分，其余章节仍是草稿状态。([Swift Forums][1])
+* 作者发布此 beta 版本旨在 **征求社区反馈**，特别是第一部分（前 17 章），这些内容覆盖了多数入门者在学习 Swift 语言时最需要掌握的知识。([Swift Forums][1])
+
+**章节范围示例（部分）：**
+
+* Swift 基本语法、数据类型与语句
+* 条件控制与循环
+* 函数、闭包、错误处理
+* 集合类型（数组、字典、集合）
+* 字符串与字符处理
+* 结构体、类、枚举、协议与泛型
+* 错误处理与先进类型系统机制
+* 附录：标准库引用、集合方法、模式匹配等内容概览 ([Swift Forums][1])
+
+**发行形式：**
+
+该书 beta 版提供多种格式供选择：
+
+* PDF（推荐，可读性最佳）
+* EPUB3（适合 Apple Books）
+* AZW3（Kindle，渲染效果稍弱）
+
+### 🧩 小结
+
+这本书是一个**面向初学者的大部头教材**，目标是用 Swift 系统讲解编程基础与进阶话题，内容从基本语法到复杂类型系统涵盖广泛。尽管还在 beta 阶段，但其第一部分已足够作为 Swift 新手入门和巩固基础的学习材料。作者鼓励读者参与反馈与校对，为未来正式版打下基础。([Swift Forums][1])
 
 ## 推荐博文
 
