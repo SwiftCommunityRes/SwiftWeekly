@@ -114,6 +114,170 @@ iPhone 周期仍将为整体数据定下基调，但在现阶段，需求走向�
 
 ## Swift论坛
 
+### 1、提议：允许 `reduce` 产生不可拷贝（noncopyable）结果
+
+作者：Ben Cohen ｜ 发布日期：2026 年 1 月 12 日
+[阅读原帖](https://forums.swift.org/t/pitch-allow-reduce-to-produce-noncopyable-results/84073 "Allow reduce to produce noncopyable results")
+
+这个 pitch 提议**扩展 `Sequence.reduce` 系列 API**，让它们能够：
+
+* 支持 **不可拷贝类型（noncopyable types）** 作为累积结果；
+* 将累积初始值以 **consuming（消费）** 方式接收，而不是借用，从而避免不必要的拷贝。
+
+**动机：**
+`reduce` 目前假定初始值是可拷贝的，会在内部复制这份值，这对于不可拷贝类型无法工作。通过让参数以 consuming 语义传入，就可以把值“拿过来”更新，而不需要借用/拷贝，从而让 `reduce` 可用于更多类型。
+
+**主要修改示例：**
+
+```swift
+extension Sequence {
+  public func reduce<Result: ~Copyable>(
+    _ initialResult: consuming Result,
+    _ nextPartialResult:
+      (_ partialResult: consuming Result, Element) throws -> Result
+  ) rethrows -> Result
+
+  public func reduce<Result: ~Copyable>(
+    into initialResult: consuming Result,
+    _ updateAccumulatingResult:
+      (_ partialResult: inout Result, Element) throws -> ()
+  ) rethrows -> Result
+}
+```
+
+这种写法消除了对初始值的隐式拷贝，并允许不可拷贝类型参与归约逻辑。
+
+**讨论亮点：**
+
+* 这种更通用的 `reduce` 与现有习惯一致，`reduce(into:)` 本身已经是 consuming 的；
+* 社区提出是否也应将类似语义推广到 `AsyncSequence.reduce` 等；
+* 改动不会破坏现有源码兼容性，但会影响 ABI 调用约定，需要兼容入口保留。
+
+
+### 2、SE-0504：任务取消屏蔽（Task Cancellation Shields）
+
+作者：John McCall ｜ 发布日期：2026 年 1 月 12 日
+[查看提案](https://forums.swift.org/t/se-0504-task-cancellation-shields/84095 "SE-0504: Task Cancellation Shields")
+
+这个提案进入**正式审查阶段**，目标是为 Swift 并发提供一个 API，让你可以在某段异步代码内部**屏蔽（shield）任务取消的可见性** —— 即使父任务已被取消，在这段代码里仍然不“看到”取消状态。
+
+**动机：**
+当前没有语言级支持使某些清理或关键代码在取消传播时仍然运行。开发者通常不得不手动创建无结构任务（unstructured task）作为 workaround，这会引入调度延迟和不确定性。 shields 提供一种更精确的行为控制。
+
+**核心 API（草案）：**
+
+```swift
+public func withTaskCancellationShield<Value>(
+  _ operation: () async throws -> Value
+) async throws -> Value
+```
+
+以及其同步版本，用于屏蔽取消感知，同时运行代码。
+
+**社区讨论要点：**
+
+* 有人认为这个特性对资源清理或第三方库调用非常有用；
+* 如何命名（shield vs ignore vs defer）引发了深入讨论，因为要准确传达语义；
+* shield 并不阻止任务实际上被取消，它只是让当前范围内调用 `Task.isCancelled` 返回假，从而不触发取消逻辑。
+
+**小结：**
+该提案旨在增强 Swift 并发，让开发者控制任务取消的可见性，有助于更可靠的清理逻辑，但命名与语义解释仍是社区关注点。
+
+
+### 3、提案：为 `RawSpan` 提供安全加载值 API
+
+作者：Guillaume Lessard ｜ 发布日期：2026 年 1 月 14 日
+[阅读原帖](https://forums.swift.org/t/pitch-2-safe-loading-of-values-from-rawspan/84144 "Safe loading of values from RawSpan")
+
+这篇 pitch 提议在标准库中引入一组**安全的 API 用于从 `RawSpan` 载入值**，以及相应的从 `RawSpan` 到 `Span` 的安全转换。
+
+**动机：**
+`RawSpan` 目前带有一些不安全（unsafe）方法来从原始内存读取任意类型。虽然原始整数类型可以安全读取，但不安全标记让用户总是心存疑虑。该提案希望提供边界检查、安全加载值接口及控制字节序（endianness）的支持。
+
+**核心设计：**
+
+* 引入新约束 `FullyInhabited` —— 强调类型对于每一种可能的位模式都有合法值；
+* 为满足条件的类型（例如整数、浮点型等）提供安全 `load(as:)` 方法：
+
+```swift
+extension RawSpan {
+  func load<T: FullyInhabited>(
+    fromByteOffset: Int = 0,
+    as: T.Type = T.self
+  ) -> T
+}
+```
+
+* 对于整数类型，还提供支持指定字节序的重载版本。
+
+**其他改进：**
+
+* `MutableRawSpan` 增加带字节序控制的 `storeBytes` 方法；
+* `Span` 添加通过 `RawSpan` 构造的安全初始化器。
+
+**社区讨论亮点：**
+
+* 类型是否真的能完全符合 `FullyInhabited`、padding 字节是否安全等问题被热议；
+* 是否允许手动声明某些结构体也能安全 conform 于 `FullyInhabited`。
+
+**小结：**
+该提案希望减少 unsafe API 使用，让 `RawSpan` 提供更安全、界限检查的内存读取机制，对二进制解析、网络字节操作等场景非常有用。
+
+
+### 4、讨论：在包生态中推广 `import FoundationEssentials`
+
+作者：Mads Odgaard ｜ 发布日期：2026 年 1 月 13 日
+[阅读原帖](https://forums.swift.org/t/the-adoption-of-import-foundationessentials-throughout-the-package-ecosystem/84112 "The adoption of import FoundationEssentials throughout the package ecosystem")
+
+这个讨论聚焦于 Swift 包生态中 **推广使用 `import FoundationEssentials` 代替传统 `import Foundation`**，以减少二进制体积和依赖重量级 ICU 国际化库的问题，这在 Android 等平台对体积敏感的情境下尤为重要。
+
+**主要背景：**
+
+* 在 Android 等环境下，包含完整的 ICU 国际化数据会显著增加最终二进制尺寸，这阻碍了 Swift 在这些生态中的采用；
+* `FoundationEssentials` 是 Foundation 的一个更轻量的子集，包含核心 API，而不依赖 ICU 国际化组件。
+
+**生态挑战：**
+
+* Swift 当前 **会向外泄露导入库的公共 API**（public API of imports），因此简单替换 import 会造成**源不兼容**，需要发布主版本升级；
+* 多个流行库已有人尝试引入 `import FoundationEssentials`，但因兼容性限制难以全面推广。
+
+**社区观点：**
+
+* 有人支持强制切换并接受破坏性变更，以改善整体生态体积问题；
+* 也有人担心现有生态兼容性及某些依赖完整 Foundation 功能的包无法轻易迁移。
+
+**小结：**
+该讨论旨在推动更轻量化的基础依赖，对于希望减小 Android/Linux/嵌入式平台大小的 Swift 项目尤为重要，但涉及兼容性牵引，需要包维护者协作。
+
+
+### 5、提案：标准库添加获取当前可执行文件路径的 API
+
+作者：Jonathan Grynspan ｜ 发布日期：2026 年 1 月 14 日
+[阅读原帖](https://forums.swift.org/t/pitch-api-to-get-the-path-to-the-current-executable/84137 "API to get the path to the current executable")
+
+这个 pitch 提议在 Swift 标准库中提供一个**统一 API 来获取当前可执行文件的路径**，避免开发者依赖平台特定方法或高层 API（比如 `Bundle.executableURL`）。
+
+**动机：**
+
+许多命令行工具、测试框架和跨平台代码需要在运行时知道自身的可执行路径，但目前只能依赖平台特定 API 或绕过实现细节。提供统一 API 可以让 Swift 项目更便捷地处理如路径查找、资源定位等需求。
+
+**示例：**
+
+```swift
+if let executablePath = CommandLine.executablePath {
+  // 使用 path 做进一步处理
+}
+```
+
+**讨论重点：**
+
+* 该 API 仅返回当前执行的可执行文件路径，并不会执行查找其他二进制；
+* 在测试环境下，返回的路径可能是测试运行工具本身（如 Xcode 的 xctest），因此应文档说明行为；
+* 社区建议将结果设为 Optional 返回以处理不支持的平台或无法解析的场景。([Swift Forums][6])
+
+**小结：**
+该提案希望让 Swift 标准库直接支持可执行路径获取，提高跨平台一致性，简化工具和框架内对自身路径的访问逻辑。
+
 
 ## 推荐博文
 
