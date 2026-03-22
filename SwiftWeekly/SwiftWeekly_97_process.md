@@ -102,6 +102,21 @@ Swift 周报已在 GitHub 开源：
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周“提升技能 + 开阔思路”：
+
+[Android 瘦 LTO 与 Swift 集成层启动优化实战指南](https://developer.unity.cn/projects/6985aea1edbc2a001e30c857/ "ndroid 瘦 LTO 与 Swift 集成层启动优化实战指南")
+
+**摘要：** 本文深入探讨了在跨平台应用开发中，通过 Android 端瘦 LTO 构建与 Apple 端 Swift重写集成层来协同优化启动性能的实战方案。文章指出，瘦 LTO 摒弃了全量优化的资源密集型模式，通过精准画像启动关键路径，实现编译产物的结构化精简；而 Swift 原生集成层则消除了传统跨语言桥接链路的延迟损耗。作者详细阐述了两项技术的协同逻辑： Android 端削减代码加载体积， Apple 端压缩初始化链路，共同形成覆盖编译产物到运行时执行的优化闭环。文中不仅提供了基于应用场景的差异化配置策略，还展望了这种优化思路为构建可扩展的性能体系所带来的长远价值，为复杂跨平台应用的启动加速提供了方法论参考。
+
+[替换认证系统背后的经验教训](https://www.esri.com/en-us/software-engineering/blog/articles/lessons-from-swapping-out-our-authentication-system/ "替换认证系统背后的经验教训")
+
+**摘要：**  这篇来自Esri工程团队的博客，详细复盘了在 Qt Maps SDK 中替换核心认证系统并将其与Swift、 Kotlin 等 SDK 共享 API 对齐的复杂历程。文章揭示了这一原本看似目标明确的迁移，最终演变为涉及技术选型、架构重构与用户体验考量的系统性工程。团队分享了面对命名冲突、防止系统混用、重构网络栈以实现全局请求处理器，以及为应对双重代码路径而翻倍测试覆盖等挑战时的解决方案。通过采用新旧系统并行发布的核心策略，团队最终在不影响产品质量的前提下，成功完成了高风险的技术债偿还，并统一了跨平台SDK的行为。这篇博客为大型SDK的底层架构升级与跨平台代码复用提供了宝贵的实战经验。
+
+
+[跨平台 Swift：构建一个运行在浏览器中的 Swift 应用](https://www.pointfree.co/blog/posts/151-cross-platform-swift-building-a-swift-app-for-the-browser/ "跨平台 Swift：构建一个运行在浏览器中的 Swift 应用")
+
+**摘要：** 本文探索了Swift在浏览器环境中的运行现状与开发实践。作者指出，尽管Swift在服务器端已趋于成熟，但通过WebAssembly在浏览器端运行仍是新兴领域。文章以构建一个简单的计数应用为例，详细演示了从配置SwiftWasm工具链、使用JavaScriptKit库与DOM交互，到利用Swift Observation框架实现响应式更新的全流程。文中直面了当前工具链不够完善、缺少SwiftUI等原生框架支持等挑战，但同时也展示了纯Swift业务逻辑真正实现“一次编写，多端运行”的潜力。这篇博客为寻求探索Swift全栈开发或希望将现有Swift代码引入Web平台的开发者，提供了一份极具实操性的入门指南。
+
 
 ## 关于我们
 
