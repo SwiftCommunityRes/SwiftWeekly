@@ -99,6 +99,177 @@ Swift 周报已在 GitHub 开源：
 
 ## Swift论坛
 
+### 1、[Pitch] UUID v7 及其他改进
+
+作者：Tony Parker ｜ 发布日期：2026-03-18
+[阅读原帖](https://forums.swift.org/t/pitch-uuid-v7-other-improvements/85427 "[Pitch] UUID v7, other improvements")
+
+本提案由 Tony Parker 撰写，为 Foundation 的 **`UUID`** 类型带来了一系列期待已久的改进。
+
+**核心内容：**
+
+- 新增 **UUID v7**（时间有序 UUID）支持：将 Unix 时间戳编码在最高 48 位，生成单调递增、可排序的 UUID，非常适合作为数据库主键，解决了 v4 随机 UUID 在 B-tree 索引中写放大的问题。
+- 新增 **`UUID.Version`** 结构体，支持对任意 UUID 进行版本自省，采用 `RawRepresentable` 而非 `enum`，以保持源码和二进制兼容性。
+- 新增 **`UUID.nil`** 和 **`UUID.max`** 哨兵值（全零/全一）。
+- 新增 **`uuidStringLower`** 属性，避免调用 `.lowercased()` 产生额外内存分配。
+- 新增 **`span`** 属性，通过 `Span<UInt8>` 提供零拷贝字节访问。
+- 新增通过 `OutputSpan` 初始化 UUID 的构造器。
+
+```swift
+// 创建时间有序 UUID
+let id = UUID.timeOrdered()
+
+// 版本自省
+switch id.version {
+case .timeOrdered: print("v7 UUID，按创建时间可排序")
+case .random:      print("v4 UUID")
+default:           break
+}
+
+// 哨兵值
+let nilID = UUID.nil  // 00000000-0000-0000-0000-000000000000
+let maxID = UUID.max  // FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF
+```
+
+**讨论亮点：** 社区对版本命名争议较大，多位成员建议使用 `.v4`、`.v7` 等直接引用规范编号的命名，而非 `timeBased`/`timeOrdered` 等描述性名称；`UUID.nil` 的命名也引发讨论，有人担心与 Swift 的 `nil` 关键字混淆，建议改为 `.zero` 或 `.min`；Tony Parker 最终倾向于 `.min` 以与 `.max` 对称。此外，提案还更新了 `timeOrdered(using:at:)` 以支持注入自定义日期，方便测试。
+
+**点评：** 这是 Foundation `UUID` 类型多年来最实质性的一次升级，v7 支持对于现代后端开发尤为重要，`Span` 集成也体现了 Swift 对低层次、零拷贝 API 的持续投入。
+
+---
+
+### 2、SE-0522：源码级编译器警告控制
+
+作者：Tony Allevato（Review Manager）｜ 发布日期：2026-03-19
+[阅读原帖](https://forums.swift.org/t/se-0522-source-level-control-over-compiler-warnings/85453 "SE-0522: Source-Level Control Over Compiler Warnings")
+
+**SE-0522** 正式进入审查阶段（截止 2026-04-02），提案引入 **`@warn`** 属性，允许开发者在源码层面对编译器警告进行细粒度控制，可将特定诊断组的警告升级为错误、降级为警告或完全忽略。
+
+**核心语法：**
+
+```swift
+// 将某诊断组升级为错误
+@warn(DeprecatedDeclaration, as: error)
+func foo() { ... }
+
+// 忽略某诊断组
+@warn(DeprecatedDeclaration, as: ignored)
+func bar() { ... }
+```
+
+**动机：** 现有工具链只能通过命令行标志进行模块级别的警告控制，缺乏针对特定声明的精细化手段，导致开发者要么忍受噪音警告，要么一刀切地关闭整类警告。
+
+**讨论亮点：**
+- 多位成员对 `@warn` 的命名提出异议，建议改为 **`@diagnose`**，并调整参数顺序以提升可读性，如 `@diagnose(DiagnosticGroup, as: .error)`。
+- 有人提议支持对 **remarks**（编译器备注）的控制，但也有人指出 remarks 与 warning/error 处于不同维度，不宜混用。
+- Xiaodi Wu 对 `as: ignored` 用于忽略所有废弃警告表示担忧，认为这会鼓励开发者一次性屏蔽所有废弃提示，而非针对性处理，建议参考 `@preconcurrency` 的设计思路。
+- 有成员提出未来方向：支持在 `do {}` 块等更小的词法作用域内控制诊断，类似 Rust 的 `#[allow(...)]`。
+
+**点评：** 这是 Swift 开发者长期以来的痛点，尤其在维护大型遗留代码库时。提案设计合理，命名和作用域粒度是后续需要打磨的重点。
+
+---
+
+### 3、[Pitch] RigidArray 与 UniqueArray
+
+作者：Alejandro Alonso、Karoy Lorentey ｜ 发布日期：2026-03-19
+[阅读原帖](https://forums.swift.org/t/pitch-rigidarray-and-uniquearray/85455 "[Pitch] RigidArray and UniqueArray")
+
+本提案建议将 **`RigidArray`** 和 **`UniqueArray`** 两种新数组类型引入标准库，核心目标是支持存储**不可复制（`~Copyable`）元素**的堆分配数组。
+
+**动机：** 现有 `Array` 的写时复制（**CoW**）机制与不可复制类型根本不兼容——当数组缓冲区需要复制时，无法克隆不可复制的元素，会导致资源（如文件描述符）被错误地多次释放。
+
+**两种类型的定位：**
+
+- **`UniqueArray<Element: ~Copyable>`**：动态扩容的堆分配数组，始终唯一持有其存储，`var b = a` 是移动而非复制，`a` 随即失效。适合通用场景。
+- **`RigidArray<Element: ~Copyable>`**：固定容量的堆分配数组，超出容量时直接 fatal error，不会隐式分配。适合实时/嵌入式等对延迟敏感的场景。
+
+```swift
+var a = UniqueArray<File>()
+a.append(file1)
+var b = a       // 移动，a 不再有效
+
+var r = RigidArray<Int>(capacity: 2)
+r.append(1)
+r.append(2)
+r.append(3)     // 运行时错误：超出容量
+```
+
+**讨论亮点：**
+- 命名争议：多人认为 `UniqueArray` 容易被误解为"元素唯一的数组"（类似 Set），建议改为 `NoncopyableArray` 等更直白的名称。
+- 有人质疑为何不直接扩展 `Array` 支持 `~Copyable`，Joe Groff 和 Steve Canon 解释：`UniqueArray` 即便对可复制元素也有价值（消除引用计数、CoW 检查），与"让 `Array` 条件性不可复制"是两个不同的需求。
+- 自定义分配器（Allocator）的支持被列为备选方案，但因语言层面尚不具备默认泛型参数等基础设施，暂未纳入本提案。
+
+**点评：** 这是 Swift 所有权系统走向成熟的重要一步，为嵌入式和系统编程场景提供了关键的数据结构支撑。命名问题值得在正式提案阶段认真对待。
+
+---
+
+### 4、[修订] SE-0469 Task 命名补充实例属性
+
+作者：Konrad 'ktoso' Malawski ｜ 发布日期：2026-03-20
+[阅读原帖](https://forums.swift.org/t/amend-se-0469-task-names-to-include-instance-property/85460 "[Amend] SE-0469 Task names to include instance property")
+
+这是一个对 **SE-0469（Task 命名）** 的小幅修订提案。作者 ktoso 发现，当前 `Task` 类型只在静态属性和 `UnsafeCurrentTask` 上暴露了任务名称，却遗漏了从 `Task` 实例外部读取名称的实例属性。
+
+**拟新增 API：**
+
+```swift
+extension Task {
+    /// 返回任务创建时设置的名称（如有）
+    public var name: String?
+}
+```
+
+**背景：** SE-0469 已允许在创建 Task 时传入名称，lldb 也已支持读取和打印任务树中的名称，但从外部通过 `task.name` 读取却一直缺失，属于明显的疏漏。
+
+**讨论亮点：**
+- 社区普遍认为这是一个无争议的遗漏修复，建议走"修订"快速通道而非完整提案流程。
+- 属性将为**只读**，任务名称在创建后不可变。
+- ktoso 指出，由于缺少运行时入口点，该属性**无法向旧版运行时回溯部署**。
+- James Dempsey 表示，他在 Instruments 课程中推广 Task 命名功能时，学生对此非常欢迎，也印证了该 API 的实用价值。
+
+**点评：** 典型的"小而美"修复，补全了 Task 命名功能的最后一块拼图，对调试和可观测性有实际帮助。
+
+---
+
+### 5、完全用 Swift 编写的裸机 Raspberry Pi Pico 示例（零 C 代码）
+
+作者：Kishikawa Katsumi ｜ 发布日期：2026-03-19
+[阅读原帖](https://forums.swift.org/t/bare-metal-raspberry-pi-pico-examples-written-entirely-in-swift-no-c-code-at-all/85454 "Bare-metal Raspberry Pi Pico examples written entirely in Swift, no C code at all")
+
+作者分享了 **pico-bare-swift** 项目——一组完全用 **Embedded Swift** 编写的裸机 Raspberry Pi Pico（RP2040）示例，除链接脚本外，不含任何 C 代码，连向量表、boot2 和启动代码都用 Swift 实现。
+
+**实现关键技术：**
+
+1. **`@section`（SE-0492）**：将数据放置到特定链接器段，替代 GCC 的 `__attribute__((section(...)))`，用于定义向量表：
+
+```swift
+@used
+@section(".vector")
+let vectorTable: (UInt32, @convention(c) () -> Void, ...) = (
+    0x2004_0000, resetHandler, defaultHandler, defaultHandler
+)
+```
+
+2. **`@_extern`**：访问链接脚本定义的符号（如 `__data_start`），替代 C 的 `extern char` 声明：
+
+```swift
+@_extern(c, "__data_start") nonisolated(unsafe) var __data_start: UInt8
+```
+
+3. **`@c`（SE-0495）**：将 Swift 函数导出为 C 可调用符号，满足硬件和链接器对特定符号名的要求：
+
+```swift
+@c(Reset_Handler)
+func resetHandler() {
+    initializeMemorySections()
+    Application.main()
+}
+```
+
+**一个值得注意的坑：** Swift 编译器始终生成 PIC 代码，`@_extern` 变量会产生 GOT（全局偏移表）条目，默认落在 `.data`（RAM）段，而启动代码需要在 `.data` 初始化之前访问这些符号，形成"先有鸡还是先有蛋"的问题。解决方案是在链接脚本中将 `.got` 移至 ROM。
+
+项目包含 8 个由浅入深的示例，从最简单的 LED 闪烁到带按钮输入的 I2C OLED 显示屏。
+
+**点评：** 这是 Embedded Swift 生态成熟度的有力证明。随着 `@section`、`@_extern`、`@c` 等特性的落地，Swift 已具备完整替代 C 进行裸机开发的能力，对嵌入式开发者极具参考价值。
 
 ## 推荐博文
 
