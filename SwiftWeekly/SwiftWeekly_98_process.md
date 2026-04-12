@@ -154,6 +154,20 @@ iPhone Ultra 采用横向书本式内折设计，配备 5.5 英寸外屏与 7.8 
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[ Swift 脱离 Xcode：Apple 编程语言为跨平台开发者迈出最激进的一步](https://www.webpronews.com/swift-breaks-free-from-xcode-apples-programming-language-makes-its-boldest-play-yet-for-cross-platform-developers/ " Swift 脱离 Xcode：Apple 编程语言为跨平台开发者迈出最激进的一步")
+
+**摘要：** 这篇报道详细解读了 Swift 项目官方在2025年6月宣布的一项重大举措：将一流的 IDE 支持带到任何能够使用语言服务器协议（LSP）的编辑器中——包括 VS Code、Neovim、Emacs 等。长期以来， Swift 一直被视为与 Xcode 绑定的语言，虽已支持 Linux 和 Windows ，但在 Xcode 之外的开发体验一直不尽人意。为此，官方不仅大幅投入 SourceKit-LSP 的工程资源，使其具备宏展开、更精准的代码补全、跨模块导航等现代IDE必备功能，还专门打造了一款“Swift for VS Code ”扩展，集成了调试、 Swift Package Manager 包解析和测试发现等能力。文章指出，这一布局的深层原因在于Swift正加速向服务端和嵌入式系统扩展——开发者越来越多地在 Xcode 无法运行的平台上工作，官方必须主动打破对单一 IDE 的依赖，才能让 Swift 在多平台生态中走得更远。
+
+[ 从应用到服务：Swift 的演进之路](https://www.infoq.com/presentations/swift-apps-services/ " 从应用到服务：Swift 的演进之路")
+
+**摘要：** 这场来自QCon London 的演讲由 Apple 高级软件工程师Cory Benfield 主讲，深入探讨了 Swift 从应用层语言向安全、高规模服务领域演进的过程。演讲指出， Swift 已在 Apple 内外用于运行服务超过8年——从 iCloud Keychain 到 App Store 处理管道、 SharePlay 文件共享，再到 Apple Intelligence 的 Private Cloud Compute，均以 Swift 构建。 Benfield 详细解释了 Swift 在服务端的核心优势：无垃圾回收器消除了尾部延迟，而“零成本抽象”使其性能可与 C 语言媲美。演讲还展示了 Swift 与 C++ 及 Java 生态的全新互操作能力，并为在服务端逐步采用Swift提供了实用原则和路线图。全文呈现了一幅 Swift 从 Apple 平台专属语言，稳步成长为兼具安全性与高性能的服务端开发利器的图景。
+
+[讲讲 swift 中 defer 的实现原理和使用场景](https://juejin.cn/post/7350860141582385188/ "讲讲 swift 中 defer 的实现原理和使用场景")
+
+**摘要：**  这篇文章详细介绍了 Swift 中的 defer 语句，探讨了其用法和实现原理，并提供了多个具体的使用场景。通过分析 Swift 官方源码，解释了 defer 的底层实现机制，以及在特殊场景下的行为。文章强调了 defer 在资源管理和清理工作中的重要性，并指出了一些常见的误用情况，例如在 defer 中使用 return 语句。总的来说，defer 是 Swift 中一个非常有用的特性，它简化了资源管理和清理工作的代码编写。
+
 
 ## 关于我们
 
