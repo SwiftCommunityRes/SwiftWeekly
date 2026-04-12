@@ -151,6 +151,177 @@ iPhone Ultra 采用横向书本式内折设计，配备 5.5 英寸外屏与 7.8 
 
 ## Swift论坛
 
+### 1、[Pitch] 为 Result 添加异步支持
+
+作者：mattie ｜ 发布日期：2026-04-08
+[阅读原帖](https://forums.swift.org/t/pitch-async-result-support/85888 "Pitch: Async Result Support")
+
+本帖提出为 **`Result`** 类型添加两项异步相关的 API 扩展，延续了 **@ktoso** 此前的相关工作。
+
+**动机：** 现有的 `Result.init(catching:)` 只支持同步抛出闭包，无法直接包裹异步代码，导致许多项目重复手写相同的样板代码。
+
+**提案内容：**
+
+1. 为 `Result` 新增异步版本的 `catching` 初始化器，支持 `async throws`：
+
+```swift
+let result = await Result {
+  try await asyncWork()
+}
+```
+
+2. 为 `Task` 新增 `result` 属性，返回 **`Result<Success, Failure>`**，方便链式调用 `flatMap` 等操作：
+
+```swift
+let result = await Task {
+    try await asyncWork()
+  }
+  .result
+  .flatMap { transformValue($0) }
+```
+
+**详细设计：**
+
+```swift
+extension Result where Success: ~Copyable {
+  public nonisolated(nonsending) init(
+    catching body: () async throws(Failure) -> Success
+  ) async { ... }
+}
+
+extension Task {
+  public var result: Result<Success, Failure> {
+    async get { Result { try await self.value } }
+  }
+}
+```
+
+**讨论亮点：** 社区对第一个 `async catching init` 普遍持正面态度，认为实用价值高；对 `Task.result` 属性则讨论较多，部分人认为使用场景有限。作者表示对后者持开放态度，欢迎反馈。
+
+> 小而美的提案，填补了 `Result` 与 `async/await` 之间长期存在的空白，尤其是异步初始化器，几乎是每个项目都会手写的工具代码，纳入标准库十分合理。
+
+---
+
+### 2、Swift-tar：纯 Swift 实现的 TAR 归档读写库
+
+作者：kateinoigakukun ｜ 发布日期：2026-04-06
+[阅读原帖](https://forums.swift.org/t/swift-tar-a-pure-swift-tar-archive-read-write-extract-library/85844 "Swift-tar: A pure Swift TAR archive read/write/extract library")
+
+作者发布了 **swift-tar**，一个纯 Swift 编写的 TAR 归档读写与解压库。
+
+**核心特性：**
+- **无 Foundation 依赖**，不依赖任何系统框架
+- **跨平台**：支持 macOS、Linux、Windows、**WebAssembly** 及 **Embedded Swift**
+- 透明处理 **GNU & PAX 扩展**（长路径、长链接名、PAX 扩展头）
+
+**基础 API 示例（内存模式）：**
+
+```swift
+import Tar
+
+let archive = Archive(data: archiveBytes)
+
+for entry in archive {
+    let path = entry.fields.path()
+    let size = entry.fields.size
+    print("\(path) (\(size) bytes)")
+}
+```
+
+**流式读取与解压（适合大文件）：**
+
+```swift
+import Tar
+
+var reader = TarReader()
+var extractor = try TarExtractor().streamingExtractor(to: "output")
+
+for chunk in chunks {
+    try extractor.consume(reader.append(chunk))
+}
+
+try extractor.consume(reader.finish())
+let result = try extractor.finish()
+print("Extracted \(result.extractedEntries) entries")
+```
+
+**性能：** 本地基准测试中，解压 3.5 GB 的 `swift-6.3-RELEASE-ubuntu24.04.tar` 速度略快于系统自带的 `bsdtar`。项目采用 MIT 协议开源。
+
+> 对于需要在嵌入式或 WebAssembly 等无 Foundation 环境下处理 TAR 文件的场景，这个库填补了一个重要空白，性能表现也令人印象深刻。
+
+---
+
+### 3、SE-0526：withDeadline 正式审查
+
+作者：Jumhyn ｜ 发布日期：2026-04-07
+[阅读原帖](https://forums.swift.org/t/se-0526-withdeadline/85850 "SE-0526: withDeadline")
+
+**SE-0526** 提案正式进入审查阶段，审查期截止至 **2026 年 4 月 20 日**。
+
+**提案内容：** 引入 **`withDeadline`** 函数，为异步操作提供基于绝对时间点的可组合超时机制。若操作在截止时间前完成则正常返回结果；若超时，则取消操作并等待其返回后抛出错误。
+
+**函数签名：**
+
+```swift
+nonisolated(nonsending) public func withDeadline<Return, Failure: Error>(
+  ...,
+  body: nonisolated(nonsending) () async throws(Failure) -> Return
+) async throws(DeadlineError<Failure>) -> Return
+```
+
+**讨论亮点：**
+- **@jrose** 提问为何要将错误包装为 `DeadlineError<Failure>`，认为不关心超时与业务错误区别时处理起来较繁琐。
+- **@ktoso** 解释这是为了保留 **typed throws** 的类型信息，并坦言理想方案是支持 `SomeError | DeadlineError` 这样的错误联合类型，但语言目前尚不支持。
+- **@ibex** 指出提案简介描述不够清晰，未明确说明超时后函数会等待操作完成再返回，而非立即返回。
+
+> `withDeadline` 是对 Swift 并发工具箱的重要补充，与 `withTaskCancellationHandler` 等 API 形成良好的组合。错误包装方式的设计取舍值得关注，也折射出 Swift 类型化错误体系仍有待完善的地方。
+
+---
+
+### 4、Task.immediate 的正确使用场景探讨
+
+作者：mattneub ｜ 发布日期：2026-04-08
+[阅读原帖](https://forums.swift.org/t/is-this-a-good-use-of-task-immediate/85885 "Is this a good use of Task.immediate?")
+
+作者在 UIKit 应用中发现了 **`Task.immediate`**，并分享了其在 `@IBAction` 场景下的使用体验与疑问。
+
+**背景：** 作者的应用采用"presenter / processor"架构，所有用户输入都通过 `async` 方法传递给业务逻辑对象。原有写法：
+
+```swift
+@IBAction func doStats(_ sender: UIButton) {
+    Task {
+        await processor?.receive(.stats(source: sender))
+    }
+}
+```
+
+普通 `Task` 仅是调度器，存在轻微延迟，且快速连续操作时可能出现乱序。改用 `Task.immediate` 后，单元测试中无需额外延迟即可通过。
+
+**社区解答：**
+- **@mattie** 认为这是完全合理的用法，但指出 `Task.immediate` 使用了不同版本的 `@_inheritActorContext`，语义上与普通 `Task` 并不完全等价。
+- **@nkbelov** 给出了关键判断依据：若 `processor` 是 **`@MainActor`** 类，`Task.immediate` 能立即执行并消除延迟；若是独立 **actor**，任务仍会在进入 body 后立即挂起以切换线程，问题依然存在。作者确认其 `processor` 为 `@MainActor` 类，因此该用法有效。
+
+> 这个讨论很好地揭示了 `Task.immediate` 的适用边界：它并非万能的"立即执行"，其效果取决于目标 actor 的隔离域。理解这一点对于正确使用 Swift 并发至关重要。
+
+---
+
+### 5、[修订] SE-0469：Task 命名新增实例属性
+
+作者：John_McCall ｜ 发布日期：2026-04-06
+[阅读原帖](https://forums.swift.org/t/amended-se-0469-task-naming/85841 "Amended SE-0469: Task Naming")
+
+**SE-0469（Task 命名）** 已于去年三月被接受并在 **Swift 6.2** 中实现，但近期社区发现一个明显疏漏：提案未提供读取任意 `Task` 名称的公开 API。
+
+**修订内容：** 语言指导小组（LSG）决定直接修订 SE-0469，为 `Task` 新增一个不可变的实例属性 **`name`**，无需重新发起完整的演进审查流程。
+
+```swift
+// 可通过实例属性读取任务名称
+let taskName = someTask.name
+```
+
+**LSG 说明：** 此次采用轻量级修订流程属于特殊情况，源于原审查中的明显疏漏。LSG 重申对开放审查流程的支持，若社区有重大异议，将回归正常审查流程。
+
+> 一个小而重要的修复。能够在运行时读取 `Task` 的名称，对于调试、日志记录和可观测性工具来说都是不可或缺的能力，此前的遗漏确实令人意外。
 
 ## 推荐博文
 
