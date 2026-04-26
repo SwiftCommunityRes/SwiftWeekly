@@ -92,6 +92,116 @@ Swift 周报已在 GitHub 开源：
 
 ## Swift论坛
 
+### 1、SE-0529：将 FilePath 加入标准库
+
+作者：John McCall ｜ 发布日期：2026-04-23
+[阅读原帖](https://forums.swift.org/t/se-0529-add-filepath-to-the-standard-library/86194 "SE-0529: Add FilePath to the Standard Library")
+
+**SE-0529** 提案正式进入审查阶段（截止 2026 年 5 月 4 日），旨在将 **`FilePath`** 类型纳入 Swift 标准库。目前处理文件路径只能依赖 **`Foundation.URL`**（过于通用且问题颇多）或 **`swift-system`** 包，标准库中缺乏专用的路径类型。
+
+该提案将 `swift-system` 中已有的 `FilePath` 实现提升为标准库一等公民，提供跨平台（POSIX / Windows）的路径操作 API，包括路径拼接、组件遍历、**`Span<FilePath.CodeUnit>`** 形式的底层字节访问等。现有 `System.FilePath` 用户可通过 ABI 重定向平滑迁移。
+
+社区讨论热烈，主要围绕以下几点：`nullTerminatedCodeUnits` 命名（`null` vs `nul` 的历史争议）、`..` 不做规范化处理（因符号链接语义）、是否应支持 `Codable`（提案选择不支持以避免歧义）。Franz Busch 建议将提案中关于跨平台路径处理的详细说明整理进标准库文档目录。
+
+> 这是 Swift 生态期待已久的补全——告别 `URL` 滥用，拥有一个真正面向文件系统的路径类型。
+
+---
+
+### 2、[Pitch] @Reasync 与 @ReasyncMembers 宏
+
+作者：broken-circle ｜ 发布日期：2026-04-22
+[阅读原帖](https://forums.swift.org/t/pitch-reasync-and-reasyncmembers-macros/86180 "Pitch: @Reasync and @ReasyncMembers macros")
+
+该 Pitch 提议在标准库（或官方 swiftlang-org 包）中新增 **`@Reasync`** 和 **`@ReasyncMembers`** 宏，通过编译期自动生成 `async` 函数的同步重载，消除手动维护两份几乎相同代码的负担。
+
+动机来自作者维护 `swift-test-kit` 的实际痛点：大量断言与求值器需要同时提供同步和异步版本，任何改动都必须在两处同步，极易产生漂移。语言层面的 **`reasync`** 特性虽有讨论但实现复杂，Doug Gregor 曾建议用宏来解决这一"近似语法糖"的问题，本提案正是对此的落地实践。
+
+```swift
+@Reasync
+func run(_ body: () async throws -> Void) async rethrows {
+    try await body()
+}
+// 宏自动生成：
+// func run(_ body: () throws -> Void) rethrows {
+//     try body()
+// }
+```
+
+宏的转换覆盖整个函数体：`async let` → `let`，`for await` → `for`，`await` 表达式直接去除。`@ReasyncMembers` 则作用于类型级别，为类型内所有 `async` 函数批量生成同步重载。
+
+> 在语言级 `reasync` 落地之前，这是一个务实且可立即使用的工程方案，值得关注。
+
+---
+
+### 3、带默认值私有 let 字段的 init 值语义问题
+
+作者：taylorswift ｜ 发布日期：2026-04-22
+[阅读原帖](https://forums.swift.org/t/value-semantics-of-init-with-defaulted-private-let-fields-does-not-make-sense/86193 "Value semantics of init with defaulted private let fields does not make sense")
+
+作者指出，当结构体含有带默认值的 **`private let`** 字段时，在扩展中通过 `self = .init(...)` 赋值会触发编译错误，而这对值类型而言本应是完全合法的操作。
+
+```swift
+struct S {
+    let x: Int
+    private let padding: Int = 0
+    init(x: Int) { self.x = x }
+}
+
+extension S {
+    init() {
+        self = .init(x: 0)
+        // ❌ Immutable value 'self.padding' may only be initialized once
+    }
+}
+```
+
+对于值类型，`self = new` 在语义上等同于整体替换，不应受字段不可变性约束。Joe Groff 明确表示这看起来是一个 **编译器 bug**，作者随即在 GitHub 提交了 issue。讨论中也探讨了修复方向：编译器应将 `self = .init(...)` 识别为整体重新初始化，而非对各字段的逐一赋值。
+
+> 这是一个影响实际编码模式（如 padding 注入、闭包驱动初始化）的真实 bug，Joe Groff 的确认使其有望在近期得到修复。
+
+---
+
+### 4、为特定时区的 Calendar 提供更具表达力的初始化方式
+
+作者：Kiel Gillard ｜ 发布日期：2026-04-21
+[阅读原帖](https://forums.swift.org/t/expressively-initialising-calendars-for-specific-time-zones/86139 "Expressively initialising calendars for specific time zones")
+
+作者提议为 **`Calendar`** 新增一个接受 `timeZone` 参数的初始化器，以替代目前必须先创建 `var` 再赋值的两步写法，使代码更具表达力并可使用 `let`。
+
+```swift
+// 现状
+var calendar = Calendar(identifier: .gregorian)
+calendar.timeZone = sydney
+
+// 提议
+let calendar = Calendar(identifier: .gregorian, timeZone: sydney)
+```
+
+作者已向 `swift-foundation` 提交 PR。社区讨论中，`tera` 提出了一种**流式（fluent）API** 的替代方案，认为其扩展性更好、更符合 DRY 原则：
+
+```swift
+let calendar = Calendar(identifier: .gregorian).timeZone(sydney).firstWeekday(2)
+```
+
+双方就 ABI 稳定性、未来新增字段时的兼容性展开了深入讨论，作者也在 PR 中持续更新以回应社区反馈。
+
+> 一个小而美的改进提案，流式 API 方案值得在最终设计中认真考量。
+
+---
+
+### 5、[已接受（含修改）] SE-0521：改进 Opaque 与 Existential 类型的 Optional 语法
+
+作者：Jumhyn (Frederick Kellison-Linn) ｜ 发布日期：2026-04-19
+[阅读原帖](https://forums.swift.org/t/accepted-with-modifications-se-0521-improved-syntax-for-optionals-of-opaque-and-existential-types/86115 "Accepted with modifications: SE-0521: Improved Syntax for Optionals of Opaque and Existential Types")
+
+**SE-0521** 已被语言指导组（LSG）**接受（含修改）**。该提案允许将 `any Protocol?` 和 `some Protocol?` 直接书写为可选类型，而无需加括号写成 `(any Protocol)?`。
+
+在原提案基础上，LSG 额外扩展了一项修改：**抑制约束（suppressed constraints）** 同样适用此语法糖，即 `any ~Copyable?` 等同于 `(any ~Copyable)?`（`some` 同理）。裸写的 `~Copyable`（不带 `any`/`some`）已有警告，故不在此次扩展范围内。
+
+此外，LSG 决定在 `.swiftinterface` 文件中继续使用带括号的消歧形式，因为该文件主要面向机器消费而非人工阅读。
+
+> 审查讨论简短而积极，这一语法改进将让涉及 opaque/existential 类型的可选值写法更加自然流畅。
+
 
 ## 推荐博文
 
