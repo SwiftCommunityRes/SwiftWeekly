@@ -202,8 +202,21 @@ let calendar = Calendar(identifier: .gregorian).timeZone(sydney).firstWeekday(2)
 
 > 审查讨论简短而积极，这一语法改进将让涉及 opaque/existential 类型的可选值写法更加自然流畅。
 
-
 ## 推荐博文
+
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[我们如何用 Swift 重写 Electron 录音引擎](https://circleback.ai/blog/how-we-rebuilt-our-electron-recording-engine-in-swift/ "我们如何用 Swift 重写 Electron 录音引擎")
+
+**摘要：** 这篇来自 Circleback 团队的工程实战博客，详述了将 Electron 应用中的实时音视频捕获引擎从 JavaScript 迁移到 Swift 的全过程。文章指出，在 Electron 渲染进程中处理实时媒体流会不可避免地遭遇 GC 暂停和线程调度等问题。为此，团队在 macOS 上使用 ScreenCaptureKit，在 Windows 上通过自研的 OBSKit 调用 libobs，并利用 Swift 搭建了跨平台共享层。更值得一提的是，他们开发了内部工具 Atomic，借助 Swift 宏在编译时自动生成原生代码与 React 前端之间的类型安全桥接代码，让 Swift 中每一个 @Published 属性都能自动变为 React 中的 Jotai atom。全文呈现了一场从 Web 技术栈向原生 Swift 迁移的完整优化实践，为处理实时媒体场景的跨平台桌面应用提供了极具参考价值的范本。
+
+[Swift 并发：一个 await、两个 Actor 的运行时追踪](https://adjoe.io/company/engineer-blog/swift-concurrency-await-runtime-trace-executor-hops/ "Swift 并发：一个 await、两个 Actor 的运行时追踪")
+
+**摘要：** 这篇来自 adjoe 工程师团队的深度技术文章，在月活 2 亿设备的 SDK 实战背景下，逐行剖析了 Swift 并发在运行时的完整执行路径。文章提出了一个核心问题：你写下一个 await，运行时究竟做了什么？作者通过追踪一段从 @MainActor 切换到另一个 Actor 再返回的具体代码，逐一拆解了任务挂起与恢复时底层延续状态机（Continuation State Machine）的原子 CAS 转换过程，并详细分析了运行时如何通过 mustSwitchToRun 逻辑判断是否真的需要跳转执行器。全文揭示了 actor 边界切换和任务执行器偏好变更这两个独立的触发条件，为在高并发场景下写出可预测、高性能的 Swift 并发代码提供了关键性的底层视角。
+
+[Swift 6.3 稳定版：正式支持 Android SDK，扩展 C 互操作](https://www.infoq.com/news/2026/04/swift-6-3-android-c-interop/ "Swift 6.3 稳定版：正式支持 Android SDK，扩展 C 互操作")
+
+**摘要：** 这篇来自 InfoQ 的新闻深度解析，系统梳理了 Swift 6.3 版本的核心技术更新。文章指出，该版本最重大的里程碑是正式推出了 Android SDK，开发者现在可以用 Swift 开发原生 Android 应用，或将 Swift 代码无缝集成到现有的 Kotlin/Java 项目中。在语言层面，Swift 6.3 引入了全新的 @c 和 @implementation 属性，让 Swift 与 C/C++ 的互操作从“单向调用”进化为“双向直接导出”；同时，weak let 解决了并发上下文中弱引用的不可发送性问题，模块选择器（Module Selectors）解决了多模块间的符号歧义。此外，版本还增强了对嵌入式开发的支持。全文描绘了一幅 Swift 从 Apple 生态语言，稳步迈向全场景、跨平台工业级语言的技术图景。
 
 
 ## 关于我们
