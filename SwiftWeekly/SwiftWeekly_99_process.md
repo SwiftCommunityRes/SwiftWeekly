@@ -202,6 +202,141 @@ let calendar = Calendar(identifier: .gregorian).timeZone(sydney).firstWeekday(2)
 
 > 审查讨论简短而积极，这一语法改进将让涉及 opaque/existential 类型的可选值写法更加自然流畅。
 
+---
+
+### 6、[Pitch] 为高性能埋点提供低开销的 Task 标识符
+
+作者：Joakim Hassila ｜ 发布日期：2026-05-12
+[阅读原帖](https://forums.swift.org/t/pitch-cheap-task-identity-for-high-performance-instrumentation/86666 "Pitch: Cheap Task identity for high-performance instrumentation")
+
+该 Pitch 提议为 Swift 并发运行时暴露一个轻量级的 **Task 标识符** 公开 API，类似线程编程中的 `pthread_self()`，专为高性能埋点场景设计。
+
+作者团队正在构建一个面向实时系统（交易基础设施、游戏引擎、音频管线）的零分配、无锁埋点库，完整 span 捕获（含时间戳、线程 ID、CPU ID、SBE 编码结构化载荷、无锁环形缓冲写入）仅需约 **25 ns**。为关联并发任务产生的 span 与日志，他们目前通过 `@_silgen_name` 直接调用私有运行时符号 `swift_task_getCurrent`，但该符号已被标记为保留符号并将在未来报错。
+
+现有公开 API `withUnsafeCurrentTask { }` 的性能对比如下：
+
+```swift
+// 各方案 p50 延迟（M4 Max）
+swift_task_getCurrent（原始运行时调用）  →  2 ns
+withUnsafeCurrentTask { }（空闭包）     →  6 ns
+withUnsafeCurrentTask + unsafeBitCast  → 39 ns（含类型元数据解析、VWT 间接调用等开销）
+```
+
+提案建议新增如下 API：
+
+```swift
+extension Task {
+    /// 当前 Task 的轻量标识符，非 Task 上下文时为 nil。O(1)，无分配。
+    public static var currentIdentifier: Task.Identifier? { get }
+}
+```
+
+讨论中，Franz Busch 和 Konrad Malawski（ktoso）建议直接暴露运行时已有的 **`task_id`**（单调递增的 `UInt64`，进程生命周期内稳定），可通过 `swift_task_getJobTaskId` 访问，性能与原始调用相当。John McCall 表示这些字段可以合理地纳入 ABI，ktoso 也表示愿意亲自推进实现，作者将负责撰写正式提案。
+
+> 对于需要始终开启、零开销埋点的高性能 Swift 应用，这是一个填补关键空白的实用提案。
+
+---
+
+### 7、[Pitch] Optional 不可复制类型的改进与泛化
+
+作者：Alejandro Alonso ｜ 发布日期：2026-05-11
+[阅读原帖](https://forums.swift.org/t/pitch-optional-noncopyable-improvements-and-generalizations/86656 "Pitch: Optional noncopyable improvements and generalizations")
+
+该 Pitch 针对 **`~Copyable`（不可复制）** 类型与 **`Optional`** 的交互痛点，提议新增三个方法并泛化现有 API。
+
+**动机：** 自 Swift 6.0 起，标准库部分支持存储不可复制值，但实际使用极为繁琐。例如，想在不消耗 optional 的前提下检查其内容，`if let` 会消耗所有权，导致后续无法继续使用：
+
+```swift
+if let payload = optional { }
+foo(optional) // ❌ use after consume
+```
+
+**提议新增方法：**
+
+- **`borrow()`**：返回 `Ref<Wrapped>?`，以借用方式访问 optional 内部值，不消耗所有权
+- **`mutate()`**：返回 `MutableRef<Wrapped>?`，以 `inout` 方式就地修改内部值
+- **`insert(_:)`**：将新值写入 optional 并返回对其内部值的可变引用，避免后续使用 `!` 强解包
+
+**泛化现有 API：**`map`、`flatMap`（均改为 `consuming`）、`unsafelyUnwrapped` 将支持 `~Copyable & ~Escapable` 的包装类型，且不引入源码兼容性问题（重载解析会优先选择更特化的现有版本）。
+
+社区讨论活跃，主要集中在 `insert` 的命名（有建议改为 `put()`、`place()`、`replace()`），以及 `borrow()`/`mutate()` 是否应改为属性（如 `.ref`/`.mutableRef`）。Joe Groff 指出未来语言层面的 `if borrow x = opt` 绑定语法与本提案方向兼容。
+
+> 这是对 Swift 所有权系统的重要补全，让不可复制类型在日常编码中真正可用。
+
+---
+
+### 8、`nonisolated(nonsending)` 作为函数参数是否基本无用？
+
+作者：BJ Homer ｜ 发布日期：2026-05-11
+[阅读原帖](https://forums.swift.org/t/is-nonisolated-nonsending-on-a-function-parameter-mostly-useless/86649 "Is nonisolated(nonsending) on a function parameter mostly useless?")
+
+作者在尝试构建类似 `MainActor.run` 的自定义 actor 执行 API 时，发现 **`nonisolated(nonsending)`** 用于函数参数存在一个隐蔽的"陷阱"：`@MainActor` 隔离的闭包可以被**隐式转换**为 `nonisolated(nonsending)` 闭包，导致传入的闭包实际上仍在主 actor 上执行，而非在目标 actor 的执行上下文中运行。
+
+```swift
+actor DBActor {
+  func run(_ work: nonisolated(nonsending) async () -> Void) async {
+    await work()
+  }
+}
+
+@MainActor func buttonPushed() {
+  Task {
+    await myDatabaseActor.run {
+      // ⚠️ 看起来在 DBActor 上运行，实际上仍在 @MainActor 执行！
+      dbObject.modify()
+    }
+  }
+}
+```
+
+**解决方案：** Jamie（jamieQ）提出，将参数同时标记为 `sending nonisolated(nonsending)` 可以阻断隐式静态隔离推断，使闭包在调用点被推断为 `nonisolated(nonsending)`：
+
+```swift
+func run(_ work: sending nonisolated(nonsending) async () -> Void) async { ... }
+```
+
+讨论中还揭示了一个相关 bug：`nonisolated(nonsending)` 参数同时标记 `sending` 或 `@Sendable` 时，在旧版本中无法正确跳转到调用方执行器，该 bug 已在 main 分支修复，预计随 Swift 6.4 发布。作者的实际场景是为 Core Data 的 `NSManagedObjectContext` 构建支持 `async` 闭包的 `performAsyncBlock` API。
+
+> `nonisolated(nonsending)` 的隐式转换规则是并发模型中的一个微妙陷阱，`sending nonisolated(nonsending)` 的组合拼写虽反直觉，但目前是唯一有效的防护手段。
+
+---
+
+### 9、通过 SourceKit 暴露并发信息
+
+作者：Jamie（jamieQ）｜ 发布日期：2026-05-12
+[阅读原帖](https://forums.swift.org/t/exposing-concurrency-info-via-sourcekit/86678 "Exposing concurrency info via sourcekit")
+
+作者正在探索通过 **SourceKit-LSP** 将 Swift 并发信息以可视化方式呈现给开发者，目前原型已实现两类功能：
+
+1. **隔离跨越（Isolation Crossings）**：在调用点标注调用方与被调用方隔离域不同的位置（即潜在的动态挂起点），以特殊图标提示
+2. **闭包推断隔离（Inferred Closure Isolation）**：对未显式标注隔离的闭包，以灰色内联提示文字展示编译器推断出的隔离信息
+
+实现策略是复用现有的 `collectVariableTypes` 请求模式：遍历类型检查后的 AST，收集相关信息，通过 **Inlay Hints** 在语言服务器层渲染。由于隔离信息已存在于类型检查后的 AST 中，实现相对直接。
+
+Alex Hoppen（SourceKit-LSP 核心维护者）给予积极反馈，建议：将两类功能作为独立特性分开实现；隔离跨越可考虑使用 **Code Lenses**（行级标注）而非内联提示；最终通过 `SourceKitLSPOptions`（`.sourcekit-lsp/config.json`）提供配置开关。Franz Busch 还建议进一步暴露编译器追踪的**隔离区域（isolation regions）**信息。
+
+> 这一工具层面的改进将大幅降低理解 Swift 并发代码的认知负担，期待早日合并进 SourceKit-LSP 主线。
+
+---
+
+### 10、Swift 6.3.2 正式发布
+
+作者：Mishal Shah ｜ 发布日期：2026-05-13
+[阅读原帖](https://forums.swift.org/t/announcing-swift-6-3-2/86698 "Announcing Swift 6.3.2")
+
+Swift 团队正式发布 **Swift 6.3.2**，可通过 `swiftly install 6.3.2` 安装，Xcode 26.5 中也已内置该版本。本次为补丁版本，主要修复内容如下：
+
+- **Swift 编译器**：在 Linux 上使用 C++ 互操作时，允许导入使用 C++23 头文件（如 `<expected>`）的 C++ 库
+- **Swift Package Manager**：修复 `Bundle.module` 在 `MainActor` 外部无法访问的问题；多项 Package Registry 交互修复
+- **Swift Testing**：修复退出测试（exit tests）在无标准输出/错误时返回无效结果的问题；为 `@Test` 等宏包含泛型类型参数时新增警告
+- **libdispatch**：将 dispatch 工作线程名称统一改为 `"DispatchWorker"`，不再基于根队列标签命名
+- **SourceKit-LSP**：修复在 Windows 上使用 `compile_commands.json` 时可能崩溃的问题；新增 `forceResolvedVersions` 配置项，等效于 SwiftPM 的 `--force-resolved-versions`
+- **Swift Build**：同步修复 `Bundle.module` 在 `MainActor` 外部的访问问题
+
+社区补充：Amazon Linux 2023 的 Docker 镜像（`6.3.2-amazonlinux2023`）也已同步发布。
+
+> 稳定性补丁版本，C++23 互操作修复和 Bundle.module 并发访问修复是本次最值得关注的改动。
+
 ## 推荐博文
 
 以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
