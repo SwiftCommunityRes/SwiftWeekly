@@ -118,6 +118,119 @@ LPDDR6：下一代低功耗移动内存标准，通常被视为 LPDDR5X 之后�
 
 ## Swift论坛
 
+### 1、`for await` 中的 `weak self` 应该在哪里解包
+
+作者：kelin ｜ 发布日期：2026 年 7 月 10 日
+[阅读原帖](https://forums.swift.org/t/for-await-and-weak-self/88192 "`for await` and `weak self`")
+
+**核心内容：**
+Vladimir Kelin 讨论在长期监听 **AsyncSequence** 时，`weak self` 是在 `for await` 循环前解包，还是在每次迭代中解包。两种写法都会编译，但生命周期语义明显不同。
+
+**动机说明：**
+如果观察任务可能持续很久，开发者通常希望对象释放后监听自动停止，而不是因为闭包提前强持有 `self` 导致实例被延长生命周期。
+
+```swift
+Task { @MainActor [weak self] in
+    for await state in engine.stateUpdates {
+        guard let self else { return }
+        self.lastState = state
+    }
+}
+```
+
+**主要修改或代码示例：**
+Itai Ferber 指出，如果在循环前 `guard let self`，`self` 会在整个循环期间被强持有；如果在循环内部解包，则每次收到新值都会重新读取弱引用，一旦对象释放就退出。对普通同步循环也类似，编译器通常不能把检查随意提升到循环外，因为这会改变可观察语义。
+
+**讨论亮点：**
+Slava Pestov 追问这里是否真的需要 `weak self`，提醒大家先确认是否存在引用循环。讨论最后聚焦到 **ARC**、弱引用读取和优化器不能改变对象生命周期语义。
+
+**简要点评：**
+长期观察类任务中，把 `guard let self` 放在循环内部通常更贴近“对象存在才继续处理”的意图；若希望任务本身持有对象到观察结束，则循环前解包更直接。
+
+### 2、SE-0536：为 Swift Package Registry 增加搜索能力
+
+作者：Mikaela Caron ｜ 发布日期：2026 年 7 月 10 日
+[阅读原帖](https://forums.swift.org/t/se-0536-package-registry-search/88203 "SE-0536: Package Registry Search")
+
+**核心内容：**
+**SE-0536 Package Registry Search** 正式进入审查，审查期从 2026 年 7 月 10 日持续到 7 月 24 日。该提案希望为 **Swift Package Registry** 增加标准化搜索能力，让客户端能通过统一接口查找包。
+
+**动机说明：**
+Swift 包生态正在增长，但包发现能力仍依赖网站、第三方索引或人工检索。标准化搜索接口可以让 `swift package`、IDE 和私有 registry 以一致方式提供包发现体验。
+
+**主要修改或代码示例：**
+讨论重点集中在搜索结果结构、分页稳定性和查询语义上。Will Field-Thompson 质疑结果对象中的 `registry` 字段适用场景，并建议考虑基于游标的 `after` / `before` 分页，或让服务器通过 `Link` header 返回不透明分页信息。
+
+**讨论亮点：**
+Joseph Heck 建议区分模糊搜索和确定性过滤：例如 `scope`、`author`、`pkg`、`name` 这类限定条件最好保持精确匹配，避免过滤条件被模糊扩展后产生意外结果。也有人提醒 PyPI 的 `pip search` 已被关闭，说明服务端搜索接口需要谨慎设计。
+
+**简要点评：**
+这是 **SwiftPM** 生态基础设施层面的重要补齐。真正难点不只是“能搜”，而是如何在不同 registry 实现之间保持稳定、可分页、可预期的搜索语义。
+
+### 3、Nanosaur 2 被移植到 Nintendo 3DS
+
+作者：Alsey Coleman Miller ｜ 发布日期：2026 年 7 月 10 日
+[阅读原帖](https://forums.swift.org/t/nanosaur-2-ported-to-nintendo-3ds/88193 "Nanosaur 2 ported to Nintendo 3DS")
+
+**核心内容：**
+Alsey Coleman Miller 分享了一个 **Nanosaur 2** 分支：将原本的 C 游戏引擎和渲染代码改写为 **Swift**，并加入 **Metal** 与 **Nintendo 3DS** 支持，同时让渲染层从 OpenGL 中解耦。
+
+**动机说明：**
+这个项目展示了 Swift 在复古游戏、掌机设备和跨平台渲染上的可行性。作者还为双屏设备加入支持，例如在下屏显示 HUD，适配 Anbernic DS 等设备形态。
+
+**主要修改或代码示例：**
+作者移除了原项目中对 Classic Mac Toolbox 的依赖，并向原始项目提交了 PR，内容包括 Swift 移植、Metal renderer 和 Nintendo 3DS port。项目重点不是单个 API，而是把旧游戏工程迁移成更现代、更可移植的架构。
+
+**讨论亮点：**
+社区成员对 Pangea Software 旧游戏开源表示惊喜，也有人补充 **Nanosaur** 在 Apple 游戏史中的定位并非“第一款 Mac 3D 游戏”，提醒相关历史表述需要更精确。
+
+**简要点评：**
+这类 showcase 很适合观察 Swift 的边界：它不只服务 Apple 平台应用，也能进入游戏移植、嵌入式设备和自定义渲染管线。
+
+### 4、多语言 Swift Package 中的导入与链接问题
+
+作者：eueu ｜ 发布日期：2026 年 7 月 10 日
+[阅读原帖](https://forums.swift.org/t/multi-language-library/88196 "Multi-language library")
+
+**核心内容：**
+eueu 在 Linux 上使用 **Swift Package Manager 6.2** 构建同时包含 C、C++ 和 Swift 的库时遇到两个问题：应用侧需要额外 `import` C target 才能看到符号，以及 C++ 目标的对象文件存在但链接失败。
+
+**动机说明：**
+混合语言包是 Swift 跨平台和系统编程的重要场景。开发者希望对外暴露一个统一 Swift 模块，而不是要求使用方理解内部 C/C++/Swift target 拆分。
+
+```swift
+@_exported import TC
+```
+
+**主要修改或代码示例：**
+Mahdi Bahrami 建议在 Swift 模块中使用 `@_exported import OtherLib` 转发依赖模块 API，这解决了“只想 import 一个库”的问题。Bassam Khouri 提到 Swift 6.4 起 **SwiftPM** 默认构建系统变为 **Swift Build**，未来对多语言 target 的支持可能更容易完善。
+
+**讨论亮点：**
+发帖者最终表示在 Swift 6.2.4 下也跑通了，不需要升级到 6.4 编译器；第一个问题由 `@_exported import` 解决，第二个链接问题则通过试错修复，仍在确认真正起作用的配置。
+
+**简要点评：**
+`@_exported import` 虽然是 underscored 属性，但在模块门面层很常见。多语言包的链接问题仍需要依赖 **SwiftPM** 和构建系统继续打磨，尤其是在 Linux 场景。
+
+### 5、SwiftRD：面向 Visual Studio 与 IntelliJ 的 Swift IDE 集成
+
+作者：Jascha ｜ 发布日期：2026 年 7 月 11 日
+[阅读原帖](https://forums.swift.org/t/major-new-r-based-swift-ide-integration-in-progress-for-full-swift-support-in-visual-studio-and-intellij-with-bidirectional-c-interoperability-to-boot/88212 "Major new R# based Swift IDE-integration In Progress for full Swift support in Visual Studio and IntelliJ with bidirectional C++ interoperability to boot")
+
+**核心内容：**
+Jascha 介绍了 SoftOmni 正在开发的 **SwiftRD**：一个基于 **ReSharper** 的开源 Swift 实现，目标是在 Visual Studio、Rider 以及未来的 IntelliJ 系 IDE 中提供更完整的 Swift 支持，并支持与 JetBrains C++ 前端的双向互操作。
+
+**动机说明：**
+Swift 在 Windows 和 Linux 上的 IDE 体验仍明显弱于 macOS。SwiftRD 试图不依赖 **SourceKit**，而是用 C# 从零实现独立的 Swift 语言前端，为跨平台 IDE 提供语义分析、补全、重构和调试等能力。
+
+**主要修改或代码示例：**
+项目计划优先支持 **SPM** 工程，核心 Swift engine 预计 2026 年底基本完成，数据流分析计划在 2027 年第一季度推进；Early Access 预计在 2027 年第二季度，初始发布目标在 2027 年第三到第四季度。路线图包括语义高亮、格式化、补全、检查与 quick fix、调试、跳转定义、引用查找、DocC、Swiftly 版本管理以及测试运行集成。
+
+**讨论亮点：**
+Felix 表示期待跨平台 SPM 项目的支持；Jascha 补充说这正是项目推动的重要原因之一。Martin Lau 建议现代服务端 Swift 支持应考虑 **Hummingbird**，而不是维护状态较弱的 Kitura。
+
+**简要点评：**
+SwiftRD 仍是长期工程，但方向很值得关注：如果独立 Swift 前端和 IDE 插件生态成形，Swift 的非 Apple 平台开发体验可能会迎来重要补强。
+
 
 ## 推荐博文
 
