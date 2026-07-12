@@ -121,6 +121,20 @@ LPDDR6：下一代低功耗移动内存标准，通常被视为 LPDDR5X 之后�
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[Swift 社区动态：2026年6月版]( https://www.swift.org/blog/whats-new-in-swift-june-2026/ "Swift 社区动态：2026年6月版")
+
+**摘要：** 这篇官方月度动态回顾了 WWDC 2026 期间 Swift 生态的多个重要进展。Apple在Platforms State of the Union 中宣布，核心操作系统内核的部分组件正在用Swift编写；QUIC传输层已被 Swift 重写并开源为 swift-nio-quic 包；Apple 还发布了Foundation Models框架的工具包，并承诺未来开源框架本身。全文展现了Swift正从应用层向操作系统底层稳步渗透的技术趋势。
+
+[ SwiftUI 新增文档协议，性能全面提升](https://www.infoq.com/news/2026/07/swiftui-wwdc26/ " SwiftUI 新增文档协议，性能全面提升")
+
+**摘要：** 这篇报道系统梳理了 WWDC 2026上SwiftUI 的核心更新：新的 Document 协议通过快照差异比较和异步读写提升文档型应用的数据处理效率；工具栏API增强了按钮显示优先级的控制能力；滑动操作现已支持任意视图；AsyncImage 获得自动 HTTP 缓存支持，@State 实现惰性初始化，全新的ContentBuilder 则终结了困扰开发者多年的“编译器无法在合理时间内类型检查此表达式”的经典编译错误。
+
+[ 跨平台Swift：博客系列与简易 Apple/Android 应用](hhttps://forums.swift.org/t/cross-platform-swift-blog-series-and-simple-apple-android-app/87557/ " 跨平台Swift：博客系列与简易Apple/Android应用")
+
+**摘要：** 这篇社区分享介绍了一个名为 “Cross-platform Swift” 的博客系列及配套的可构建示例项目，使用 CMake 与官方 Swift Android SDK 构建了一个简易 Android 应用。随着 Swift 6.3 正式发布官方 Android SDK，该系列博客填补了从理论到实践的关键空白——涵盖环境配置、Swift与Java/Kotlin 互操作，以及双端共享业务逻辑的具体模式。
+
 
 ## 关于我们
 
