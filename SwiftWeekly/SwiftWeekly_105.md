@@ -330,6 +330,20 @@ Swift **Networking Workgroup** 正在规划标准化的 IP 地址与端口“通
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[Swift 6.4 带来了新的语言特性以及 Swift 与 XCTest 之间的互操作性](https://www.infoq.cn/article/MrNN9S3ZTFiCaoaU3h4i/ "Swift 6.4 带来了新的语言特性以及 Swift 与 XCTest 之间的互操作性")
+
+**摘要：** 这篇报道详细梳理了 Xcode 27 中 Swift 6.4 Beta 版的全新特性。语言层面包括 weak let与~Sendable、defer 支持 await 异步任务、anyAppleOS 简化可用性检查、以及通过 @diagnose 实现更精细的警告控制。测试方面，Swift Testing 与 XCTest 实现了双向互操作—— XCTest 断言失败可在 Swift Testing 中报告，Swift Testing API 也可在 XCTest 中运行。此外， @C 属性支持将 Swift 函数暴露给 C 语言，Foundation 继续向纯 Swift 迁移，URL 解析速度最高提升4倍。
+
+[SwiftUI 新增文档协议，性能全面提升](https://www.infoq.com/news/2026/07/swiftui-wwdc26/ "SwiftUI 新增文档协议，性能全面提升")
+
+**摘要：** 这篇报道系统梳理了 WWDC 2026 上 SwiftUI 的核心更新。新的 Document 协议通过快照差异比较和异步读写，让文档型应用高效处理大量数据。工具栏 API 新增 visibilityPriority ，可控制按钮显示优先级，自动将不常用操作收进溢出菜单。滑动操作现已支持任意视图而不仅是列表；AsyncImage 获得自动 HTTP 缓存支持， @State 实现惰性初始化，全新的 ContentBuilder 则终结了“编译器无法在合理时间内类型检查此表达式”的经典编译错误。
+
+[丢掉包袱，硬刚 Rust：WWDC26 前瞻与 Swift 6.4 的底层革命](https://kinds.blog.csdn.net/article/details/161724273/ "丢掉包袱，硬刚 Rust：WWDC26 前瞻与 Swift 6.4 的底层革命")
+
+**摘要：** 这篇前瞻文章敏锐捕捉到 Swift 演进的核心转向——从“写App 的高级语言”向着高性能“系统级语言”狂奔。随着 Swift 的战场拓展至大模型 AI 推理、空间计算、嵌入式开发等领域， ARC 带来的 retain/release 和写时复制已成为“性能刺客”。为此，Swift 6.4 酝酿了两大利器：一是已被正式接受的 Ref<T>与MutableRef<T>，通过编译期生命周期和所有权检查实现安全借用，性能直逼 C 语言；二是全新的 Continuation 机制，旨在终结 withCheckedContinuation 模式下“忘记恢复”或“重复恢复”的异步崩溃。
+
 
 ## 关于我们
 
