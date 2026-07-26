@@ -283,6 +283,50 @@ iPhone 分批次发布，彻底改变季节性营收规律
 
 ## Swift论坛
 
+### 1、[提案：支持别名访问的 Span 与 Ref 类型]
+
+作者：Douglas Gregor ｜ 发布日期：2026 年 7 月 24 日
+[阅读原帖](https://forums.swift.org/t/pitch-aliased-span-and-ref-types/88529 "[Pitch] Aliased Span and Ref types")
+
+该提案计划引入一组 **AliasedSpan**、**AliasedMutableSpan**、**AliasedRef** 与 **AliasedMutableRef** 类型。它们保留现有 **Span**、**Ref** 家族的内存安全能力，同时放宽 Swift 独占访问规则，以适配共享内存以及 C、C++ 等语言的互操作场景。API 整体沿用现有类型的设计，但针对内存可能存在别名的事实限制借用和修改方式。
+
+讨论重点落在安全边界与生态采用策略上。社区指出，可变别名引用若跨并发任务共享，普通读写可能发生撕裂并破坏值的不变量；Douglas 因此倾向于让这些类型永远不遵循 **Sendable**。对于公共库 API，他仍建议优先使用非别名 **Span**，以保留独占访问带来的优化空间，仅在共享内存或 C 互操作等必要场景使用别名类型。该提案填补了安全视图与现实互操作之间的重要缺口，但最终设计必须明确并发与类型转换的约束。
+
+### 2、[为什么 UserDefaults 不遵循 Sendable？]
+
+作者：Ben Pious ｜ 发布日期：2026 年 7 月 25 日
+[阅读原帖](https://forums.swift.org/t/why-isnt-userdefaults-sendable/88531 "Why isn't UserDefaults Sendable?")
+
+虽然文档说明 **UserDefaults** 本身是线程安全的，可同时用于多个线程或任务，但它没有遵循 **Sendable**。原因在于 **UserDefaults** 可以被继承：基类的线程安全并不能保证所有子类同样安全，而实际项目中确实存在并非线程安全、且并不少见的子类，因此 Foundation 无法为整个类层次提供 **Sendable** 保证。
+
+讨论还提到，开发者可以用 `@retroactive @unchecked Sendable` 绕过检查，但这会把正确性责任完全交给自己，不适合作为通用方案。一个可能的改进方向是将 **UserDefaults** 标记为 `~Sendable`，让经过审慎设计的子类自行声明 **Sendable**，而不是彻底禁止。这一案例也提醒我们：线程安全描述的是具体实现，并不自动等价于可继承类型在 Swift 并发模型中的可发送性。
+
+### 3、[运行 Vapor 应用的最小 Docker 镜像是什么？]
+
+作者：Lars Sonchocky-Helldorf ｜ 发布日期：2026 年 7 月 24 日
+[阅读原帖](https://forums.swift.org/t/what-is-the-smallest-docker-container-to-run-a-vapor-app/88507 "What is the smallest Docker container to run a Vapor app?")
+
+讨论聚焦如何缩小 **Vapor** 应用的生产容器。默认生成的部署配置以 Ubuntu 为基础，但在镜像体积敏感的场景中，可以使用 Swift 的 **Static Linux SDK**（Musl SDK）编译应用，再部署到更精简的 Alpine 镜像；这是讨论中给出的最小化方向。
+
+另一种选择是使用经过裁剪的 **chiseled container**，它同样能显著减少运行时内容。关键不只是替换 `FROM`：构建产物必须针对目标 C 标准库和运行环境生成，尤其要避免把 glibc 构建的二进制直接放进 musl 环境。对于追求极致体积的服务，静态 Linux SDK 加 Alpine 值得优先验证；若更看重兼容性与维护成本，chiseled 镜像通常更稳妥。
+
+### 4、[为什么 Swift Package 无需声明依赖就能导入 SwiftUI？]
+
+作者：Bit By A Vampire ｜ 发布日期：2026 年 7 月 24 日
+[阅读原帖](https://forums.swift.org/t/why-is-swiftui-always-available-in-swift-package-without-needing-to-declare-dependency-on-it/88518 "Why is SwiftUi always available in Swift Package without needing to declare dependency on it?")
+
+**SwiftUI** 并不是由 Swift Package Manager 构建和下载的包依赖，而是随 macOS、iOS 等 Apple 平台 SDK 与操作系统提供的系统框架。因此，只要目标平台的 SDK 包含 SwiftUI，源码就可以直接 `import SwiftUI`，无需在 `Package.swift` 的 `dependencies` 中声明它；应用启动时会动态链接对应框架。
+
+如果包没有导入 SwiftUI，就不会产生使用成本。讨论进一步指出，即使导入，由于 Apple 平台使用 **dyld shared cache**，其额外运行时成本也接近于零。需要注意的是，“可以导入”并不代表跨平台可用：面向 Linux 或不支持 SwiftUI 的 Apple 系统版本时，仍应通过平台声明、可用性检查或条件编译约束代码。
+
+### 5、[征集 IP 地址与端口标准 API 的设计需求]
+
+作者：Tommy Pauly ｜ 发布日期：2026 年 7 月 24 日
+[阅读原帖](https://forums.swift.org/t/requirements-for-ip-address-and-port-apis/88514 "Requirements for IP address and port APIs")
+
+Swift **Networking Workgroup** 正在规划标准化的 IP 地址与端口“通用交换类型”，希望解决 URLSession、SwiftNIO、中间件、配置、日志和高性能数据通路各自采用不同表示的问题。首阶段聚焦 **IPv4**、**IPv6** 与端口，并征集所有权模型、内存视图、解析与序列化、类型转换、地址属性查询以及与 **Span** 协作等需求，目标是建立高性能且可被各网络库共同使用的基础 API。
+
+社区重点推荐了 `swift-endpoint` 的现有设计，其中包含 `IPv4Address`、`IPv6Address`、`AnyIPAddress`、`CIDR`、`DomainName`、`ConnectionTarget` 与 `Port` 等类型，并支持无分配的 **Span** 解析、C 互操作和 RFC 地址分类。讨论亮点还包括 ByteBuffer 与 `[UInt8]` 间的复制成本、IDN 表带来的二进制体积、旧系统对 `UInt128` 的可用性限制、Unix Domain Socket、模糊测试及未来协议扩展。标准类型若能兼顾这些现实约束，将明显降低 Swift 网络生态的桥接成本。
 
 ## 推荐博文
 
