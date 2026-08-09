@@ -120,6 +120,20 @@ Google：更新了 Gemini 3 Pro、3 Deep Think、3.1 Pro、3.5 Flash，以及 Na
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[构建可测试的 SwiftData 应用](https://azamsharp.com/2026/08/02/building-testable-swiftdata-apps "构建可测试的 SwiftData 应用")
+
+**摘要：** 这篇博客聚焦于 SwiftData 应用中测试策略的落地实践。作者深入探讨了如何通过依赖注入和自定义容器来隔离数据层，使单元测试不再受真实持久化存储的干扰。文章不仅展示了模拟数据上下文的技巧，还提供了构建可靠、可维护测试套件的具体模式，为采用 SwiftData 的开发者填补了从“能用”到“可测”之间的关键空白。
+
+[别再浪费 Token 问“怎么修我的 iOS 应用性能”了](https://ohmyswift.com/blog/2026/08/02/stop-burning-tokens-on-fix-my-ios-app-performance/ "别再浪费 Token 问“怎么修我的 iOS 应用性能”了")
+
+**摘要：** 这篇博客犀利地指出，与其反复向 AI 助手求助“修复性能问题”，开发者更应该掌握一套系统性的性能诊断方法论。文章从 Instruments 工具的正确使用姿势讲起，梳理了从定位 CPU 瓶颈、内存泄漏到优化渲染路径的完整工作流。全文旨在帮助开发者建立“先测量、后优化”的工程思维，将 AI 从“开药方的医生”降级为“执行处方的高级助手”。
+
+[ 再探 Swift 协议与全局 Actor](https://www.massicotte.org/blog/protocols-and-global-actors/ " 再探 Swift 协议与全局 Actor")
+
+**摘要：** 这篇博客深入剖析了协议与 Actor 隔离之间微妙的交互关系。文章清晰地区分了三种场景：整个协议被 @MainActor 标记、每个协议要求单独隔离，以及利用 Swift 6.2 新工具实现无隔离。核心观点是：在给协议打上 @MainActor 之前，先问清楚它是否真的需要——因为一旦这个约束进入代码库，就很难再移除了。
+
 
 ## 关于我们
 
