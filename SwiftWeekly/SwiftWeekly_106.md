@@ -117,6 +117,164 @@ Google：更新了 Gemini 3 Pro、3 Deep Think、3.1 Pro、3.5 Flash，以及 Na
 
 ## Swift论坛
 
+### 1、[SE-0539：让宏为属性初始化表达式开放 self 访问]
+
+作者：Nils Grabenhorst ｜ 发布日期：2026 年 8 月 2 日
+[阅读原帖](https://forums.swift.org/t/se-0539-enable-macros-to-grant-self-access-for-property-initializers/88713 "SE-0539: Enable Macros to Grant `self` Access for Property Initializers")
+
+**核心内容：**
+SE-0539 为 **accessor macro** 的角色声明新增可选参数 `initialization: selfAvailable`，允许宏承诺把属性初始化表达式移动到一个可以访问 `self` 的上下文。当前编译器在宏展开前会把所有属性初始化表达式都按立即执行处理，导致模拟 `lazy` 行为的宏即使最终把表达式放进 getter，也无法引用实例成员。
+
+**动机说明：**
+原生 `lazy` 属性可以在初始化表达式中访问实例成员，但实现同样语义的宏却会被提前拒绝。提案希望消除这种能力差异，同时保留宏展开前的类型检查，以便宏仍能获得推断出的属性类型。
+
+**主要修改或代码示例：**
+
+```swift
+@attached(accessor, initialization: selfAvailable,
+          names: named(get), named(set))
+@attached(peer, names: prefixed(_))
+public macro Lazy() = #externalMacro(...)
+
+struct Earth {
+    let mice = 21
+    @Lazy var theAnswer = self.mice * 2
+}
+```
+
+未声明该参数时默认采用 `selfUnavailable`，因此现有宏的行为不变；展开后的初始化表达式还会在新上下文中再次接受类型检查，宏若违背承诺，错误仍会在展开代码中被诊断。
+
+**讨论亮点：**
+社区主要讨论参数命名是否应体现 `self`、初始化或 autoclosure，以及 SwiftUI `@Environment` 示例是否安全。提案作者强调，这项改动只开放类型检查能力，不改变 **SwiftUI** 数据流语义，也不是通过 `@autoclosure` 实现延迟捕获。
+
+**简要点评：**
+这是一个范围克制但实用的宏能力补全，让库作者可以构建更接近语言原生 `lazy` 的抽象，同时把正确放置初始化表达式的责任明确交给宏实现者。
+
+### 2、[SE-0540：为 Swift Package 提供默认构建设置]
+
+作者：Matt Massicotte ｜ 发布日期：2026 年 8 月 3 日
+[阅读原帖](https://forums.swift.org/t/se-0540-default-package-settings/88748 "SE-0540: Default Package Settings")
+
+**核心内容：**
+SE-0540 提议在 **Package.swift** 的 `Package` 层统一声明 `defaultSwiftSettings`、`defaultCSettings`、`defaultCXXSettings` 和 `defaultLinkerSettings`，减少多 target 包中反复复制相同编译选项的问题。
+
+**动机说明：**
+即使是 SwiftPM 默认生成的主 target 与测试 target，也经常需要重复启用同一 upcoming feature。大型包目前通常依赖共享数组或在 `Package` 定义后遍历并修改 targets，不但冗长，还容易在新增 target 时漏配设置。
+
+**主要修改或代码示例：**
+
+```swift
+let package = Package(
+    name: "MyPackage",
+    targets: [
+        .target(name: "Library"),
+        .testTarget(
+            name: "LibraryTests",
+            swiftSettings: [.inherited()]
+        )
+    ],
+    defaultSwiftSettings: [
+        .enableUpcomingFeature("ApproachableConcurrency")
+    ]
+)
+```
+
+target 未填写设置时自动使用默认值；显式空数组表示不继承；`.inherited()` 可把默认值插入指定位置，再叠加 target 专属设置。相同规则也适用于 C、C++ 与链接器设置。
+
+**讨论亮点：**
+支持者认为该设计能避免遗漏并让清单更具声明性，质疑者则认为收益可能不足以引入继承规则。讨论尤其关注“省略设置”和“显式空数组”的语义差异、`.inherited()` 的顺序、如何排除单个默认项，以及共享常量数组是否已经足够。
+
+**简要点评：**
+提案直击多 target 包的真实痛点，但继承顺序与覆盖规则会成为长期 API 心智负担；在接受前进一步简化退出继承和覆盖单项设置的表达方式会更稳妥。
+
+### 3、[隔离协议一致性中的 concurrent 方法真的安全吗？]
+
+作者：Matt Massicotte ｜ 发布日期：2026 年 8 月 6 日
+[阅读原帖](https://forums.swift.org/t/are-concurrent-methods-on-isolated-conformances-actually-safe/88813 "Are concurrent methods on isolated conformances actually safe?")
+
+**核心内容：**
+讨论研究 **isolated conformance** 与 `@concurrent` 协议要求组合时的安全性。一个 `@MainActor` 类型以主 Actor 隔离方式遵循协议，但从 `nonisolated(nonsending)` 函数调用其 `@concurrent` 要求时，编译器警告该一致性可能被传入并发上下文。
+
+**动机说明：**
+提问者最初认为异步调用可以完成 Actor hop，而且全局 Actor 隔离类型本身可发送，因此警告可能过于保守；问题源于探索 **AsyncIteratorProtocol** 时对其方法隔离语义的疑惑。
+
+**主要修改或代码示例：**
+
+```swift
+protocol AsyncRequirement {
+    @concurrent func work() async
+}
+
+@MainActor
+final class ConformingType: @MainActor AsyncRequirement {
+    func work() async {}
+}
+
+nonisolated(nonsending) func useThem() async {
+    let value: some AsyncRequirement = ConformingType()
+    await value.work() // 隔离一致性警告
+}
+```
+
+**讨论亮点：**
+关键结论是 `@concurrent` 要求在并发执行器上运行，与要求成员在类型隔离域中执行的 isolated conformance 存在根本张力；它和 `nonisolated(nonsending)` 并不等价。原帖作者随后认可该警告有依据，且 **SendableMetatype** 不能消除它。不过后续测试发现 Swift 6.3.3 与 nightly、opaque type 与泛型写法之间仍有诊断差异，尚待编译器团队确认是否为回归。
+
+**简要点评：**
+这场讨论很好地展示了 Swift 并发标注不能只看“是否 async”：方法实际在哪个隔离域执行，以及协议一致性何时跨域，才是判断安全性的核心。
+
+### 4、[SE-0516 Iterable 经修改后获接受]
+
+作者：Nate Cook、Ben Cohen ｜ 发布日期：2026 年 8 月 5 日
+[阅读原帖](https://forums.swift.org/t/accepted-with-modifications-se-0516-iterable/88806 "[Accepted with modifications] SE-0516: `Iterable`")
+
+**核心内容：**
+语言指导组宣布 SE-0516 经修改后接受。新的 **Iterable** 协议为同步迭代提供统一入口，覆盖不可复制、不可逃逸元素及可抛错迭代，并通过批量返回 **Span** 降低跨模块逐元素调用的成本；常见代码仍可使用熟悉的 `for-in`。
+
+**动机说明：**
+现有迭代抽象难以完整表达所有权受限类型和高性能批量访问。`nextSpan()` 能减少 ABI 边界调用，为不同集合保留更大的优化空间，因此批量迭代被指导组视为该设计的关键价值。
+
+**主要修改或代码示例：**
+主协议保留名称 **Iterable**，迭代器 API 家族改用 **BorrowingIterator** 术语，以兼顾普通使用者的易理解性和实现者需要了解的所有权语义。`maximumCount` 更名为 `maxCount`，`OutputSpan` 与 `OutputRawSpan` 也将遵循 **Iterable**。
+
+**讨论亮点：**
+最终契约规定：迭代器一旦返回空 span，后续 `nextSpan()` 也必须为空；一旦抛错，调用方不得再次调用 `nextSpan()`。需要可恢复错误的场景应使用非抛错、元素为 `Result` 的迭代器。指导组选择约束调用方，是为了避免通用迭代器额外记录“是否曾抛错”的状态和成本。
+
+**简要点评：**
+最终方案在命名、可预测语义和性能之间取得了务实平衡，也让 Swift 的同步迭代能力更好地衔接所有权模型。
+
+### 5、[SE-0541：为 Swift Package 放宽 Swift/C 互操作限制]
+
+作者：Owen Voorhees ｜ 发布日期：2026 年 8 月 5 日
+[阅读原帖](https://forums.swift.org/t/se-0541-flexible-swift-c-interoperability-for-packages/88796 "SE-0541: Flexible Swift/C Interoperability for Packages")
+
+**核心内容：**
+SE-0541 计划解除 **SwiftPM** 对包内 Swift 与 C 系语言互操作的多项限制：普通、可执行、测试和宏 target 可混合 Swift、C、C++ 与 Objective-C 源码，并可配置 bridging header。插件 target 本身仍只允许 Swift 源码。
+
+**动机说明：**
+当前包作者常被迫建立单独的 C shim target，才能导入少量 C API；同一 target 不能混合源码，也让 `@implementation`、底层 Clang module 重导出和 bridging header 等语言已有能力难以在 Swift Package 中使用。
+
+**主要修改或代码示例：**
+
+```swift
+.executableTarget(
+    name: "swift-format",
+    swiftSettings: [
+        .bridgingHeader(
+            "swift-format-bridging-header.h",
+            visibility: .internal
+        )
+    ]
+)
+```
+
+提案还为混合 target 定义 public headers 与 module map 规则，扩展测试和宏 target 的 C/C++ 设置；**PackagePlugin** 将以统一的 `SourceModuleTarget` 协议描述源码 target。此外，Swift-only target 的 Swift 生成头文件 module map 会对所有下游编译可见，修复 C 接口再次被 Swift 消费时的可见性问题。
+
+**讨论亮点：**
+社区反馈高度积极，多位包维护者表示目前正为这些限制使用变通方案，尤其期待 `@implementation` 和混合源码支持。提案同时强调：库 target 的 bridging header 只能使用 `.internal` 可见性，以避免向下游暴露不稳定的非模块化接口；已有插件若依赖具体 target 类型转换，采用混合源码后可能需要更新。
+
+**简要点评：**
+这是一项显著改善工程体验的 SwiftPM 提案，可减少 shim target 和手工模块化样板，让 Swift/C 渐进式混编更接近 Xcode 工程中的成熟能力。
+
 
 ## 推荐博文
 
