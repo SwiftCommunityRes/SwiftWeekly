@@ -115,6 +115,73 @@ Appfigures 的研究还显示，巴西和日本近几个月实施新规后，App
 
 ## Swift论坛
 
+### 1、[提议引入“至多调用一次”的函数标注]
+
+作者：Pavel Yaskevich ｜ 发布日期：2026 年 8 月 20 日
+[阅读原帖](https://forums.swift.org/t/pitch-introduce-a-way-to-annotate-functions-that-are-called-at-most-once/89088 "[Pitch] Introduce a way to annotate functions that are called at most once")
+
+该提案引入 **`@called(once)`** 属性，用于向编译器声明一个函数值最多只会被调用一次。其核心动机是让编译器既能诊断违反调用次数约束的代码，也能更准确地分析闭包捕获值的生命周期，从而改善闭包与 **不可复制类型（non-Copyable types）** 的协作。
+
+这一能力尤其适合 **`Task`**、任务组及各类只消费一次回调的 API。社区讨论主要聚焦于属性名是否应改为更精确的 **`@called(atMostOnce)`**、现有 API 如何兼顾 ABI 与回部署，以及标准库能否及时完成广泛适配。核心团队成员表示并发库将积极采用该属性；旧 ABI 场景可能保留原重载，并通过新的受可用性约束重载逐步迁移。简评：这是一项底层但影响广泛的所有权能力，真正价值取决于标准库和生态 API 的完整采纳。
+
+### 2、[Swift 6.4 即将带来的 Embedded Swift 改进]
+
+作者：Douglas Gregor ｜ 发布日期：2026 年 8 月 20 日
+[阅读原帖](https://forums.swift.org/t/embedded-swift-improvements-coming-in-swift-6-4/89085 "Embedded Swift Improvements Coming in Swift 6.4")
+
+Swift 6.4 继续扩大 **Embedded Swift** 可用的语言子集，使受限设备上的代码更接近完整 Swift。本次语言层面的主要变化包括：全面支持 **存在类型 `any`**（含 `Any`）、支持非类型化 **`throws`**，以及完整支持元类型。不过受 Embedded Swift 泛型必须最终特化的模型限制，仍不能在 `any` 值上调用泛型方法；非类型化错误通常还会触发堆分配，因此资源敏感项目仍应优先使用类型化抛错。
+
+```swift
+protocol DefaultInitializable {
+    init()
+}
+
+extension Int: DefaultInitializable {}
+
+let factory: any DefaultInitializable.Type = Int.self
+let value: any DefaultInitializable = factory.init()
+```
+
+库层面新增了字符串到浮点数的解析能力，并让并发库支持会抛错的 **`Task`** 与 **`TaskGroup`** 操作。相关功能现已可通过 Swift 开发快照试用。简评：Swift 6.4 在保持“按需付费”的代码体积与性能原则下，明显降低了现有 Swift 代码迁移到嵌入式环境的门槛。
+
+### 3、[SwiftTUI：面向 Swift 的终端界面框架]
+
+作者：Adam Zethraeus ｜ 发布日期：2026 年 8 月 18 日
+[阅读原帖](https://forums.swift.org/t/swifttui-a-terminal-ui-framework-for-swift/89032 "SwiftTUI — a Terminal UI framework for Swift")
+
+**SwiftTUI** 是一个以“将 SwiftUI 语义绘制到终端单元格”为目标的开源 TUI 框架，希望补足 Swift 在终端应用生态中的空缺。开发者只需创建 Swift Package、添加依赖并声明遵循 **`App`** 的入口类型，即可沿用熟悉的声明式开发方式构建终端应用。
+
+框架已实现 **`@State`**、**`@Binding`**、**`@Observable`**、堆栈布局、滚动视图、手势、键盘命令、动画与过渡等大量 SwiftUI 风格 API，并负责处理 **ANSI、Xterm、OSC 与 TTY** 等终端差异。它基于 Swift 6.3、启用严格并发，支持 macOS 和 Linux，Windows 支持已进入主分支但尚未发布标签版本。讨论整体对项目表示欢迎，也提到其对 SwiftUI 结构差异化与属性图思想的借鉴。简评：项目尚年轻，但熟悉 SwiftUI 的开发者几乎无需切换心智模型，值得 CLI 工具作者关注和试用。
+
+### 4、[GSoC 2026：为 Swift 并发跟踪 Task 与 TaskGroup]
+
+作者：Ege Kaya ｜ 发布日期：2026 年 8 月 20 日
+[阅读原帖](https://forums.swift.org/t/gsoc-2026-task-and-taskgroup-tracking-for-swift-concurrency/89084 "[GSoC 2026] Task and TaskGroup tracking for Swift Concurrency")
+
+该 GSoC 项目为 Swift 并发运行时加入 **TaskRegistry**，解决任务未在线程上执行时无法从回溯中看到、进而难以排查停滞与死锁的问题。实现没有采用争用严重的全局链表，而是把任务按 64 位 Task ID 哈希到 64 个缓存行对齐的 **TaskRegistryShard**；每个分片维护独立的侵入式双向链表与 **LazyMutex**，插入和删除均为 O(1)。
+
+为避免额外分配，注册表指针直接存放在 **AsyncTask.PrivateStorage** 中，单次注册成本约为 0.01 微秒。调试器遍历时使用 `try_lock()`，跳过无法加锁的分片并限制循环次数，以便在崩溃或内存损坏时安全读取。模拟高吞吐 Web 服务器的测试创建了超过 60 万个任务，耗时从 0.3715 秒增至 0.3860 秒。核心运行时支持已经合并，崩溃回溯与 LLDB 宏仍是后续目标。简评：这是对并发可观测性的关键基础设施补强，以很低的运行时成本换取更强的调试能力。
+
+### 5、[`async let` 中的捕获列表为何仍触发数据竞争诊断]
+
+作者：Dan ｜ 发布日期：2026 年 8 月 18 日
+[阅读原帖](https://forums.swift.org/t/async-let-capture-list/89043 "Async let capture list")
+
+发帖者发现，相同的捕获列表用于 **`Task`** 时可以通过编译，直接写在 **`async let`** 右侧却会提示发送 `nonSendables` 可能造成数据竞争。原因在于 `async let` 会把等号右侧的整个表达式放进立即创建的子任务中求值，因此捕获列表里的 `nonSendables.map(\.description)` 也发生在该子任务内；而 `Task` 示例中的闭包会先在当前上下文同步创建，再传给 `Task.init`。
+
+```swift
+let asyncWork = { [sendables = nonSendables.map(\.description)] in
+    for item in sendables {
+        // 使用已转换为 String 的值
+    }
+}
+
+async let result = asyncWork()
+nonSendables = []
+```
+
+将闭包或捕获结果提前保存即可消除诊断。讨论中有人建议编译器对捕获列表特殊处理，或未来提供类似 **`ChildTask`**、左侧捕获列表的语法；也有人认为显式预处理能更清楚地表达求值时机，避免继续复杂化 `async let` 语义。简评：当前行为符合 **SE-0317** 的模型，但确实暴露了结构化并发中“表达式在哪里求值”容易被忽略的问题。
+
 
 ## 推荐博文
 
