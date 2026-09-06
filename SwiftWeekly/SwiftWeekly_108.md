@@ -88,6 +88,69 @@ CNMO科技了解到，苹果正在开发耳机型、眼镜型等 AI 终端。出
 
 ## Swift论坛
 
+### 1、近期语言与标准库提案实现进度更新
+
+作者：John McCall ｜ 发布日期：2026-08-31
+[阅读原帖](https://forums.swift.org/t/implementation-status-update-for-recent-language-and-library-proposals/89295 "Implementation status update for recent language and library proposals")
+
+随着 **Swift 6.4** 实现工作基本收尾，语言指导组整理了此前已获接受、尚未标记为实现的提案，帮助开发者确认功能落地版本。6.4 已实现的功能包括 **UniqueArray**、**UniqueBox**、**Ref / MutableRef**、**Iterable**、`borrow` / `mutate` 访问器及任务取消屏蔽等。
+
+**Swift 6.5** 预计实现 **FilePath**、`withDeadline`、不可复制结果的 `reduce` 等；其中获取当前可执行文件路径的 API 已实现，仍需等待 `FilePath` 以调整返回类型。较早的 yielding accessors 已恢复开发，正则后行断言等停滞提案则可能需要重新评审。
+
+讨论中，社区指出 **Iterable（SE-0516）** 应归入 6.4，作者已修正清单。**点评：** 这份公告适合用于升级规划，但应区分“已实现”与“预计实现”，避免把获批提案直接视为当前可用功能。
+
+### 2、为命令行工具提供信号触发的运行状态查询
+
+作者：Jonathan Grynspan ｜ 发布日期：2026-09-01
+[阅读原帖](https://forums.swift.org/t/pitch-siginfo-et-al-support/89330 "[Pitch] SIGINFO (et al.) support")
+
+作者提议在 **Swift Argument Parser** 中增加 **InfoProvidingParsableCommand**，让根命令通过 `static func provideInfo() async` 报告运行状态，方便用户在长任务执行期间查询进度。触发方式包括 Apple 等平台的 **SIGINFO / Ctrl+T**、Linux 的 **SIGUSR1**，以及 Windows 的 **Ctrl+Break**。示例从 actor 读取已完成与剩余文件数量并输出。
+
+讨论主要围绕功能应归入 ArgumentParser 还是独立包，以及状态方法应直接打印、还是返回字符串交由处理器输出。社区还提醒，不应把 **Swift Concurrency** 永久依赖 Dispatch 当作设计前提。
+
+**点评：** 统一状态查询能改善命令行体验；目前仍是提议，API 命名、输出职责与包边界尚待确定。
+
+### 3、根据最低部署版本进行条件编译
+
+作者：JiaxuLi ｜ 发布日期：2026-08-31
+[阅读原帖](https://forums.swift.org/t/pitch-conditional-compilation-for-the-deployment-target/89282 "[Pitch] Conditional compilation for the deployment target")
+
+作者希望根据当前模块的**最低部署版本**选择声明和存储类型，解决 **if #available** 无法切换类型布局的问题，例如在 **Mutex** 与旧系统锁实现之间取舍。9 月 5 日更新的原型采用平台列表语法：
+
+```swift
+#if deploymentTargetAtLeast(macOS 15, iOS 18, *)
+// 使用面向较新部署版本的实现
+#else
+// 使用兼容旧部署版本的实现
+#endif
+```
+
+原型需启用 `-enable-experimental-feature DeploymentTargetCondition`。判断针对正在编译的模块，条件不会保留到模块序列化结果中；讨论因此将跨模块内联时的判断、SDK 版本检查列为独立议题。
+
+**点评：** 该方向有望减少兼容层的运行时分支，但仍处于原型阶段，不能视为正式 Swift 语法。
+
+### 4、引用类型实现集合协议时的拼接陷阱
+
+作者：Nicolas（nickasd） ｜ 发布日期：2026-08-31
+[阅读原帖](https://forums.swift.org/t/unexpected-behaviour-when-implementing-rangereplaceablecollection-in-a-class/89286 "Unexpected behaviour when implementing RangeReplaceableCollection in a class")
+
+作者用类实现带撤销功能的 **UndoableArray**，遵循 **RangeReplaceableCollection** 后发现：执行 `a + b` 会修改左侧集合。原因是默认 `+` 实现复制变量后追加元素，对引用类型而言仍指向同一实例；标准库源码也已有相关问题注释。
+
+讨论纠正了“自行覆盖即可解决”的说法：这些 `+` 方法是**静态派发的协议扩展方法**，并非可动态覆盖的协议要求，自定义重载无法全面替换泛型上下文中的行为。社区提出从空集合构建结果的修复方向，但仍需评估 **Array** 的性能影响。撤销机制依赖共享对象身份，也使直接改用结构体并不简单。
+
+**点评：** 自定义集合不仅要满足方法签名，还应检查默认实现的值语义假设；该主题尚未给出通用修复方案。
+
+### 5、DocC 静态托管转换子命令是否应退役
+
+作者：David Rönnqvist ｜ 发布日期：2026-09-01
+[阅读原帖](https://forums.swift.org/t/future-of-the-transform-for-static-hosting-subcommand/89304 "Future of the `transform-for-static-hosting` subcommand?")
+
+作者征集 **docc process-archive transform-for-static-hosting** 的实际用途，并探讨废弃可能。**docc convert** 自 2022 年起默认生成适合静态托管的文件；事后转换子命令只复制页面模板，会丢失自定义页眉、页脚及已有的页面静态内容。
+
+讨论中，有用户认为 **docc merge** 后需重新转换；维护者澄清，合并本身会复制输入归档中的 `index.html`，并要求可复现的异常单独报错。同名的 `--transform-for-static-hosting` 构建选项与此次讨论的子命令也应区分。
+
+作者列出维持现状、改造为逐页合并、提前废弃三种方向，尚无最终决定。**点评：** 可据此检查文档流水线中的重复转换步骤；支持静态托管与未来的完整静态 HTML 输出，也属于不同能力。
+
 
 ## 推荐博文
 
