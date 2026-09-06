@@ -91,6 +91,20 @@ CNMO科技了解到，苹果正在开发耳机型、眼镜型等 AI 终端。出
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[Swift 社区动态：2026年8月版](https://www.swift.org/blog/whats-new-in-swift-august-2026/ "wift 社区动态：2026年8月版")
+
+**摘要：** 这篇官方月度动态由特邀作者 Simon Leeb（elementary-swift 项目创始人）主笔，重点聚焦 Swift 在 Web 场景中的最新进展。文章介绍了 ElementaryUI——一个运行在浏览器中、基于 Embedded Swift 构建的轻量级 Web UI 框架，能够生成极小的 WebAssembly 二进制文件。此外还涵盖了 Swift on Windows 的进展、内存安全编程实践、以及 Embedded Swift 在 Raspberry Pi Pico 上的运行演示。全文呈现了 Swift 正从服务端向 Web 前端乃至嵌入式领域全面渗透的技术图景。
+
+[ContentBuilder 详解：SwiftUI 类型检查加速背后的秘密](https://fatbobman.com/en/posts/contentbuilder-explained/ "ContentBuilder 详解：SwiftUI 类型检查加速背后的秘密")
+
+**摘要：**  这篇技术深度解析文章，聚焦于 WWDC 2026 上 SwiftUI 引入的新特性——ContentBuilder。从表面看，它只是一个作用范围更广的 ViewBuilder；但 Apple 工程师声称这一调整能显著提升类型检查性能。文章深入剖析了 ContentBuilder 的本质，揭示了其加速类型检查背后的实现原理。全文为深受“编译器无法在合理时间内类型检查此表达式”之苦的 SwiftUI 开发者，提供了一份从现象到原理的完整解读。
+
+[iOS 安全（第五部分）：AI 辅助编码时不泄露数据的正确姿势](https://slekens.dev/en// "iOS 安全（第五部分）：AI 辅助编码时不泄露数据的正确姿势")
+
+**摘要：** 这篇来自 Slekens 技术博客的文章，是 iOS 安全基础系列的收官之作。文章聚焦于一个日益紧迫的现实问题：在使用 Claude、ChatGPT 等 AI 编程助手时，什么可以分享、什么绝对不能分享。作者明确指出，密钥永远不该出现在提示词中，并系统阐述了如何在享受 AI 辅助编程效率的同时，保护好代码和数据的安全边界。全文为日常依赖 AI 工具进行开发的 iOS 工程师提供了一份极具实操价值的安全守则。
+
 
 ## 关于我们
 
