@@ -86,6 +86,67 @@ Apple 9 月发布会即将登场！据传将带来首款折叠屏 iPhone Ultra�
 
 ## Swift论坛
 
+### 1、Vapor 5 首个测试版发布：拥抱结构化并发
+
+作者：Tim（0xTim） ｜ 发布日期：2026-09-15
+[阅读原帖](https://forums.swift.org/t/vapor-5-beta-1-released/89572 "Vapor 5 Beta 1 Released")
+
+**Vapor 5 Beta 1** 在 Vapor 1.0 发布十周年当天亮相。此次重写以 **结构化并发** 和最新生态库为基础，推动框架摆脱围绕事件循环组织服务的旧模型。
+
+作者在后续的[官方介绍](https://blog.vapor.codes/posts/whats-new-in-vapor-5-beta/ "What's New in Vapor 5 Beta")中说明：路由默认采用流式请求体，`content.decode()` 因此需要 `await`；**Request** 与 **Response** 改为结构体，服务通过显式依赖注入传递，并接入 **Swift HTTP Types**、**Swift Configuration** 和 **Swift Service Lifecycle**。
+
+讨论中，开发者肯定通用类型和 HTTP 服务实现拆分为独立包的方向，认为这有助于扩大 Swift 后端生态。**点评：** 本次升级值得关注的是并发模型与服务组织方式的改变；测试版可用于评估迁移，部分 API 仍在调整。
+
+### 2、提议引入 Cell、ConstCell 与 Volatile，补足共享内存抽象
+
+作者：Alejandro Alonso ｜ 发布日期：2026-09-15
+[阅读原帖](https://forums.swift.org/t/pitch-cell-constcell-and-volatile/89582 "[Pitch] Cell, ConstCell, and Volatile")
+
+这份由 Alejandro Alonso 与 Doug Gregor 合作的提议，以可组合类型取代此前的 `AliasedSpan`／`AliasedRef` 方案，解决共享内存、C/C++ 互操作和同步原语难以满足 **独占访问规则** 的问题。
+
+**Cell** 提供内部可变性，可与 **Span**、**Ref** 组合；**ConstCell** 禁止从 Swift 写入，但允许外部修改底层内存；**Volatile** 表达面向内存映射 I/O 等场景的易失读写语义。它们仍是拟议 API。
+
+争议集中在 **Cell** 的条件式 **Sendable** 遵循：参与者担心它让未同步的共享状态绕过诊断，支持者强调其跨语言同步用途。此外，硬件开发者建议以显式读写方法替代属性访问，避免隐含的多次读改写。**点评：** 生命周期安全与并发正确性需要分别保证，接口必须清楚表达这条边界。
+
+### 3、UncheckedString 提议：保留未经 Unicode 验证的字符串数据
+
+作者：Alastair Houghton ｜ 发布日期：2026-09-15
+[阅读原帖](https://forums.swift.org/t/pitch-uncheckedstring-raw-string-support-for-swift/89571 "[Pitch] `UncheckedString` (raw string support for Swift)")
+
+作者提议新增 **UncheckedString<Element>**，容纳编码未知、非有效 UTF-8 或宽字符数据，服务于文件名、命令行参数、环境变量及 Windows 互操作等需求。
+
+方案提供按元素宽度表示的字符串字面量，并用 `\x{...}` 写入原始单元，避免先转换为 **String** 而丢失原始数据。**swift-protobuf** 开发者指出，这也有助于替代大型数组字面量，缓解嵌入二进制数据时的编译与存储问题。
+
+讨论焦点是应否引入整套新字符串类型与协议，还是先设计原始字面量并衔接通用字节容器；命名和 **Span** 接口也待完善。**点评：** 无损保留数据的需求明确，但它与 Unicode 文本、普通字节缓冲区的职责边界仍需收敛。
+
+### 4、Swift 密码学生态讨论：Swift Crypto 是否应独立演进
+
+作者：Paul Toffoloni ｜ 发布日期：2026-09-18
+[阅读原帖](https://forums.swift.org/t/state-of-cryptography-in-swift/89649 "State of cryptography in Swift")
+
+作者重新讨论 **Swift Crypto** 与 **CryptoKit** 紧密耦合带来的限制，认为服务端及非 Apple 平台需要更透明、独立的贡献和发布流程。
+
+他以 **HMAC** 内存分配优化、**ML-DSA-44** 与 **SLH-DSA** 支持推进缓慢为例，提出在 `swiftlang` 下建立初期兼容现有 API 的密码学库，或让 Swift Crypto 逐步独立演进。这些是讨论方向，尚非确定计划。
+
+回复支持改善治理与发布节奏，并补充 **swift-nio-ssl** 和 Swift Crypto 各自编译 **BoringSSL** 所增加的构建负担；Tim 认为需要生态指导组进一步讨论。**点评：** 关键在于如何兼顾 API 稳定性、维护能力与跨平台需求，形成社区能够持续参与的演进机制。
+
+### 5、提议为 Hasher 增加 RawSpan 字节输入接口
+
+作者：Jeremy Schonfeld ｜ 发布日期：2026-09-15
+[阅读原帖](https://forums.swift.org/t/pitch-add-rawspan-primitive-to-hasher/89583 "[Pitch] Add RawSpan primitive to Hasher")
+
+该提议为 **Hasher** 增加 `combine(bytes: RawSpan)` 重载，使开发者无需借助 **UnsafeRawBufferPointer** 即可将原始字节混入哈希状态，补齐标准库对安全内存视图的支持。拟议接口如下：
+
+```swift
+extension Hasher {
+    public mutating func combine(bytes: RawSpan)
+}
+```
+
+讨论中有人建议同时接受 **ConvertibleToBytes**。作者希望保持范围集中，认为减少转换样板应在所有接收 **RawSpan** 的 API 间统一设计。让 RawSpan 遵循 **Hashable** 也被列为未来方向，不属于本次改动。
+
+**点评：** 这是一次范围明确的安全性补齐，保留现有按字节混入的语义；帖子发布时尚未实现，不能视为已经可用的标准库 API。
+
 
 ## 推荐博文
 
