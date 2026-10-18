@@ -142,6 +142,67 @@ Apple 智能是苹果的系统级个人智能体系，由设备端 30 亿参数�
 
 ## Swift论坛
 
+### 1、为浮点运算引入显式宽松运算符
+
+作者：Steve Canon ｜ 发布日期：2026-10-14
+[阅读原帖](https://forums.swift.org/t/relaxed-floating-point-operators/90050 "\"Relaxed\" floating-point operators")
+
+这份草案拟为 **FloatingPoint** 增加 `&+`、`&-`、`&*` 及对应赋值运算符，允许编译器重结合表达式并生成**融合乘加（FMA）**，以放宽逐位可复现性的方式换取向量化机会；普通运算符保持原有语义。点积累加可写成：
+
+```swift
+accum &+= a[index] &* b[index]
+```
+
+讨论集中于 `&` 前缀是否合适，以及包装类型、块级控制或宏能否改善使用体验。作者用数值算法说明，同一表达式中精确与宽松运算确有混用需求。**点评**：逐运算符选择让性能取舍清晰可见，但结果可能随架构和编译选项变化，采用前仍需验证算法的误差要求。
+
+### 2、SE-0557：让 Hasher 直接接收 RawSpan
+
+作者：Joe Groff（评审主持；提案作者为 Jeremy Schonfeld） ｜ 发布日期：2026-10-12
+[阅读原帖](https://forums.swift.org/t/se-0557-add-rawspan-primitive-to-hasher/90025 "SE-0557: Add `RawSpan` primitive to `Hasher`")
+
+**SE-0557** 已进入正式评审，评审期至 2026 年 10 月 20 日。提案拟新增 `Hasher.combine(bytes: RawSpan)`，让开发者直接混入原始字节，无须转向 **UnsafeRawBufferPointer**；本次不包含让 **RawSpan** 遵循 **Hashable**。
+
+```swift
+extension Hasher {
+    @export(implementation)
+    public mutating func combine(bytes: RawSpan)
+}
+```
+
+讨论除 API 命名外，也关注 `Span.bytes` 在元素仅满足 **BitwiseCopyable** 时可能暴露未初始化字节，进而被用于哈希的问题，并提出更严格的 **ConvertibleToBytes** 约束。**点评**：这是补齐安全字节 API 的小步改进，但安全访问内存与适合参与哈希的字节表示仍需区分。
+
+### 3、扩展构建工具插件，让 SwiftPM 接入外部构建系统
+
+作者：Doug Schaefer ｜ 发布日期：2026-10-14
+[阅读原帖](https://forums.swift.org/t/pitch-extending-build-tool-plugins-for-customizing-targets/90061 "[Pitch] Extending Build Tool Plugins for Customizing Targets")
+
+这份草案希望让 **SwiftPM 构建工具插件** 从生成源码扩展到调用外部构建系统，并向依赖目标提供库等构建产物，减少混合语言项目对外围脚本的依赖。主要设计包括 `buildProducts`、平台与 **traits** 条件、`alwaysOutOfDate`，以及在实际构建时解析的目标三元组、SDK 路径等变量；同时支持完全由插件构建的目标和混合语言源码生成。
+
+作者以通过 **CMake** 构建 SDL、生成 Swift 绑定及打包 Android APK 为例。社区建议用类型化参数替代字符串变量，以改善发现性并减少拼写错误，也讨论了生成头文件的公开方式与插件执行时机。**点评**：这有望扩大 `swift build` 的适用范围，关键在于让外部工具顺畅参与构建图，同时保持配置易用。
+
+### 4、在包清单中配置 SwiftPM 优化策略
+
+作者：Owen Voorhees ｜ 发布日期：2026-10-14
+[阅读原帖](https://forums.swift.org/t/pitch-swiftpm-optimization-settings/90060 "Pitch: SwiftPM Optimization Settings")
+
+这份草案拟为 **SwiftPM** 清单新增 `optimizationLevel`、`crossModuleOptimization` 和 `compilationMode`，让目标根据需要选择速度、体积、**跨模块优化（CMO）**及增量或整模块编译。例如，为发布构建优先优化体积：
+
+```swift
+swiftSettings: [
+    .optimizationLevel(.size, .when(configuration: .release)),
+]
+```
+
+动机包括缩小受限平台的二进制，以及为性能敏感库开放更多内联机会。设置只作用于目标自身；完整 CMO 需要开启优化并使用整模块编译，不兼容组合将报错。讨论焦点是根包能否覆盖依赖的设置，作者表示该能力仍需另行设计。**点评**：显式 API 能改善配置表达，但最终应用对整条依赖链的控制权仍是重要设计问题。
+
+### 5、简化从 String 获取 UTF-8 Span 的路径
+
+作者：Mahdi Bahrami ｜ 发布日期：2026-10-13
+[阅读原帖](https://forums.swift.org/t/getting-a-span-out-of-a-string-should-not-be-this-hard/90035 "Getting a span out of a String should not be this hard")
+
+作者指出，兼顾旧系统与性能地从 **String** 获取 UTF-8 **Span**，往往需要自行组合多条路径：先尝试 `utf8.withContiguousStorageIfAvailable`，再按可用性使用 `utf8Span.span`，旧系统则通过可变副本的 `withUTF8` 回退。因此，他希望标准库提供统一且兼容更早系统的访问接口。
+
+讨论涉及桥接字符串、小字符串的潜在复制，以及反复执行 `if #available` 的开销。参与者强调，安全 API 的性能问题应通过具体案例排查；同时指出，向旧系统部署的决定属于平台供应商职责，不由 **Swift Evolution** 决定。**点评**：统一入口能减少重复兼容代码，但帖中的性能反馈仍需基准验证，不宜据此认定安全接口普遍更慢。
 
 ## 推荐博文
 
