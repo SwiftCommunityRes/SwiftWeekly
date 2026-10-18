@@ -16,9 +16,9 @@ Swift 周报已在 GitHub 开源：
 > **本期精选速览**
 >
 > * **新闻和社区**：苹果AI加速补课：库克打通中国，特努斯抢攻客厅
-> * **提案**：
-> * **Swift 论坛**：
-> * **推荐博文**：
+> * **提案**：本期有 7 个通过的提案和 5 个正在审核中的提案
+> * **Swift 论坛**：讨论让 Hasher 直接接收 RawSpan
+> * **推荐博文**：Swift社区动态：2026年9月版；Swift 6.4 正式发布
 
 ## 话题讨论
 
@@ -30,12 +30,9 @@ Swift 周报已在 GitHub 开源：
 
 欢迎在评论区留下你的看法和建议。
 
-
-欢迎在评论区留下你的看法和建议。
-
 ## 新闻和社区
 
-### 苹果AI加速补课：库克打通中国，特努斯抢攻客厅
+### 苹果 AI 加速补课：库克打通中国，特努斯抢攻客厅
 
 *2026 年 10 月 16 日｜来源：钛媒体APP*
 
@@ -126,13 +123,13 @@ AI 时代的竞争，终局不是谁把 AI 写进了发布会，资本市场真�
 
 此前，该服务已于 7 月 8 日通过网信部门生成式 AI 服务备案，9 月 29 日取得上线许可。
 
-![](https://pics2.baidu.com/feed/ae51f3deb48f8c54fd06420c3e6159e7e1fe7f92.jpeg@f_auto?token=3beb0704f8cfc3d3e1f3bef05148b925)
+![](https://files.mdnice.com/user/38782/fb13ba2f-97e7-4325-bed7-98c8226d47c2.png)
 
 据彭博社报道，苹果在中国市场推进 AI 能力落地过程中，与百度就搜索及 Siri 相关功能展开合作。
 
 该表述与今年 7 月国内媒体披露的信息一致：苹果将在 Siri 语音助手及视觉智能（Visual Intelligence）功能中嵌入百度的软件服务。
 
-![](https://pics1.baidu.com/feed/3b292df5e0fe9925fbae86b030e02acd8cb1710e.jpeg@f_auto?token=aeeee922b79f042e29990404a9205f2a)
+![](https://files.mdnice.com/user/38782/e359879f-001b-41d1-af39-e6866a158be7.png)
 
 更早一条可追溯的线索来自代码层面。第三方开发者对 iOS 27 Beta 2 固件的拆解显示，系统内新增了名为「Baidu Visual Search」的模块，指向视觉搜索能力的接入。这一模块的出现，与百度在视觉搜索领域长期积累的能力方向一致。
 
@@ -146,6 +143,69 @@ Apple 智能是苹果的系统级个人智能体系，由设备端 30 亿参数�
 
 ## 提案
 
+### 通过的提案
+
+[SE-0545](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0545-build-debugging-options.md "SE-0545")
+**SwiftPM 构建性能调试选项** 提案已通过审查。
+
+该提案此前已在 **第一百零七期周报** 的「正在审查的提案」模块中做过详细介绍。
+
+[SE-0546](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0546-memberwise-init-extensions.md "SE-0546")
+**同一文件成员初始化器扩展** 提案已通过审查。
+
+该提案此前已在 **第一百零七期周报** 的「正在审查的提案」模块中做过详细介绍。
+
+[SE-0547](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0547-swiftpm-compilation-caching.md "SE-0547")
+**SwiftPM 对编译缓存的支持** 提案已通过审查。
+
+该提案此前已在 **第一百零八期周报** 的「正在审查的提案」模块中做过详细介绍。
+
+[SE-0548](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0548-resign-remote-id.md "SE-0548")
+**为远程分布式参与者引用添加 resignRemoteID**  提案已通过审查。
+
+该提案此前已在 **第一百零八期周报** 的「正在审查的提案」模块中做过详细介绍。
+
+[SE-0551](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0551-span-of-one.md "SE-0551")
+**Span 超过单个值**  提案已通过审查。
+
+添加初始化器，在任何值上形成单元素 `Span`，并在任何可变值上形成单元素 `MutableSpan`。
+
+[SE-0552](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0552-float-pi-rounding.md "SE-0552")
+**四舍五入 Float.pi**  提案已通过审查。
+
+更改 `FloatingPoint` 上属性 `pi` 的定义，使其不再需要四舍五入到零。更新 `Float.pi` 以匹配新定义。
+
+[SE-0553](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0553-task-identity.md "SE-0553")
+**Task Identity**  提案已通过审查。
+
+为当前执行 `Task` 添加一个便宜、稳定、流程唯一的标识符。`Task.currentID`，带有 `Task` 和 `UnsafeCurrentTask` 上的实例访问器，以与线程本地读取相当的成本返回不透明的 `Task.ID`——启用始终打开的仪器，如跟踪和热路径上的结构化日志记录。该标识符用于将观察和每个任务状态归因于任务，而不是用于指导控制流程。
+
+### 正在审查的提案
+
+[SE-0554](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0554-deployment-target-conditional-compilation.md "SE-0554")
+**部署目标条件汇编** 提案正在审查。
+
+添加 `deploymentTargetAtLeast(...)`，这是一个条件编译谓词，根据模块的最小部署目标选择源，使用可用性风格的平台版本要求。
+
+[SE-0555](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0555-iterable-inout-skip.md "SE-0555")
+**inout超载BorrowingIteratorProtocol.skip(by:)** 提案正在审查。
+
+新增了一个 `BorrowingIteratorProtocol.skip(by:)` 方法的重载版本，该版本将其参数作为 `inout Int` 接收。与现有方法仅在正常返回时才报告计数不同，新的重载版本即使迭代器抛出错误，也会告知调用者还有多少元素需要跳过。
+
+[SE-0556](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0556-cell.md "SE-0556")
+**Cell, ConstCell 和 Volatile** 提案正在审查。
+
+引入一系列 `Cell` 类型，这些类型对排他性提供了更宽松的要求，使它们适用于共享内存、同步原语、并发数据结构以及与其他语言的互操作性。
+
+[SE-0557](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0557-hasher-rawspan-primitive.md "SE-0557")
+**添加 RawSpan 原语到 Hasher** 提案正在审查。
+
+向 `Hasher` 添加一个新的原始 API，用于将 `RawSpan` 的字节混合到 hasher 的状态中。
+
+[SE-0558](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0558-mutablespan-bulk-updates.md "SE-0558")
+**MutableSpan 的批量更新操作和 MutableRawSpan** 提案正在审查。
+
+向 `MutableSpan` 和 `MutableRawSpan` 添加批量更新操作，这些操作用重复值或另一个跨度或 `Iterable` 元素覆盖跨度（或其子范围）。
 
 ## Swift论坛
 
@@ -165,7 +225,7 @@ accum &+= a[index] &* b[index]
 ### 2、SE-0557：让 Hasher 直接接收 RawSpan
 
 作者：Joe Groff（评审主持；提案作者为 Jeremy Schonfeld） ｜ 发布日期：2026-10-12
-[阅读原帖](https://forums.swift.org/t/se-0557-add-rawspan-primitive-to-hasher/90025 "SE-0557: Add `RawSpan` primitive to `Hasher`")
+[阅读原帖](https://forums.swift.org/t/se-0557-add-rawspan-primitive-to-hasher/90025 "SE-0557: Add RawSpan primitive to Hasher")
 
 **SE-0557** 已进入正式评审，评审期至 2026 年 10 月 20 日。提案拟新增 `Hasher.combine(bytes: RawSpan)`，让开发者直接混入原始字节，无须转向 **UnsafeRawBufferPointer**；本次不包含让 **RawSpan** 遵循 **Hashable**。
 
@@ -215,7 +275,7 @@ swiftSettings: [
 
 以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
 
-[SSwift社区动态：2026年9月版](https://swift.org/blog/whats-new-in-swift-september-2026/ "Swift社区动态：2026年9月版")
+[Swift社区动态：2026年9月版](https://swift.org/blog/whats-new-in-swift-september-2026/ "Swift社区动态：2026年9月版")
 
 **摘要：** 这篇官方月度动态由 Vapor 核心团队成员 Tim Condon 客座主笔，重点回顾了 Vapor 十周年暨 Vapor 5 首个 beta 的发布——这是一次彻底重写，全面拥抱结构化并发，正式告别EventLoopFuture。同期 Swift 6.4 正式发布，Swift Build 成为 SwiftPM 默认构建系统，Subprocess 达到 1.0，JavaScriptKit 的 Wasm 桥接最高提速 40 倍。全文呈现了 Swift 在服务端、工具链与 Wasm 生态上的同步推进。
 
