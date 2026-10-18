@@ -22,6 +22,13 @@ Swift 周报已在 GitHub 开源：
 
 ## 话题讨论
 
+从“卷不动”到“短逃离”，一批年轻人开始往乡村跑——每周花三五百块，住进主打“放慢节奏”的“青年养老院”，种地、打坐、发呆，什么都不干。有人说这是高压下的“策略性退却”，也有人觉得不过是换个地方玩手机。如果你也动过“跑路两天”的念头，来选你的真实想法：”。**如果你也动过“跑路两天”的念头，来选你的真实想法：**
+
+1. 上班已经够消耗了，花点小钱买个喘气的空间，很值
+2. 不是不回来卷，是知道什么时候该停下来调一调？
+3. 社交吸引人：一个人待着太闷，想认识同样“不想卷”的人？
+
+欢迎在评论区留下你的看法和建议。
 
 
 欢迎在评论区留下你的看法和建议。
@@ -205,6 +212,20 @@ swiftSettings: [
 讨论涉及桥接字符串、小字符串的潜在复制，以及反复执行 `if #available` 的开销。参与者强调，安全 API 的性能问题应通过具体案例排查；同时指出，向旧系统部署的决定属于平台供应商职责，不由 **Swift Evolution** 决定。**点评**：统一入口能减少重复兼容代码，但帖中的性能反馈仍需基准验证，不宜据此认定安全接口普遍更慢。
 
 ## 推荐博文
+
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[SSwift社区动态：2026年9月版](https://swift.org/blog/whats-new-in-swift-september-2026/ "Swift社区动态：2026年9月版")
+
+**摘要：** 这篇官方月度动态由 Vapor 核心团队成员 Tim Condon 客座主笔，重点回顾了 Vapor 十周年暨 Vapor 5 首个 beta 的发布——这是一次彻底重写，全面拥抱结构化并发，正式告别EventLoopFuture。同期 Swift 6.4 正式发布，Swift Build 成为 SwiftPM 默认构建系统，Subprocess 达到 1.0，JavaScriptKit 的 Wasm 桥接最高提速 40 倍。全文呈现了 Swift 在服务端、工具链与 Wasm 生态上的同步推进。
+
+[Google Cloud 正式推出服务器端 Swift SDK](https://cloud.google.com/blog/topics/developers-practitioners/introducing-the-server-side-cloud-swift-sdk/ "Google Cloud 正式推出服务器端 Swift SDK")
+
+**摘要：** 这篇来自 Google Cloud 官方博客的文章宣布了google-cloud-swift的正式落地。该 SDK 基于 Swift 6.2+ 构建，利用非阻塞 SwiftNIO 事件循环、HTTP/2 多路复用和 gRPC 传输，并借助 Swift 6 的编译期并发检查实现零成本数据竞争安全。它覆盖 Cloud Storage、IAM、AI 等一百多项 Google Cloud 服务，面向服务器、容器与 DevOps 环境设计，标志着 Swift 作为云端语言的官方生态再进一步。
+
+[Swift 6.4 正式发布](https://swift.org/blog/swift-6.4-released/ "Swift 6.4 正式发布")
+
+**摘要：** 这篇官方发布公告系统梳理了 Swift 6.4 的核心更新。语言层面，defer块现在可以直接使用await，withTaskCancellationShield确保关键清理代码不被取消；可选的不透明类型与存在类型不再需要额外括号，@diagnose属性支持在源码中控制编译器警告。性能层面，UniqueArray、Ref/MutableRef等新类型减少了数组操作中的写时复制开销，Wasm 桥接通过 JavaScriptKit 最高提速 40 倍。全文为开发者提供了一份从语法改进到底层性能的完整版本指南。
 
 
 ## 关于我们
