@@ -18,7 +18,7 @@ Swift 周报已在 GitHub 开源：
 > * **新闻和社区**：400多岗位被裁！苹果收缩传统业务，新任CEO剑指AI
 > * **提案**：
 > * **Swift 论坛**：
-> * **推荐博文**：
+> * **推荐博文**：CompilationTesting 测试框架预览、SwiftUI 里的 layoutMarginsGuide、嵌套 NSHostingView 的生命周期陷阱
 
 ## 话题讨论
 
@@ -137,6 +137,19 @@ Siri AI 是全面升级的 Siri，不仅功能更强大，对话也更加自然�
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[Point-Free 预告：CompilationTesting](https://www.pointfree.co/blog/posts/234-beta-preview-compilationtesting "Point-Free 预告：CompilationTesting")
+
+**摘要：** 这篇来自 Point-Free 的公告预告了 Beta Preview 阶段的 CompilationTesting 库，用于为“本不该编译通过”的 Swift 代码编写单元测试。库会直接调用 Swift 编译器，把编译诊断（error、warning、fix-it、note）以 inline snapshot 的形式记录在测试文件中，从而锁住库对外承诺的那些编译期保证——例如某个重载不可用、某个隔离标注阻止了对共享状态的非法访问、某个宏生成的代码确实受到类型检查器的约束。文章还演示了如何用 flags 控制 Swift 语言模式（.languageMode(.v5)）、默认 actor 隔离与实验特性，以及用 .compilation trait 为整个测试套件统一配置编译环境。
+
+[SwiftUI 中的 layoutMarginsGuide 用法详解](https://sarunw.com/posts/swiftui-content-margin-guide/ "SwiftUI 中的 layoutMarginsGuide 用法详解")
+
+**摘要：** 这篇来自 Sarunw 的技术博客指出，SwiftUI 开发者习以为常的 .padding(.horizontal, 16) 其实只是一种“猜测”——系统边距随设备型号和方向变化，在 iPhone Duo 上甚至会出现一侧 20、另一侧 0 的非对称情况。文章详细讲解了 iOS 27.1 新增的 contentMargins(for: .container) 如何让系统自动选择容器边距、如何通过 GeometryProxy 的同名方法读取具体数值（该值不包含安全区，与 UIKit 的 layoutMargins 存在差异），并提醒它与 iOS 17 引入的 contentMargins(_:_:for:) 属于两个不同的类型体系，同时给出了兼容 iOS 27.0 的降级写法。
+
+[被拆掉的 NSHostingView 还会再建一次 View](https://onevcat.com/2026/10/nested-hosting-view/ "被拆掉的 NSHostingView 还会再建一次 View")
+
+**摘要：** 这篇来自王巍 (onevcat) 的博客记录了一次颇为曲折的排查经历：在 Prowl 项目中，切换到 Canvas 视图时某个终端卡片会变成一片空白。作者通过日志、二分查找与变体实验逐步缩小范围，最终定位到两个叠加的原因——其一是 SwiftUI 与 AppKit 混用时的生命周期问题，嵌套在 NSViewRepresentable 内部的 NSHostingView 在外层已经调用过 dismantleNSView 之后，只要自身仍留在 window 中，就会照常 flush 事务并对一棵已退场的视图树再次调用 makeNSView；其二是宿主在 init 中无条件接管共享 surface 的实现放大了这一副作用。文章附有独立的最小复现项目，并给出了在 dismantleNSView 中主动拆除内层 hosting view、以及让所有权规则能自行恢复的两段修复方案。
 
 ## 关于我们
 
