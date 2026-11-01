@@ -134,6 +134,75 @@ Siri AI 是全面升级的 Siri，不仅功能更强大，对话也更加自然�
 
 ## Swift论坛
 
+### 1、使用 send 与 @oneway 表达单向 Actor 调用
+
+作者：Konrad Malawski ｜ 发布日期：2026-10-27
+[阅读原帖](https://forums.swift.org/t/pitch-2-send-and-oneway-method-calls/90305 "[Pitch#2] send and @oneway method calls")
+
+这份第二轮提议将单向调用从分布式场景扩展至普通 **Actor**：通过 **send** 从同步上下文提交调用，无需等待完成，以减少 `Task { await ... }` 包装的开销，并让分布式传输利用单向消息机制。可选的 **@oneway** 标记用于表达 API 的调用意图。
+
+```swift
+// 提议中的语法：从同步上下文提交 Actor 调用
+actor Collector {
+    @oneway func collect(_ value: Int) { }
+}
+
+func notify(_ collector: Collector) {
+    send collector.collect(1)
+    send collector.collect(2)
+}
+```
+
+同一任务向同一 Actor 连续发送的调用按顺序入队；异步方法内部仍需考虑挂起与重入。讨论集中于是否会鼓励滥用非结构化并发，以及能否用库 API 替代语法。作者在回复中同意暂时移除对 `@discardableResult` 的支持，将目标限制为不抛错、返回 `Void` 的方法。**点评：** 同步回调通知 Actor 的意图会更清晰，但它仍属于非结构化并发，不能替代需要等待结果的调用。
+
+### 2、单次 yield 函数：让借用与资源清理走出闭包
+
+作者：Meghana Gupta ｜ 发布日期：2026-10-28
+[阅读原帖](https://forums.swift.org/t/pitch-single-yield-functions/90319 "Pitch: Single-yield functions")
+
+提议引入 **单次 yield 函数**：函数执行到 `yield` 时交出值并暂停，调用方结束访问后再恢复执行、完成清理。这为借用值与可变访问提供函数级表达，也有望减少部分 `with*` API 的闭包嵌套。
+
+```swift
+// 提议中的声明形式
+func ownedValue() -> yield T
+func borrowedValue() -> yield borrow T
+func mutableValue() -> yield inout T
+```
+
+社区讨论了 `yield`、`yielding` 与 `yields` 的命名、`defer` 的行为及恢复执行的时机。**Swift Testing** 的潜在用例是借出安全的 **RawSpan** 附件缓冲区；但 `withTaskGroup` 等 API 涉及异步清理与错误传播，不能直接迁移。多次 yield 的生成器及 `async` 支持也不在本轮范围内。**点评：** 这为资源访问提供了更直接的表达，实际适用范围仍取决于生命周期和清理语义的完善。
+
+### 3、Swift Testing 预览对 Embedded Swift 的支持
+
+作者：Jonathan Grynspan ｜ 发布日期：2026-10-26
+[阅读原帖](https://forums.swift.org/t/preview-embedded-swift-support-in-swift-testing/90281 "[Preview] Embedded Swift support in Swift Testing")
+
+借助 Swift 6.4 对 **Embedded Swift** 的改进，**Swift Testing** 已提供实验支持，并在 WASI、Raspberry Pi Pico 2 等环境演示运行。目标是让嵌入式开发沿用熟悉的测试 API；目前已覆盖 **@Test**、**#expect**、自定义测试作用域 trait 和 JSON Lines 输出。
+
+试用需依赖 `swift-testing` 的 `main` 分支、适配目标平台的 **PAL** 扩展，并由入口调用 `swift_testing_embeddedMain()`。构建时设置 `SWT_EMBEDDED=1`，暂时使用可执行目标，尚不支持 SwiftPM 测试目标。
+
+当前测试串行执行，但受目标支持的异步测试仍可使用；`.timeLimit` 不可用，类型扩展内的测试与运行时值描述也存在限制。社区反馈积极，并计划尝试更多微控制器；团队希望未来将其随嵌入式工具链分发，理想目标为 Swift 6.5。**点评：** 测试能力已迈出实用一步，接入时仍需处理平台适配与构建流程。
+
+### 4、允许 SwiftPM 在依赖图中并存多个主版本
+
+作者：Bri Peticca ｜ 发布日期：2026-10-29
+[阅读原帖](https://forums.swift.org/t/pitch-allowing-multiple-major-versions-of-a-package/90326 "[Pitch] Allowing Multiple Major Versions of a Package")
+
+这份提议希望解除 **Swift Package Manager** 对每个包仅解析一个版本的限制。当直接依赖需要某包的 1.x、传递依赖需要其 2.x 时，可以分别解析并构建，避免菱形依赖冲突迫使整个生态同步升级。
+
+方案包括用 **PURL** 表达包来源与版本、调整 **PubGrub** 按主版本分桶、重连依赖图，以及自动生成模块别名来隔离同名 Swift 模块。初稿采用显式开启的方式，已有原型验证多版本构建与链接，但解析器等工作尚未完成。
+
+讨论聚焦于是否应默认开启、清单如何控制此行为，以及 C 模块符号冲突。作者澄清，包含 C 目标的包不应简单地被禁止，但其符号隔离仍需进一步设计。多版本也会增加体积、下载量和旧版本审计成本。**点评：** 它能缓解依赖升级阻塞，但成功构建并不意味着不同版本的类型与共享资源可以自动互通。
+
+### 5、Swift 6.4.2 发布：修复编译、构建与运行时问题
+
+作者：Mishal Shah ｜ 发布日期：2026-10-30
+[阅读原帖](https://forums.swift.org/t/announcing-swift-6-4-2/90337 "Announcing Swift 6.4.2")
+
+**Swift 6.4.2** 正式发布，本次以正确性和稳定性修复为主。可通过 `swiftly install 6.4.2` 安装，公告确认 Xcode 27.2 包含该版本；Docker 与 WinGet 渠道在发帖时仍待上线。
+
+编译器修复了带尾部填充的 C 结构体数组在优化构建中的误编译、涉及 `deinit` 的误报独占访问冲突，以及部分带大型 SIMD 参数的异步函数在调试构建中的崩溃。标准库对数组未初始化容量接口中的非法 `initializedCount` 改为触发陷阱，避免未定义行为。
+
+**SwiftPM** 修复条件 trait、跨注册表缓存验证和动态库共享静态库等问题；**Foundation** 补上 `Data.resetBytes(in:)` 的下界检查，并修复部分 Linux 文件系统上的原子写入失败。公告帖尚无后续问答，发布说明还覆盖 LLDB、Swift Build 和测试输出修复。**点评：** 使用 Swift 6.4 的项目可重点回归 C 互操作、并发与依赖构建路径，评估此次补丁带来的收益。
 
 ## 推荐博文
 
