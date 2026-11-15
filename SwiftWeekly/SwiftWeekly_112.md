@@ -18,7 +18,7 @@ Swift 周报已在 GitHub 开源：
 > * **新闻和社区**：新任CEO亲自督战 苹果AI布局谋变
 > * **提案**：
 > * **Swift 论坛**：
-> * **推荐博文**：
+> * **推荐博文**：Swift社区动态：2026年11月版、Practical Auto-Vectorization 实战、SwiftUI 中的 GlassEffectContainer
 
 ## 话题讨论
 
@@ -115,6 +115,19 @@ Swift 周报已在 GitHub 开源：
 
 ## 推荐博文
 
+以下三篇文章非常值得一读，适合本周「提升技能 + 开阔思路」：
+
+[Swift社区动态：2026年11月版](https://www.swift.org/blog/whats-new-in-swift-november-2026/ "Swift社区动态：2026年11月版")
+
+**摘要：** 这篇官方月度动态由 Swift Package Index 联合创始人 Dave Verwer 与 Apple 高级产品经理 Dave Lester 共同主笔，开篇即是给 CocoaPods 用户的提醒：历经两年过渡期后，CocoaPods 将于 2026 年 12 月 2 日停止接受新的 pod 与版本，现有仓库转为只读，尚未迁移到 SwiftPM 的项目应当抓紧行动。社区亮点部分提到 John Sundell 分享的 Optional `take()` 等实用技巧、Sindre Sorhus 用 Swift 重写个人网站让链接错误变成编译错误，以及 EPAM 团队用 Hummingbird 与 Vapor 构建后端的经验对比。包发布方面，Swift Kafka Client 达到 1.0.0，swift-ros2 新增机器人网络的话题图 API。提案板块涵盖正在审查的 SE-0559 与 SE-0560，以及近期通过的 SE-0552、SE-0545、SE-0553、SE-0551。
+
+[Practical Auto-Vectorization：让单线程循环快上好几倍](https://blog.mahdibm.com/posts/practical-auto-vectorization/ "Practical Auto-Vectorization：让单线程循环快上好几倍")
+
+**摘要：** 这篇技术文章以优化 Base64 编码为例，讲解如何通过调整源码形态来适配 LLVM 的成本模型、让编译器自动把单线程循环转换成 SIMD 向量代码。作者在 Apple M6 上实测，朴素实现仅 0.34 GB/s，加上查找表后达到 4.6 GB/s，而去掉阻碍向量化的查找表与分支后，自动向量化版本跃升至 16.0 GB/s；最终手工 SIMD 配合 64 字节查找表更是达到 29.2 GB/s，较最初实现提升约 90 倍，甚至略快于 Daniel Lemire 的 C++ 实现。文中给出的技巧包括：使用 Span 等连续内存接口、通过预计算候选结果做 If-Conversion 以生成条件移动指令、用 `&+` `&-` 避免溢出检查路径、用 `unsafe bytes[unchecked:]` 消除下标边界检查，以及借助 `-emit-ir` 搜索 `vector.body` 来确认循环确实已被向量化。
+
+[SwiftUI 中的 GlassEffectContainer 是什么](https://sarunw.com/posts/swiftui-glasseffectcontainer/ "SwiftUI 中的 GlassEffectContainer 是什么")
+
+**摘要：** 这篇来自 Sarunw 的技术博客解读了 iOS 26 引入的 GlassEffectContainer：默认情况下每个玻璃视图各自独立绘制，互不知晓彼此，而容器的作用正是把 Liquid Glass 形状归拢到一处，让它们彼此产生反应。文章详细讲解了如何用容器的 spacing 参数控制形状靠近后融合的程度、用 glassEffectUnion(id:namespace:) 让相距较远的形状合并为同一块玻璃，以及用 glassEffectID 配合 @Namespace 与 withAnimation 实现形态间的生长与收缩过渡。作者还实测指出玻璃效果过渡的三种形态——.matchedGeometry、.materialize 与 .identity——各自的适用场景，并提醒标准控件如工具栏和标签栏已自带该行为，无需重复包裹。
 
 ## 关于我们
 
