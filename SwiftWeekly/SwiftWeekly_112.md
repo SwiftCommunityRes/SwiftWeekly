@@ -112,6 +112,76 @@ Swift 周报已在 GitHub 开源：
 
 ## Swift论坛
 
+### 1、在包清单中按目标环境设置构建条件
+
+作者：Franz Busch ｜ 发布日期：2026-11-13
+[阅读原帖](https://forums.swift.org/t/target-environment-conditions-in-package-manifests/90725 "Target environment conditions in package manifests")
+
+该提议为 **SwiftPM** 的构建设置与目标依赖条件 `.when(...)` 新增 **targetEnvironments** 参数，用于区分模拟器、Mac Catalyst、musl 等环境，解决仅按操作系统筛选时无法选择不同库或实现的问题。例如，仅在使用 musl 的 Linux 上引入兼容目标：
+
+```swift
+.target(
+    name: "CFTS",
+    condition: .when(platforms: [.linux], targetEnvironments: [.musl])
+)
+```
+
+平台与环境条件必须同时满足；环境名称精确匹配，无环境的目标三元组不匹配。提议还计划扩展源码中的 `#if targetEnvironment(...)`，使其与清单规则一致。讨论重点是自定义 **Swift SDK** 的适配，以及条件如何融入包解析与 SwiftBuild 的构建模型。点评：这能减少手动传递 traits 的负担，但仍需明确条件在构建流程中的求值方式。
+
+### 2、让 Never 遵循字符串描述协议
+
+作者：Dmitriy Ignatyev ｜ 发布日期：2026-11-10
+[阅读原帖](https://forums.swift.org/t/conform-never-to-customstringconvertible/90617 "Conform Never to CustomStringConvertible")
+
+作者建议为 **Never** 添加 **CustomStringConvertible** 和 **CustomDebugStringConvertible** 遵循，使以 `Never` 表示不可能分支的泛型枚举也能满足字符串描述的条件遵循。由于该类型没有实例，属性可通过空 `switch` 实现：
+
+```swift
+extension Never: CustomStringConvertible {
+    public var description: String {
+        switch self {}
+    }
+}
+```
+
+讨论的主要分歧在于动机：作者希望用协议约束限制日志 API 的输入，Xiaodi Wu 则指出，该协议只是字符串表示的定制点，不保证输出质量或稳定性；一般格式化可直接使用 `String(describing:)`，特定业务保证应由自定义协议表达。点评：补齐遵循有利于泛型组合，但不宜把描述协议当作日志内容质量的保证。
+
+### 3、第二轮提议：区分恰好一次与至多一次的函数类型
+
+作者：Allan Shortlidge ｜ 发布日期：2026-11-05
+[阅读原帖](https://forums.swift.org/t/pitch-2-called-once-function-types/90515 "[Pitch #2] Called-once function types")
+
+第二轮提议引入 **@once** 表示恰好调用一次，并将至多调用一次的标注更名为 **@callable(once)**。这些信息让编译器能够允许闭包消耗不可复制值，或重新发送非 **Sendable** 值，避免因潜在的重复执行而拒绝安全代码：
+
+```swift
+func callOnce(_ body: @once () -> Void) {
+    body()
+    body() // 错误：闭包已被消耗
+}
+```
+
+本轮还引入编译器内部的 **Deinitable** 协议，并补充互操作与标准库采用规则。讨论聚焦属性命名、逃逸闭包和 `withoutActuallyDeiniting` 的保证边界：逃逸的 `@once` 并不保证在某个时间点前执行；非逃逸形式可在作用域正常结束时提供更强检查。点评：将调用次数纳入类型系统能改善所有权与并发体验，但应准确理解其对程序进展的保证范围。
+
+### 4、探索使用 Swift 编写 GPU 程序
+
+作者：Drecothedev ｜ 发布日期：2026-10-26
+[阅读原帖](https://forums.swift.org/t/swift-on-the-gpu/90299 "Swift on the GPU")
+
+作者正在尝试将 **Swift** 转译为 **Metal** 的小型编译器，希望探索类似 Mojo 的 GPU 编程体验，并询问其他实现路径。这是一场早期探索，尚未形成正式语言设计。
+
+讨论中，Jonathan Wight 分享了使用 Swift 语法编写着色器的 **schmetal** 实验；另有参与者建议研究 LLVM 层的 GPU 支持，并与 **Embedded Swift** 社区交流。实际开发痛点则涉及渲染管线、CPU/GPU 数据传输和着色器绑定，单纯更换着色器语言难以全部解决。后续还涉及 **MetalSprockets** 的组合式封装，以及通过 **MetalCompilerPlugin** 缓解 SwiftPM 对 Metal 目标支持不足的问题。
+
+点评：Swift GPU 编程的价值既取决于编译能力，也取决于资源管理、类型安全与包工具链能否形成完整体验；帖中的 API 构想仍属探索，不能视为已支持的 Swift 功能。
+
+### 5、为固定布局值类型提供回部署能力
+
+作者：Douglas Gregor ｜ 发布日期：2026-11-04
+[阅读原帖](https://forums.swift.org/t/pitch-back-deployment-for-fixed-layout-value-types-3571/90446 "Pitch: Back-deployment for fixed-layout value types - #3571")
+
+Douglas Gregor 与 Allan Shortlidge 提议将 **@backDeployed(before:)** 扩展至固定布局的 **@frozen struct** 和 **enum**，让部分新类型可用于较旧的系统运行时，降低新标准库 API 的采用门槛。候选包括 **Span** 系列、**Int128/UInt128**、**UniqueArray** 和 **Mutex** 等；不同类型仍可能有各自的运行时下限。
+
+实现复用现有的外来类型及协议见证表唯一化机制。讨论涉及动态布局能否支持、多个依赖中的元数据副本合并，以及元数据访问成本。值得关注的是，作者在 11 月 14 日更新中明确撤回了最初对弹性协议追溯遵循的限制，表示已找到解除方案，最新草案已移除该限制。
+
+点评：这有望缩短新类型发布与应用实际采用之间的等待，但回部署范围仍受类型布局及所需运行时能力约束，不代表所有新 API 都能自动用于旧系统。
 
 ## 推荐博文
 
